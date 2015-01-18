@@ -1624,6 +1624,7 @@ Public Sub ProcessScriptLine(Sid As Integer)
 
 fastSet:
   currLineNumber = exeLine(Sid)
+  frmCavebot.lstScript.ListIndex = currLineNumber - 1 'why -1? ListIndex start at 0, currLineNumber start at 1
   If DoingNewLoot(Sid) = True Then
     currLine = "move " & CStr(DoingNewLootX(Sid)) & "," & _
      CStr(DoingNewLootY(Sid)) & "," & _
