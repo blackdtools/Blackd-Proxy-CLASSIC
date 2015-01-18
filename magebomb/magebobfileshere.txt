@@ -1,0 +1,4 @@
+magebomb files will be saved here.
+
+Please remember that magebomb will not work in latest tibia versions.
+Sorry for the inconvenience.

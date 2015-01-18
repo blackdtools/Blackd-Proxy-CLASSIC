@@ -1,0 +1,5 @@
+Línea 29: la clase MSWinsockLib.Winsock del control sckServerGame no era una clase de control cargada.
+Línea 37: la clase MSWinsockLib.Winsock del control sckClientGame no era una clase de control cargada.
+Línea 45: la clase MSWinsockLib.Winsock del control sckServer no era una clase de control cargada.
+Línea 53: la clase MSWinsockLib.Winsock del control SckClient no era una clase de control cargada.
+Línea 331: la clase MSFlexGridLib.MSFlexGrid del control gridLog no era una clase de control cargada.

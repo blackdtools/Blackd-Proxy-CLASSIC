@@ -1,0 +1,76 @@
+setChaoticMovesOFF
+setMeleeKill rat
+setMeleeKill bug
+setMeleeKill centipede
+setMeleeKill rotworm
+setMeleeKill carrion worm
+setMeleeKill spider
+setLoot D7 0B
+setLoot DC 25
+setLoot 23 28
+move 32273,32750,10
+move 32268,32787,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32249,32803,10
+move 32229,32817,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32225,32832,10
+move 32208,32810,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32187,32782,10
+move 32176,32754,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32201,32722,10
+move 32245,32710,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32257,32721,10
+move 32261,32739,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32251,32751,10
+move 32239,32732,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32218,32732,10
+move 32206,32748,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32208,32763,10
+move 32246,32775,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32259,32750,10
+move 32269,32738,10
+IfTrue ($mycap$#number<=#5000) Goto $nlineoflabel:depositer$
+move 32273,32749,10
+gotoScriptLine 0
+:depositer
+move 32273,32749,10
+move 32273,32751,9
+move 32255,32774,9
+move 32255,32775,8
+move 32233,32774,8
+move 32233,32775,7
+move 32240,32812,7
+move 32252,32817,7
+move 32266,32815,7
+move 32289,32814,7
+move 32339,32836,7
+waitX 1
+sayMessage hi
+waitX 3
+sayInTrade deposit all
+waitX 1
+sayInTrade yes
+waitX 1
+move 32339,32845,7
+putLootOnDepot
+move 32304,32827,7
+move 32286,32814,7
+move 32267,32814,7
+move 32242,32816,7
+move 32237,32788,7
+move 32233,32775,7
+move 32233,32774,8
+move 32238,32761,8
+move 32255,32773,8
+move 32255,32774,9
+move 32273,32751,9
+move 32273,32750,10
+gotoScriptLine 0

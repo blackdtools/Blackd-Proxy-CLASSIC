@@ -1,0 +1,1 @@
+If your system doesn't display the texts correctly then copy the 3 fonts files here to your windows\font folder
