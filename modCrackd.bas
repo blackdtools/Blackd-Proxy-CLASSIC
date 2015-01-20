@@ -49,39 +49,31 @@ Public Declare Function BlackdForceWrite Lib _
 
 #Else
 
-'Public Declare Function EncipherTibia Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, _
-    ByRef firstKeyByte As Byte) As Long
 
-'Public Declare Function DecipherTibia Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, _
-    ByRef firstKeyByte As Byte) As Long
     
 Public Declare Function EncipherTibiaProtected Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, _
+    "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\crackd.dll" (ByRef firstPacketByte As Byte, _
     ByRef firstKeyByte As Byte, ByVal uboundpacket As Long, ByVal uboundkey As Long) As Long
 
 Public Declare Function DecipherTibiaProtected Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, _
+    "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\crackd.dll" (ByRef firstPacketByte As Byte, _
     ByRef firstKeyByte As Byte, ByVal uboundpacket As Long, ByVal uboundkey As Long) As Long
     
 Public Declare Function EncipherTibiaProtectedSP Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, _
+    "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\crackd.dll" (ByRef firstPacketByte As Byte, _
     ByRef firstKeyByte As Byte, ByVal uboundpacket As Long, ByVal uboundkey As Long) As Long
 
 Public Declare Function DecipherTibiaProtectedSP Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, _
+    "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\crackd.dll" (ByRef firstPacketByte As Byte, _
     ByRef firstKeyByte As Byte, ByVal uboundpacket As Long, ByVal uboundkey As Long) As Long
 
 Public Declare Function GetTibiaCRC Lib _
-    "C:\blackdProxy\crackd.dll" (ByRef firstPacketByte As Byte, ByVal uboundpacketMinus6 As Long) As Long
+    "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\crackd.dll" (ByRef firstPacketByte As Byte, ByVal uboundpacketMinus6 As Long) As Long
 
 Public Declare Function BlackdForceWrite Lib _
-    "C:\blackdProxy\crackd.dll" (ByVal address As Long, ByRef mybuffer As Byte, ByVal mybuffersize As Long, ByVal hwndClientWindow As Long) As Long
+    "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\crackd.dll" (ByVal address As Long, ByRef mybuffer As Byte, ByVal mybuffersize As Long, ByVal hwndClientWindow As Long) As Long
     
-'Public Declare Function GetTibiaCRC2 Lib _
-'    "C:\blackdProxy\crackd2.dll" (ByRef firstPacketByte As Byte, ByVal uboundpacketMinus6 As Long) As Long
-    
+
 #End If
 
 Public Declare Sub RtlMoveMemory Lib "Kernel32" ( _

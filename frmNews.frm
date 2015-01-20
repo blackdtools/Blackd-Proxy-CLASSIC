@@ -57,6 +57,12 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
+    strMsg = "Blackd Proxy 35.1" & vbCrLf & _
+     "----------------------------" & vbCrLf & _
+     " - Minimum changes to work in all Tibia versions up to 10.73" & vbCrLf & _
+     " - Several minor bug fixes." & vbCrLf & _
+     " - Proyect now available in GitHub!"
+     
     strMsg = strMsg & vbCrLf & "Blackd Proxy 35.0" & vbCrLf & _
      "----------------------------" & vbCrLf & _
      " - New exiva command: exiva useitemonname:AA BB,Abcdef =>uses custom item AA BB on first creature with name Abcdef" & vbCrLf & _

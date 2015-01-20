@@ -5,17 +5,17 @@ Attribute VB_Name = "modCode"
 Option Explicit
 
 Public Const FIX_addConfigPaths As String = _
-"config1033,config1034,config1035,config1036,config1037,config1038,config1039,config1040,config1041,config1050,config1051,config1051preview,config1052,config1052preview,config1053,config1053preview,config1054,config1055,config1056,config1057,config1058,config1059,config1060,config1061,config1062,config1063,config1064,config1070,config1071,config1072"
+"config1033,config1034,config1035,config1036,config1037,config1038,config1039,config1040,config1041,config1050,config1051,config1051preview,config1052,config1052preview,config1053,config1053preview,config1054,config1055,config1056,config1057,config1058,config1059,config1060,config1061,config1062,config1063,config1064,config1070,config1071,config1072,config1073"
 
 Public Const FIX_addConfigVersions As String = _
-"10.33,10.34,10.35,10.36,10.37,10.38,10.39,10.4,10.41,10.5,10.51,10.51 preview,10.52,10.52 preview,10.53,10.53 preview,10.54,10.55,10.56,10.57,10.58,10.59,10.60,10.61,10.62,10.63,10.64,10.70,10.71,10.72"
+"10.33,10.34,10.35,10.36,10.37,10.38,10.39,10.4,10.41,10.5,10.51,10.51 preview,10.52,10.52 preview,10.53,10.53 preview,10.54,10.55,10.56,10.57,10.58,10.59,10.60,10.61,10.62,10.63,10.64,10.70,10.71,10.72,10.73"
 
 Public Const FIX_addConfigVersionsLongs As String = _
-"1033,1034,1035,1036,1037,1038,1039,1040,1041,1050,1051,1051,1052,1052,1053,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1070,1071,1072"
+"1033,1034,1035,1036,1037,1038,1039,1040,1041,1050,1051,1051,1052,1052,1053,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1070,1071,1072,1073"
 
-Public Const FIX_highestTibiaVersionLong As String = "1072"
-Public Const FIX_TibiaVersionDefaultString As String = "10.72"
-Public Const FIX_TibiaVersionForceString As String = "10.72"
+Public Const FIX_highestTibiaVersionLong As String = "1073"
+Public Const FIX_TibiaVersionDefaultString As String = "10.73"
+Public Const FIX_TibiaVersionForceString As String = "10.73"
 
 
 
@@ -30,7 +30,6 @@ Public Const DropDelayerConst As Long = 3 ' turns to wait before doing a step of
 Public Const cte_initHP = 10000
 Public Const cte_initMANA = 10000
 Public Const localstr As String = "127.0.0.1"
-' Public Const longsecretkey = "5ojhgt59823 g5?32fu59psdfqw8rjmvpogihytrmkbpwer1-<cfrtr`et5hu67jsd?4?fjoi5390-**-*fggd-*dfg*--*sdf*-h-*-*sd54sv45h678996¡'486gjbmnm,k"
 Public Const longsecretkey = "pfiwmvjgjikdfzasdruieopqwfhgkvvbnmklpofufrhufhuhsqaewftswgyguuhbvxhchufudhgoipopeqwiueifhjhsfdzvvcdvhfhfruyiurtuiuwfewqweffswqdepoffr"
 
 ' LEVELSPY - XRAY
@@ -268,7 +267,7 @@ Public Type TypeBackpack
   open As Boolean
   cap As Long
   used As Long
-  Name As String
+  name As String
   item(0 To HIGHEST_ITEM_BPSLOT) As TypeItem
 End Type
 
@@ -5855,7 +5854,7 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
     isDamageRune = True
 
   Case Else
-    thing = "item " & GoodHex(RuneB1) & " " & GoodHex(RuneB2)
+    thing = "item " & GoodHex(runeB1) & " " & GoodHex(runeB2)
     isDamageRune = False
   End Select
   If (isDamageRune = True) Then
@@ -8734,7 +8733,7 @@ Public Sub StartReconnection(idConnection As Integer)
       Backpack(idConnection, j).open = False
       Backpack(idConnection, j).cap = 0
       Backpack(idConnection, j).used = 0
-      Backpack(idConnection, j).Name = ""
+      Backpack(idConnection, j).name = ""
   Next j
   For k = 1 To EQUIPMENT_SLOTS
     mySlot(idConnection, k).t1 = &H0
@@ -8982,60 +8981,7 @@ Public Function encriptionSumChr(ByVal chr1 As String, ByVal chr2 As String, Opt
     encriptionSumChr = newchr3
 End Function
 
-Public Function stringIn3(str As String) As String
-    Dim initialPass As String
-    Dim l As Long
-    Dim i As Long
-    Dim finalPass As String
-    Dim randomDesp As Long
-    Dim cranchar As String
-    
-    initialPass = str
-    initialPass = stringIn2(str)
-    randomDesp = randomNumberBetween(0, 9)
-    l = Len(initialPass)
-    finalPass = CStr(randomDesp)
-    For i = 1 To l
-       cranchar = Mid$(longsecretkey, randomDesp + i, 1)
-       finalPass = finalPass & encriptionSumChr(Mid$(initialPass, i, 1), cranchar)
-    Next i
-    stringIn3 = finalPass
-End Function
 
-Public Function stringOut2(str As String) As String
-  Dim s As String
-  Dim l As Long
-  Dim i As Long
-  Dim tmp1 As String
-  Dim tmp2 As Byte
-  l = Len(str) / 3
-  s = ""
-  For i = 1 To l
-    tmp1 = Mid(str, -2 + (i * 3), 3)
-    tmp2 = CByte(CLng(tmp1))
-    s = s & Chr(tmp2)
-  Next i
-  stringOut2 = s
-End Function
-
-Public Function stringout3(str As String) As String
-    Dim randomDesp As Long
-    Dim lenstr As String
-    Dim cranchar As String
-    Dim finalPass As String
-    Dim i As Long
-    Dim res As String
-    randomDesp = CLng(Left$(str, 1))
-    lenstr = Len(str)
-    finalPass = ""
-    For i = 2 To lenstr
-       cranchar = Mid$(longsecretkey, randomDesp + i - 1, 1)
-       finalPass = finalPass & encriptionSumChr(Mid$(str, i, 1), cranchar, False)
-    Next i
-    res = finalPass
-    res = stringOut2(finalPass)
-    stringout3 = res
-End Function
 
 
 
@@ -10483,15 +10429,15 @@ Public Function UseItemOnName(idConnection As Integer, ByVal strTile As String) 
     LowByte = LowByteOfLong(ItemID)
     HighByte = HighByteOfLong(ItemID)
     strTile = Mid(strTile, 7) '7?? with the comma, i thought it'd be 6?? ...
-    Dim Name As String
+    Dim name As String
 
     While Left(strTile, 1) = " "
     strTile = Mid(strTile, 1) 'ignore spaces..
     Wend
 
 
-    Name = strTile
-    success = SendAimbot(Name, idConnection, LowByte, HighByte)
+    name = strTile
+    success = SendAimbot(name, idConnection, LowByte, HighByte)
     If success = True Then
     UseItemOnName = 0
     Else
