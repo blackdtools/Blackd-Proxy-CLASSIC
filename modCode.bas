@@ -5871,9 +5871,8 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
   End If
   
   
-  If target = "" Then ' use last targeted
-    target = currTargetName(idConnection)
-  End If
+  Dim lLastTargetName As String
+  lLastTargetName = LCase(currTargetName(idConnection)) 'currTargetName=name of last target, even if there is no target atm..
   SpecialSource = False
   If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
@@ -5903,6 +5902,8 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
   End If
   ' search the person
   lTarget = LCase(target)
+  Dim RedSquareID As Long
+  RedSquareID = ReadRedSquare(idConnection)
   For y = -6 To 7
     For X = -8 To 9
       For s = 1 To 10
