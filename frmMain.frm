@@ -1006,7 +1006,8 @@ lastLoadLine = 660
     savedItem(i).t2 = &H0
     AfterLoginLogoutReason(i) = ""
     ProcessID(i) = -1
-    exeLine(i) = 0
+    'exeLine(i) = 0
+    updateExeLine i, 0, False, False
     fishCounter(i) = 0
     pushTarget(i) = 0
     pushDelay(i) = CInt(Int((PUSHDELAYTIMES * Rnd)))
@@ -1657,7 +1658,8 @@ Public Sub DoCloseActions(ByVal Index As Integer)
   savedItem(Index).t2 = &H0
   savedItem(Index).t2 = &H0
   pushDelay(Index) = CInt(Int((PUSHDELAYTIMES * Rnd)))
-  exeLine(Index) = 0
+  'exeLine(Index) = 0
+   updateExeLine Index, 0, False, False
   pushTarget(Index) = 0
   'ProcessID(index) = -1
   fishCounter(Index) = 0
@@ -7218,6 +7220,7 @@ End Sub
 Private Function LearnFromServerLogin(ByRef packet() As Byte, ByVal Index As Integer, ByVal strIP As String, Optional bstart As Long = 2) As Long
     Dim c As Byte
     Dim res As Long
+Dim tmpLong As Long
 
     If UBound(packet) < 2 Then
         LearnFromServerLogin = 0
@@ -7225,6 +7228,22 @@ Private Function LearnFromServerLogin(ByRef packet() As Byte, ByVal Index As Int
     End If
     c = packet(bstart)
     Select Case c
+    Case &H28
+       If TibiaVersionLong >= 1074 Then
+         res = PacketIPchange5(packet, Index, strIP, bstart)
+      
+            If res <> 1 Then
+              txtPackets.Text = txtPackets.Text & vbCrLf & "ERROR: FAILED TO MODIFY LOGIN PACKET!"
+            Else
+              If CloseLoginServerAfterCharList = True Then
+                 If Index > 0 Then
+                    sckServer(Index).Close
+                 End If
+              End If
+              LearnFromServerLogin = 1
+              Exit Function
+            End If
+       End If
     Case &H14
       If TibiaVersionLong >= 1012 Then
         res = PacketIPchange4(packet, Index, strIP, bstart)
@@ -7248,7 +7267,7 @@ Private Function LearnFromServerLogin(ByRef packet() As Byte, ByVal Index As Int
          End If
       End If
     Case Else
-      'Debug.Print "unknown server login packet (" & GoodHex(c) & ") : " & frmMain.showAsStr(packet, True);
+      Debug.Print "unknown server login packet (" & GoodHex(c) & ") : " & frmMain.showAsStr(packet, True);
       
     End Select
     LearnFromServerLogin = 0
