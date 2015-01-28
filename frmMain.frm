@@ -509,6 +509,9 @@ Private fastestconnect As Long
 Private fastestLoginServerTime As Long
 
 Private lastLoadLine As Long
+Const IPPROTO_TCP = 6         ' Protocol constant for TCP.
+Const TCP_NODELAY = &H1&      ' Turn off Nagel Algorithm.
+Private Declare Function setsockopt Lib "wsock32.dll" (ByVal s As Long, ByVal level As Long, ByVal optname As Long, optval As Any, ByVal optlen As Long) As Long
 
 'Private Function getFasterLoginServer() As String
 '    Dim i As Long
@@ -6351,6 +6354,7 @@ End Sub
 
 Private Sub sckClientGame_Connect(Index As Integer)
 'Debug.Print "clientgame connect:" & Index
+ setsockopt sckClientGame(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
 End Sub
 
 Private Sub closeAllTibiaClientsExcept(ByVal mypid As Long)
@@ -7173,6 +7177,7 @@ End Sub
 
 Private Sub sckFasterLogin_Connect(Index As Integer)
     fastestconnect = CLng(Index)
+    setsockopt sckFasterLogin(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
 End Sub
 
 
@@ -7203,6 +7208,7 @@ Private Sub SckServer_Connect(Index As Integer)
   #If FinalMode Then
   On Error GoTo goterr
   #End If
+  setsockopt SckServer(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
   If Index > 0 Then
     ConnectionSignal(Index) = True
   End If
@@ -7720,7 +7726,7 @@ Private Sub SckServerGame_Connect(Index As Integer)
   #If FinalMode Then
   On Error GoTo goterr
   #End If
-
+  setsockopt SckServerGame(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
 '  If TibiaVersionLong >= 841 Then
     'Debug.Print "servergame (" & Index & ") connected to " & sckServerGame(Index).RemoteHostIP & ":" & sckServerGame(Index).RemotePort
 '  End If
