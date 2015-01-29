@@ -301,35 +301,7 @@ giveError2:
 End Sub
 
 
-Public Function IsInIDE() As Boolean
 
-Dim blnIDE As Boolean
-
-On Error GoTo Error_Handler
-
-'The following will generate an error when running under IDE
-Debug.Print 1 / 0
-
-'If we got this far, then we are not running under the IDE since
-'Debug.Print is ignored by the compiler.
-blnIDE = False
-
-Exit_Procedure:
-
-IsInIDE = blnIDE
-
-Exit Function
-
-Error_Handler:
-
-'If we are here, then we are running in the IDE.
-'You could further qualify the error by evaluating
-'Err.Number = 11 (Division By Zero).
-blnIDE = True
-
-GoTo Exit_Procedure
-
-End Function
 
 Private Function ShowConfigWizard() As Boolean
   On Error GoTo goterr
@@ -396,16 +368,15 @@ Private Sub Form_Load()
     End If
   End If
   
+  If IsIDE = True Then
+    ChDrive App.path
+    ChDir App.path
+  End If
+  
   MemoryProtectedMode = False
   ForceDisableEncryption = False
   WARNING_USING_OTSERVER_RSA = False
-  #If FinalMode = 1 Then
-  If IsInIDE() = True Then
-    MsgBox "Blackd Proxy won't run properly from VB6 IDE in final mode (because a problem with crackd.dll path)" & _
-     vbCrLf & "For debug you should replace all:" & vbCrLf & "#Const FinalMode =0" & vbCrLf & "to" & vbCrLf & "#Const FinalMode =0" & vbCrLf & vbCrLf & "You should also ensure that crackd.dll is found in C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\", vbOKOnly + vbInformation, "Information for the programmer"
-    End
-  End If
-  #End If
+
   MyErrorDate = CDate("01/01/2001")
   confirmedExit = False
   stealth_stage = 0

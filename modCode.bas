@@ -288,6 +288,8 @@ Public Type TypeRuneMakerOptions
   secondActionMana As Long
   secondActionSoulpoints As Long
 End Type
+
+Public gISIDE As Boolean
 Public TrainerTimer1 As Long
 Public TrainerTimer2 As Long
 Public initialRuneBackpack() As Byte
@@ -10793,3 +10795,20 @@ goterr:
     UseItemOnName = -1
 End Function
 
+
+
+Public Function IsIDE() As Boolean '
+        gISIDE = False
+        'This line is only executed if running in the IDE and then returns True
+        Debug.Assert CheckIDE
+        If gISIDE Then
+          IsIDE = True
+        Else
+          IsIDE = False
+        End If
+End Function
+
+Private Function CheckIDE() As Boolean ' this is a helper function for Public Function IsIDE()
+        gISIDE = True 'set global flag
+        CheckIDE = True
+End Function
