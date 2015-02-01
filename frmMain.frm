@@ -512,7 +512,7 @@ Private lastLoadLine As Long
 Const IPPROTO_TCP = 6         ' Protocol constant for TCP.
 Const TCP_NODELAY = &H1&      ' Turn off Nagel Algorithm.
 Private Declare Function setsockopt Lib "wsock32.dll" (ByVal s As Long, ByVal level As Long, ByVal optname As Long, optval As Any, ByVal optlen As Long) As Long
-
+Const errIndexOutOfRange = -1610350521
 'Private Function getFasterLoginServer() As String
 '    Dim i As Long
 '    Dim idLoginSP As Long
@@ -6599,8 +6599,7 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
 goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckClientGame_ConnectionRequest(" & Index & "," & requestID & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
-
-Private Sub SckClientGame_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+Private Sub HandleSckClientGame_Data(Index As Integer, MyCodingIsLazyPacket() As Byte, bytesTotal As Long)
   ' gameclient gets data
   Dim packet() As Byte 'a tibia packet is an array of bytes
   Dim listPos As Integer
@@ -6629,7 +6628,9 @@ Private Sub SckClientGame_DataArrival(Index As Integer, ByVal bytesTotal As Long
   If Index > 0 Then
   processIt = True
   If (UseCrackd = True) And (MustCheckFirstClientPacket(Index) = False) Then
-    sckClientGame(Index).GetData realRawPacket, vbArray + vbByte
+    'sckClientGame(Index).GetData realRawPacket, vbArray + vbByte
+    ReDim realRawPacket(bytesTotal - 1)
+    RtlMoveMemory realRawPacket(0), MyCodingIsLazyPacket(0), bytesTotal
     SPpos = 0
     'Exit Sub 'borrame
     SPlim = UBound(realRawPacket)
@@ -6686,8 +6687,9 @@ Private Sub SckClientGame_DataArrival(Index As Integer, ByVal bytesTotal As Long
     Loop While (SPpos < SPlim)
     Exit Sub
   Else
-    sckClientGame(Index).GetData packet, vbArray + vbByte
-    
+    'sckClientGame(Index).GetData packet, vbArray + vbByte
+    ReDim packet(bytesTotal - 1)
+    RtlMoveMemory packet(0), MyCodingIsLazyPacket(0), bytesTotal
     
   End If
 workAroundForRareError:
@@ -6891,10 +6893,56 @@ workAroundForRareError:
   
   Exit Sub
 errclose:
-  frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & Index & " lost connection at SckClientGame_DataArrival #"
+  frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & Index & " lost connection at HandleSckClientGame_Data #"
   frmMain.DoCloseActions Index
   DoEvents
 End Sub
+
+Private Sub SckClientGame_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+    Dim FullPacket() As Byte
+    Dim SubPacket() As Byte
+    Dim offset As Long
+    Dim SubPacketLen As Long
+
+    sckClientGame(Index).GetData FullPacket, vbArray + vbByte
+    offset = 0
+    While offset < bytesTotal    '
+        If UBound(FullPacket) < offset + 2 Then    'should never happen. means coding error
+            Err.Raise _
+                    Number:=errIndexOutOfRange, _
+                    Description:="Failed to read all packets in SckClientGame_DataArrival (after reading 'all' packets, offset was not equal to bytesTotal)", _
+                    Source:="SckClientGame_DataArrival"
+
+        End If
+
+        SubPacketLen = GetTheLong(FullPacket(offset), FullPacket(offset + 1)) + 2
+        ReDim SubPacket(SubPacketLen - 1)
+        RtlMoveMemory SubPacket(0), FullPacket(offset), SubPacketLen
+        'If (UBound(SubPacket) <> UBound(FullPacket)) Or SubPacketLen <> bytesTotal Then
+        '    Err.Raise _
+             '        Number:=1, _
+             '        Description:="Sum Ting Wong", _
+             '        Source:="SckClientGame_DataArrival"
+        '
+        'End If
+
+        HandleSckClientGame_Data Index, SubPacket, SubPacketLen
+        offset = offset + SubPacketLen
+    Wend
+
+    If offset <> bytesTotal Then    'this should never happen.. means coding error
+        Err.Raise _
+                Number:=errIndexOutOfRange, _
+                Description:="Failed to read all packets in SckClientGame_DataArrival (after reading 'all' packets, offset was not equal to bytesTotal)", _
+                Source:="SckClientGame_DataArrival"
+    End If
+
+
+End Sub
+
+
+
+
 
 Public Sub UnifiedSendToClientGame(ByVal Index As Integer, ByRef packet() As Byte, Optional forceOldMode As Boolean = False)
   Dim extrab As Long
