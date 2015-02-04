@@ -424,6 +424,64 @@ Public Function getProcessOffset(ByVal hProcess As Long, ByVal pid As Long) As L
 goterr:
     getProcessOffset = 0
 End Function
+Public Function Memory_ReadCString(ByVal address As Long, ByVal process_Hwnd As Long, Optional absoluteAddress As Boolean = False, Optional EOLCharacter As Byte = &H0) As String
+' Declare some variables we need
+    Dim PID As Long         ' Used to hold the Process Id
+    Dim phandle As Long     ' Holds the Process Handle
+    Dim ByteBuf As Byte   ' Byte
+    Dim res As String
+    Dim offset As Long
+    Dim i As Long
+    Dim BytesRead As Long
+    On Error GoTo goterr
+
+    ' First get a handle to the "game" window
+    If (process_Hwnd = 0) Then Exit Function
+
+    ' We can now get the pid
+    GetWindowThreadProcessId process_Hwnd, PID
+
+
+
+    ' Use the pid to get a Process Handle
+    'phandle = OpenProcess(PROCESS_VM_READ, False, pid)
+
+    phandle = OpenProcess(PROCESS_READ_WRITE_QUERY, False, PID)    ' more powerfull
+    If (phandle = 0) Then
+        Debug.Print "Error " & CStr(Err.LastDllError) & ": " & GetDllErrorDescription(Err.LastDllError)
+        Exit Function
+    End If
+
+    '1
+    'offset = 0
+    If ((useDynamicOffsetBool = True) And (absoluteAddress = False)) Then
+        offset = getProcessOffset(phandle, process_Hwnd)
+        address = address + offset
+    End If
+    ' Read string
+    i = 0
+    While True
+        BytesRead = ReadProcessMemory(phandle, address + i, ByteBuf, 1, 0&)
+        If BytesRead <> 1 Then
+            'handle error??...
+            GoTo exitwhile    ' dunno how to Exit While in vb6...
+        End If
+        If ByteBuf = EOLCharacter Then
+            GoTo exitwhile    ' dunno how to Exit While in vb6...
+        End If
+        res = res + Chr(ByteBuf)
+        i = i + 1
+    Wend
+exitwhile:
+    ' Close the Process Handle
+    CloseHandle phandle
+    Memory_ReadCString = res
+    Exit Function
+goterr:
+    '???
+    CloseHandle phandle
+    Memory_ReadCString = res
+End Function
 
 Public Function Memory_ReadByte(ByVal address As Long, ByVal process_Hwnd As Long, _
  Optional absoluteAddress As Boolean = False) As Byte
