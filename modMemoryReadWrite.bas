@@ -513,7 +513,7 @@ Public Function Memory_ReadLong(ByVal address As Long, ByVal process_Hwnd As Lon
    CloseHandle phandle
   
 End Function
-Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead, ByVal Stringify As Boolean, _
+Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As Long, ByVal Stringify As Boolean, _
                                 ByVal StringMinLen As Long, ByVal process_Hwnd As Long, Optional absoluteAddress As Boolean = False) As String
 ' Declare some variables we need
     Dim PID As Long         ' Used to hold the Process Id
@@ -567,7 +567,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead, B
                 tmpstr = ""
             Else
                 If Stringify And Len(tmpstr) > 0 Then
-                    res = res & " " & Hexarize(tmpstr) & " " & GoodHex(ByteBuf)
+                    res = res & " " & Hexarize(tmpstr) & GoodHex(ByteBuf)    ' Hexarize ends with " "
                     tmpstr = ""
                 Else
                     res = res & " " & GoodHex(ByteBuf)
@@ -576,17 +576,29 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead, B
         End If
     Next i
 exitwhile:
+    If Stringify And Len(tmpstr) >= StringMinLen Then
+        res = res & " " & tmpstr
+        tmpstr = ""
+    Else
+        If Stringify And Len(tmpstr) > 0 Then
+            res = res & " " & RTrim(Hexarize(tmpstr))
+            tmpstr = ""
+        End If
+    End If
+
+
     ' Close the Process Handle
     CloseHandle phandle
     Memory_Analyze1 = res
     Exit Function
 goterr:
     '???
-    CloseHandle phandle
     Memory_Analyze1 = res & "... after reading " & CStr(i) & " bytes, got an error reading at memory location (decimal) " & CStr(StartAddress + i) & " :  Err.Number: " & _
                       CStr(Err.Number) & " Err.Description: " & Err.Description & " Err.LastDllError: " & CStr(Err.LastDllError)
+    If phandle <> 0 Then
+        CloseHandle phandle
+    End If
 End Function
-
 Public Function Memory_BlackdAddressToFinalAdddress(ByVal address As Long, ByVal process_Hwnd As Long)
    Dim pid As Long         ' Used to hold the Process Id
    Dim phandle As Long     ' Holds the Process Handle
