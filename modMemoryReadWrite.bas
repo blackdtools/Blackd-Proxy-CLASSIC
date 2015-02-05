@@ -553,7 +553,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As
     ' Read string
 
     For i = 1 To BytesToRead Step 1
-        LastBytesRead = ReadProcessMemory(phandle, StartAddress + i, ByteBuf, 1, 0&)
+        LastBytesRead = ReadProcessMemory(phandle, StartAddress + i -1, ByteBuf, 1, 0&)
         If LastBytesRead <> 1 Then
             GoTo goterr
             'err.raise?
@@ -593,7 +593,7 @@ exitwhile:
     Exit Function
 goterr:
     '???
-    Memory_Analyze1 = res & "... after reading " & CStr(i) & " bytes, got an error reading at memory location (decimal) " & CStr(StartAddress + i) & " :  Err.Number: " & _
+    Memory_Analyze1 = res & "... after reading " & CStr(i - 1) & " bytes, got an error reading at memory location (decimal) " & CStr(StartAddress + i -1 ) & " :  Err.Number: " & _
                       CStr(Err.Number) & " Err.Description: " & Err.Description & " Err.LastDllError: " & CStr(Err.LastDllError)
     If phandle <> 0 Then
         CloseHandle phandle
