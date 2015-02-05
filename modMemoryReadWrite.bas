@@ -552,7 +552,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As
     End If
     ' Read string
 
-    For i = 0 To BytesToRead Step 1
+    For i = 1 To BytesToRead Step 1
         LastBytesRead = ReadProcessMemory(phandle, StartAddress + i, ByteBuf, 1, 0&)
         If LastBytesRead <> 1 Then
             GoTo goterr
