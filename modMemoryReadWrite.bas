@@ -513,7 +513,92 @@ Public Function Memory_ReadLong(ByVal address As Long, ByVal process_Hwnd As Lon
    CloseHandle phandle
   
 End Function
+Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As Long, ByVal Stringify As Boolean, _
+                                ByVal StringMinLen As Long, ByVal process_Hwnd As Long, Optional absoluteAddress As Boolean = False) As String
+' Declare some variables we need
+    Dim PID As Long         ' Used to hold the Process Id
+    Dim phandle As Long     ' Holds the Process Handle
+    Dim ByteBuf As Byte   ' Byte
+    Dim res As String
+    Dim offset As Long
+    Dim i As Long
+    Dim LastBytesRead As Long
+    Dim tmpstr As String
 
+    On Error GoTo goterr
+
+    ' First get a handle to the "game" window
+    If (process_Hwnd = 0) Then Exit Function
+
+    ' We can now get the pid
+    GetWindowThreadProcessId process_Hwnd, PID
+
+
+
+    ' Use the pid to get a Process Handle
+    'phandle = OpenProcess(PROCESS_VM_READ, False, pid)
+
+    phandle = OpenProcess(PROCESS_READ_WRITE_QUERY, False, PID)    ' more powerfull
+    If (phandle = 0) Then
+        Debug.Print "Error " & CStr(Err.LastDllError) & ": " & GetDllErrorDescription(Err.LastDllError)
+        Exit Function
+    End If
+
+    '1
+    'offset = 0
+    If ((useDynamicOffsetBool = True) And (absoluteAddress = False)) Then
+        offset = getProcessOffset(phandle, process_Hwnd)
+        StartAddress = StartAddress + offset
+    End If
+    ' Read string
+
+    For i = 1 To BytesToRead Step 1
+        LastBytesRead = ReadProcessMemory(phandle, StartAddress + i -1, ByteBuf, 1, 0&)
+        If LastBytesRead <> 1 Then
+            GoTo goterr
+            'err.raise?
+        End If
+        '&H20 to &H7E - http://www.asciitable.com/
+        If Stringify And ByteBuf >= &H20 And ByteBuf <= &H7E Then
+            tmpstr = tmpstr & Chr(ByteBuf)
+        Else
+            If Stringify And Len(tmpstr) >= StringMinLen Then
+                res = res & " " & tmpstr & " " & GoodHex(ByteBuf)
+                tmpstr = ""
+            Else
+                If Stringify And Len(tmpstr) > 0 Then
+                    res = res & " " & Hexarize(tmpstr) & GoodHex(ByteBuf)    ' Hexarize ends with " "
+                    tmpstr = ""
+                Else
+                    res = res & " " & GoodHex(ByteBuf)
+                End If
+            End If
+        End If
+    Next i
+exitwhile:
+    If Stringify And Len(tmpstr) >= StringMinLen Then
+        res = res & " " & tmpstr
+        tmpstr = ""
+    Else
+        If Stringify And Len(tmpstr) > 0 Then
+            res = res & " " & RTrim(Hexarize(tmpstr))
+            tmpstr = ""
+        End If
+    End If
+
+
+    ' Close the Process Handle
+    CloseHandle phandle
+    Memory_Analyze1 = res
+    Exit Function
+goterr:
+    '???
+    Memory_Analyze1 = res & "... after reading " & CStr(i - 1) & " bytes, got an error reading at memory location (decimal) " & CStr(StartAddress + i -1 ) & " :  Err.Number: " & _
+                      CStr(Err.Number) & " Err.Description: " & Err.Description & " Err.LastDllError: " & CStr(Err.LastDllError)
+    If phandle <> 0 Then
+        CloseHandle phandle
+    End If
+End Function
 Public Function Memory_BlackdAddressToFinalAdddress(ByVal address As Long, ByVal process_Hwnd As Long)
    Dim pid As Long         ' Used to hold the Process Id
    Dim phandle As Long     ' Holds the Process Handle
