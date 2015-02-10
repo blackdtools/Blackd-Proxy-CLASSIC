@@ -6259,7 +6259,7 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
         Else
           lSquare = LCase(GetNameFromID(idConnection, tmpID))
         End If
-        If (Len(lTarget) <> 0 And lSquare = lTarget) Or (Len(lTarget) = 0 And RedSquareID <> 0 And RedSquareID = tmpID) Or (RedSquareID = 0 And Len(lTarget) = 0 And Len(lLastTargetName) <> 0 And lLastTargetName = lSquare) Then
+        If (Len(lTarget) <> 0 And lSquare = lTarget) Or (Len(lTarget) = 0 And RedSquareID <> 0 And RedSquareID = tmpID) Or (((RedSquareID = 0 Or Not HPOfID(idConnection).Exists(RedSquareID)) Or GetHPFromID(idConnection, CDbl(RedSquareID)) = 0) And Len(lTarget) = 0 And Len(lLastTargetName) <> 0 And lLastTargetName = lSquare) Then
         '0D 00 84 FF FF 40 00 00 40 0C 00 CB DD 01 40
           If SpecialSource = True Then
                sCheat = "83 FF FF 00 00 00 " & GoodHex(runeB1) & " " & GoodHex(runeB2) & " " & _
