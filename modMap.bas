@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "35.6" ' Proxy version ' string version
-Public Const myNumericVersion = 35600 ' numeric version
+Public Const ProxyVersion = "35.7" ' Proxy version ' string version
+Public Const myNumericVersion = 35700 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -6189,6 +6189,31 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' F3 00 00 09 00 4D 69 6E 75 6E 69 6E 68 61 00
       templ1 = GetTheLong(packet(pos + 3), packet(pos + 4))
       pos = pos + 6 + templ1
+    Case &HF5
+      ' new since Tibia 10.76
+      ' List of equipable items found in your char
+      ' F5
+      ' 11 00 - item count: 17, then items are listed below:
+      ' 01 00 00 01 00
+      ' 02 00 00 01 00
+      ' 03 00 00 01 00
+      ' 04 00 00 01 00
+      ' 05 00 00 01 00
+      ' 06 00 00 01 00
+      ' 07 00 00 01 00
+      ' 08 00 00 01 00
+      ' 09 00 00 01 00
+      ' 0A 00 00 01 00
+      ' 0B 00 00 01 00
+      ' 25 0B 00 01 00
+      ' D7 0B 00 05 00
+      ' 51 0D 00 01 00
+      ' E0 0D 00 01 00
+      ' 5E 1E 00 01 00
+      ' D7 3E 00 01 00
+      templ1 = GetTheLong(packet(pos + 1), packet(pos + 2))
+      pos = pos + 3 + (templ1 * 5)
+      
     Case &HF6 ' TIBIA 9.4 - OPENING AUCTION HOUSE
       '            F6 00 00 00 00 01 00 00 00
       '            F6 10 27 00 00 01 00 06 00 0A 01 01 00 1F 0D 01 00 2C 0D 01 00 2F 0D 01 00 51 0D 01 00 5E 1E 01 00
