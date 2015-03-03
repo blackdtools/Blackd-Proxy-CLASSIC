@@ -57,7 +57,11 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 35.7" & vbCrLf & _
+    strMsg = "Blackd Proxy 35.8" & vbCrLf & _
+     "----------------------------" & vbCrLf & _
+     " - Fixed login bug in OT servers 10.74+"
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 35.7" & vbCrLf & _
      "----------------------------" & vbCrLf & _
      " - Updated parser for new packets at Tibia 10.76"
      

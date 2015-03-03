@@ -5370,6 +5370,10 @@ Public Sub WriteIni()
 
 
 
+  strInfo = "&H" & Hex(adrRSA)
+  i = setBlackdINI("MemoryAddresses", "adrRSA", strInfo, here)
+  
+
   strInfo = "&H" & Hex(adrMulticlient)
   i = setBlackdINI("MemoryAddresses", "adrMulticlient", strInfo, here)
   strInfo = "&H" & Hex(multiclientByte1)
@@ -7300,7 +7304,9 @@ Dim tmpLong As Long
             End If
        End If
     Case &H14
-      If TibiaVersionLong >= 1012 Then
+      If TibiaVersionLong >= 1074 Then
+        res = PacketIPchange5b(packet, Index, strIP, bstart)
+      ElseIf TibiaVersionLong >= 1012 Then
         res = PacketIPchange4(packet, Index, strIP, bstart)
       ElseIf TibiaVersionLong >= 1011 Then
         res = PacketIPchange3(packet, Index, strIP, bstart)
