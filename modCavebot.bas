@@ -166,7 +166,18 @@ Public Sub updateExeLine(ByVal Sid As Long, ByVal newExeLine As Long, ByVal Rela
     End If
     If (updateLst = True) Then
         If (modMap.cavebotIDselected = Sid) Then
-        frmCavebot.lstScript.ListIndex = exeLine(Sid)
+            Dim eLine As Long
+            eLine = exeLine(Sid)
+            If frmCavebot.lstScript.ListCount > eLine Then
+                #If FinalMode = 0 Then
+                Debug.Print "Executing line " & eLine
+                #End If
+                frmCavebot.lstScript.ListIndex = eLine
+            Else
+                #If FinalMode = 0 Then
+                Debug.Print "Trying to execute a line beyond script limits: " & eLine
+                #End If
+            End If
         End If
     End If
 End Sub
