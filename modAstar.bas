@@ -1,5 +1,5 @@
 Attribute VB_Name = "modAstar"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 ' move orders
 Public Const MoveRight = &H1

@@ -549,7 +549,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 

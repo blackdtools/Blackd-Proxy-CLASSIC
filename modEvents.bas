@@ -1,5 +1,5 @@
 Attribute VB_Name = "modEvents"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 Public Const MAXSCHEDULED = 20

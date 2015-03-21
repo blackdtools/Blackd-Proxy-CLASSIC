@@ -1,5 +1,5 @@
 Attribute VB_Name = "modBrowser"
-#Const FinalMode = 0
+#Const FinalMode = 1
 
 'This module contains all the declarations to use the
 'Windows 95 Shell API to use the browse for folders

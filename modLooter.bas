@@ -1,5 +1,5 @@
 Attribute VB_Name = "modLooter"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 Public Const MAXLOOTQUEUE As Long = 19
 Public Type TypeLootPoint

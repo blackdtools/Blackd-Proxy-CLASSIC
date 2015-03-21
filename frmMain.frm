@@ -492,7 +492,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const BufferDebug = 0
 Option Explicit
 Private Const OptCte4 = 1 'internal size of a byte ( 1 byte )

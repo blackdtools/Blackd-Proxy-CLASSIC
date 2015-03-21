@@ -1,5 +1,5 @@
 Attribute VB_Name = "modDirectSound"
-#Const FinalMode = 0
+#Const FinalMode = 1
 ' DirectX sound basic functions - by Blackd
 Option Explicit
 Public DirectX As DirectX7

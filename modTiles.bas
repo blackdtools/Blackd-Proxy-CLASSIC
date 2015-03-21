@@ -1,5 +1,5 @@
 Attribute VB_Name = "modTiles"
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const TileDebug = 0
 Option Explicit
 Public DBGtileError As String

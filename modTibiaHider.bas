@@ -1,6 +1,6 @@
 Attribute VB_Name = "modTibiaHider"
 Option Explicit
-#Const FinalMode = 0
+#Const FinalMode = 1
 
 
 

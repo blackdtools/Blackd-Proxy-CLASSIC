@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMC"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 ' The special multiclient address:

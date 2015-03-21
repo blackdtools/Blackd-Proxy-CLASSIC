@@ -1,5 +1,5 @@
 Attribute VB_Name = "modCavebot"
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const withdebugreposition = False
 Option Explicit
 Private Const maxSETUSEITEMDist As Long = 2

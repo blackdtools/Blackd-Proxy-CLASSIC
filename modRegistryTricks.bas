@@ -1,5 +1,5 @@
 Attribute VB_Name = "modRegistryTricks"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 Public stealth_stage As Long

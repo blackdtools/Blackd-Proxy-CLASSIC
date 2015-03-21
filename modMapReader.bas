@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMapReader"
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const ShowMapLoading = 0
 Option Explicit
 Public Type TypeBMSquare

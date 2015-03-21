@@ -1,5 +1,5 @@
 Attribute VB_Name = "modCode"
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const AllowPowerCommands = 1
 #Const cte_DownloadMode = 0 ' 0 = winsock ; 1 = inet
 Option Explicit

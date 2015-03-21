@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMap"
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const MapDebug = 0
 Option Explicit
 

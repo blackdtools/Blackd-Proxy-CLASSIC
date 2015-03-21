@@ -1,5 +1,5 @@
 Attribute VB_Name = "modTrainer"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 Public trainerIDselected As Long
 Public Type TypeRefillSlot

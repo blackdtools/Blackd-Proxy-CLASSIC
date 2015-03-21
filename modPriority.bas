@@ -1,5 +1,5 @@
 Attribute VB_Name = "modPriority"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 ' (c) Copyright 2003 Andrew Novick.

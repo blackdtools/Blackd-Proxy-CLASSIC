@@ -1,5 +1,5 @@
 Attribute VB_Name = "modRSA"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 Public adrRSA As Long

@@ -1,5 +1,5 @@
 Attribute VB_Name = "modWarbot"
-#Const FinalMode = 0
+#Const FinalMode = 1
 Option Explicit
 
 Public Const MAX_NAME_LENGHT = 30
