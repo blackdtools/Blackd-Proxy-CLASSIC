@@ -1,5 +1,5 @@
 Attribute VB_Name = "modHotkeys"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 Public Type TypeHotkey
   key1 As Byte

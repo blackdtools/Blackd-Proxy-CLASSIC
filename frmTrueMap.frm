@@ -373,7 +373,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 Public Function ColourPriority(Colour As ColorConstants) As Integer
   Select Case Colour
@@ -604,10 +604,15 @@ End Sub
 Public Sub SetButtonColours()
  Dim z As Long
  Dim i As Long
+ 
  If mapIDselected = 0 Then
    z = 7
  Else
    z = myZ(mapIDselected)
+ End If
+ If (z < 0) Or (z > 15) Then
+  Debug.Print "BUG: error at SetButtonColours - z=" & CStr(z)
+  Exit Sub
  End If
  If z <= 7 Then
    For i = 0 To 7

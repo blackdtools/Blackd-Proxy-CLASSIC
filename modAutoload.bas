@@ -1,5 +1,5 @@
 Attribute VB_Name = "modAutoload"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 Private Const CteAutoloadSubfolder As String = "autoload"
 Public SettingsOfChar As scripting.Dictionary  ' A dictionary Char Name (string) -> Settings (string)

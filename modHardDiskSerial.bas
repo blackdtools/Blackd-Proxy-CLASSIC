@@ -1,5 +1,5 @@
 Attribute VB_Name = "modHardDisk"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 
 'Constantes de las carpetas / Directorios especiales de Windows

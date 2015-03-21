@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMap"
-#Const FinalMode = 1
+#Const FinalMode = 0
 #Const MapDebug = 0
 Option Explicit
 
@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "35.9" ' Proxy version ' string version
-Public Const myNumericVersion = 35900 ' numeric version
+Public Const ProxyVersion = "36.9" ' Proxy version ' string version
+Public Const myNumericVersion = 36000 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -2891,6 +2891,9 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
        If TibiaVersionLong >= 870 Then
         pos = pos + 1 '  1 new byte since Tibia 8.7
        End If
+       If TibiaVersionLong >= 1076 Then ' maybe before 10.76 too - unconfirmed
+         pos = pos + 1 '  1 new byte since Tibia 10.76
+       End If
        If (cavebotEnabled(idConnection) = True) Or (RuneMakerOptions(idConnection).activated = True) Or (RuneMakerOptions(idConnection).autoEat = True) Then
          AfterLoginLogoutReason(idConnection) = "YOU DIED!" & vbLf & "Auto reconnection canceled to avoid potential disasters."
        End If
@@ -3696,11 +3699,15 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' close container
       somethingChangedInBps(idConnection) = True
       pauseStacking(idConnection) = 0
-      tempID = CLng(packet(pos + 1)) 'ID?
-      Backpack(idConnection, tempID).open = False
-      Backpack(idConnection, tempID).name = ""
-      Backpack(idConnection, tempID).cap = 0
-      Backpack(idConnection, tempID).used = 0
+      tempID = CLng(packet(pos + 1)) 'ID
+      If (tempID <= HIGHEST_BP_ID) Then
+        Backpack(idConnection, tempID).open = False
+        Backpack(idConnection, tempID).name = ""
+        Backpack(idConnection, tempID).cap = 0
+        Backpack(idConnection, tempID).used = 0
+      Else
+        Debug.Print "BUG: bad parsing of 6F packet. Errors probably happened before this point."
+      End If
       ' SendMessageToClient idConnection, "You closed a backpack ID : " & CStr(lonN), "GM BlackdProxy"
       pos = pos + 2
     Case &H70
@@ -5747,9 +5754,12 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       
 
       
-
       templ2 = 0
-      If TibiaVersionLong >= 872 Then
+      If TibiaVersionLong >= 1055 Then
+        If tempb1 = &H12 Then
+            templ2 = 1
+        End If
+      ElseIf TibiaVersionLong >= 872 Then
         If tempb1 = &H11 Then
             templ2 = 1
         End If
@@ -5767,10 +5777,14 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         End If
       End If
       
+      'Debug.Print GoodHex(tempb1) & ": message =" & mobName
+      
       If (templ2 = 1) Then
+               
+        
         If ((TrainerOptions(idConnection).misc_dance_14min = 1) And _
             (CheatsPaused(idConnection) = False)) Then
-         ' Debug.Print "REAL serverLogoutMessage=" & mobName
+
           If mobName = serverLogoutMessage Then
            ' Debug.Print "DANCE OK"
             aRes = randomNumberBetween(0, 3)

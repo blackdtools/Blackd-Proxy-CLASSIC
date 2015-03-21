@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMemoryReadWrite"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 
 Private Enum enPriority_Class

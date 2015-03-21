@@ -1,5 +1,5 @@
 Attribute VB_Name = "modAddressPath"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 
 Public Type AddressPath

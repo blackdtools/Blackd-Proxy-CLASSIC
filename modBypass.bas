@@ -1,5 +1,5 @@
 Attribute VB_Name = "modBypass"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 Dim ServerIP() As String
 Dim ServerName() As String

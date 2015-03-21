@@ -47,7 +47,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 
 Private Sub cmdOk_Click()
@@ -57,7 +57,13 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 35.9" & vbCrLf & _
+    
+    strMsg = "Blackd Proxy 36.0" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixed a bug at death event in Tibia 10.76" & vbCrLf & _
+     " - Fixed a bug with the anti idle feature of our trainer"
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 35.9" & vbCrLf & _
      "----------------------------" & vbCrLf & _
      " - Fixed bug that happened when a cavebot script reached the end."
      

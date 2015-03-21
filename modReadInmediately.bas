@@ -1,5 +1,5 @@
 Attribute VB_Name = "modReadInmediately"
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 
 Public Const cteOfficial As String = " - OFFICIAL TIBIA"

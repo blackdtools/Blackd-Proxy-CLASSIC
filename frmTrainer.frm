@@ -962,7 +962,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-#Const FinalMode = 1
+#Const FinalMode = 0
 Option Explicit
 Public Sub UpdateValues()
   Dim goodValues As Boolean

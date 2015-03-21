@@ -1,5 +1,5 @@
 Attribute VB_Name = "modCode"
-#Const FinalMode = 1
+#Const FinalMode = 0
 #Const AllowPowerCommands = 1
 #Const cte_DownloadMode = 0 ' 0 = winsock ; 1 = inet
 Option Explicit
@@ -6276,6 +6276,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
           ChangePlayTheDangerSound False
           aRes = ChangePauseStatus(idConnection, True, True)
         ElseIf rightpart = "dance" Then
+       ' Debug.Print "antiidle"
           res = 1
           aRes = randomNumberBetween(0, 3)
           tmpStr = "exiva turn" & CStr(aRes)
