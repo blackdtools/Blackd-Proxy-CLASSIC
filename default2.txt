@@ -1,0 +1,24 @@
+setMeleeKill spider
+setMeleeKill cave rat
+setMeleeKill rat
+setLoot D7 0B
+setLootDistance 1
+setBot PKwarnings=0
+move 32374,32182,8
+move 32369,32186,8
+move 32368,32190,8
+move 32368,32198,8
+move 32369,32203,8
+move 32369,32209,8
+move 32369,32214,8
+move 32374,32214,8
+move 32378,32214,8
+move 32381,32214,8
+move 32374,32214,8
+move 32369,32213,8
+move 32369,32203,8
+move 32369,32196,8
+move 32369,32188,8
+move 32369,32184,8
+move 32372,32183,8
+gotoScriptLine 0

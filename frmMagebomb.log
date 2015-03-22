@@ -1,0 +1,2 @@
+Línea 38: la clase MSWinsockLib.Winsock del control clientLess no era una clase de control cargada.
+Línea 46: la clase MSFlexGridLib.MSFlexGrid del control gridBomb no era una clase de control cargada.
