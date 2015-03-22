@@ -1,0 +1,1562 @@
+[Root]
+Most Recent Package=p40
+
+[Package|Blackd Proxy|Package]
+PackageFolder=C:\blackdProxy\setup
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup\setup.exe
+File2=C:\blackdProxy\setup\Setup.Lst
+File3=C:\blackdProxy\setup\BlackdProxy.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+[Package|Blackd Proxy|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup
+
+[Package|Blackd Proxy|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Blackd Proxy|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Blackd Proxy|Files Found]
+
+[Package|Blackd Proxy|Files Released]
+help.CHI=
+
+[Package|Blackd Proxy|Missing Dependency Information]
+
+[Package|Blackd Proxy|Out-of-Date Dependency Information]
+
+[Package|Blackd Proxy|Files Added]
+C:\blackdProxy\realServers.txt=
+
+[Package|Blackd Proxy|Files Removed]
+
+[Package|Blackd Proxy|Files In Project]
+C:\BlackdProxy.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\realServers.txt=Yes
+
+[Package|Blackd Proxy|Configure Registry Files]
+Applicable=No
+
+[Package|Blackd Proxy|Configure Remote Servers]
+Applicable=No
+
+[Package|Blackd Proxy|Install Locations]
+C:\BlackdProxy.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\realServers.txt=$(AppPath)
+
+[Package|Blackd Proxy|Configure Shared Files]
+Applicable=Yes
+C:\BlackdProxy.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\realServers.txt=No
+
+[Package|Blackd Proxy|Distribution]
+Type=single
+Size=
+Title=BlackdProxy
+
+[Package|Blackd Proxy|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|Blackd Proxy|BlackdProxy]
+Icon1=BlackdProxy.exe
+Title1=BlackdProxy
+StartIn1=$(AppPath)
+Key1=Icon1
+
+
+[Package|BlackdProxy|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup
+
+[Package|BlackdProxy|Configure DAO ISAMs]
+Applicable=No
+
+[Package|BlackdProxy|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|BlackdProxy|Files Found]
+
+[Package|BlackdProxy|Files Released]
+help.CHI=
+
+[Package|BlackdProxy|Missing Dependency Information]
+
+[Package|BlackdProxy|Out-of-Date Dependency Information]
+
+[Package|BlackdProxy|Files Added]
+C:\blackdProxy\realServers.txt=
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+
+[Package|BlackdProxy|Files Removed]
+
+[Package|BlackdProxy|Files In Project]
+C:\blackdProxy\BlackdProxy.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\realServers.txt=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+
+[Package|BlackdProxy|Configure Registry Files]
+Applicable=No
+
+[Package|BlackdProxy|Configure Remote Servers]
+Applicable=No
+
+[Package|BlackdProxy|Install Locations]
+C:\blackdProxy\BlackdProxy.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\realServers.txt=$(AppPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+
+[Package|BlackdProxy|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\realServers.txt=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+
+[Package|BlackdProxy|Distribution]
+Type=single
+Size=
+Title=BlackdProxy
+
+[Package|BlackdProxy|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|BlackdProxy|BlackdProxy]
+Icon1=BlackdProxy.exe
+Title1=BlackdProxy
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|BlackdProxy|Package]
+PackageFolder=C:\blackdProxy\setup
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup\setup.exe
+File2=C:\blackdProxy\setup\Setup.Lst
+File3=C:\blackdProxy\setup\BlackdProxy.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|BlackdProxy11|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup
+
+[Package|BlackdProxy11|Configure DAO ISAMs]
+Applicable=No
+
+[Package|BlackdProxy11|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|BlackdProxy11|Files Found]
+
+[Package|BlackdProxy11|Files Released]
+help.CHI=
+
+[Package|BlackdProxy11|Missing Dependency Information]
+
+[Package|BlackdProxy11|Out-of-Date Dependency Information]
+
+[Package|BlackdProxy11|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\realServers.txt=
+
+[Package|BlackdProxy11|Files Removed]
+
+[Package|BlackdProxy11|Files In Project]
+C:\blackdProxy\BlackdProxy11.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\realServers.txt=Yes
+
+[Package|BlackdProxy11|Configure Registry Files]
+Applicable=No
+
+[Package|BlackdProxy11|Configure Remote Servers]
+Applicable=No
+
+[Package|BlackdProxy11|Install Locations]
+C:\blackdProxy\BlackdProxy11.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\realServers.txt=$(AppPath)
+
+[Package|BlackdProxy11|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy11.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\realServers.txt=No
+
+[Package|BlackdProxy11|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.1
+
+[Package|BlackdProxy11|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|BlackdProxy11|BlackdProxy]
+Icon1=BlackdProxy11.exe
+Title1=BlackdProxy 1.1
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|BlackdProxy11|Package]
+PackageFolder=C:\blackdProxy\setup
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup\setup.exe
+File2=C:\blackdProxy\setup\Setup.Lst
+File3=C:\blackdProxy\setup\BlackdProxy11.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|BlackdProxy1.1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup11
+
+[Package|BlackdProxy1.1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|BlackdProxy1.1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|BlackdProxy1.1|Files Found]
+
+[Package|BlackdProxy1.1|Files Released]
+help.CHI=
+
+[Package|BlackdProxy1.1|Missing Dependency Information]
+
+[Package|BlackdProxy1.1|Out-of-Date Dependency Information]
+
+[Package|BlackdProxy1.1|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\realServers.txt=
+
+[Package|BlackdProxy1.1|Files Removed]
+
+[Package|BlackdProxy1.1|Files In Project]
+C:\blackdProxy\BlackdProxy11.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\realServers.txt=Yes
+
+[Package|BlackdProxy1.1|Configure Registry Files]
+Applicable=No
+
+[Package|BlackdProxy1.1|Configure Remote Servers]
+Applicable=No
+
+[Package|BlackdProxy1.1|Install Locations]
+C:\blackdProxy\BlackdProxy11.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\realServers.txt=$(AppPath)
+
+[Package|BlackdProxy1.1|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy11.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\realServers.txt=No
+
+[Package|BlackdProxy1.1|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.1
+
+[Package|BlackdProxy1.1|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|BlackdProxy1.1|BlackdProxy]
+Icon1=BlackdProxy11.exe
+Title1=BlackdProxy 1.1
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|BlackdProxy1.1|Package]
+PackageFolder=C:\blackdProxy\setup11
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup11\setup.exe
+File2=C:\blackdProxy\setup11\Setup.Lst
+File3=C:\blackdProxy\setup11\BlackdProxy11.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Blackd Proxy 1.2|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup12
+
+[Package|Blackd Proxy 1.2|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Blackd Proxy 1.2|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Blackd Proxy 1.2|Files Found]
+
+[Package|Blackd Proxy 1.2|Files Released]
+help.CHI=
+
+[Package|Blackd Proxy 1.2|Missing Dependency Information]
+
+[Package|Blackd Proxy 1.2|Out-of-Date Dependency Information]
+
+[Package|Blackd Proxy 1.2|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\realServers.txt=
+
+[Package|Blackd Proxy 1.2|Files Removed]
+
+[Package|Blackd Proxy 1.2|Files In Project]
+C:\blackdProxy\BlackdProxy12.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\realServers.txt=Yes
+
+[Package|Blackd Proxy 1.2|Configure Registry Files]
+Applicable=No
+
+[Package|Blackd Proxy 1.2|Configure Remote Servers]
+Applicable=No
+
+[Package|Blackd Proxy 1.2|Install Locations]
+C:\blackdProxy\BlackdProxy12.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\realServers.txt=$(AppPath)
+
+[Package|Blackd Proxy 1.2|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy12.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\realServers.txt=No
+
+[Package|Blackd Proxy 1.2|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.2
+
+[Package|Blackd Proxy 1.2|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|Blackd Proxy 1.2|BlackdProxy]
+Icon1=BlackdProxy12.exe
+Title1=BlackdProxy 1.2
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Blackd Proxy 1.2|Package]
+PackageFolder=C:\blackdProxy\setup12
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup12\setup.exe
+File2=C:\blackdProxy\setup12\Setup.Lst
+File3=C:\blackdProxy\setup12\BlackdProxy12.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Blackd Proxy 1.3|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup13
+
+[Package|Blackd Proxy 1.3|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Blackd Proxy 1.3|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Blackd Proxy 1.3|Files Found]
+
+[Package|Blackd Proxy 1.3|Files Released]
+help.CHI=
+
+[Package|Blackd Proxy 1.3|Missing Dependency Information]
+
+[Package|Blackd Proxy 1.3|Out-of-Date Dependency Information]
+
+[Package|Blackd Proxy 1.3|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+
+[Package|Blackd Proxy 1.3|Files Removed]
+
+[Package|Blackd Proxy 1.3|Files In Project]
+C:\blackdProxy\BlackdProxy13.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+
+[Package|Blackd Proxy 1.3|Configure Registry Files]
+Applicable=No
+
+[Package|Blackd Proxy 1.3|Configure Remote Servers]
+Applicable=No
+
+[Package|Blackd Proxy 1.3|Install Locations]
+C:\blackdProxy\BlackdProxy13.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+
+[Package|Blackd Proxy 1.3|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy13.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+
+[Package|Blackd Proxy 1.3|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.3
+
+[Package|Blackd Proxy 1.3|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|Blackd Proxy 1.3|BlackdProxy]
+Icon1=BlackdProxy13.exe
+Title1=BlackdProxy 1.3
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Blackd Proxy 1.3|Package]
+PackageFolder=C:\blackdProxy\setup13
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup13\setup.exe
+File2=C:\blackdProxy\setup13\Setup.Lst
+File3=C:\blackdProxy\setup13\BlackdProxy13.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Blackd Proxy 1.4|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup14
+
+[Package|Blackd Proxy 1.4|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Blackd Proxy 1.4|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Blackd Proxy 1.4|Files Found]
+
+[Package|Blackd Proxy 1.4|Files Released]
+help.CHI=
+
+[Package|Blackd Proxy 1.4|Missing Dependency Information]
+
+[Package|Blackd Proxy 1.4|Out-of-Date Dependency Information]
+
+[Package|Blackd Proxy 1.4|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+
+[Package|Blackd Proxy 1.4|Files Removed]
+
+[Package|Blackd Proxy 1.4|Files In Project]
+C:\blackdProxy\BlackdProxy14.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+
+[Package|Blackd Proxy 1.4|Configure Registry Files]
+Applicable=No
+
+[Package|Blackd Proxy 1.4|Configure Remote Servers]
+Applicable=No
+
+[Package|Blackd Proxy 1.4|Install Locations]
+C:\blackdProxy\BlackdProxy14.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+
+[Package|Blackd Proxy 1.4|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy14.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+
+[Package|Blackd Proxy 1.4|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.4
+
+[Package|Blackd Proxy 1.4|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|Blackd Proxy 1.4|BlackdProxy]
+Icon1=BlackdProxy14.exe
+Title1=BlackdProxy 1.4
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Blackd Proxy 1.4|Package]
+PackageFolder=C:\blackdProxy\setup14
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup14\setup.exe
+File2=C:\blackdProxy\setup14\Setup.Lst
+File3=C:\blackdProxy\setup14\BlackdProxy14.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Blackd Proxy 1.5|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup15
+
+[Package|Blackd Proxy 1.5|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Blackd Proxy 1.5|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Blackd Proxy 1.5|Files Found]
+
+[Package|Blackd Proxy 1.5|Files Released]
+help.CHI=
+
+[Package|Blackd Proxy 1.5|Missing Dependency Information]
+
+[Package|Blackd Proxy 1.5|Out-of-Date Dependency Information]
+
+[Package|Blackd Proxy 1.5|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\stackables.txt=
+
+[Package|Blackd Proxy 1.5|Files Removed]
+
+[Package|Blackd Proxy 1.5|Files In Project]
+C:\blackdProxy\BlackdProxy15.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\stackables.txt=Yes
+
+[Package|Blackd Proxy 1.5|Configure Registry Files]
+Applicable=No
+
+[Package|Blackd Proxy 1.5|Configure Remote Servers]
+Applicable=No
+
+[Package|Blackd Proxy 1.5|Install Locations]
+C:\blackdProxy\BlackdProxy15.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\stackables.txt=$(AppPath)
+
+[Package|Blackd Proxy 1.5|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy15.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\stackables.txt=No
+
+[Package|Blackd Proxy 1.5|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.5
+
+[Package|Blackd Proxy 1.5|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|Blackd Proxy 1.5|BlackdProxy]
+Icon1=BlackdProxy15.exe
+Title1=BlackdProxy 1.5
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Blackd Proxy 1.5|Package]
+PackageFolder=C:\blackdProxy\setup15
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup15\setup.exe
+File2=C:\blackdProxy\setup15\Setup.Lst
+File3=C:\blackdProxy\setup15\BlackdProxy15.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Proxy 1.4|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup14
+
+[Package|Proxy 1.4|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Proxy 1.4|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Proxy 1.4|Files Found]
+
+[Package|Proxy 1.4|Files Released]
+help.CHI=
+
+[Package|Proxy 1.4|Missing Dependency Information]
+
+[Package|Proxy 1.4|Out-of-Date Dependency Information]
+
+[Package|Proxy 1.4|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\Tibia.dat=
+
+[Package|Proxy 1.4|Files Removed]
+
+[Package|Proxy 1.4|Files In Project]
+C:\blackdProxy\BlackdProxy14.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\Tibia.dat=Yes
+
+[Package|Proxy 1.4|Configure Registry Files]
+Applicable=No
+
+[Package|Proxy 1.4|Configure Remote Servers]
+Applicable=No
+
+[Package|Proxy 1.4|Install Locations]
+C:\blackdProxy\BlackdProxy14.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\Tibia.dat=$(AppPath)
+
+[Package|Proxy 1.4|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy14.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\Tibia.dat=No
+
+[Package|Proxy 1.4|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 1.4
+
+[Package|Proxy 1.4|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|Proxy 1.4|BlackdProxy]
+Icon1=BlackdProxy14.exe
+Title1=BlackdProxy 1.4
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Proxy 1.4|Package]
+PackageFolder=C:\blackdProxy\setup14
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup14\setup.exe
+File2=C:\blackdProxy\setup14\Setup.Lst
+File3=C:\blackdProxy\setup14\BlackdProxy14.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|proxytest|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup24
+
+[Package|proxytest|Configure DAO ISAMs]
+Applicable=No
+
+[Package|proxytest|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|proxytest|Files Found]
+
+[Package|proxytest|Files Released]
+help.CHI=
+
+[Package|proxytest|Missing Dependency Information]
+
+[Package|proxytest|Out-of-Date Dependency Information]
+C:\WINDOWS\system32\scrrun.dll=
+
+[Package|proxytest|Files Added]
+
+[Package|proxytest|Files Removed]
+
+[Package|proxytest|Files In Project]
+C:\blackdProxy\BlackdProxy24.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\scrrun.dll=Yes
+C:\WINDOWS\system32\msvcrt.dll=Yes
+C:\WINDOWS\system32\scrrnes.dll=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|proxytest|Configure Registry Files]
+Applicable=No
+
+[Package|proxytest|Configure Remote Servers]
+Applicable=No
+
+[Package|proxytest|Install Locations]
+C:\blackdProxy\BlackdProxy24.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\scrrun.dll=$(WinSysPath)
+C:\WINDOWS\system32\msvcrt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\scrrnes.dll=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|proxytest|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy24.exe=No
+C:\blackdProxy\help.chm=No
+
+[Package|proxytest|Distribution]
+Type=single
+Size=
+Title=BlackdProxy
+
+[Package|proxytest|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|proxytest|BlackdProxy]
+Icon1=BlackdProxy24.exe
+Title1=BlackdProxy
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|proxytest|Package]
+PackageFolder=C:\blackdProxy\setup24
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup24\setup.exe
+File2=C:\blackdProxy\setup24\Setup.Lst
+File3=C:\blackdProxy\setup24\BlackdProxy24.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Proxy38|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup38
+
+[Package|Proxy38|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Proxy38|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Proxy38|Files Found]
+
+[Package|Proxy38|Files Released]
+help.CHI=
+
+[Package|Proxy38|Missing Dependency Information]
+
+[Package|Proxy38|Out-of-Date Dependency Information]
+C:\WINDOWS\system32\scrrun.dll=
+
+[Package|Proxy38|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\Tibia.dat=
+
+[Package|Proxy38|Files Removed]
+
+[Package|Proxy38|Files In Project]
+C:\blackdProxy\BlackdProxy38.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\scrrun.dll=Yes
+C:\WINDOWS\system32\msvcrt.dll=Yes
+C:\WINDOWS\system32\scrrnes.dll=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\Tibia.dat=Yes
+
+[Package|Proxy38|Configure Registry Files]
+Applicable=No
+
+[Package|Proxy38|Configure Remote Servers]
+Applicable=No
+
+[Package|Proxy38|Install Locations]
+C:\blackdProxy\BlackdProxy38.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\scrrun.dll=$(WinSysPath)
+C:\WINDOWS\system32\msvcrt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\scrrnes.dll=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\Tibia.dat=$(AppPath)
+
+[Package|Proxy38|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy38.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\Tibia.dat=No
+
+[Package|Proxy38|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 3.8
+
+[Package|Proxy38|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Falso
+Parent0=$(Programs)
+
+[Package|Proxy38|BlackdProxy]
+Icon1=BlackdProxy38.exe
+Title1=BlackdProxy 3.8
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Proxy38|Package]
+PackageFolder=C:\blackdProxy\setup38
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup38\setup.exe
+File2=C:\blackdProxy\setup38\Setup.Lst
+File3=C:\blackdProxy\setup38\BlackdProxy38.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|proxy39|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup39
+
+[Package|proxy39|Configure DAO ISAMs]
+Applicable=No
+
+[Package|proxy39|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|proxy39|Files Found]
+
+[Package|proxy39|Files Released]
+help.CHI=
+
+[Package|proxy39|Missing Dependency Information]
+
+[Package|proxy39|Out-of-Date Dependency Information]
+C:\WINDOWS\system32\scrrun.dll=
+
+[Package|proxy39|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\Tibia.dat=
+
+[Package|proxy39|Files Removed]
+
+[Package|proxy39|Files In Project]
+C:\blackdProxy\BlackdProxy39.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\scrrun.dll=Yes
+C:\WINDOWS\system32\msvcrt.dll=Yes
+C:\WINDOWS\system32\scrrnes.dll=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\Tibia.dat=Yes
+
+[Package|proxy39|Configure Registry Files]
+Applicable=No
+
+[Package|proxy39|Configure Remote Servers]
+Applicable=No
+
+[Package|proxy39|Install Locations]
+C:\blackdProxy\BlackdProxy39.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\scrrun.dll=$(WinSysPath)
+C:\WINDOWS\system32\msvcrt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\scrrnes.dll=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\Tibia.dat=$(AppPath)
+
+[Package|proxy39|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy39.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\Tibia.dat=No
+
+[Package|proxy39|Distribution]
+Type=single
+Size=
+Title=BlackdProxy 3.9
+
+[Package|proxy39|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|proxy39|BlackdProxy]
+Icon1=BlackdProxy39.exe
+Title1=BlackdProxy 3.9
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|proxy39|Package]
+PackageFolder=C:\blackdProxy\setup39
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup39\setup.exe
+File2=C:\blackdProxy\setup39\Setup.Lst
+File3=C:\blackdProxy\setup39\BlackdProxy39.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|p40|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\blackdProxy\setup40
+
+[Package|p40|Configure DAO ISAMs]
+Applicable=No
+
+[Package|p40|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|p40|Files Found]
+
+[Package|p40|Files Released]
+help.CHI=
+
+[Package|p40|Missing Dependency Information]
+
+[Package|p40|Out-of-Date Dependency Information]
+C:\WINDOWS\system32\msflxgrd.ocx=
+C:\WINDOWS\system32\scrrun.dll=
+
+[Package|p40|Files Added]
+C:\blackdProxy\4loginIP.txt=
+C:\blackdProxy\4loginPORT.txt=
+C:\blackdProxy\Tibia.dat=
+
+[Package|p40|Files Removed]
+
+[Package|p40|Files In Project]
+C:\blackdProxy\BlackdProxy40.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\scrrun.dll=Yes
+C:\WINDOWS\system32\msvcrt.dll=Yes
+C:\WINDOWS\system32\scrrnes.dll=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\WINSKES.DLL=Yes
+C:\WINDOWS\system32\msflxgrd.ocx=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\blackdProxy\help.chm=Yes
+C:\WINDOWS\system32\hhctrl.ocx=Yes
+C:\WINDOWS\system32\itss.dll=Yes
+C:\WINDOWS\system32\itircl.dll=Yes
+C:\WINDOWS\system32\hh.exe=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\blackdProxy\4loginIP.txt=Yes
+C:\blackdProxy\4loginPORT.txt=Yes
+C:\blackdProxy\Tibia.dat=Yes
+
+[Package|p40|Configure Registry Files]
+Applicable=No
+
+[Package|p40|Configure Remote Servers]
+Applicable=No
+
+[Package|p40|Install Locations]
+C:\blackdProxy\BlackdProxy40.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\scrrun.dll=$(WinSysPath)
+C:\WINDOWS\system32\msvcrt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\scrrnes.dll=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\WINSKES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\msflxgrd.ocx=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\blackdProxy\help.chm=$(AppPath)
+C:\WINDOWS\system32\hhctrl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\itss.dll=$(WinSysPath)
+C:\WINDOWS\system32\itircl.dll=$(WinSysPath)
+C:\WINDOWS\system32\hh.exe=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\blackdProxy\4loginIP.txt=$(AppPath)
+C:\blackdProxy\4loginPORT.txt=$(AppPath)
+C:\blackdProxy\Tibia.dat=$(AppPath)
+
+[Package|p40|Configure Shared Files]
+Applicable=Yes
+C:\blackdProxy\BlackdProxy40.exe=No
+C:\blackdProxy\help.chm=No
+C:\blackdProxy\4loginIP.txt=No
+C:\blackdProxy\4loginPORT.txt=No
+C:\blackdProxy\Tibia.dat=No
+
+[Package|p40|Distribution]
+Type=single
+Size=
+Title=BlackdProxy
+
+[Package|p40|IconGroups]
+Group0=BlackdProxy
+PrivateGroup0=Verdadero
+Parent0=$(Programs)
+
+[Package|p40|BlackdProxy]
+Icon1=BlackdProxy40.exe
+Title1=BlackdProxy
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|p40|Package]
+PackageFolder=C:\blackdProxy\setup40
+ProjectFolder=C:\blackdProxy
+ServerSideCab=
+File1=C:\blackdProxy\setup40\setup.exe
+File2=C:\blackdProxy\setup40\Setup.Lst
+File3=C:\blackdProxy\setup40\BlackdProxy40.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

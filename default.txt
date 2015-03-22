@@ -1,0 +1,4 @@
+setMeleeKill cave rat
+setMeleeKill rat
+setLoot D7 0B
+gotoScriptLine 0
