@@ -1,3 +1,0 @@
-enemy1
-enemy2
-enemy3
