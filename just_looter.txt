@@ -1,0 +1,4 @@
+setBot PKwarnings=0
+setBot LootAll=1
+setLootDistance 1
+gotoScriptLine 0

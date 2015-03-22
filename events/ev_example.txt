@@ -1,0 +1,32 @@
+1
+0000100000000000000:500
+pl
+*$lastsender$*no
+0
+0000100000000000000:500
+pl?
+*$lastsender$*no
+0
+0100000000000000000:500
+pl?
+no
+0
+0100000000000000000:2000
+time
+2 or 3 hours
+0
+0000100000000000000:2000
+time
+*$lastsender$*2 or 3 hours
+0
+0100000000000000000:1500
+bye
+farewell
+0
+0111100100100000001:0
+
+exiva log $time$ $lastsender$:$lastmsg$
+1
+0100000000000000000:1000
+hi
+$randomlineof:hi.txt$
