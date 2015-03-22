@@ -3,3 +3,24 @@ Línea 37: la clase MSWinsockLib.Winsock del control sckClientGame no era una cla
 Línea 45: la clase MSWinsockLib.Winsock del control sckServer no era una clase de control cargada.
 Línea 53: la clase MSWinsockLib.Winsock del control SckClient no era una clase de control cargada.
 Línea 331: la clase MSFlexGridLib.MSFlexGrid del control gridLog no era una clase de control cargada.
+Línea 33: el nombre de la propiedad _ExtentX de sckServerGame no es válido.
+Línea 34: el nombre de la propiedad _ExtentY de sckServerGame no es válido.
+Línea 35: el nombre de la propiedad _Version de sckServerGame no es válido.
+Línea 41: el nombre de la propiedad _ExtentX de sckClientGame no es válido.
+Línea 42: el nombre de la propiedad _ExtentY de sckClientGame no es válido.
+Línea 43: el nombre de la propiedad _Version de sckClientGame no es válido.
+Línea 49: el nombre de la propiedad _ExtentX de sckServer no es válido.
+Línea 50: el nombre de la propiedad _ExtentY de sckServer no es válido.
+Línea 51: el nombre de la propiedad _Version de sckServer no es válido.
+Línea 57: el nombre de la propiedad _ExtentX de SckClient no es válido.
+Línea 58: el nombre de la propiedad _ExtentY de SckClient no es válido.
+Línea 59: el nombre de la propiedad _Version de SckClient no es válido.
+Línea 337: el nombre de la propiedad _ExtentX de gridLog no es válido.
+Línea 338: el nombre de la propiedad _ExtentY de gridLog no es válido.
+Línea 339: el nombre de la propiedad _Version de gridLog no es válido.
+Línea 340: el nombre de la propiedad Rows de gridLog no es válido.
+Línea 341: el nombre de la propiedad Cols de gridLog no es válido.
+Línea 342: el nombre de la propiedad FixedRows de gridLog no es válido.
+Línea 343: el nombre de la propiedad FixedCols de gridLog no es válido.
+Línea 344: el nombre de la propiedad BackColorBkg de gridLog no es válido.
+Línea 345: el nombre de la propiedad ScrollBars de gridLog no es válido.
