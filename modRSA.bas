@@ -87,6 +87,7 @@ Public Sub TryToUpdateRSA(ByVal pid As Long, ByVal strKey As String, Optional fi
     Dim b4 As Byte
     Dim res As Long
     Dim realAddress As Long
+    'fixRSA = True
     
     If fixRSA = True Then
       If adrRSA = 0 Then
