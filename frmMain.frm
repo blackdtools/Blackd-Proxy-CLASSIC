@@ -7288,6 +7288,7 @@ Dim tmpLong As Long
     c = packet(bstart)
     Select Case c
     Case &H28
+       'Debug.Print "LOGIN TYPE " & GoodHex(c)
        If TibiaVersionLong >= 1074 Then
          res = PacketIPchange5(packet, Index, strIP, bstart)
       
@@ -7304,6 +7305,7 @@ Dim tmpLong As Long
             End If
        End If
     Case &H14
+     ' Debug.Print "LOGIN TYPE " & GoodHex(c)
       If TibiaVersionLong >= 1074 Then
         res = PacketIPchange5b(packet, Index, strIP, bstart)
       ElseIf TibiaVersionLong >= 1012 Then
