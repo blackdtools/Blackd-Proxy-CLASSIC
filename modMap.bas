@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "36.4" ' Proxy version ' string version
-Public Const myNumericVersion = 36400 ' numeric version
+Public Const ProxyVersion = "36.5" ' Proxy version ' string version
+Public Const myNumericVersion = 36500 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 

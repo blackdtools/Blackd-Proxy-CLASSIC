@@ -6599,7 +6599,7 @@ Public Function DropLootToGround(idConnection As Integer) As Long
   tileID = GetTheLong(sourceB1, sourceB2)
   
   b3 = res1.amount
-  If TibiaVersionLong >= 860 Then
+  If (TibiaVersionLong >= 860) Or (TibiaVersionLong = 760) Then ' fix by divinity76
     If (b3 = &H0) Then
         b3 = &H1
     End If
