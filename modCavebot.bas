@@ -665,8 +665,14 @@ nextIter:
 '    frmMain.UnifiedSendToServerGame idConnection, cPacket, True
     
     sCheat = "78 FF FF " & GoodHex(&H40 + res1.bpID) & " 00 " & GoodHex(res1.slotID) & " " & _
-     GoodHex(res1.b1) & " " & GoodHex(res1.b2) & " FF FF " & GoodHex(&H40 + res2.bpID) & " 00 " & _
+     GoodHex(res1.b1) & " " & GoodHex(res1.b2) & " "
+     If (TibiaVersionLong = 760) Then
+     sCheat = sCheat & GoodHex(res1.slotID) & " "
+     End If
+     sCheat = sCheat & "FF FF " & GoodHex(&H40 + res2.bpID) & " 00 " & _
      GoodHex(res2.slotID) & " " & GoodHex(amount1)
+
+
      
     SafeCastCheatString "DoOneStack1", idConnection, sCheat
     
