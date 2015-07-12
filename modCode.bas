@@ -32,6 +32,15 @@ Public Const cte_initMANA = 10000
 Public Const localstr As String = "127.0.0.1"
 Public Const longsecretkey = "pfiwmvjgjikdfzasdruieopqwfhgkvvbnmklpofufrhufhuhsqaewftswgyguuhbvxhchufudhgoipopeqwiueifhjhsfdzvvcdvhfhfruyiurtuiuwfewqweffswqdepoffr"
 
+Type URL
+    Scheme As String
+    Host As String
+    Port As Long
+    uri As String
+    Query As String
+End Type
+
+
 ' LEVELSPY - XRAY
 
 
@@ -11147,4 +11156,55 @@ End Function
 Private Function CheckIDE() As Boolean ' this is a helper function for Public Function IsIDE()
         gISIDE = True 'set global flag
         CheckIDE = True
+End Function
+
+
+Function ExtractUrl(ByVal strUrl As String) As URL
+    Dim intPos1 As Integer
+    Dim intPos2 As Integer
+    
+    Dim retURL As URL
+    
+    '1 look for a scheme it ends with ://
+    intPos1 = InStr(strUrl, "://")
+    
+    If intPos1 > 0 Then
+        retURL.Scheme = Mid(strUrl, 1, intPos1 - 1)
+        strUrl = Mid(strUrl, intPos1 + 3)
+    End If
+        
+    '2 look for a port
+    intPos1 = InStr(strUrl, ":")
+    intPos2 = InStr(strUrl, "/")
+    
+    If intPos1 > 0 And intPos1 < intPos2 Then
+        ' a port is specified
+        retURL.Host = Mid(strUrl, 1, intPos1 - 1)
+        
+        If (IsNumeric(Mid(strUrl, intPos1 + 1, intPos2 - intPos1 - 1))) Then
+                retURL.Port = CInt(Mid(strUrl, intPos1 + 1, intPos2 - intPos1 - 1))
+        End If
+    ElseIf intPos2 > 0 Then
+        retURL.Host = Mid(strUrl, 1, intPos2 - 1)
+    Else
+        retURL.Host = strUrl
+        retURL.uri = "/"
+        
+        ExtractUrl = retURL
+        Exit Function
+    End If
+    
+    strUrl = Mid(strUrl, intPos2)
+    
+    ' find a question mark ?
+    intPos1 = InStr(strUrl, "?")
+    
+    If intPos1 > 0 Then
+        retURL.uri = Mid(strUrl, 1, intPos1 - 1)
+        retURL.Query = Mid(strUrl, intPos1 + 1)
+    Else
+        retURL.uri = strUrl
+    End If
+    
+    ExtractUrl = retURL
 End Function
