@@ -7489,6 +7489,8 @@ While pos <= lastp
           theTranslation = NameOfHexID(idConnection, Right$(varn, (Len(varn) - 13)))
         ElseIf (Left$(varn, 13) = "hex-tibiastr:") Then
           theTranslation = Hexarize2(Right$(varn, (Len(varn) - 13)))
+        ElseIf (Left$(varn, 10) = "urlencode:") Then
+          theTranslation = URLEncode(Right$(varn, (Len(varn) - 10)))
         ElseIf (Left$(varn, 13) = "randomlineof:") Then 'special variable
           theTranslation = GetRandomLineOf(Right$(varn, (Len(varn) - 13)))
         ElseIf (Left$(varn, 19) = "pksonrelativefloor:") Then 'special variable
@@ -9814,6 +9816,23 @@ Public Function sendString(idConnection As Integer, str As String, toServer As B
   Exit Function
 goterr:
   sendString = -1
+End Function
+
+Public Function URLEncode(ByRef Text As String) As String
+'WARNING: NO UNICODE SUPPORT
+'creds: http://www.vbforums.com/showthread.php?541683-VB6-URLencode-amp-URLdecode
+'this regex-per-byte approac use more cpu than needed, we can implement a faster encoder later
+    Dim lngA As Long, strChar As String
+    For lngA = 1 To Len(Text)
+        strChar = Mid$(Text, lngA, 1)
+        If strChar Like "[A-Za-z0-9]" Then
+        ElseIf strChar = " " Then
+            strChar = "+"
+        Else
+            strChar = "%" & Right$("0" & Hex$(Asc(strChar)), 2)
+        End If
+        URLEncode = URLEncode & strChar
+    Next lngA
 End Function
 
 Public Function IDofName(idConnection As Integer, strName As String, lngOption As Long) As String
