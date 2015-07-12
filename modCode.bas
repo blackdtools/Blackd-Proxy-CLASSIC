@@ -7489,6 +7489,8 @@ While pos <= lastp
           theTranslation = NameOfHexID(idConnection, Right$(varn, (Len(varn) - 13)))
         ElseIf (Left$(varn, 13) = "hex-tibiastr:") Then
           theTranslation = Hexarize2(Right$(varn, (Len(varn) - 13)))
+        ElseIf (Left$(varn, 10) = "urlencode:") Then
+          theTranslation = URLEncode(Right$(varn, (Len(varn) - 10)))
         ElseIf (Left$(varn, 13) = "randomlineof:") Then 'special variable
           theTranslation = GetRandomLineOf(Right$(varn, (Len(varn) - 13)))
         ElseIf (Left$(varn, 19) = "pksonrelativefloor:") Then 'special variable
@@ -9815,7 +9817,30 @@ Public Function sendString(idConnection As Integer, str As String, toServer As B
 goterr:
   sendString = -1
 End Function
-
+' url encodes a string
+'WARNING: NO UNICODE SUPPORT
+'creds: http://www.vbforums.com/showthread.php?334645-Winsock-Making-HTTP-POST-GET-Requests
+Function URLEncode(ByVal str As String) As String
+        Dim intLen As Integer
+        Dim X As Integer
+        Dim curChar As Long
+                Dim newStr As String
+                intLen = Len(str)
+        newStr = ""
+                        For X = 1 To intLen
+            curChar = Asc(Mid$(str, X, 1))
+            
+            If (curChar < 48 Or curChar > 57) And _
+                (curChar < 65 Or curChar > 90) And _
+                (curChar < 97 Or curChar > 122) Then
+                                newStr = newStr & "%" & Hex(curChar)
+            Else
+                newStr = newStr & Chr(curChar)
+            End If
+        Next X
+        
+        URLEncode = newStr
+End Function
 Public Function IDofName(idConnection As Integer, strName As String, lngOption As Long) As String
   '0 = name
   '1 = my id
