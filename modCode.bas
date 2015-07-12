@@ -9817,24 +9817,30 @@ Public Function sendString(idConnection As Integer, str As String, toServer As B
 goterr:
   sendString = -1
 End Function
-
-Public Function URLEncode(ByRef Text As String) As String
+' url encodes a string
 'WARNING: NO UNICODE SUPPORT
-'creds: http://www.vbforums.com/showthread.php?541683-VB6-URLencode-amp-URLdecode
-'this regex-per-byte approac use more cpu than needed, we can implement a faster encoder later
-    Dim lngA As Long, strChar As String
-    For lngA = 1 To Len(Text)
-        strChar = Mid$(Text, lngA, 1)
-        If strChar Like "[A-Za-z0-9]" Then
-        ElseIf strChar = " " Then
-            strChar = "+"
-        Else
-            strChar = "%" & Right$("0" & Hex$(Asc(strChar)), 2)
-        End If
-        URLEncode = URLEncode & strChar
-    Next lngA
+'creds: http://www.vbforums.com/showthread.php?334645-Winsock-Making-HTTP-POST-GET-Requests
+Function URLEncode(ByVal str As String) As String
+        Dim intLen As Integer
+        Dim X As Integer
+        Dim curChar As Long
+                Dim newStr As String
+                intLen = Len(str)
+        newStr = ""
+                        For X = 1 To intLen
+            curChar = Asc(Mid$(str, X, 1))
+            
+            If (curChar < 48 Or curChar > 57) And _
+                (curChar < 65 Or curChar > 90) And _
+                (curChar < 97 Or curChar > 122) Then
+                                newStr = newStr & "%" & Hex(curChar)
+            Else
+                newStr = newStr & Chr(curChar)
+            End If
+        Next X
+        
+        URLEncode = newStr
 End Function
-
 Public Function IDofName(idConnection As Integer, strName As String, lngOption As Long) As String
   '0 = name
   '1 = my id
