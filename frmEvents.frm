@@ -909,6 +909,7 @@ Private Sub Form_Load()
 cmbEventType.Clear
 cmbEventType.AddItem "0 - MSG THAT CONTAINS..."
 cmbEventType.AddItem "1 - EXACT MESSAGE"
+cmbEventType.AddItem "2 - Like Regex.."
 cmbEventType.Text = "0 - MSG THAT CONTAINS..."
 ReloadFiles
   With lstVar
