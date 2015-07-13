@@ -8702,6 +8702,6 @@ Private Sub SckHttpGet_DataArrival(Index As Integer, ByVal bytesTotal As Long)
 End Sub
 Private Sub SckHttpGet_Close(Index As Integer)
     HTTPGetConnected(Index) = False
-    SckHttpGet(0).Close 'DO NOT REMOVE THIS (seemingly useless) LINE. SHIT WILL BREAK AFTER 2 REQUESTS WITHOUT THIS LINE!!
+    SckHttpGet(Index).Close 'DO NOT REMOVE THIS (seemingly useless) LINE. SHIT WILL BREAK AFTER 2 REQUESTS WITHOUT THIS LINE!!
 End Sub
 
