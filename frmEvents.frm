@@ -948,6 +948,7 @@ ReloadFiles
     .AddItem "$hex-lastattackedid$"
     .AddItem "$nameofhex-id:AB CD EF 00$"
     .AddItem "$hex-idofname:name$"
+    .AddItem "$httpget:http://example.org/what.php?foo=bar&baz=blabla$"
     .AddItem "$numbertohex1:171$"
     .AddItem "$numbertohex2:52651$"
     .AddItem "$hex1tonumber:AB$"
