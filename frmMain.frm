@@ -8653,7 +8653,7 @@ End If
     ' {headers}
     '
     ' {post data}
-    strHTTP = strMethod & " " & parsedURL.uri & " HTTP/1.0" & vbCrLf
+    strHTTP = strMethod & " " & parsedURL.uri & "?" & parsedURL.Query & " HTTP/1.0" & vbCrLf
     strHTTP = strHTTP & "Host: " & parsedURL.Host & vbCrLf
     strHTTP = strHTTP & strHeaders
     strHTTP = strHTTP & vbCrLf
