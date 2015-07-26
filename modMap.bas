@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "36.5" ' Proxy version ' string version
-Public Const myNumericVersion = 36500 ' numeric version
+Public Const ProxyVersion = "36.6" ' Proxy version ' string version
+Public Const myNumericVersion = 36600 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -2861,10 +2861,17 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       expectMore = False
     Case &H17
       ' new since Tibia 9.8 - new pending state
+   
       CheatsPaused(idConnection) = True
       IDstring(idConnection) = GoodHex(packet(pos + 1)) & GoodHex(packet(pos + 2)) & GoodHex(packet(pos + 3)) & GoodHex(packet(pos + 4))
       myID(idConnection) = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
-      If TibiaVersionLong >= 1058 Then
+      If TibiaVersionLong >= 1080 Then
+      ' tibia 10.80+
+      ' 17 FA D5 7B 02 32 00 03 0F 15 0D 80 03 A9 FC 03 80 03 7E D5 B6 7F 00 01 01 24 00 68 74 74 70 3A 2F 2F 73 74 61 74 69 63 2E 74 69 62 69 61 2E 63 6F 6D 2F 69 6D 61 67 65 73 2F 73 74 6F 72 65 19 00 0A
+        pos = pos + 25
+        lonN = GetTheLong(packet(pos), packet(pos + 1))
+        pos = pos + 5 + lonN
+      ElseIf TibiaVersionLong >= 1058 Then
       ' tibia 10.58+
       ' 17 FA D5 7B 02 32 00 03 0F 15 0D 80 03 A9 FC 03 80 03 7E D5 B6 7F 00 01 01 0A
          pos = pos + 26
@@ -6193,9 +6200,15 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       doingTrade2(idConnection) = False
     Case &HF2
       ' Tibia 8.7 +
-      ' report statement result
-      templ1 = GetTheLong(packet(pos + 1), packet(pos + 2))
-      pos = pos + 3 + templ1
+      ' report statement result?
+      If TibiaVersionLong >= 1080 Then
+        ' Tibia 10.80+
+        ' F2 00
+        pos = pos + 2
+      Else
+        templ1 = GetTheLong(packet(pos + 1), packet(pos + 2))
+        pos = pos + 3 + templ1
+      End If
     Case &HF3
       ' Tibia 8.72
       ' unknown
