@@ -163,6 +163,23 @@ Public Sub ProcessEventMsg(idConnection As Integer, thetype As Byte)
           End If
         End If
       End If
+    ElseIf evType = 2 Then 'Like regex
+      If Mid(CustomEvents(idConnection).ev(i).flags, lotype, 1) = 1 Then
+        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).flags, 19, 1) = "1")) Then
+          partR = LCase(parseVars(idConnection, CustomEvents(idConnection).ev(i).trigger))
+          If partL Like partR Then 'triggered
+            executeThis = parseVars(idConnection, CustomEvents(idConnection).ev(i).action)
+            strTmp = Right$(CustomEvents(idConnection).ev(i).flags, Len(CustomEvents(idConnection).ev(i).flags) - 20)
+            mustdelay = CLng(strTmp)
+            If mustdelay = 0 Then
+              intRes = ExecuteInTibia(executeThis, idConnection, False)
+            Else
+              mustdelay = mustdelay + GetTickCount()
+              AddSchedule idConnection, executeThis, mustdelay
+            End If
+          End If
+        End If
+      End If
     End If
 
   Next i
