@@ -16,6 +16,14 @@ Begin VB.Form frmMain
    ScaleHeight     =   7635
    ScaleWidth      =   8400
    StartUpPosition =   2  'CenterScreen
+   Begin MSWinsockLib.Winsock SckHttpGet 
+      Index           =   0
+      Left            =   3240
+      Top             =   0
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
    Begin VB.CheckBox chkForceLoginServer 
       BackColor       =   &H00000000&
       Caption         =   "Force login server:"
@@ -513,6 +521,11 @@ Const IPPROTO_TCP = 6         ' Protocol constant for TCP.
 Const TCP_NODELAY = &H1&      ' Turn off Nagel Algorithm.
 Private Declare Function setsockopt Lib "wsock32.dll" (ByVal s As Long, ByVal Level As Long, ByVal optname As Long, optval As Any, ByVal optlen As Long) As Long
 Const errIndexOutOfRange = -1610350521
+
+Dim HTTPGetConnected() As Boolean
+Dim HTTPGetResponseBuffer() As String
+
+
 'Private Function getFasterLoginServer() As String
 '    Dim i As Long
 '    Dim idLoginSP As Long
@@ -8594,3 +8607,101 @@ Private Function GetWITHTIBIADAT() As String
 goterr:
     GetWITHTIBIADAT = GetWITHTIBIADATtrivial()
 End Function
+
+
+
+
+Public Function HTTPGet(uri As String) As String
+Dim parsedURL As URL
+Dim strHeaders As String
+Dim strMethod As String
+Dim strHTTP As String
+Dim strPostData As String
+'currently hardcoded to only 1 (0), i guess theoretically we could support several requests at once...
+'.........but i don't wanna figure that out now x.x
+ReDim Preserve HTTPGetConnected(0 To 1)
+ReDim Preserve HTTPGetResponseBuffer(0 To 1)
+
+strHeaders = "Connection: close" & vbCrLf
+
+strMethod = "GET"
+parsedURL = ExtractUrl(uri)
+If parsedURL.Host = vbNullString Then
+    Err.Raise vbCritical, uri, "Invalid Host"
+End If
+    'hmm, support multiple connections?
+    SckHttpGet(0).Protocol = sckTCPProtocol
+    SckHttpGet(0).RemoteHost = parsedURL.Host
+    
+    parsedURL.Scheme = "http" 'bleh. supporting anything else would be a lot of work.
+    If parsedURL.Scheme = "http" Then
+        If parsedURL.Port > 0 Then
+            SckHttpGet(0).RemotePort = parsedURL.Port
+        Else
+            SckHttpGet(0).RemotePort = 80
+        End If
+    ElseIf parsedURL.Scheme = vbNullString Then
+        SckHttpGet(0).RemotePort = 80
+    Else
+        MsgBox "Invalid protocol schema"
+    End If
+    
+    ' build the HTTP request in the form
+    '
+    ' {REQ METHOD} URI HTTP/1.0
+    ' Host: {host}
+    ' {headers}
+    '
+    ' {post data}
+    strHTTP = strMethod & " " & parsedURL.uri & "?" & parsedURL.Query & " HTTP/1.0" & vbCrLf
+    strHTTP = strHTTP & "Host: " & parsedURL.Host & vbCrLf
+    strHTTP = strHTTP & strHeaders
+    strHTTP = strHTTP & vbCrLf
+    strHTTP = strHTTP & strPostData
+    HTTPGetConnected(0) = False
+    SckHttpGet(0).Connect
+    ' wait for a connection
+    While Not HTTPGetConnected(0)
+        DoEvents
+    Wend
+    'connected
+    SckHttpGet(0).SendData strHTTP
+    ' wait for response
+    While HTTPGetConnected(0)
+        DoEvents
+    Wend
+    'have our response, connection is closed.
+    
+    HTTPGet = HTTPGetResponseBuffer(0)
+    HTTPGet = Mid$(HTTPGet, InStr(HTTPGet, vbCrLf & vbCrLf) + 4) 'trim out HTTP headers.
+    HTTPGetResponseBuffer(0) = vbNullString 'clear memory
+End Function
+
+
+
+
+Private Sub SckHttpGet_Error(Index As Integer, ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+'??? now what?
+Err.Raise Number, "SckHttpGet", Description & " source: " & Source
+HTTPGetConnected(Index) = Not HTTPGetConnected(Index) 'flip it.
+End Sub
+
+Private Sub SckHttpGet_Connect(Index As Integer)
+    HTTPGetConnected(Index) = True
+End Sub
+
+Private Sub SckHttpGet_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+    Dim strResponse As String
+    SckHttpGet(Index).GetData strResponse, vbString, bytesTotal
+    
+'    strResponse = FormatLineEndings(strResponse)
+    
+    ' we append this to the string becuase data arrives
+    ' in multiple packets
+    HTTPGetResponseBuffer(Index) = HTTPGetResponseBuffer(Index) & strResponse
+End Sub
+Private Sub SckHttpGet_Close(Index As Integer)
+    HTTPGetConnected(Index) = False
+    SckHttpGet(Index).Close 'DO NOT REMOVE THIS (seemingly useless) LINE. SHIT WILL BREAK AFTER 2 REQUESTS WITHOUT THIS LINE!!
+End Sub
+
