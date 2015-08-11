@@ -57,7 +57,11 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-   strMsg = "Blackd Proxy 36.7" & vbCrLf & _
+    strMsg = "Blackd Proxy 36.8" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixed a bug with a new packet related with Tibia coins at Tibia 10.81"
+      
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 36.7" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Minimum changes to work in all Tibia versions up to 10.81"
      
