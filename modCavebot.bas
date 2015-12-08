@@ -2222,7 +2222,6 @@ fastSet:
       End If
       
     ElseIf onDepotPhase(Sid) = 4 Then
-    ' open depotChest
       If doneDepotChestOpen(Sid) = True Then
         onDepotPhase(Sid) = 5
         somethingChangedInBps(Sid) = True
@@ -6366,6 +6365,7 @@ Public Sub OpenTheDepot(idConnection As Integer)
 goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing OpenTheDepot"
 End Sub
+
 Public Sub OpenDepotChest(idConnection As Integer)
   Dim res1 As TypeSearchItemResult2
   Dim inRes As Integer
