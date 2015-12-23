@@ -395,6 +395,7 @@ Private Sub Form_Load()
   If IamAdmin = False Then
   Debug.Print "WARNING: not running as admin!"
   End If
+  BecomePowerfull
   
   
  OVERWRITE_CONFIGPATH = ""

@@ -1,4 +1,4 @@
-Attribute VB_Name = "modProcessPrivileges"
+Attribute VB_Name = "modPower"
 Option Explicit
 
 ' Constants used for various API calls. Refer to MSDN for detailed
@@ -7,7 +7,7 @@ Option Explicit
 Private Const TOKEN_ADJUST_PRIVILEGES = &H20
 Private Const TOKEN_QUERY = &H8
 Private Const ANYSIZE_ARRAY = 1
-'Private Const PROCESS_ALL_ACCESS = &H1F0FFF
+Private Const PROCESS_ALL_ACCESS = &H1F0FFF
 Private Const SE_DEBUG_NAME As String = "SeDebugPrivilege"
 Private Const SE_PRIVILEGE_ENABLED = &H2
 
@@ -76,8 +76,8 @@ GetDllErrorDescription = Trim$(sError)
 
 End Function
    
-Public Sub SetAllPrivilegesForMe()
-On Error GoTo goterr
+Public Sub BecomePowerfull()
+    On Error GoTo goterr
          Dim hProcess As Long           ' Handle to your current process
          Dim hToken As Long             ' Handle to your process token.
          Dim lPrivilege As Long         ' Privilege to enable/disable
@@ -117,6 +117,7 @@ On Error GoTo goterr
             'Debug.Print "Blackd Proxy have full power now."
          End If
          ' PROBLEM SOLVED!
+         Exit Sub
 goterr:
          Exit Sub
 End Sub
@@ -200,4 +201,10 @@ lResult = AdjustTokenPrivileges(hToken, False, TP, Len(TP), TPPrevious, cbPrevio
          End If
 
 End Function
+
+
+
+
+
+
 

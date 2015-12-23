@@ -244,6 +244,17 @@ Public tibiaModuleRegionSize As Long
 Public OffsetsCache() As TypeOffsetInfo
 Private NextOffset As Long
 Private OffsetsCacheSize As Long
+
+Private Function GetDllErrorDescription(ByVal lngCode As Long) As String
+
+Dim sError As String * 500
+Dim lErrMsg As Long
+
+lErrMsg = FormatMessage(&H1000, ByVal 0&, lngCode, 0, sError, Len(sError), 0)
+GetDllErrorDescription = Trim$(sError)
+
+End Function
+
 Public Function ResetOffsetCache(ByVal parOffsetsCacheSize As Long)
     Dim i As Long
     OffsetsCacheSize = parOffsetsCacheSize
