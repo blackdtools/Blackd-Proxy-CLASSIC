@@ -2081,7 +2081,7 @@ Private Sub cmdLoadScript_Click()
   If cavebotIDselected > 0 Then
     cavebotScript(cavebotIDselected).RemoveAll
     cavebotLenght(cavebotIDselected) = 0
-    filename = App.path & "\" & txtFile.Text
+    filename = App.path & "\cavebot\" & txtFile.Text
     If fso.FileExists(filename) = True Then
     
       fn = FreeFile
@@ -2211,7 +2211,7 @@ Private Sub cmdSaveScript_Click()
   If cavebotIDselected > 0 Then
     limI = cavebotLenght(cavebotIDselected) - 1
     fn = FreeFile
-    Open App.path & "\" & txtFile.Text For Output As #fn
+    Open App.path & "\cavebot\" & txtFile.Text For Output As #fn
     For i = 0 To limI
       Print #fn, GetStringFromIDLine(cavebotIDselected, i)
     Next i
@@ -2397,7 +2397,7 @@ Public Sub ReloadFiles()
   Dim f As scripting.Folder
   Dim f1 As scripting.File
   Set fs = New scripting.FileSystemObject
-  Set f = fs.GetFolder(App.path)
+  Set f = fs.GetFolder(App.path & "\cavebot")
   txtFile.Clear
   For Each f1 In f.Files
     If LCase(Right(f1.name, 3)) = "txt" Then
