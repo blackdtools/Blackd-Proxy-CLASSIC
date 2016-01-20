@@ -7206,7 +7206,7 @@ Public Sub UpdateExpVars(idConnection As Integer)
   Dim sRes As String
   Dim dblSol As Double
   Dim dblSol2 As Double
-  On Error GoTo goterr
+  On Error Resume Next
   sRes = ""
   var_expleft(idConnection) = "?"
   var_nextlevel(idConnection) = "?"
