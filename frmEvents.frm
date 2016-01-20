@@ -945,6 +945,7 @@ ReloadFiles
     .AddItem "$hex-equiped-ammount:01$"
     .AddItem "$num-equiped-ammount:01$"
     .AddItem "$hex-equiped-ammount-special:01$"
+    .AddItem "$urlencode:are you there?$"
     .AddItem "$hex-tibiastr:hello$"
     .AddItem "$hex-lastattackedid$"
     .AddItem "$nameofhex-id:AB CD EF 00$"
