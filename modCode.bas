@@ -8788,7 +8788,8 @@ Public Function MoveItemToEquip(idConnection As Integer, b1 As Byte, b2 As Byte,
 '    cPacket(13) = equip
 '    cPacket(14) = &H0
 '    cPacket(15) = &H0
-    If TibiaVersionLong >= 860 Then ' o 861?
+    If TibiaVersionLong >= 860 Or TibiaVersionLong = 760 Then ' o 861?
+    'fix for 7.6 OT servers
         If (resF.amount = 0) Then
           b16 = 1
         Else
