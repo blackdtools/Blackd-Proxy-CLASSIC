@@ -2010,7 +2010,6 @@ Private Sub cmdLoadCopyPaste_Click()
     Dim pieces() As String
     Dim strLine As String
     Dim strtext As String
-    Dim seguir As Boolean
     If cavebotIDselected > 0 Then
         lblInfo.Caption = "Waiting for copy/paste..."
         ClosedBoard = False
@@ -2032,15 +2031,7 @@ Private Sub cmdLoadCopyPaste_Click()
                 For ai = 0 To UBound(pieces)
                   strLine = pieces(ai)
                   seguir = True
-                  While seguir = True
-                   If Len(strLine) < 1 Then
-                     seguir = False
-                   ElseIf Right$(strLine, 1) <> " " Then
-                     seguir = False
-                   Else
-                     strLine = Left(strLine, (Len(strLine) - 1))
-                   End If
-                  Wend
+                  strLine = LTrim$(strLine)
                   If Len(strLine) >= 1 Then
                     AddIDLine cavebotIDselected, i, strLine
                     i = i + 1
