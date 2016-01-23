@@ -2030,7 +2030,6 @@ Private Sub cmdLoadCopyPaste_Click()
                 i = 0
                 For ai = 0 To UBound(pieces)
                   strLine = pieces(ai)
-                  seguir = True
                   strLine = LTrim$(strLine)
                   If Len(strLine) >= 1 Then
                     AddIDLine cavebotIDselected, i, strLine
