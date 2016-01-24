@@ -311,7 +311,7 @@ End Sub
 Public Function isMelee(idConnection As Integer, ByRef str As String) As Boolean
   ' get the name from an ID
   Dim res As Boolean
-  If cavebotMelees(idConnection).Exists(LCase(str)) = True Then
+  If cavebotMelees(idConnection).Exists(LCase(str)) = True Or cavebotMelees(idConnection).Exists("*") = True Then
     isMelee = True
   Else
     isMelee = False
