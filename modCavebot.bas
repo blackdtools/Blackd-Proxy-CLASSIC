@@ -310,13 +310,14 @@ Public Sub RemoveAllMelee(idConnection As Integer)
 End Sub
 Public Function isMelee(idConnection As Integer, ByRef str As String) As Boolean
   ' get the name from an ID
-  Dim res As Boolean
-  If cavebotMelees(idConnection).Exists(LCase(str)) = True Or cavebotMelees(idConnection).Exists("*") = True Then
-    isMelee = True
+  If cavebotMelees(idConnection).Exists("*") = True Then
+ ' inversed
+    isMelee = Not cavebotMelees(idConnection).Exists(LCase(str))
   Else
-    isMelee = False
+    isMelee = cavebotMelees(idConnection).Exists(LCase(str))
   End If
 End Function
+
 
 
 Public Function AddIgnoredcreature(idConnection As Integer, dblID As Double) As Long
