@@ -57,7 +57,14 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 37.1" & vbCrLf & _
+    
+    strMsg = "Blackd Proxy 37.2" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Many bug fixes." & vbCrLf & _
+     " - Added command to add everything as cavebot target: SetMeleeKill *" & vbCrLf & _
+     " - Added Event options to capture SYSTEM messages and RAID messages in newest Tibia version"
+    
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 37.1" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Hopefully fixed an user interface bug (buttons were displayed blank for some users)."
      

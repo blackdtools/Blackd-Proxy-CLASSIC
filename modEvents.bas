@@ -121,8 +121,11 @@ Public Sub ProcessEventMsg(idConnection As Integer, thetype As Byte)
       thetype = thetype - 2
     End If
   End If
-  If thetype > 19 Then
-    Exit Sub
+  If thetype = &HF Then
+  ' Debug.Print "received RAID message: " & var_lastmsg(idConnection)
+  End If
+  If thetype > 18 Then
+     thetype = 0 ' system messages
   End If
   nEvents = CustomEvents(idConnection).Number
   partL = LCase(var_lastmsg(idConnection))

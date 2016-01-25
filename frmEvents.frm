@@ -167,7 +167,7 @@ Begin VB.Form frmEvents
    End
    Begin VB.CheckBox chkParameter 
       BackColor       =   &H00000000&
-      Caption         =   "Unknown0F"
+      Caption         =   "RAID MSG"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Index           =   15
@@ -332,7 +332,7 @@ Begin VB.Form frmEvents
    End
    Begin VB.CheckBox chkParameter 
       BackColor       =   &H00000000&
-      Caption         =   "Unknown00"
+      Caption         =   "SYSTEM"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Index           =   0
@@ -904,6 +904,8 @@ Private Sub cmdUpdateVar_Click()
     txtTrans.Text = "Error: select a char first"
   End If
 End Sub
+
+
 
 Private Sub Form_Load()
 cmbEventType.Clear

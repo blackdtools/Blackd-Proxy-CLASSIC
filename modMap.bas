@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "37.1" ' Proxy version ' string version
-Public Const myNumericVersion = 37100 ' numeric version
+Public Const ProxyVersion = "37.2" ' Proxy version ' string version
+Public Const myNumericVersion = 37200 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -141,7 +141,7 @@ Public Type TypeStackTileInfo '1 entire square of map info
   s(0 To 10) As TypeTileInfo
 End Type
 ' API for fast moves of memory in blocks
-Private Declare Sub RtlMoveMemory Lib "Kernel32" ( _
+Private Declare Sub RtlMoveMemory Lib "kernel32" ( _
     lpDest As Any, _
     lpSource As Any, _
     ByVal ByValcbCopy As Long)
@@ -5488,6 +5488,11 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                 mobName = mobName & Chr(packet(pos))
                 pos = pos + 1
             Next itemCount
+            
+            var_lastsender(idConnection) = "SYSTEM"
+            var_lastmsg(idConnection) = mobName
+            ProcessEventMsg idConnection, &H0
+            
         Case &H17, &H18, &H1B
                 ' B4 17 C5 7E E1 7D 07 1A 00 00 00 1E 00 00 00 00 00 36 00 41 20 70 6F 69 73 6F 6E 20 73 70 69 64 65 72 20 6C 6F 73 65 73 20 32 36 20 68 69 74 70 6F 69 6E 74 73 20 64 75 65 20 74 6F 20 79 6F 75 72 20 61 74 74 61 63 6B 2E
                 ' B4 18 AD 7E 5B 7D 0F 19 00 00 00 B4 00 00 00 00 00 3B 00 59 6F 75 20 6C 6F 73 65 20 32 35 20 68 69 74 70 6F 69 6E 74 73 20 64 75 65 20 74 6F 20 61 6E 20 61 74 74 61 63 6B 20 62 79 20 61 20 6D 69 6E 6F 74 61 75 72 20 67 75 61 72 64 2E
@@ -5505,7 +5510,10 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                     mobName = mobName & Chr(packet(pos))
                     pos = pos + 1
                 Next itemCount
-                
+              
+                 var_lastsender(idConnection) = "SYSTEM"
+                 var_lastmsg(idConnection) = mobName
+                 ProcessEventMsg idConnection, &H0
                 
         Case &H19, &H1A, &H1C, &H1D
               ' B4 1D AE 7E 5C 7D 0F 32 00 00 00 D7 2D 00 41 20 6D 69 6E 6F 74 61 75 72 20 67 75 61 72 64 20 67 61 69 6E 65 64 20 35 30 20 65 78 70 65 72 69 65 6E 63 65 20 70 6F 69 6E 74 73 2E
@@ -5523,6 +5531,10 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                 mobName = mobName & Chr(packet(pos))
                 pos = pos + 1
               Next itemCount
+              
+              var_lastsender(idConnection) = "SYSTEM"
+              var_lastmsg(idConnection) = mobName
+              ProcessEventMsg idConnection, &H0
      
         Case &H6, &H21, &H22
                    ' B4 21 37 27 26 00 47 75 69 6C 64 20 6D 65 73 73 61 67 65 3A 20 48 61 69 6C 20 54 69 62 69 61 6E 6F 73 20 56 69 63 69 61 64 6F 73 21
@@ -5537,7 +5549,13 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                         mobName = mobName & Chr(packet(pos))
                         pos = pos + 1
                     Next itemCount
+                    
+                    var_lastsender(idConnection) = "SYSTEM"
+                    var_lastmsg(idConnection) = mobName
+                    ProcessEventMsg idConnection, &H0
+                    
         Case Else
+    
                          'Debug.Print frmMain.showAsStr3(packet, True, pos, 1000000)
                     pos = pos + 2
                     lonN = GetTheLong(packet(pos), packet(pos + 1))
@@ -5547,6 +5565,17 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                         mobName = mobName & Chr(packet(pos))
                         pos = pos + 1
                     Next itemCount
+                   ' Debug.Print "Received packet type " & GoodHex(tempb1) & ": " & mobName
+                       
+                    If (tempb1 = &H13) Then
+                       var_lastsender(idConnection) = "RAID"
+                       var_lastmsg(idConnection) = mobName
+                       ProcessEventMsg idConnection, &H11
+                    Else
+                       var_lastsender(idConnection) = "SYSTEM"
+                       var_lastmsg(idConnection) = mobName
+                       ProcessEventMsg idConnection, &H0
+                   End If
               
         End Select
 
