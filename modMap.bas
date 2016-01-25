@@ -4741,7 +4741,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         End If
         pos = pos + 2 'skip level
       End If
-      subType = CLng(packet(pos))
+      subType = packet(pos)
       Select Case subType
 '      Case newchatmessage_H22
 '        ' new since Tibia 8.72 ' eat food
