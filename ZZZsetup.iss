@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Blackd Proxy"
-#define MyAppVersion "37.1"
+#define MyAppVersion "37.2"
 #define MyAppPublisher "blackdtools.com"
 #define MyAppURL "http://blackdtools.com"
 #define MyAppExeName "Tibia.exe"
@@ -62,13 +62,9 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "Tibia.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "012_goblins_femur_hills.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "021_darashia_rotworms.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "just_looter.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "config.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "crackd.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "danger.wav"; DestDir: "{app}"; Flags: ignoreversion
-Source: "default.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "ding.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dx7vb.dll"; DestDir: "{app}"; Flags: 
 Source: "errors.txt"; DestDir: "{app}"; Flags: ignoreversion
@@ -98,6 +94,7 @@ Source: "mswsock.dll"; DestDir: "{sys}"; Flags: restartreplace uninsneveruninsta
 Source: "richtx32.ocx"; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver 
 ; end custom additional VB6 files ]]]
 Source: "autoload\*"; DestDir: "{app}\autoload"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "cavebot\*"; DestDir: "{app}\cavebot"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "conds\*"; DestDir: "{app}\conds"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config760\*"; DestDir: "{app}\config760"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config770\*"; DestDir: "{app}\config770"; Flags: ignoreversion recursesubdirs createallsubdirs

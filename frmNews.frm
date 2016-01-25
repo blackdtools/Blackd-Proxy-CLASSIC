@@ -62,6 +62,7 @@ Private Sub Form_Load()
     "----------------------------" & vbCrLf & _
      " - Many bug fixes." & vbCrLf & _
      " - Added command to add everything as cavebot target: SetMeleeKill *" & vbCrLf & _
+     " - Moved cavebot files to folder \cavebot" & vbCrLf & _
      " - Added Event options to capture SYSTEM messages and RAID messages in newest Tibia version"
     
     strMsg = strMsg & vbCrLf & "Blackd Proxy 37.1" & vbCrLf & _
