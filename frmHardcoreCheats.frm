@@ -1083,6 +1083,69 @@ Private Sub timerAutoUpdater_Timer()
   End If
 End Sub
 
+
+
+Private Sub CountdownXYZ()
+'
+If (Me.chkColorEffects <> 1) Then
+Exit Sub
+End If
+
+Dim i As Integer
+Dim ii As Integer
+Dim SecondsLeft As Long
+Dim CurrTicks As Long
+CurrTicks = GetTickCount()
+
+  For i = 1 To HighestConnectionID
+    For ii = 1 To MAXCLIENTS
+      If (XYZCountdowns(i, ii).s = 0) Then
+        'this 1 has expired.
+      Else
+      
+        SecondsLeft = XYZCountdowns(i, ii).s - (GetTickCount() / 1000) ' s contains expiry timestamp
+        If (SecondsLeft < 0) Then
+        XYZCountdowns(i, ii).s = 0 '0 means expired.
+          'XYZCountdowns(i).Remove (ii)
+        Else
+'        Debug.Print XYZCountdowns(i, ii).X
+'        Debug.Print XYZCountdowns(i, ii).y
+'        Debug.Print XYZCountdowns(i, ii).z
+'        Debug.Print XYZCountdowns(i, ii).s
+'         Debug.Print SecondsLeft
+'exiva < 84 7F 04 D2 01 07 66 05 00 31 30 30 30 30
+'        ^t XX XX YY YY ZZ CO TibiaStr
+'         modCode.sendString i, "84 7F 04 D2 01 07 66 05 00 31 30 30 30 30", False, True
+         modCode.sendString i, "84 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft)), False, True
+         End If
+      End If
+    Next
+  Next
+
+End Sub
+
+Public Function AddXYZCounter(idConnection As Integer, X As Long, y As Long, z As Long, Seconds As Long) As Boolean
+Dim Timestamp As Long
+Dim i As Long
+Dim pos As TypeMatrixPosition
+Dim res As Boolean
+  pos.X = X
+  pos.y = y
+  pos.z = z
+  Timestamp = (GetTickCount() / 1000) + Seconds
+  pos.s = Timestamp
+  res = False
+  For i = 1 To MAXCLIENTS
+  If (XYZCountdowns(idConnection, i).s = 0) Then
+    res = True
+    XYZCountdowns(idConnection, i) = pos
+    Exit For
+    End If
+  Next
+  AddXYZCounter = res ' if false, means that we are already counting the max number of walls :/ should fix limit
+End Function
+
+
 Private Sub timerLight_Timer()
   Dim i As Integer
   'Dim cPacket() As Byte
@@ -1106,6 +1169,7 @@ Private Sub timerLight_Timer()
   For i = 1 To HighestConnectionID
       errorD = i
   If (GameConnected(i) = True) And (sentWelcome(i) = True) And (GotPacketWarning(i) = False) Then
+  CountdownXYZ
     If ReconnectionStage(i) = 3 Then
       If frmBackpacks.totalbpsOpen(i) < CLng(txtRelogBackpacks.Text) Then
         aRes = openBP(i)
