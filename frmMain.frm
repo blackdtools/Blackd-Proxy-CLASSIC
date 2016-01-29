@@ -3497,6 +3497,7 @@ ReDim DoingNewLootMAXGTC(1 To MAXCLIENTS)
   ReDim lastAttackedIDstatus(1 To MAXCLIENTS)
   ReDim executingCavebot(1 To MAXCLIENTS)
   ReDim lastPing(1 To MAXCLIENTS)
+  ReDim XYZCountdowns(1 To MAXCLIENTS, 1 To MAXCLIENTS) 'TODO: currently, we can only keep count of MAXCLIENTS walls per character. fix it so we can keep count of unlimited number of walls per character..
   ReDim doingTrade(1 To MAXCLIENTS)
   ReDim doingTrade2(1 To MAXCLIENTS)
   ReDim GotKillOrderTargetID(1 To MAXCLIENTS)
