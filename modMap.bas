@@ -246,6 +246,7 @@ Public GotPacketWarning() As Boolean ' for safe mode
 Public doingTrade() As Boolean
 Public doingTrade2() As Boolean
 Public lastPing() As Long
+Public XYZCountdowns() As TypeMatrixPosition
 Public SendToServer() As Byte
 Public AfterLoginLogoutReason() As String
 Public pushTarget() As Double
@@ -3018,7 +3019,12 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       End If
 
       tileID = GetTheLong(packet(pos), packet(pos + 1))
-      
+      If (tileID = 2129) Then ' 2129 = magic wall
+       frmHardcoreCheats.AddXYZCounter idConnection, initX, initY, initZ, 20
+      ElseIf (tileID = 2130) Then ' 2130 = wild growth
+       frmHardcoreCheats.AddXYZCounter idConnection, initX, initY, initZ, 45
+      End If
+
 
          
       Select Case tileID
