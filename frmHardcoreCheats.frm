@@ -1113,10 +1113,29 @@ CurrTicks = GetTickCount()
 '        Debug.Print XYZCountdowns(i, ii).z
 '        Debug.Print XYZCountdowns(i, ii).s
 '         Debug.Print SecondsLeft
+            If (TibiaVersionLong >= 1090) Then
+           'This Protocol is confirmed for: 1090->1090
+           'Todo: check older versions
+           'recieved packet:
+           'AA 00 00 00 00 07 00 42 72 61 64 77 65 6E 20 00 24 1A 82 D3 7B 07 06 00 4D 75 6E 63 68 2E 6B 19 82 D3 7B 07 01 F9 0D FF 04
+           'shrinking packet, removing useless ??? info:
+           'AA 00 00 00 00 00 00  20 00 24 1A 82 D3 7B 07 06 00 4D 75 6E 63 68 2E 6B 19 82 D3 7B 07 01 F9 0D FF 04
+           ' building custom packet:
+           'AA 00 00 00 00 00 00 20 00 24 $numbertohex2:{$myx$}$ $numbertohex2:{$myy$}$ $numbertohex1:{$myz$}$ $hex-tibiastr:the quick brown fox$
+           modCode.sendString i, "AA 00 00 00 00 00 00 20 00 24 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " " & Hexarize2(CStr(SecondsLeft)), False, True
+            Else
+           'This protocol is confirmed for: 760->760
+           'Todo: check newer versions.
 'exiva < 84 7F 04 D2 01 07 66 05 00 31 30 30 30 30
 '        ^t XX XX YY YY ZZ CO TibiaStr
 '         modCode.sendString i, "84 7F 04 D2 01 07 66 05 00 31 30 30 30 30", False, True
+' Dim str As String
+ ' str = "84 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft))
+'Debug.Print str
          modCode.sendString i, "84 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft)), False, True
+          End If
+
+
          End If
       End If
     Next
