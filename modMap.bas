@@ -3019,7 +3019,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       End If
 
       tileID = GetTheLong(packet(pos), packet(pos + 1))
-      If (tileID = 2129) Then ' 2129 = magic wall
+      If (tileID = 2129 Or tileID = 2128) Then 'magic wall. 2129 in 760, 2128 in 1090
        frmHardcoreCheats.AddXYZCounter idConnection, initX, initY, initZ, 20
       ElseIf (tileID = 2130) Then ' 2130 = wild growth
        frmHardcoreCheats.AddXYZCounter idConnection, initX, initY, initZ, 45
