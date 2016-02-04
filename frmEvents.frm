@@ -805,7 +805,6 @@ Private Sub cmdLoadEv_Click()
   Dim filename As String
   Dim i As Long
   Dim p As Long
-  Dim seguir As Boolean
   Dim completed As Boolean
   Dim aRes As Long
   Dim thelo As Long
@@ -830,16 +829,7 @@ Private Sub cmdLoadEv_Click()
           strLine(p) = ""
           completed = False
         End If
-        seguir = True
-        While seguir = True
-         If Len(strLine(p)) < 1 Then
-           seguir = False
-         ElseIf Right$(strLine(p), 1) <> " " Then
-           seguir = False
-         Else
-           strLine(p) = Left$(strLine(p), (Len(strLine(p)) - 1))
-         End If
-        Wend
+        strLine(p) = LTrim$(strLine(p))
         Next p
         If completed = True Then
           thelo = Len(strLine(2))
