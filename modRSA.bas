@@ -87,11 +87,16 @@ Public Sub TryToUpdateRSA(ByVal pid As Long, ByVal strKey As String, Optional fi
     Dim b4 As Byte
     Dim res As Long
     Dim realAddress As Long
-    'fixRSA = True
+   ' fixRSA = True ' @Programmers: you can uncomment this to obtain adrRSA in old clients. ASRL should be disabled with Microsoft EMET
     
     If fixRSA = True Then
       If adrRSA = 0 Then
         AutoUpdateRSA (pid)
+        If adrRSA = 0 Then
+           Debug.Print ("Failed to obtain RSA address. ASRL was  enabled so it was not possible to obtain it.")
+        Else
+           Debug.Print ("Obtained RSA key = &H" & Hex(adrRSA))
+        End If
       End If
     End If
 
