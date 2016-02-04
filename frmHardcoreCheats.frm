@@ -1124,7 +1124,7 @@ CurrTicks = GetTickCount()
            'AA 00 00 00 00 00 00 20 00 24 $numbertohex2:{$myx$}$ $numbertohex2:{$myy$}$ $numbertohex1:{$myz$}$ $hex-tibiastr:the quick brown fox$
            modCode.sendString i, "AA 00 00 00 00 00 00 20 00 24 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " " & Hexarize2(CStr(SecondsLeft)), False, True
             Else
-           'This protocol is confirmed for: 760->760
+           'This protocol is confirmed for: 760->860
            'Todo: check newer versions.
 'exiva < 84 7F 04 D2 01 07 66 05 00 31 30 30 30 30
 '        ^t XX XX YY YY ZZ CO TibiaStr
