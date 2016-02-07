@@ -103,7 +103,7 @@ Public Sub TryToUpdateRSA(ByVal process_Hwnd As Long, ByVal strKey As String, Op
     If adrRSA = 0 Then
         Exit Sub
     End If
-    If pid = -1 Then
+    If process_Hwnd = -1 Then
         Exit Sub
     End If
    
