@@ -9,6 +9,104 @@ Public Const RLserverRSAkey1075 As String = "13212774320587228406229509908229338
 Public Const OTserverRSAkey As String = "109120132967399429278860960508995541528237502902798129123468757937266291492576446330739696001110603907230888610072655818825358503429057592827629436413108566029093628212635953836686562675849720620786279431090218017681061521755056710823876476444260558147179707119674283982419152118103759076030616683978566631413"
 
 Public WARNING_USING_OTSERVER_RSA As Boolean
+'
+Private Const MAX_PATH As Long = 260
+
+Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Long, lpdwProcessId As Long) As Long
+Private Const TH32CS_SNAPPROCESS As Long = 2&
+Private Const TH32CS_SNAPMODULE As Long = 8&
+Private Const TH32CS_SNAPMODULE32 As Long = 10&
+Private Const INVALID_HANDLE_VALUE As Long = -1
+
+' typedef struct tagMODULEENTRY32 {
+'  DWORD   dwSize;
+'  DWORD   th32ModuleID;
+'  DWORD   th32ProcessID;
+'  DWORD   GlblcntUsage;
+'  DWORD   ProccntUsage;
+'  BYTE    *modBaseAddr;
+'  DWORD   modBaseSize;
+'  HMODULE hModule;
+'  TCHAR   szModule[MAX_MODULE_NAME32 + 1];
+'  TCHAR   szExePath[MAX_PATH];
+' } MODULEENTRY32, *PMODULEENTRY32;
+
+Private Type MODULEENTRY32
+ dwSize As Long
+ th32ModuleID As Long
+  th32ProcessID As Long
+  GlblcntUsage As Long
+  ProccntUsage As Long
+  modBaseAddr As Long
+  modBaseSize As Long
+  hModule As Long
+'  TCHAR   szModule[MAX_MODULE_NAME32 + 1];
+  szModule As String * 256 ' hope this is right...
+'  TCHAR   szExePath[MAX_PATH];
+  szExePath As String * MAX_PATH 'and this..
+End Type
+
+Private Type PROCESSENTRY32
+    dwSize As Long
+    cntUsage As Long
+    th32ProcessID As Long
+    th32DefaultHeapID As Long
+    th32ModuleID As Long
+    cntThreads As Long
+    th32ParentProcessID As Long
+    pcPriClassBase As Long
+    dwFlags As Long
+    szExeFile As String * MAX_PATH
+End Type
+
+Private Declare Function CreateToolhelp32Snapshot Lib "kernel32" _
+   (ByVal lFlags As Long, ByVal lProcessID As Long) As Long
+
+Private Declare Function Module32First Lib "kernel32" _
+   (ByVal hSnapShot As Long, uProcess As MODULEENTRY32) As Long
+Private Declare Function Module32Next Lib "kernel32" _
+   (ByVal hSnapShot As Long, uProcess As MODULEENTRY32) As Long
+
+
+
+Public Declare Function ProcessFirst Lib "kernel32" _
+    Alias "Process32First" _
+   (ByVal hSnapShot As Long, uProcess As PROCESSENTRY32) As Long
+
+Public Declare Function ProcessNext Lib "kernel32" _
+    Alias "Process32Next" _
+   (ByVal hSnapShot As Long, uProcess As PROCESSENTRY32) As Long
+
+Private Declare Sub CloseHandle Lib "kernel32" _
+   (ByVal hPass As Long)
+
+Private Function GetMainModuleAddress(ByVal process_Hwnd As Long, ByRef MainModuleAddress As Long, ByRef MainModuleSize As Long) As Boolean
+  Dim hSnapShot As Long
+  Dim uHandle As MODULEENTRY32
+  Dim foo As Long
+  Dim Pid As Long
+  GetWindowThreadProcessId process_Hwnd, Pid
+  uHandle.dwSize = Len(uHandle) ' DO NOT use Len$ here!
+  hSnapShot = CreateToolhelp32Snapshot(24, Pid) '24=TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32
+  If (hSnapShot = INVALID_HANDLE_VALUE) Then
+    Debug.Print "CreateToolhelp32Snapshot failed on pid " & CStr(Pid) & " ...TODO: use GetLastError() for more info about why it failed"
+    GetMainModuleAddress = False
+    Exit Function
+  End If
+  foo = Module32First(hSnapShot, uHandle)
+  If (foo = 0) Then
+    Debug.Print "Module32First failed on pid " & CStr(Pid) & " ...TODO: use GetLastError() for more info about why it failed"
+    CloseHandle (hSnapShot)
+    GetMainModuleAddress = False
+    Exit Function
+  End If
+  CloseHandle (hSnapShot)
+  MainModuleAddress = uHandle.modBaseAddr
+  MainModuleSize = uHandle.modBaseSize
+  GetMainModuleAddress = True
+End Function
+
+
 
 Public Sub AutoUpdateRSA(ByVal pid As Long)
   On Error GoTo goterr
@@ -22,14 +120,26 @@ Public Sub AutoUpdateRSA(ByVal pid As Long)
   Dim maxsi As Integer
   Dim backupi As Long
   Dim reskey As String
+  Dim TibiaExeModuleAddress As Long
+  Dim TibiaExeModuleSize As Long
+  Dim TibiaExeModuleEnd As Long
+
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Trying to autoupdate adrRSA..."
+   If (GetMainModuleAddress(Pid, TibiaExeModuleAddress, TibiaExeModuleSize) = False) Then
+     frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA, GetMainModuleAddress failed.."
+     adrRSA = 0
+     'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA (" & CStr(Err.Number) & ") : " & Err.Description
+     Exit Sub
+  End If
+  TibiaExeModuleEnd = TibiaExeModuleAddress + TibiaExeModuleSize
   reskey = ""
   pg = 0
   maxsi = 1
   si = 1
   'sc = Mid$(RLserverRSAkey, si, 1)
   sb = ""
-  i = &H500000
+  ' i = &H500000
+  i = TibiaExeModuleAddress
   Do
      b = Memory_ReadByte(i, pid)
      sb = Chr(b)
@@ -64,7 +174,8 @@ Public Sub AutoUpdateRSA(ByVal pid As Long)
      End If
      i = i + 1
      DoEvents
-  Loop Until i >= &HA00000
+  'Loop Until i >= &HA00000
+  Loop Until i >= TibiaExeModuleEnd
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... MEMORY SCAN COMPLETED WITHOUT RESULTS"
    Exit Sub
    
