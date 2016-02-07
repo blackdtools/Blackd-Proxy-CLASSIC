@@ -73,7 +73,7 @@ goterr:
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA (" & CStr(Err.Number) & ") : " & Err.Description
   Exit Sub
 End Sub
-Public Sub TryToUpdateRSA(ByVal pid As Long, ByVal strKey As String, Optional fixRSA As Boolean = False)
+Public Sub TryToUpdateRSA(ByVal process_Hwnd As Long, ByVal strKey As String, Optional fixRSA As Boolean = False)
 ' at this moment fixRSA =true only will works at Windows XP (or in any Window if ASLR is disabled)
     Dim i As Long
     Dim writeChr As String
@@ -91,7 +91,7 @@ Public Sub TryToUpdateRSA(ByVal pid As Long, ByVal strKey As String, Optional fi
     
     If fixRSA = True Then
       If adrRSA = 0 Then
-        AutoUpdateRSA (pid)
+        AutoUpdateRSA (process_Hwnd)
         If adrRSA = 0 Then
            Debug.Print ("Failed to obtain RSA address. ASLR was  enabled so it was not possible to obtain it.")
         Else
@@ -107,7 +107,7 @@ Public Sub TryToUpdateRSA(ByVal pid As Long, ByVal strKey As String, Optional fi
         Exit Sub
     End If
    
-    realAddress = Memory_BlackdAddressToFinalAdddress(adrRSA, pid)
+    realAddress = Memory_BlackdAddressToFinalAdddress(adrRSA, process_Hwnd)
     If (realAddress = 0) Then
       Exit Sub
     End If
@@ -118,7 +118,7 @@ Public Sub TryToUpdateRSA(ByVal pid As Long, ByVal strKey As String, Optional fi
       RSA_bytes(i) = byteChr
     Next i
    
-    res = BlackdForceWrite(realAddress, RSA_bytes(0), 309, pid)
+    res = BlackdForceWrite(realAddress, RSA_bytes(0), 309, process_Hwnd)
     Debug.Print "RSA key changed"
 
     WARNING_USING_OTSERVER_RSA = True
