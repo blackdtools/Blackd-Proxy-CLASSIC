@@ -2017,10 +2017,10 @@ Private Sub cmdLoadCopyPaste_Click()
         "Finally press OK"
         'why can't i just frmBigText.txtBoard = Join(lstScript.List, vbCrLf) ?
         frmBigText.txtBoard.Text = ""
-        For i = 1 To lstScript.ListCount
+        For i = 0 To lstScript.ListCount
             frmBigText.txtBoard.Text = frmBigText.txtBoard.Text & lstScript.List(i) & vbCrLf
         Next
-        If (i > 1) Then
+        If (i > 0) Then
             frmBigText.txtBoard.Text = Left(frmBigText.txtBoard.Text, Len(frmBigText.txtBoard.Text) - Len(vbCrLf))
         End If
         i = 0
