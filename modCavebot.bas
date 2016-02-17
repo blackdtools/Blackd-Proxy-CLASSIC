@@ -2432,10 +2432,11 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
                         sCheat = "05 00 A1 " & SpaceID(targetID)
                     End If
                 
-                
-                    WriteRedSquare idConnection, currTargetID(idConnection) ' new since in tibia 8.62
-                    inRes = GetCheatPacket(cPacket, sCheat)
-                    frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+                    If (currTargetID(idConnection) <> currentRedSquare) Then 'don't resend attack packet if we are already attacking this creature (the client will always notice if attack has been canceled, so currentRedSquare should always be up to date, i believe.. )
+                       WriteRedSquare idConnection, currTargetID(idConnection) ' new since in tibia 8.62
+                       inRes = GetCheatPacket(cPacket, sCheat)
+                       frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+                    End If
                     DoEvents
                 End If
             End If
