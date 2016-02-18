@@ -10220,7 +10220,8 @@ goterr:
 End Function
 
 Public Function CountOnFloor(idConnection As Integer, strFloor As String, _
- blnCountPKs As Boolean, blnCountGMs As Boolean) As Long
+ Optional blnCountPKs As Boolean = False, Optional blnCountGMs As Boolean = False, _ 
+ Optional blnCountMeleeTargets As Boolean = False) As Long
   Dim lngFloor As Long
   Dim lngCount As Long
   Dim lngRealFloor As Long
@@ -10243,7 +10244,12 @@ Public Function CountOnFloor(idConnection As Integer, strFloor As String, _
           tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
           If tileID = 97 Then
            nameofgivenID = GetNameFromID(idConnection, Matrix(y, X, z, idConnection).s(s).dblID)
-            If (isMelee(idConnection, nameofgivenID) = False) And (isHmm(idConnection, nameofgivenID) = False) And (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
+            If ((isMelee(idConnection, nameofgivenID) = True) Or (isHmm(idConnection, nameofgivenID) = True)) And (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
+              If (blnCountMeleeTargets = True And nameofgivenID <> CharacterName(idConnection)) Then
+                lngCount = lngCount + 1
+              End If
+            Else
+            If (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
               If (nameofgivenID <> CharacterName(idConnection)) Then
                 If (IsGM(nameofgivenID) = True) Then
                   If (blnCountGMs = True) Then
@@ -10255,6 +10261,7 @@ Public Function CountOnFloor(idConnection As Integer, strFloor As String, _
                   End If
                 End If
               End If
+            End If
             End If
           ElseIf tileID = 0 Then
             Exit For
