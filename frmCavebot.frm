@@ -2015,6 +2015,16 @@ Private Sub cmdLoadCopyPaste_Click()
         ClosedBoard = False
         frmBigText.lblText = "Copy the full script. Then paste it here." & vbCrLf & _
         "Finally press OK"
+        'why can't i just frmBigText.txtBoard = Join(lstScript.List, vbCrLf) ?
+        frmBigText.txtBoard.Text = ""
+        For i = 0 To lstScript.ListCount
+            frmBigText.txtBoard.Text = frmBigText.txtBoard.Text & lstScript.List(i) & vbCrLf
+        Next
+        If (i > 0) Then
+            frmBigText.txtBoard.Text = Left(frmBigText.txtBoard.Text, Len(frmBigText.txtBoard.Text) - Len(vbCrLf))
+        End If
+        i = 0
+
         frmBigText.Show
         DisableBoardButtons
         While ClosedBoard = False
