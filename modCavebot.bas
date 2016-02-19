@@ -5122,12 +5122,19 @@ Public Function OpenCorpse(idConnection As Integer) As Long
   Dim bpID As Byte
   Dim sCheat As String
   Dim cPacket() As Byte
+  Dim topStack As Long
+  Dim sPos As Long
+  Dim tileID As Long
+  Dim xdif As Long
+  Dim ydif As Long
   'aRes = SendLogSystemMessageToClient(idConnection, "Detected new corpse at " & _
    myLastCorpseX(idConnection) & " , " & myLastCorpseY(idConnection) & " , " & _
    myLastCorpseZ(idConnection) & " , " & myLastCorpseS(idConnection) & " : " & _
    FiveChrLon(myLastCorpseTileID(idConnection)))
  ' DoEvents
   '0A 00 82 37 7D A7 7D 09 59 0F 02 00
+  xdif = myLastCorpseX(idConnection) - myX(idConnection)
+  ydif = myLastCorpseY(idConnection) - myY(idConnection)
   bpID = frmBackpacks.GetFirstFreeBpID(idConnection)
   If (myLastCorpseZ(idConnection) <> myZ(idConnection)) Then
     If publicDebugMode = True Then
@@ -5147,9 +5154,26 @@ Public Function OpenCorpse(idConnection As Integer) As Long
        " at bpID " & GoodHex(bpID))
       DoEvents
     End If
-    sCheat = "0A 00 82 " & FiveChrLon(myLastCorpseX(idConnection)) & " " & _
-     FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & _
-     FiveChrLon(myLastCorpseTileID(idConnection)) & " " & GoodHex(CByte(myLastCorpseS(idConnection))) & " " & GoodHex(bpID) & " "
+    If (TibiaVersionLong = 760) Then
+    'fix for tibia 7.6.
+        For sPos = 1 To 10
+            tileID = GetTheLong(Matrix(ydif, xdif, myZ(idConnection), idConnection).s(sPos).t1, Matrix(ydif, xdif, myZ(idConnection), idConnection).s(sPos).t2)
+            'Debug.Print DatTiles(tileID).iscontainer
+            If DatTiles(tileID).iscontainer = True Then
+            'first stacks are reserved for grounds or permament items
+            'topStack is 02 in most of cases and then are the items that lies beneath topItem
+                topStack = sPos
+                Exit For
+            End If
+        Next sPos
+        sCheat = "0A 00 82 " & FiveChrLon(myLastCorpseX(idConnection)) & " " & _
+        FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & _
+        FiveChrLon(tileID) & " " & GoodHex(CByte(topStack)) & " " & GoodHex(bpID) & " "
+    Else
+        sCheat = "0A 00 82 " & FiveChrLon(myLastCorpseX(idConnection)) & " " & _
+        FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & _
+        FiveChrLon(myLastCorpseTileID(idConnection)) & " " & GoodHex(CByte(myLastCorpseS(idConnection))) & " " & GoodHex(bpID) & " "
+    End If
     GetCheatPacket cPacket, sCheat
     frmMain.UnifiedSendToServerGame idConnection, cPacket, True
     DoEvents
