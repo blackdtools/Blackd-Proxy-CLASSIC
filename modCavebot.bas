@@ -2556,6 +2556,15 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
     Exit Sub
   End If
   SOPT = 1
+  If(TibiaVersionLong = 760) Then
+  For SS = 0 To 10
+    tileID = GetTheLong(Matrix(ydif, xdif, z, idConnection).s(SS).t1, Matrix(ydif, xdif, z, idConnection).s(SS).t2)
+    If (DatTiles(tileID).usable2 = True Or DatTiles(tileID).floorChangeDOWN = True Or DatTiles(tileID).floorChangeUP = True Or DatTiles(tileID).noFloorChange = False) Then
+     SOPT = SS
+     Exit For
+     End If
+    Next SS
+  Else 'not 760
   For SS = 1 To 10
     tileID = GetTheLong(Matrix(ydif, xdif, z, idConnection).s(SS).t1, Matrix(ydif, xdif, z, idConnection).s(SS).t2)
     If DatTiles(tileID).alwaysOnTop = True Then
@@ -2564,6 +2573,7 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
       Exit For
     End If
   Next SS
+  End If
   b1 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t1
   b2 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t2
   sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
