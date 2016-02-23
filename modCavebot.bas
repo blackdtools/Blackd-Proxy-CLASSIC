@@ -2556,6 +2556,55 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
     Exit Sub
   End If
   SOPT = 1
+  If ( TibiaVersionLong = 760) Then
+  ' This is an ugly hack, 
+  'but until someone figure out the correct way to calculate the last 2 bytes in 760, 
+  ' this is better than the cavebot getting stuck all the time
+  ' seems  the last 2 bytes depend on items, players standing on top, and 
+  ' a special case for "tiles containg splash" (blood, water, wine, etc, this is the "SS +1")
+    For SS = 0 To 10
+    tileID = GetTheLong(Matrix(ydif, xdif, z, idConnection).s(SS).t1, Matrix(ydif, xdif, z, idConnection).s(SS).t2)
+    If (DatTiles(tileID).usable2 = True Or DatTiles(tileID).floorChangeDOWN = True Or DatTiles(tileID).floorChangeUP = True Or DatTiles(tileID).noFloorChange = False) Then
+     SOPT = SS
+     
+  b1 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t1
+  b2 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t2
+  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+   " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS) & " 00"
+   ' debug
+ 'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
+  inRes = GetCheatPacket(cPacket, sCheat)
+  frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+  
+  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+   " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS + 1) & " 00"
+   ' debug
+ 'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
+  inRes = GetCheatPacket(cPacket, sCheat)
+  frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+     
+     
+  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+   " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS) & " 02"
+   ' debug
+ 'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
+  inRes = GetCheatPacket(cPacket, sCheat)
+  frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+     
+     
+  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+   " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS + 1) & " 02"
+   ' debug
+ 'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
+  inRes = GetCheatPacket(cPacket, sCheat)
+  frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+     
+     
+     End If
+    Next SS
+    DoEvents '?
+    Exit Sub
+  End If
   For SS = 1 To 10
     tileID = GetTheLong(Matrix(ydif, xdif, z, idConnection).s(SS).t1, Matrix(ydif, xdif, z, idConnection).s(SS).t2)
     If DatTiles(tileID).alwaysOnTop = True Then
