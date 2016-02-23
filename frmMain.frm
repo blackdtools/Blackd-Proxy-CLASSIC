@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form frmMain 
    BackColor       =   &H00000000&
@@ -504,7 +504,7 @@ Attribute VB_Exposed = False
 #Const BufferDebug = 0
 Option Explicit
 Private Const OptCte4 = 1 'internal size of a byte ( 1 byte )
-Private Declare Sub RtlMoveMemory Lib "Kernel32" ( _
+Private Declare Sub RtlMoveMemory Lib "kernel32" ( _
     lpDest As Any, _
     lpSource As Any, _
     ByVal ByValcbCopy As Long)
@@ -7303,7 +7303,22 @@ Dim tmpLong As Long
     Select Case c
     Case &H28
        'Debug.Print "LOGIN TYPE " & GoodHex(c)
-       If TibiaVersionLong >= 1074 Then
+       If TibiaVersionLong >= 1091 Then
+          res = PacketIPchange6(packet, Index, strIP, bstart)
+      
+            If res <> 1 Then
+              txtPackets.Text = txtPackets.Text & vbCrLf & "ERROR: FAILED TO MODIFY LOGIN PACKET!"
+            Else
+              If CloseLoginServerAfterCharList = True Then
+                 If Index > 0 Then
+                    sckServer(Index).Close
+                 End If
+              End If
+              LearnFromServerLogin = 1
+              Exit Function
+            End If
+       
+       ElseIf TibiaVersionLong >= 1074 Then
          res = PacketIPchange5(packet, Index, strIP, bstart)
       
             If res <> 1 Then
@@ -7320,7 +7335,9 @@ Dim tmpLong As Long
        End If
     Case &H14
      ' Debug.Print "LOGIN TYPE " & GoodHex(c)
-      If TibiaVersionLong >= 1074 Then
+      If TibiaVersionLong >= 1091 Then
+        res = 1 ' just motd
+      ElseIf TibiaVersionLong >= 1074 Then
         res = PacketIPchange5b(packet, Index, strIP, bstart)
       ElseIf TibiaVersionLong >= 1012 Then
         res = PacketIPchange4(packet, Index, strIP, bstart)

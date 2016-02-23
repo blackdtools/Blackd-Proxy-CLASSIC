@@ -1840,6 +1840,337 @@ Public Function RewriteWithLocalIPcharPos(ByVal pos As Long) As Byte
  
   RewriteWithLocalIPcharPos = res
 End Function
+Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As Integer, ByVal strIP As String, Optional bstart As Long = 2) As Integer
+  Const rewriteEnabled As Boolean = True ' set false for debug purposes. Packet should only be copied in newpacket. Proxy will not really connect.
+  Dim lon As Long
+  Dim motd As Long
+  Dim numChars As Long
+  Dim lonCName As Long
+  Dim lonSName As Long
+  Dim i As Integer
+  Dim j As Integer
+  Dim pos As Long
+  Dim servName As String
+  Dim servIP1 As Byte
+  Dim servIP2 As Byte
+  Dim servIP3 As Byte
+  Dim servIP4 As Byte
+  Dim servPort As Long
+  Dim charName As String
+  Dim hb As Byte
+  Dim lb As Byte
+  Dim res As Integer
+  Dim adder As Long
+  Dim serverIPport As String
+  Dim lngIPid As Long
+  Dim gamep As Long
+  Dim doingdebugHere As Boolean
+  Dim tipoBloque As Byte
+  Dim servDOMAIN As String
+  Dim totalServidores As Long
+  Dim newServerName As String
+  Dim newServerDomain As String
+  Dim newServerPort As Long
+  Dim loadedServers() As String
+  Dim loadedPorts() As String
+  Dim loadedDomains() As String
+  Dim zz As Long
+  Dim serID As Long
+  Dim packetNEW() As Byte
+  Dim ultimoN As Long
+  Dim ti As Long
+  Dim lLocal As Long
+  Dim b1Local As Byte
+  Dim b2Local As Byte
+  Dim tmpB As Byte
+  Dim tmpU As Long
+  Dim newSize As Long
+  Dim modSize As Long
+  Dim aleat As Long
+  Dim realL As Long
+  Dim ultimoTI As Long
+  Dim strangeNewThingLen As Long
+  On Error GoTo returnTheResult
+  
+    'Debug.Print "PacketIPchange6 ORIGINAL>" & frmMain.showAsStr(packet, True)
+    
+  lLocal = Len(localstr)
+  b1Local = HighByteOfLong(lLocal)
+  b2Local = LowByteOfLong(lLocal)
+  ultimoN = 0
+  gamep = CLng(frmMain.sckClientGame(0).LocalPort)
+  servDOMAIN = ""
+  'LogOnFile "gotthem.txt", frmMain.showAsStr2(packet, 0) & vbCrLf
+  res = -1 'error
+  adder = bstart - 2
+  If packet(2 + adder) <> &H28 Then
+    Debug.Print "This is not a list of character Tibia 10.91+ packet... Received type = " & GoodHex(packet(2 + adder))
+    res = -1
+    GoTo returnTheResult 'this is not a list of character packet
+  End If
+  strangeNewThingLen = GetTheLong(packet(adder + 3), packet(adder + 4))
+
+
+  If frmMain.chckAlter.Value = 0 Then
+    res = 0
+    GoTo returnTheResult 'proxy user don't want to change this packet
+  End If
+
+    If packet(adder + 5 + strangeNewThingLen) <> &HC Then
+    Debug.Print "This is not a list of character packet... Received type at " & CStr(adder + 5 + strangeNewThingLen) & " = " & GoodHex(packet(adder + 5 + strangeNewThingLen))
+    res = -1
+    GoTo returnTheResult 'this is not a list of character packet
+    End If
+
+ 
+  lon = GetTheLong(packet(0 + adder), packet(1 + adder))
+' 10.91: no motd in this packet!
+' motd = GetTheLong(packet(3 + adder + 3 + strangeNewThingLen), packet(4 + adder + 3 + strangeNewThingLen))
+ motd = 0
+
+pos = motd + 5 + adder + 2 + strangeNewThingLen
+  
+  tipoBloque = packet(pos)
+  pos = pos + 1
+
+  
+  ultimoN = pos
+    ReDim packetNEW(ultimoN)
+  For ti = 0 To ultimoN
+    packetNEW(ti) = packet(ti)
+    ultimoTI = ti
+  Next ti
+
+
+    ti = ultimoTI
+
+
+ 
+  If tipoBloque = &H64 Then
+    totalServidores = CLng(packet(pos))
+    ReDim loadedServers(totalServidores - 1)
+    ReDim loadedPorts(totalServidores - 1)
+    ReDim loadedDomains(totalServidores - 1)
+    For i = 1 To totalServidores
+    
+        pos = pos + 1
+        ReDim Preserve packetNEW(ultimoN + 1)
+        ultimoN = ultimoN + 1
+        packetNEW(ultimoN) = packet(pos)
+
+        
+        serID = CLng(packet(pos))
+        pos = pos + 1
+        lonCName = GetTheLong(packet(pos), packet(pos + 1))
+        
+        ReDim Preserve packetNEW(ultimoN + 1)
+        ultimoN = ultimoN + 1
+        packetNEW(ultimoN) = packet(pos)
+        
+        ReDim Preserve packetNEW(ultimoN + 1)
+        ultimoN = ultimoN + 1
+        packetNEW(ultimoN) = packet(pos + 1)
+        pos = pos + 2
+        
+        newServerName = ""
+        For j = 1 To lonCName
+          newServerName = newServerName & Chr(packet(pos))
+          
+          ReDim Preserve packetNEW(ultimoN + 1)
+          ultimoN = ultimoN + 1
+          packetNEW(ultimoN) = packet(pos)
+          
+          pos = pos + 1
+        Next j
+        lonSName = GetTheLong(packet(pos), packet(pos + 1))
+        
+        
+         If (rewriteEnabled = True) Then
+            ReDim Preserve packetNEW(ultimoN + 1)
+            ultimoN = ultimoN + 1
+            packetNEW(ultimoN) = b2Local
+            
+            ReDim Preserve packetNEW(ultimoN + 1)
+            ultimoN = ultimoN + 1
+            packetNEW(ultimoN) = b1Local
+            pos = pos + 2
+        Else
+            ReDim Preserve packetNEW(ultimoN + 1)
+            ultimoN = ultimoN + 1
+            packetNEW(ultimoN) = packet(pos)
+            
+            ReDim Preserve packetNEW(ultimoN + 1)
+            ultimoN = ultimoN + 1
+            packetNEW(ultimoN) = packet(pos + 1)
+            pos = pos + 2
+        End If
+        'read server name of character i
+        newServerDomain = ""
+        For j = 1 To lonSName
+          
+          newServerDomain = newServerDomain & Chr(packet(pos))
+          If (rewriteEnabled = True) Then
+          
+              tmpB = RewriteWithLocalIPcharPos(j)
+              If tmpB = &H0 Then
+                 'packet(pos) = tmpB ' commented UNSURE...
+                 
+                 
+    '            ReDim Preserve packetNEW(ultimoN + 1) ' borrar luego
+    '            ultimoN = ultimoN + 1
+    '            packetNEW(ultimoN) = packet(pos)
+                
+                
+              Else
+              
+                'packet(pos) = tmpB
+                'ReDim Preserve packetNEW(ultimoN + 1)
+                'ultimoN = ultimoN + 1
+                'packetNEW(ultimoN) = packet(pos)
+                
+               ' packet(pos) = tmpB
+                ReDim Preserve packetNEW(ultimoN + 1)
+                ultimoN = ultimoN + 1
+                packetNEW(ultimoN) = tmpB
+                
+              End If
+          Else
+                ReDim Preserve packetNEW(ultimoN + 1)
+                ultimoN = ultimoN + 1
+                packetNEW(ultimoN) = packet(pos)
+          End If
+          pos = pos + 1
+        Next j
+        newServerPort = GetTheLong(packet(pos), packet(pos + 1))
+        loadedServers(serID) = newServerName
+        loadedPorts(serID) = newServerPort
+        loadedDomains(serID) = newServerDomain
+        
+        If (rewriteEnabled = True) Then
+              hb = HighByteOfLong(gamep)
+              lb = LowByteOfLong(gamep)
+        
+              ReDim Preserve packetNEW(ultimoN + 1)
+                ultimoN = ultimoN + 1
+                packetNEW(ultimoN) = lb
+    
+              ReDim Preserve packetNEW(ultimoN + 1)
+                ultimoN = ultimoN + 1
+                packetNEW(ultimoN) = hb
+        Else
+              ReDim Preserve packetNEW(ultimoN + 1)
+                ultimoN = ultimoN + 1
+                packetNEW(ultimoN) = packet(pos)
+    
+              ReDim Preserve packetNEW(ultimoN + 1)
+                ultimoN = ultimoN + 1
+                packetNEW(ultimoN) = packet(pos + 1)
+        End If
+        
+        AddGameServer newServerName, "127.0.0.1:" & newServerPort, newServerDomain
+        pos = pos + 2
+        
+        ReDim Preserve packetNEW(ultimoN + 1)
+        ultimoN = ultimoN + 1
+        packetNEW(ultimoN) = packet(pos)
+    Next i
+    
+     
+    pos = pos + 1
+  End If
+  
+ 
+  tmpU = lon + 8 - pos
+  ReDim Preserve packetNEW(ultimoN + tmpU)
+  For ti = 1 To tmpU
+    packetNEW(ultimoN + ti) = packet(pos + ti - 1)
+  Next ti
+
+  ultimoN = ultimoN + tmpU
+  newSize = UBound(packetNEW) - 7
+
+  hb = HighByteOfLong(newSize)
+  lb = LowByteOfLong(newSize)
+  packetNEW(6) = lb
+  packetNEW(7) = hb
+  
+
+
+  newSize = newSize + 6
+  hb = HighByteOfLong(newSize)
+  lb = LowByteOfLong(newSize)
+  packetNEW(0) = lb
+  packetNEW(1) = hb
+
+'
+  modSize = (newSize + 4) Mod 8
+  aleat = 0
+  If modSize > 0 Then
+    aleat = (8 - modSize)
+  End If
+
+
+  For ti = 1 To aleat
+      ReDim Preserve packetNEW(ultimoN + 1)
+      ultimoN = ultimoN + 1
+      If rewriteEnabled = True Then
+        packetNEW(ultimoN) = &H0
+      Else
+        packetNEW(ultimoN) = packet(ultimoN)
+      End If
+  Next ti
+  
+  newSize = UBound(packetNEW) - 1
+  hb = HighByteOfLong(newSize)
+  lb = LowByteOfLong(newSize)
+  packetNEW(0) = lb
+  packetNEW(1) = hb
+  
+
+
+
+ ' Debug.Print "NEW SIZE=" & GoodHex(lb) & " " & GoodHex(hb)
+  
+  numChars = CLng(packet(pos))
+  pos = pos + 1
+  'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Client can select this characters:"
+  ResetCharList2 idConnection
+  For i = 1 To numChars 'read all the characters on the list
+    serID = CLng(packet(pos))
+    pos = pos + 1
+    lonCName = GetTheLong(packet(pos), packet(pos + 1))
+    pos = pos + 2
+    charName = ""
+    For j = 1 To lonCName
+      charName = charName & Chr(packet(pos))
+      pos = pos + 1
+    Next j
+    servName = loadedServers(serID)
+    servPort = loadedPorts(serID)
+    servDOMAIN = loadedDomains(serID)
+
+
+   ' servPort = GetGameServerPort(servName)
+   ' servDOMAIN = GetGameServerDOMAIN(servName)
+   
+    AddCharServer2 idConnection, charName, servName, servIP1, servIP2, servIP3, servIP4, servPort, servDOMAIN
+    Debug.Print charName & "-> server #" & CStr(serID) & " (" & servName & ") = " & servDOMAIN & ":" & servPort
+  Next i
+  
+  'Debug.Print frmMain.showAsStr(packet, True)
+  
+
+  'Debug.Print "NEW PCKT>" & frmMain.showAsStr(packetNEW, True)
+ 
+  frmMain.UnifiedSendToClient idConnection, packetNEW, False, True
+
+  
+  LastCharServerIndex = idConnection
+  res = 1
+returnTheResult:
+  'LogOnFile "gotthem.txt", "AFTER (" & CStr(res) & ")> " & frmMain.showAsStr2(packet, 0) & vbCrLf
+  PacketIPchange6 = res
+End Function
 
 
 Public Function PacketIPchange5(ByRef packet() As Byte, ByVal idConnection As Integer, ByVal strIP As String, Optional bstart As Long = 2) As Integer
@@ -1917,11 +2248,12 @@ Public Function PacketIPchange5(ByRef packet() As Byte, ByVal idConnection As In
     res = 0
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
-  If packet(adder + 5 + strangeNewThingLen) <> &H14 Then
+
+    If packet(adder + 5 + strangeNewThingLen) <> &H14 Then
     Debug.Print "This is not a list of character packet... Received type at " & CStr(adder + 5 + strangeNewThingLen) & " = " & GoodHex(packet(adder + 5 + strangeNewThingLen))
     res = -1
     GoTo returnTheResult 'this is not a list of character packet
-  End If
+    End If
 
  
   lon = GetTheLong(packet(0 + adder), packet(1 + adder))
@@ -2172,8 +2504,6 @@ returnTheResult:
   'LogOnFile "gotthem.txt", "AFTER (" & CStr(res) & ")> " & frmMain.showAsStr2(packet, 0) & vbCrLf
   PacketIPchange5 = res
 End Function
-
-
 
 
 Public Function PacketIPchange5b(ByRef packet() As Byte, ByVal idConnection As Integer, ByVal strIP As String, Optional bstart As Long = 2) As Integer
