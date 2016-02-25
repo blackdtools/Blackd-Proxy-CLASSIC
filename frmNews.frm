@@ -60,6 +60,11 @@ Private Sub Form_Load()
         strMsg = "Blackd Proxy 37.3" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Minimum changes to work in all Tibia versions up to 10.91" & vbCrLf & _
+     " - new variable: $meleetargetsonrelativefloor:0$ contains the number of nearby cavebot targets" & vbCrLf & _ 
+     " - when `show colour effects` is active, magic field and wild growth walls will now display number of seconds left until it disapears" & vbCrLf & _
+     " - fixed (detectable) cavebot bug where attack packet would be spammed in some situations" & vbCrLf & _ 
+     " - better calculation of exp/h in high exp OT servers (lvl 65k+) " & vbCrLf & _ 
+     " - copy & paste textboard in cavebot now contains the current script " & vbCrLf & _
      " - Many bug fixes for Tibia 7.6 ots"
      
     strMsg = strMsg & vbCrLf & "Blackd Proxy 37.2" & vbCrLf & _
