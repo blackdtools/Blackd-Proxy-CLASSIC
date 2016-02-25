@@ -70,8 +70,6 @@ Public LastCharServerIndex As Integer
 '====booleans====
 Public bLevelSpy() As Boolean
 
-
-
 Public LEVELSPY_NOP As Long
 Public LEVELSPY_ABOVE As Long
 Public LEVELSPY_BELOW As Long
@@ -1890,10 +1888,27 @@ Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As In
   Dim realL As Long
   Dim ultimoTI As Long
   Dim strangeNewThingLen As Long
+  Dim debugChain As String
+  Dim pType As Byte
+  Dim initialPos As Long
+  Dim debugLon1 As Long
+  Dim showDebug As Boolean
+  Dim debugReasons As String
+  Dim lastGoodPos As Long
+  Dim mobName As String
+  Dim expectMore As Boolean
+  Dim finalAfterPos As Long
+  Dim lastpType As Byte
+  Dim lontmp1 As Long
+  Dim charlistWasParsed As Boolean
+  Dim theInc As Long
+  Dim fillstart As Long
+  Dim fillend As Long
+  Dim packetsdif As Long
   On Error GoTo returnTheResult
-  
+  charlistWasParsed = False
     'Debug.Print "PacketIPchange6 ORIGINAL>" & frmMain.showAsStr(packet, True)
-    
+  debugChain = ""
   lLocal = Len(localstr)
   b1Local = HighByteOfLong(lLocal)
   b2Local = LowByteOfLong(lLocal)
@@ -1903,56 +1918,96 @@ Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As In
   'LogOnFile "gotthem.txt", frmMain.showAsStr2(packet, 0) & vbCrLf
   res = -1 'error
   adder = bstart - 2
-  If packet(2 + adder) <> &H28 Then
-    Debug.Print "This is not a list of character Tibia 10.91+ packet... Received type = " & GoodHex(packet(2 + adder))
-    res = -1
-    GoTo returnTheResult 'this is not a list of character packet
-  End If
-  strangeNewThingLen = GetTheLong(packet(adder + 3), packet(adder + 4))
-
-
+ ' If packet(2 + adder) <> &H28 Then
+  '  Debug.Print "This is not a list of character Tibia 10.91+ packet... Received type = " & GoodHex(packet(2 + adder))
+  '  res = -1
+   ' GoTo returnTheResult 'this is not a list of character packet
+  'End If
+  
   If frmMain.chckAlter.Value = 0 Then
     res = 0
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
-
-    If packet(adder + 5 + strangeNewThingLen) <> &HC Then
-    Debug.Print "This is not a list of character packet... Received type at " & CStr(adder + 5 + strangeNewThingLen) & " = " & GoodHex(packet(adder + 5 + strangeNewThingLen))
-    res = -1
-    GoTo returnTheResult 'this is not a list of character packet
-    End If
-
- 
   lon = GetTheLong(packet(0 + adder), packet(1 + adder))
-' 10.91: no motd in this packet!
-' motd = GetTheLong(packet(3 + adder + 3 + strangeNewThingLen), packet(4 + adder + 3 + strangeNewThingLen))
- motd = 0
-
-pos = motd + 5 + adder + 2 + strangeNewThingLen
-  
-  tipoBloque = packet(pos)
-  pos = pos + 1
-
-  
-  ultimoN = pos
-    ReDim packetNEW(ultimoN)
+    
+  ultimoN = 2 + adder - 1
+  ReDim packetNEW(ultimoN)
   For ti = 0 To ultimoN
     packetNEW(ti) = packet(ti)
-    ultimoTI = ti
   Next ti
-
-
-    ti = ultimoTI
-
-
- 
-  If tipoBloque = &H64 Then
-    totalServidores = CLng(packet(pos))
-    ReDim loadedServers(totalServidores - 1)
-    ReDim loadedPorts(totalServidores - 1)
-    ReDim loadedDomains(totalServidores - 1)
-    For i = 1 To totalServidores
-    
+  initialPos = ultimoN + 1
+  pos = initialPos
+  debugReasons = ""
+  lastpType = &HFF
+  finalAfterPos = adder + GetTheLong(packet(0 + adder), packet(1 + adder))
+  packetsdif = 0
+  Do
+    initialPos = pos
+    lastGoodPos = pos
+    mobName = ""
+    expectMore = True
+    pType = packet(pos)
+    debugChain = debugChain & " " & GoodHex(pType)
+    'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "! EVAL : " & GoodHex(pType)
+    Select Case pType ' type of subpacket
+    Case &H28
+      'Debug.Print "&H28 - AUTH"
+      pos = pos + 1
+      lontmp1 = GetTheLong(packet(pos), packet(pos + 1))
+      pos = pos + 2 + lontmp1
+      
+      theInc = 3 + lontmp1
+      fillstart = UBound(packetNEW) + 1
+      fillend = fillstart + theInc - 1
+      ReDim Preserve packetNEW(fillend)
+      ultimoN = ultimoN + theInc
+      packetsdif = ultimoN - pos + 1
+      For ti = fillstart To fillend
+        packetNEW(ti) = packet(ti - packetsdif)
+      Next ti
+       
+       
+      'Debug.Print frmMain.showAsStr(packet, True)
+      'Debug.Print frmMain.showAsStr(packetNEW, True)
+      'Debug.Print "OK"
+    Case &H14
+     ' Debug.Print "&H14 - MOTD"
+      pos = pos + 1
+      lontmp1 = GetTheLong(packet(pos), packet(pos + 1))
+      pos = pos + 2 + lontmp1
+      
+      theInc = 3 + lontmp1
+      fillstart = UBound(packetNEW) + 1
+      fillend = fillstart + theInc - 1
+      ReDim Preserve packetNEW(fillend)
+      ultimoN = ultimoN + theInc
+      packetsdif = ultimoN - pos + 1
+      For ti = fillstart To fillend
+        packetNEW(ti) = packet(ti - packetsdif)
+      Next ti
+      
+      
+      'Debug.Print frmMain.showAsStr(packet, True)
+      'Debug.Print frmMain.showAsStr(packetNEW, True)
+      'Debug.Print "OK"
+    Case &HC
+      'Debug.Print "&H0C - CHAR LIST - THIS PARSER WILL IGNORE THE REST AFTER THIS SUBTYPE"
+      pos = pos + 4
+      
+      ReDim Preserve packetNEW(pos)
+      For ti = initialPos To pos
+        packetNEW(ti) = packet(ti)
+      Next ti
+      pos = pos - 1
+      
+         '  Debug.Print frmMain.showAsStr(packet, True)
+     ' Debug.Print frmMain.showAsStr(packetNEW, True)
+      ultimoN = pos
+      totalServidores = CLng(packet(pos))
+      ReDim loadedServers(totalServidores - 1)
+      ReDim loadedPorts(totalServidores - 1)
+      ReDim loadedDomains(totalServidores - 1)
+      For i = 1 To totalServidores
         pos = pos + 1
         ReDim Preserve packetNEW(ultimoN + 1)
         ultimoN = ultimoN + 1
@@ -1971,6 +2026,10 @@ pos = motd + 5 + adder + 2 + strangeNewThingLen
         ultimoN = ultimoN + 1
         packetNEW(ultimoN) = packet(pos + 1)
         pos = pos + 2
+        
+        
+       
+      'Debug.Print frmMain.showAsStr(packetNEW, True)
         
         newServerName = ""
         For j = 1 To lonCName
@@ -2066,27 +2125,33 @@ pos = motd + 5 + adder + 2 + strangeNewThingLen
                 ultimoN = ultimoN + 1
                 packetNEW(ultimoN) = packet(pos + 1)
         End If
-        
+        If (Left$(newServerDomain, 4) = "127.") Then
+          res = 1
+          GoTo returnTheResult
+        End If
         AddGameServer newServerName, "127.0.0.1:" & newServerPort, newServerDomain
         pos = pos + 2
         
         ReDim Preserve packetNEW(ultimoN + 1)
         ultimoN = ultimoN + 1
         packetNEW(ultimoN) = packet(pos)
-    Next i
+      Next i
+      pos = pos + 1
+      
+      ' We don't need to care about the rest, just copy all and we have the packet ready
+      ' Note1 : this includes last part of subpacket &H0C (char -> server index in internal list)
     
-     
-    pos = pos + 1
-  End If
-  
- 
-  tmpU = lon + 8 - pos
+        tmpU = lon + 8 - pos
   ReDim Preserve packetNEW(ultimoN + tmpU)
   For ti = 1 To tmpU
     packetNEW(ultimoN + ti) = packet(pos + ti - 1)
   Next ti
-
   ultimoN = ultimoN + tmpU
+  
+  
+  
+  
+  ' Fill packet with correct trash
   newSize = UBound(packetNEW) - 7
 
   hb = HighByteOfLong(newSize)
@@ -2095,14 +2160,15 @@ pos = motd + 5 + adder + 2 + strangeNewThingLen
   packetNEW(7) = hb
   
 
-
+ 
+  
   newSize = newSize + 6
   hb = HighByteOfLong(newSize)
   lb = LowByteOfLong(newSize)
   packetNEW(0) = lb
   packetNEW(1) = hb
 
-'
+
   modSize = (newSize + 4) Mod 8
   aleat = 0
   If modSize > 0 Then
@@ -2126,10 +2192,7 @@ pos = motd + 5 + adder + 2 + strangeNewThingLen
   packetNEW(0) = lb
   packetNEW(1) = hb
   
-
-
-
- ' Debug.Print "NEW SIZE=" & GoodHex(lb) & " " & GoodHex(hb)
+  
   
   numChars = CLng(packet(pos))
   pos = pos + 1
@@ -2154,19 +2217,45 @@ pos = motd + 5 + adder + 2 + strangeNewThingLen
    ' servDOMAIN = GetGameServerDOMAIN(servName)
    
     AddCharServer2 idConnection, charName, servName, servIP1, servIP2, servIP3, servIP4, servPort, servDOMAIN
-    Debug.Print charName & "-> server #" & CStr(serID) & " (" & servName & ") = " & servDOMAIN & ":" & servPort
+   ' Debug.Print charName & "-> server #" & CStr(serID) & " (" & servName & ") = " & servDOMAIN & ":" & servPort
   Next i
   
-  'Debug.Print frmMain.showAsStr(packet, True)
+  
+       pos = finalAfterPos
+       charlistWasParsed = True
+     '  Debug.Print frmMain.showAsStr(packetNEW, True)
+     '  Debug.Print "OK"
+    Case Else
+      ' should not happen, unless protocol get updated
+       ' LogOnFile "errors.txt", "WARNING IN PACKET" & frmMain.showAsStr2(packet, 0) & vbCrLf & "UNKNOWN PTYPE : " & GoodHex(pType)
+       debugReasons = debugReasons & vbCrLf & " [ UNKNOWN PTYPE : " & GoodHex(pType) & " ] "
+       showDebug = True
+       expectMore = False
+    End Select
+    If pos = finalAfterPos Then
+      expectMore = False
+    ElseIf pos > finalAfterPos Then
+      debugLon1 = pos - finalAfterPos
+      debugReasons = debugReasons & vbCrLf & " [ BAD EVAL IN PTYPE : " & GoodHex(pType) & " ; overread of +" & CStr(debugLon1) & _
+      " bytes. Last good position=" & CStr(lastGoodPos) & " ]"
+      showDebug = True
+      expectMore = False
+    End If
+    lastpType = pType
+  Loop Until expectMore = False
+  
   
 
+  'Debug.Print "OLD PCKT>" & frmMain.showAsStr(packet, True)
   'Debug.Print "NEW PCKT>" & frmMain.showAsStr(packetNEW, True)
- 
-  frmMain.UnifiedSendToClient idConnection, packetNEW, False, True
-
-  
+  If (charlistWasParsed) Then
+    res = 1
+    frmMain.UnifiedSendToClient idConnection, packetNEW, False, True
+  Else
+    res = 0
+    frmMain.UnifiedSendToClient idConnection, packet, False, True
+  End If
   LastCharServerIndex = idConnection
-  res = 1
 returnTheResult:
   'LogOnFile "gotthem.txt", "AFTER (" & CStr(res) & ")> " & frmMain.showAsStr2(packet, 0) & vbCrLf
   PacketIPchange6 = res

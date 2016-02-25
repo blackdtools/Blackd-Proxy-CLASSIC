@@ -57,7 +57,11 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-        strMsg = "Blackd Proxy 37.3" & vbCrLf & _
+    strMsg = "Blackd Proxy 37.3" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixed some initial problems with Tibia 10.91"
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 37.3" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Minimum changes to work in all Tibia versions up to 10.91" & vbCrLf & _
      " - new variable: $meleetargetsonrelativefloor:0$ contains the number of nearby cavebot targets" & vbCrLf & _ 

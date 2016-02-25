@@ -503,6 +503,7 @@ Attribute VB_Exposed = False
 #Const FinalMode = 1
 #Const BufferDebug = 0
 Option Explicit
+
 Private Const OptCte4 = 1 'internal size of a byte ( 1 byte )
 Private Declare Sub RtlMoveMemory Lib "kernel32" ( _
     lpDest As Any, _
@@ -524,6 +525,7 @@ Const errIndexOutOfRange = -1610350521
 
 Dim HTTPGetConnected() As Boolean
 Dim HTTPGetResponseBuffer() As String
+
 
 
 'Private Function getFasterLoginServer() As String
@@ -7306,10 +7308,10 @@ Dim tmpLong As Long
        If TibiaVersionLong >= 1091 Then
           res = PacketIPchange6(packet, Index, strIP, bstart)
       
-            If res <> 1 Then
-              txtPackets.Text = txtPackets.Text & vbCrLf & "ERROR: FAILED TO MODIFY LOGIN PACKET!"
-            Else
+            If res = 1 Then
+          
               If CloseLoginServerAfterCharList = True Then
+                 Debug.Print "Closing login connection"
                  If Index > 0 Then
                     sckServer(Index).Close
                  End If
@@ -7336,7 +7338,20 @@ Dim tmpLong As Long
     Case &H14
      ' Debug.Print "LOGIN TYPE " & GoodHex(c)
       If TibiaVersionLong >= 1091 Then
-        res = 1 ' just motd
+        res = PacketIPchange6(packet, Index, strIP, bstart)
+        If res = 1 Then
+              If CloseLoginServerAfterCharList = True Then
+                 If Index > 0 Then
+                    Debug.Print "Closing login connection"
+                    sckServer(Index).Close
+                 End If
+              End If
+              LearnFromServerLogin = 1
+              Exit Function
+        Else
+          LearnFromServerLogin = 0
+          Exit Function
+        End If
       ElseIf TibiaVersionLong >= 1074 Then
         res = PacketIPchange5b(packet, Index, strIP, bstart)
       ElseIf TibiaVersionLong >= 1012 Then

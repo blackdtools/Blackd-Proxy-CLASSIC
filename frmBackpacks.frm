@@ -253,7 +253,7 @@ Public Sub UpdateItem(clientID As Integer, bpID As Long, slot As Long, t1 As Byt
   End If
 End Sub
 
-Public Sub RemoveItem(clientID As Integer, bpID As Long, slot As Long)
+Public Sub RemoveItem(clientID As Integer, bpID As Long, slot As Long, Optional b1 As Byte = &H0, Optional b2 As Byte = &H0, Optional b3 As Byte = &H0, Optional b4 As Byte = &H0)
   'remove item from a given slot of a bp
  Dim i As Integer
   Dim cap As Long
@@ -269,13 +269,24 @@ Public Sub RemoveItem(clientID As Integer, bpID As Long, slot As Long)
      Backpack(clientID, bpID).item(i + 1).t2
     Backpack(clientID, bpID).item(i).t3 = _
      Backpack(clientID, bpID).item(i + 1).t3
+    Backpack(clientID, bpID).item(i).t4 = _
+     Backpack(clientID, bpID).item(i + 1).t4
   Next i
   If (cap - 1) > 0 Then
-    Backpack(clientID, bpID).item(cap - 1).t1 = &H0
-    Backpack(clientID, bpID).item(cap - 1).t2 = &H0
-    Backpack(clientID, bpID).item(cap - 1).t3 = &H0
-    Backpack(clientID, bpID).used = Backpack(clientID, bpID).used - 1
+    If (Not ((b1 = &H0) And (b2 = &H2))) Then ' NEW: handle picking items from full mailbox
+      Backpack(clientID, bpID).item(cap - 1).t1 = b1
+      Backpack(clientID, bpID).item(cap - 1).t2 = b2
+      Backpack(clientID, bpID).item(cap - 1).t3 = b3
+      Backpack(clientID, bpID).item(cap - 1).t4 = b4
+    Else
+      Backpack(clientID, bpID).item(cap - 1).t1 = &H0
+      Backpack(clientID, bpID).item(cap - 1).t2 = &H0
+      Backpack(clientID, bpID).item(cap - 1).t3 = &H0
+      Backpack(clientID, bpID).item(cap - 1).t4 = &H0
+      Backpack(clientID, bpID).used = Backpack(clientID, bpID).used - 1
+    End If
   Else
+
   LogOnFile "errors.txt", "Warning at Removeitem (" & clientID & ", " & bpID & "," & slot & " )   : Container with cap 0!"
   End If
   Exit Sub
