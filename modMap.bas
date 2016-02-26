@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "37.4" ' Proxy version ' string version
-Public Const myNumericVersion = 37400 ' numeric version
+Public Const ProxyVersion = "37.5" ' Proxy version ' string version
+Public Const myNumericVersion = 37500 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -3813,11 +3813,13 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       templ1 = packet(pos + 1)
       If ((TibiaVersionLong >= 991) Or ((TibiaVersionLong >= 984) And (TibiaVersionLong < 990))) Then
         ' slot id
-        templ2 = GetTheLong(packet(pos + 4), packet(pos + 5))
+        templ2 = CLng(packet(pos + 2)) ' fixed!
+        tileID = GetTheLong(packet(pos + 4), packet(pos + 5))
+        
         ' and 2 extra bytes , usually 00 00
-        If templ2 > 0 Then
+        If tileID > 0 Then
           ' Handles a special case: Removing an item from a full inbox (several pages)
-          If DatTiles(templ2).haveExtraByte = True Then
+          If DatTiles(tileID).haveExtraByte = True Then
               If DatTiles(templ2).haveExtraByte2 = True Then
                 frmBackpacks.RemoveItem idConnection, templ1, templ2, packet(pos + 4), packet(pos + 5), packet(pos + 7), packet(pos + 8)
                 pos = pos + 3
@@ -3826,7 +3828,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                 pos = pos + 2
               End If
             Else
-              If DatTiles(templ2).haveExtraByte2 = True Then
+              If DatTiles(tileID).haveExtraByte2 = True Then
                 frmBackpacks.RemoveItem idConnection, templ1, templ2, packet(pos + 4), packet(pos + 5), &H0, packet(pos + 7)
                 pos = pos + 2
               Else

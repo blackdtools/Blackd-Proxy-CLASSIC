@@ -2372,6 +2372,88 @@ goterr:
     ReadRedSquare = -1
     Exit Function
 End Function
+
+' Maybe safer, but people say it makes cavebot slow and unable to follow monsters correctly while attacking them.
+' I will revert this one for now.
+
+'Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optional forceSend As Boolean = False) As Long
+'  ' attack ID in melee
+'  Dim aRes As Long
+'  Dim sCheat As String
+'  Dim cPacket() As Byte
+'  Dim inRes As Integer
+'  Dim safeRes As String
+'  Dim currentRedSquare As Long
+'  Dim tempID As Long
+'  Dim templ1 As Long
+'
+'  #If FinalMode Then
+'  On Error GoTo goterr
+'  #End If
+'  If (GameConnected(idConnection) = True) And (sentFirstPacket(idConnection) = True) Then
+'    '05 00 A1 7B 8A 02 40
+'    'DEBUGG
+'    'aRes = SendLogSystemMessageToClient(idconnection, "DEBUG > Attacking " & CStr(targetID))
+'    'DoEvents
+'    If isIgnoredcreature(idConnection, targetID) = True Then ' stop!
+'        currTargetID(idConnection) = 0
+'    End If
+'    currTargetID(idConnection) = targetID
+'
+'    currentRedSquare = ReadRedSquare(idConnection) ' will always return -2 in old versions
+'    If currentRedSquare = 0 Then
+'        TurnsWithRedSquareZero(idConnection) = TurnsWithRedSquareZero(idConnection) + 1
+'    Else
+'        TurnsWithRedSquareZero(idConnection) = 0
+'    End If
+'    If (currentRedSquare <> 0) Or (TurnsWithRedSquareZero(idConnection) >= 3) Then
+'        If currentRedSquare <> -1 Then
+'            If (currTargetID(idConnection)) <> 0 Or (forceSend = True) Then
+'                If ((currentRedSquare <> currTargetID(idConnection)) Or (forceSend = 0)) Then ' new since Blackd Proxy 24.0
+'
+'
+'                    If TrainerOptions(idConnection).misc_stoplowhp = 1 Then
+'                        If targetID <> 0 Then
+'                            If tempID = currTargetID(idConnection) Then
+'                                If (templ1 < TrainerOptions(idConnection).stoplowhpHP) Then
+'                                    ' should not attack this target
+'                                    MeleeAttack = -1
+'                                    Exit Function
+'                                End If
+'                            End If
+'                        End If
+'                    End If
+'                    If (currTargetID(idConnection) <> currentRedSquare) Then 'don't resend attack packet if we are already attacking this creature (the client will always notice if attack has been canceled, so currentRedSquare should always be up to date, i believe.. )
+'                    If TibiaVersionLong >= 860 Then
+'                        safeRes = RightNumberOfClicks(idConnection)
+'                        If safeRes = "" Then
+'                                ' error happened, unsafe to attack
+'                                MeleeAttack = -1
+'                                Exit Function
+'                        End If
+'                        sCheat = "09 00 A1 " & SpaceID(targetID) & safeRes
+'                    Else
+'
+'                        sCheat = "05 00 A1 " & SpaceID(targetID)
+'                    End If
+'
+'                       WriteRedSquare idConnection, currTargetID(idConnection) ' new since in tibia 8.62
+'                       inRes = GetCheatPacket(cPacket, sCheat)
+'                       frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+'                    End If
+'                    DoEvents
+'                End If
+'            End If
+'        End If
+'    End If
+'  End If
+'  MeleeAttack = 0
+'  Exit Function
+'goterr:
+'  frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at MeleeAttack : " & Err.Description
+'  frmMain.DoCloseActions idConnection
+'  MeleeAttack = -1
+'End Function
 Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optional forceSend As Boolean = False) As Long
   ' attack ID in melee
   Dim aRes As Long
@@ -2419,7 +2501,6 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
                             End If
                         End If
                     End If
-                    If (currTargetID(idConnection) <> currentRedSquare) Then 'don't resend attack packet if we are already attacking this creature (the client will always notice if attack has been canceled, so currentRedSquare should always be up to date, i believe.. )
                     If TibiaVersionLong >= 860 Then
                         safeRes = RightNumberOfClicks(idConnection)
                         If safeRes = "" Then
@@ -2433,10 +2514,10 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
                         sCheat = "05 00 A1 " & SpaceID(targetID)
                     End If
                 
-                       WriteRedSquare idConnection, currTargetID(idConnection) ' new since in tibia 8.62
-                       inRes = GetCheatPacket(cPacket, sCheat)
-                       frmMain.UnifiedSendToServerGame idConnection, cPacket, True
-                    End If
+                
+                    WriteRedSquare idConnection, currTargetID(idConnection) ' new since in tibia 8.62
+                    inRes = GetCheatPacket(cPacket, sCheat)
+                    frmMain.UnifiedSendToServerGame idConnection, cPacket, True
                     DoEvents
                 End If
             End If
@@ -2450,7 +2531,6 @@ goterr:
   frmMain.DoCloseActions idConnection
   MeleeAttack = -1
 End Function
-
 Public Function CavebotRuneAttack(idConnection As Integer, targetID As Double, runeB1 As Byte, runeB2 As Byte) As Long
   Dim aRes As Long
   Dim lTarget As String
@@ -2556,11 +2636,11 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
     Exit Sub
   End If
   SOPT = 1
-  If ( TibiaVersionLong = 760) Then
-  ' This is an ugly hack, 
-  'but until someone figure out the correct way to calculate the last 2 bytes in 760, 
+  If (TibiaVersionLong = 760) Then
+  ' This is an ugly hack,
+  'but until someone figure out the correct way to calculate the last 2 bytes in 760,
   ' this is better than the cavebot getting stuck all the time
-  ' seems  the last 2 bytes depend on items, players standing on top, and 
+  ' seems  the last 2 bytes depend on items, players standing on top, and
   ' a special case for "tiles containg splash" (blood, water, wine, etc, this is the "SS +1")
     For SS = 0 To 10
     tileID = GetTheLong(Matrix(ydif, xdif, z, idConnection).s(SS).t1, Matrix(ydif, xdif, z, idConnection).s(SS).t2)
@@ -5130,6 +5210,8 @@ Public Function LootGoodItems(idConnection As Integer) As Long
              " 00 " & GoodHex(CByte(j)) & " " & FiveChrLon(tileID) & " " & _
              GoodHex(CByte(j)) & " FF FF " & GoodHex(&H40 + res1.bpID) & " 00 " & GoodHex(res1.slotID) & _
              " " & GoodHex(amount)
+             'Debug.Print "LOOTING PACKET = " & sCheat
+             
             SafeCastCheatString "LootGoodItems1", idConnection, sCheat
             LootGoodItems = 0
             Exit Function

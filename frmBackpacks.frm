@@ -273,7 +273,7 @@ Public Sub RemoveItem(clientID As Integer, bpID As Long, slot As Long, Optional 
      Backpack(clientID, bpID).item(i + 1).t4
   Next i
   If (cap - 1) > 0 Then
-    If (Not ((b1 = &H0) And (b2 = &H2))) Then ' NEW: handle picking items from full mailbox
+    If (Not ((b1 = &H0) And (b2 = &H0))) Then ' NEW: handle picking items from full mailbox ' fixed!
       Backpack(clientID, bpID).item(cap - 1).t1 = b1
       Backpack(clientID, bpID).item(cap - 1).t2 = b2
       Backpack(clientID, bpID).item(cap - 1).t3 = b3
