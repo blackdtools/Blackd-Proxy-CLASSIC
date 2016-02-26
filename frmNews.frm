@@ -57,12 +57,16 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 37.5" & vbCrLf & _
+       strMsg = "Blackd Proxy 37.6" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixed a potential rare problem withen picking items from a full inbox."
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 37.5" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Reverted the cavebot function that follows/attack monsters." & vbCrLf & _
      " - Fixed a bug with looting"
      
-    strMsg = "Blackd Proxy 37.4" & vbCrLf & _
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 37.4" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Fixed some initial problems with Tibia 10.91"
      
