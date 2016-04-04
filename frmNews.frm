@@ -58,7 +58,11 @@ Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
     
-    strMsg = "Blackd Proxy 37.7" & vbCrLf & _
+    strMsg = "Blackd Proxy 37.8" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixed a rare case of bot crash with summoned creatures at Tibia 10.90+"
+
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 37.7" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Fixed bot crash when opening the new window to purchase extra services ingame." & vbCrLf & _
      " - Recovered Trainer ability to pick any item from ground to backpacks by entering 00 00 as ITEM ID"
