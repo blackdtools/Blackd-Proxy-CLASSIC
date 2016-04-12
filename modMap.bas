@@ -34,8 +34,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "37.7" ' Proxy version ' string version
-Public Const myNumericVersion = 37700 ' numeric version
+Public Const ProxyVersion = "37.9" ' Proxy version ' string version
+Public Const myNumericVersion = 37900 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -2756,10 +2756,12 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
   Dim tempb4 As Byte
   Dim templ1 As Long
   Dim templ2 As Long
+  Dim templ3 As Long
   Dim outfitType As Long
   Dim strDebug As String
   Dim lonCap As Long
   Dim lonNumItems As Long
+  Dim lonNumItems2 As Long
   Dim aRes As Long
   Dim lonO As Long
   Dim msg As String
@@ -6575,7 +6577,8 @@ pos = pos + 4 + (15 * templ2)
           ' Debug.Print "> " & mobName
       Next templ1
     Case &HFC
-       ' tibia premium services shop (items)
+       ' Tibia premium services shop (items)
+       ' Parser updated for Tibia 10.92
       pos = pos + 1
       lonN = GetTheLong(packet(pos), packet(pos + 1))
       pos = pos + 2
@@ -6584,12 +6587,12 @@ pos = pos + 4 + (15 * templ2)
         mobName = mobName & Chr(packet(pos))
         pos = pos + 1
       Next itemCount
-     ' Debug.Print "SELECTED CATEGORY> " & mobName
+      'Debug.Print "SELECTED CATEGORY> " & mobName
       templ2 = GetTheLong(packet(pos), packet(pos + 1))
       pos = pos + 2
       For templ1 = 1 To templ2
            lonN = CLng(FourBytesDouble(packet(pos), packet(pos + 1), packet(pos + 2), packet(pos + 3)))
-          ' Debug.Print "PRODUCT ID> " & lonN
+           'Debug.Print "PRODUCT ID> " & lonN
            pos = pos + 4
            
            lonN = GetTheLong(packet(pos), packet(pos + 1))
@@ -6607,28 +6610,66 @@ pos = pos + 4 + (15 * templ2)
              mobName = mobName & Chr(packet(pos))
              pos = pos + 1
            Next itemCount
-           'Debug.Print "DESCRIPTION> " & mobName
+          ' Debug.Print "DESCRIPTION> " & mobName
            lonN = CLng(FourBytesDouble(packet(pos), packet(pos + 1), packet(pos + 2), packet(pos + 3)))
           ' Debug.Print "PRICE> " & lonN
            pos = pos + 4
-           
-           pos = pos + 3 ' skip 3 bytes 00 00 01
-           lonN = GetTheLong(packet(pos), packet(pos + 1))
+         '  Debug.Print "2BYTES> " & GoodHex(packet(pos)) & " " & GoodHex(packet(pos + 1))
+           pos = pos + 2 ' skip 2 bytes 00 00
+           templ2 = CLng(packet(pos))
+           pos = pos + 1
+           For lonNumItems = 1 To templ2
+             lonN = GetTheLong(packet(pos), packet(pos + 1))
+             pos = pos + 2
+             mobName = ""
+             For itemCount = 1 To lonN
+               mobName = mobName & Chr(packet(pos))
+               pos = pos + 1
+             Next itemCount
+            ' Debug.Print "ICON" & CStr(lonNumItems) & "> " & mobName
+           Next lonNumItems
+           templ2 = GetTheLong(packet(pos), packet(pos + 1))
            pos = pos + 2
-           mobName = ""
-           For itemCount = 1 To lonN
-             mobName = mobName & Chr(packet(pos))
+           For lonNumItems = 1 To templ2
+             lonN = GetTheLong(packet(pos), packet(pos + 1))
+             pos = pos + 2
+             mobName = ""
+             For itemCount = 1 To lonN
+               mobName = mobName & Chr(packet(pos))
+               pos = pos + 1
+             Next itemCount
+            ' Debug.Print "PACK ITEM NAME> " & mobName
+             lonN = GetTheLong(packet(pos), packet(pos + 1))
+             pos = pos + 2
+             mobName = ""
+             For itemCount = 1 To lonN
+               mobName = mobName & Chr(packet(pos))
+               pos = pos + 1
+             Next itemCount
+            ' Debug.Print "PACK ITEM DESCRIPTION> " & mobName
+             
+             templ3 = CLng(packet(pos))
              pos = pos + 1
-           Next itemCount
-          ' Debug.Print "ICON> " & mobName
-           lonN = GetTheLong(packet(pos), packet(pos + 1))
-           pos = pos + 2
-           mobName = ""
-           For itemCount = 1 To lonN
-             mobName = mobName & Chr(packet(pos))
-             pos = pos + 1
-           Next itemCount
-          ' Debug.Print "?> " & mobName
+             For lonNumItems2 = 1 To templ3
+               lonN = GetTheLong(packet(pos), packet(pos + 1))
+               pos = pos + 2
+               mobName = ""
+               For itemCount = 1 To lonN
+                 mobName = mobName & Chr(packet(pos))
+                 pos = pos + 1
+               Next itemCount
+              ' Debug.Print "PACK ICON" & CStr(lonNumItems2) & "> " & mobName
+             Next lonNumItems2
+             
+             lonN = GetTheLong(packet(pos), packet(pos + 1))
+             pos = pos + 2
+             For itemCount = 1 To lonN
+               mobName = mobName & Chr(packet(pos))
+               pos = pos + 1
+             Next itemCount
+             'Debug.Print "PACK ITEM FLAGS> " & mobName
+           Next lonNumItems
+         
       Next templ1
    Case &HFD
       ' tibia premium services shop (history)
