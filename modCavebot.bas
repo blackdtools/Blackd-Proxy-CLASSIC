@@ -4498,6 +4498,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   Dim yt As Long
   Dim xdif As Long
   Dim ydif As Long
+  dim absoluteDif As Long
   Dim aRes As Long
   Dim myres As TypeChangeFloorResult
   'myres.result=0 req_wait
@@ -4518,8 +4519,10 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   #End If
   xdif = X - myX(Sid)
   ydif = y - myY(Sid)
+  absoluteDif = Abs(xdif) + Abs(ydif)
   aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
-  If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
+  'If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
+  If absoluteDif > 4 And aRes = 1 Then
     'out of range: first move near
     myres.X = X
     myres.y = y
