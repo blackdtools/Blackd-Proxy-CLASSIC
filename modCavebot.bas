@@ -4522,7 +4522,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   absoluteDif = Abs(xdif) + Abs(ydif)
   aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
   'If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
-  If absoluteDif > 4 And aRes = 1 Then
+  If absoluteDif > 2 And aRes = 1 Then
     'out of range: first move near
     myres.X = X
     myres.y = y
