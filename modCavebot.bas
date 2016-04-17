@@ -1794,11 +1794,6 @@ fastSet:
                  DoingNewLoot(Sid) = False ' on trap, cancel order of moving to corpse
             End If
             ignoreNext(Sid) = 0
-            If AllowRepositionAtStart(Sid) = 1 Then
-                RepositionScriptAtTrap Sid, True 'initial reposition
-            Else
-                ignoreNext(Sid) = 0
-            End If
           Else
             PerformMove Sid, val1, val2, val3
           End If
