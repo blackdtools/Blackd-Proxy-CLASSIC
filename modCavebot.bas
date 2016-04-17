@@ -7001,6 +7001,24 @@ Public Sub RepositionScript(idConnection As Integer, firstLine As Long, lastLine
       Else
         ' floor change: not valid jump
       End If
+    ElseIf mainCommand = "movetocreature" Then
+      Dim foundCreature As Boolean
+      
+      param1 = ParseString(currLine, pos, lenCurrLine, ",")
+      foundCreature = modCode.FindCreatureByName(param1, idConnection, val1, val2, val3)
+            
+      If foundCreature = True And val3 = myZ(idConnection) Then
+        tmpDist = ManhattanDistance(myX(idConnection), myY(idConnection), val1, val2)
+        If evLine = exeLine(idConnection) Then
+          tmpDist = tmpDist - 1 ' give a small priority to keep in current script line
+        End If
+        If tmpDist < bestDist Then ' this point is closer to current position
+          bestLine = evLine
+          bestDist = tmpDist
+        End If
+      Else
+        ' can't find creature, or floor change: not valid jump
+      End If
     Else
       Exit For ' not a move command: can't reposition the script. it would give unpredictable results
     End If
