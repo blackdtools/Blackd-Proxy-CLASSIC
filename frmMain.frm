@@ -6215,7 +6215,7 @@ gotPortErr:
 End Sub
 
 Private Sub SckClient_DataArrival(Index As Integer, ByVal bytesTotal As Long)
-  ' data arrives to client
+  ' data arrives from client
   Dim timeOut As Long
   Dim packet() As Byte 'a tibia packet is an array of bytes
   Dim i As Integer
