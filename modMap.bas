@@ -362,6 +362,9 @@ Public Sub CheckIfGM(idConnection As Integer, ByRef str As String, zpos As Long,
   lCaseStr = LCase(str)
   gotGM = False
   condEnter = False
+  If (forceGm = False And frmRunemaker.IsFriend(lCaseStr)) Then
+  Exit Sub ' friends are not dangers.
+  End If
   If (cavebotEnabled(idConnection) = True) Or (RuneMakerOptions(idConnection).activated = True) Or (RuneMakerOptions(idConnection).autoEat = True) Then
     If DangerGM(idConnection) = False Then
         If forceGm = False Then
@@ -369,7 +372,7 @@ Public Sub CheckIfGM(idConnection As Integer, ByRef str As String, zpos As Long,
         Else
             gotGM = True
         End If
-        If (gotGM = True) Then
+        If (gotGM = True ) Then
             DangerGM(idConnection) = True
             secL = CLng(Int((180 * Rnd) + 60))
             GMname(idConnection) = str
