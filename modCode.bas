@@ -6020,10 +6020,13 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
       Case "+" ' all MC cast
         If Len(msg) > 7 Then
           keyChar2 = LCase(Mid(lMsg, 8, 1))
+          rightpart = Right(msg, Len(lMsg) - 8)
+          If (rightpart = "") Then
+            rightpart = LCase(currTargetName(idConnection)) 
+          End If
           Select Case keyChar2
           Case "0" ' cast SD
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
@@ -6036,7 +6039,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "1" ' cast HMM
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
@@ -6049,7 +6051,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "2" ' cast Explosion
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
@@ -6062,7 +6063,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "3" ' cast IH
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
@@ -6075,7 +6075,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "4" ' cast UH
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
@@ -6088,7 +6087,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "5" ' cast SD
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
@@ -6101,7 +6099,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "6" ' cast HMM
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
@@ -6114,7 +6111,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "7" ' cast Explosion
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
@@ -6127,7 +6123,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "8" ' cast IH
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
@@ -6140,7 +6135,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "9" ' cast UH
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
@@ -6153,7 +6147,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "a" ' type A : Say (text)"
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = ExecuteInTibia(rightpart, mcid, True)
@@ -6162,7 +6155,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "b" ' cast fireball
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_fireball), HighByteOfLong(tileID_fireball))
@@ -6175,7 +6167,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "c" ' cast stalagmite
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_stalagmite), HighByteOfLong(tileID_stalagmite))
@@ -6188,7 +6179,6 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             Next mcid
           Case "d" ' cast icicle
             res = 1
-            rightpart = Right(msg, Len(lMsg) - 8)
             For mcid = 1 To MAXCLIENTS
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_icicle), HighByteOfLong(tileID_icicle))
