@@ -7078,6 +7078,48 @@ errclose:
   DoEvents
   SendAimbot = -1
 End Function
+Public Function FindCreatureByName(ByVal target As String, idConnection As Integer, ByRef foundX As Long, ByRef foundY As Long, ByRef foundZ As Long) As Boolean
+    Dim x As Long
+    Dim y As Long
+    Dim z As Long
+    Dim s As Long
+    Dim tmpname As String
+    Dim tmpID As Double
+    foundX = -1
+    foundY = -1
+    foundZ = -1
+    If (Len(target) = 0) Then
+        FindCreatureByName = False
+        Exit Function
+    End If
+    target = LCase(target)
+    
+  For z = -1 To 1 'just 1 floor below, 1 floor above, and current floor, try to save some c
+  For y = -6 To 7
+    For x = -8 To 9
+      For s = 1 To 10
+        tmpID = Matrix(y, x, myZ(idConnection) + z, idConnection).s(s).dblID
+        If tmpID = 0 Then
+        '...
+        Else
+          tmpname = LCase(GetNameFromID(idConnection, tmpID))
+          If (tmpname = target) Then
+            'found it!
+            foundX = myX(idConnection) + x
+            foundY = myY(idConnection) + y
+            foundZ = myZ(idConnection) + z
+            FindCreatureByName = True
+            Exit Function
+          End If
+        End If
+        Next s
+    Next x
+  Next y
+  Next z
+  
+    'failed to find creature
+    FindCreatureByName = False
+End Function
 
 
 Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 As Byte, runeB2 As Byte) As Long

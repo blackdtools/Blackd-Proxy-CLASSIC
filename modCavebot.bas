@@ -1755,7 +1755,50 @@ fastSet:
           End If
         End If
     End If
-
+  Case "movetocreature"
+  Dim foundCreature As Boolean
+  
+    param1 = ParseString(currLine, pos, lenCurrLine, ",")
+    foundCreature = modCode.FindCreatureByName(param1, Sid, val1, val2, val3)
+    
+    
+    continueP = True
+    If DoingNewLoot(Sid) = False Then
+            If AnythingLootable(Sid) = True Then
+                continueP = False
+            End If
+    
+    End If
+    If continueP = True And foundCreature = True Then
+    
+        If (myX(Sid) > val1 - 2) And (myX(Sid) < val1 + 2) And _
+           (myY(Sid) > val2 - 2) And (myY(Sid) < val2 + 2) And _
+           (myZ(Sid) = val3) Then
+          ' move completed
+          If DoingNewLoot(Sid) = False Then
+            'exeLine(Sid) = exeLine(Sid) + 1
+            updateExeLine Sid, 1, True
+          
+          Else
+            
+            'aRes = GiveGMmessage(Sid, "Reached loot point", "Development")
+            SmartLootCorpse Sid
+            DoingNewLoot(Sid) = False
+            DoEvents
+          End If
+        Else
+          
+          ' keep moving
+          If ignoreNext(Sid) = -1 Then
+            If DoingNewLoot(Sid) = True Then
+                 DoingNewLoot(Sid) = False ' on trap, cancel order of moving to corpse
+            End If
+            ignoreNext(Sid) = 0
+          Else
+            PerformMove Sid, val1, val2, val3
+          End If
+        End If
+    End If
   Case "gotoscriptline"
     param1 = ParseString(currLine, pos, lenCurrLine, ",")
     val1 = CLng(param1)
@@ -6955,6 +6998,24 @@ Public Sub RepositionScript(idConnection As Integer, firstLine As Long, lastLine
         End If
       Else
         ' floor change: not valid jump
+      End If
+    ElseIf mainCommand = "movetocreature" Then
+      Dim foundCreature As Boolean
+      
+      param1 = ParseString(currLine, pos, lenCurrLine, ",")
+      foundCreature = modCode.FindCreatureByName(param1, idConnection, val1, val2, val3)
+            
+      If foundCreature = True And val3 = myZ(idConnection) Then
+        tmpDist = ManhattanDistance(myX(idConnection), myY(idConnection), val1, val2)
+        If evLine = exeLine(idConnection) Then
+          tmpDist = tmpDist - 1 ' give a small priority to keep in current script line
+        End If
+        If tmpDist < bestDist Then ' this point is closer to current position
+          bestLine = evLine
+          bestDist = tmpDist
+        End If
+      Else
+        ' can't find creature, or floor change: not valid jump
       End If
     Else
       Exit For ' not a move command: can't reposition the script. it would give unpredictable results
