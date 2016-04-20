@@ -4071,7 +4071,11 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   #End If
   xdif = X - myX(Sid)
   ydif = y - myY(Sid)
-  aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
+  If modCode.Antibanmode > 0 Then
+   aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
+  Else
+   aRes = 1
+  End If
   If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
     'out of range: first move near
     myres.X = X
@@ -4563,7 +4567,11 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   xdif = X - myX(Sid)
   ydif = y - myY(Sid)
   absoluteDif = Abs(xdif) + Abs(ydif)
-  aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
+  If modCode.Antibanmode > 0 Then
+   aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
+  Else
+   aRes = 1
+  End If
   'If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
   If absoluteDif > 2 And aRes = 1 Then
     'out of range: first move near
