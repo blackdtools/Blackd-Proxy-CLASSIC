@@ -64,7 +64,7 @@ Private Sub Form_Load()
      " - new cavebot function: MoveToCreature name" & vbCrLf & _
      " - GMs on friendlist will no longer be considdered a danger" & vbCrLf & _
      " - ALL MCs Cast Rune command now works even without specying a name (will copy the target of the character that issued it)" & vbCrLf & _
-     " - cavebot will move up & down ladders faster when antibanmode is disabled."
+     " - cavebot will move up & down floors faster when antibanmode is disabled."
      
     strMsg = strMsg & vbCrLf & "Blackd Proxy 37.9" & vbCrLf & _
     "----------------------------" & vbCrLf & _
