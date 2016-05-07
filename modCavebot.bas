@@ -406,6 +406,9 @@ Public Function isHmm(idConnection As Integer, ByRef str As String) As Boolean
   Else
     isHmm = False
   End If
+  If cavebotHMMs(idConnection).Exists("*") = True Then
+    isHmm = Not isHmm ' inversed
+  End If  
 End Function
 
 
