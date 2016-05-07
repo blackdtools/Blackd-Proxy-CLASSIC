@@ -457,7 +457,7 @@ Public Function getShotType(idConnection As Integer, ByRef str As String) As Lon
   Dim res As Boolean
   If shotTypeDict(idConnection).Exists(LCase(str)) = True Then
     getShotType = shotTypeDict(idConnection).item(LCase(str))
-  ElseIf getShotType = shotTypeDict(idConnection).item("*") Then
+  ElseIf shotTypeDict(idConnection).Exists("*") = True Then
     getShotType = shotTypeDict(idConnection).item("*")
     Else
     getShotType = tileID_HMM
