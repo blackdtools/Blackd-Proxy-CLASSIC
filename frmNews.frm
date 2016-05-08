@@ -59,7 +59,12 @@ Private Sub Form_Load()
     Me.lblText = "What is new?"
     strMsg = "Blackd Proxy 38.0" & vbCrLf & _
     "----------------------------" & vbCrLf & _
-     " - Minimum changes to work in all Tibia versions up to 10.93"
+     " - Minimum changes to work in all Tibia versions up to 10.93" & vbCrLf & _
+     " - fixed a cavebot bug where it would get stuck on trying to move floor up in some situations" & vbCrLf & _
+     " - new cavebot function: MoveToCreature name (works even between floors)" & vbCrLf & _
+     " - GMs on friendlist will no longer be considered a danger" & vbCrLf & _
+     " - ALL MCs Cast Rune command now works even without specying a name (will copy the target of the character that issued it)" & vbCrLf & _
+     " - cavebot will move up & down floors faster when antibanmode is disabled."
      
     strMsg = strMsg & vbCrLf & "Blackd Proxy 37.9" & vbCrLf & _
     "----------------------------" & vbCrLf & _
