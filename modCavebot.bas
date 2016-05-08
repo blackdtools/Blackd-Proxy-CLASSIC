@@ -406,6 +406,9 @@ Public Function isHmm(idConnection As Integer, ByRef str As String) As Boolean
   Else
     isHmm = False
   End If
+  If cavebotHMMs(idConnection).Exists("*") = True Then
+    isHmm = Not isHmm ' inversed
+  End If  
 End Function
 
 
@@ -454,7 +457,9 @@ Public Function getShotType(idConnection As Integer, ByRef str As String) As Lon
   Dim res As Boolean
   If shotTypeDict(idConnection).Exists(LCase(str)) = True Then
     getShotType = shotTypeDict(idConnection).item(LCase(str))
-  Else
+  ElseIf shotTypeDict(idConnection).Exists("*") = True Then
+    getShotType = shotTypeDict(idConnection).item("*")
+    Else
     getShotType = tileID_HMM
   End If
 End Function
