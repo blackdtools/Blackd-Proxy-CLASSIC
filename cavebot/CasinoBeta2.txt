@@ -1,0 +1,265 @@
+:start
+##### VARIAVEIS
+SetLootOff
+fastExiva _crystal = 0
+fastExiva _pay = 10
+fastExiva _pay2 = 50
+fastExiva _pay3 = 9
+fastExiva _payout = 0
+fastExiva _platid = DB 0B
+fastExiva _crystalid = E3 0B
+fastExiva _count3 = 0
+fastExiva _countc3 = 0
+fastExiva _count4 = 0
+fastExiva _countc4 = 0
+fastExiva _count1 = $countitems:{$_platid$}$
+fastExiva _countc1 = $countitems:{$_crystalid$}$
+:amount
+# MENSAGEM ANTI AFK
+fastExiva _cont2 = $numericalexp:{$_cont2$}+1$
+fastExiva _cont = $numericalexp:{$_cont$}+1$
+IfTrue ($_cont2$#number>=#120) Goto $nlineoflabel:message2$
+IfTrue ($_cont$#number>=#30) Goto $nlineoflabel:message$
+# PUXA PRA MAO
+fastExiva > 78 $numbertohex2:{$numericalexp:{$myx$}+1$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ DB 0B 01 FF FF 05 00 00 $numbertohex1:2$
+fastExiva > 78 $numbertohex2:{$numericalexp:{$myx$}+1$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ E3 0B 01 FF FF 05 00 00 $numbertohex1:2$
+fastExiva _pay = $numericalexp:{$_pay$}-10$
+IfTrue ($_pay$#number>#0) Goto $nlineoflabel:amount$
+IfTrue ($num-equiped-ammount:05$#number<=#1) Goto $nlineoflabel:amount$
+sayMessage Loading
+# IF ITS PLAT
+fastExiva _count2 = $countitems:{$_platid$}$
+fastExiva _count3 = $numericalexp:{$_count2$}-{$_count1$}$
+IfTrue ($_count3$#number>#0) Goto $nlineoflabel:amount2$
+# IF ITS CRYSTAL
+fastExiva _countc2 = $countitems:{$_crystalid$}$
+fastExiva _countc3 = $numericalexp:{$_countc2$}-{$_countc1$}$
+IfTrue ($_countc3$#number>#0) Goto $nlineoflabel:amountc2$
+:amount4
+waitX 1
+# CONTA PLAT TOTAL
+fastExiva _count2 = $countitems:{$_platid$}$
+fastExiva _count3 = $numericalexp:{$_count2$}-{$_count1$}$
+# CONTA CRYSTAL TOTAL
+fastExiva _countc2 = $countitems:{$_crystalid$}$
+fastExiva _countc3 = $numericalexp:{$_countc2$}-{$_countc1$}$
+# DEVOLUÇAO
+fastExiva _count4 = $num-equiped-ammount:05$
+fastExiva _countc4 = $num-equiped-ammount:05$
+IfTrue ($_count4$#number>#50) Goto $nlineoflabel:back$
+IfTrue ($_countc4$#number>#50) Goto $nlineoflabel:back2$
+# COMECO
+IfTrue ($_count3$#number>#0) Goto $nlineoflabel:run$
+IfTrue ($_countc3$#number>#0) Goto $nlineoflabel:run2$
+# ERROR
+IfTrue ($_countc3$#number=#0) Goto $nlineoflabel:error$
+gotoScriptLine $nlineoflabel:start$
+##### RODANDO
+:run
+# DESCE DA MAO >
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_count3$}$
+fastExiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_count3$}$
+:run3
+sayMessage exiva turn1
+sayMessage Say "hi"
+:hi
+IfTrue ($lastmsg$#string=#hi) Goto $nlineoflabel:check$
+IfTrue ($lastmsg$#string=#Hi) Goto $nlineoflabel:check$
+IfTrue ($lastmsg$#string=#HI) Goto $nlineoflabel:check$
+gotoScriptLine $nlineoflabel:hi$
+:check
+sayMessage Say "H" or "L"
+##### HIGH OR LOW waiting
+:horl
+IfTrue ($lastmsg$#string=#low) Goto $nlineoflabel:dicelow$
+IfTrue ($lastmsg$#string=#l) Goto $nlineoflabel:dicelow$
+IfTrue ($lastmsg$#string=#L) Goto $nlineoflabel:dicelow$
+IfTrue ($lastmsg$#string=#h) Goto $nlineoflabel:dicehigh$
+IfTrue ($lastmsg$#string=#H) Goto $nlineoflabel:dicehigh$
+IfTrue ($lastmsg$#string=#high) Goto $nlineoflabel:dicehigh$
+IfTrue ($lastmsg$#string=#hight) Goto $nlineoflabel:dicehigh$
+gotoScriptLine $nlineoflabel:horl$
+##### IF LOW
+:dicelow
+fastExiva _rndnum = $randomnumber:1>6$
+fastExiva > 82 FF FF 0A 00 00 85 0B 00 0C
+waitX 1
+sayMessage Cassino roled a $_rndnum$.
+waitX 1
+IfTrue ($_rndnum$#number=#1) Goto $nlineoflabel:payout$
+IfTrue ($_rndnum$#number=#2) Goto $nlineoflabel:payout$
+IfTrue ($_rndnum$#number=#3) Goto $nlineoflabel:payout$
+gotoScriptLine $nlineoflabel:loser$
+##### IF HIGH
+:dicehigh
+fastExiva _rndnum = $randomnumber:1>6$
+fastExiva > 82 FF FF 0A 00 00 85 0B 00 0C
+waitX 1
+sayMessage Cassino roled a $_rndnum$.
+waitX 1
+IfTrue ($_rndnum$#number=#4) Goto $nlineoflabel:payout$
+IfTrue ($_rndnum$#number=#5) Goto $nlineoflabel:payout$
+IfTrue ($_rndnum$#number=#6) Goto $nlineoflabel:payout$
+gotoScriptLine $nlineoflabel:loser$
+##### PERDEU
+:loser
+fastExiva _rndnum2 = $randomnumber:1>4$
+IfTrue ($_rndnum2$#number=#1) Goto $nlineoflabel:loser1$
+IfTrue ($_rndnum2$#number=#2) Goto $nlineoflabel:loser2$
+IfTrue ($_rndnum2$#number=#3) Goto $nlineoflabel:loser3$
+IfTrue ($_rndnum2$#number=#4) Goto $nlineoflabel:loser4$
+:loserfinal
+sayMessage exiva turn1
+waitX 1
+fastExiva turn2
+gotoScriptLine $nlineoflabel:start$
+##### GANHOU
+:payout
+sayMessage You WIN
+IfTrue ($_crystal$#number=#1) Goto $nlineoflabel:payout2$
+sayMessage exiva #DB 0B 06
+sayMessage exiva #DB 0B 06
+sayMessage exiva #DB 0B 06
+fastExiva _payout = $_count3$
+fastExiva _payout = $numericalexp:{$_payout$}*170$
+fastExiva _payout = $numericalexp:{$_payout$}/100$
+waitX 1
+sayMessage exiva > 78 FF FF 06 00 00 $hex-equiped-item:06$ 00 $numbertohex2:{$numericalexp:{$myx$}+2$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ $numbertohex1:{$_payout$}$
+waitX 1
+sayMessage exiva #DB 0B 06
+sayMessage exiva #DB 0B 06
+sayMessage exiva #DB 0B 06
+sayMessage Balance: $countitems:{$_platid$}$ platinums, $countitems:{$_crystalid$}$ crystals.
+waitX 1
+sayMessage exiva turn0
+sayMessage exiva turn2
+gotoScriptLine $nlineoflabel:start$
+##### ANUNCIO
+:message
+sayMessage Casino 100% AFK ~ come play H or L ~ Accept Platinum and Crystal (Min 2/Max 50 coins)
+fastExiva > 82 FF FF 0A 00 00 85 0B 00 0C
+fastExiva _cont = 0
+sayMessage exiva turn0
+sayMessage exiva turn2
+fastExiva > 96 05 05 00 $hex-tibiastr:Casino 100% Afk H or L (Cast ON), accept platinum and crystals (Min 2/Max 50 coins)$
+gotoScriptLine $nlineoflabel:start$
+##### ANUNCIO 2
+:message2
+sayMessage Para jogar coloque sua aposta no meio, L = 123 / H = 456. O script gera o numero automatico. To play put money in the middle.
+fastExiva _cont2 = 0
+fastExiva _cont = 0
+sayMessage exiva turn0
+sayMessage exiva turn2
+gotoScriptLine $nlineoflabel:start$
+##### DEVOLVER PLATINUM
+:back
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_count4$}$
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_count4$}$
+sayMessage exiva turn1
+sayMessage Its too much, try again. Max 50 plat
+waitX 1
+sayMessage exiva #DB 0B 06
+sayMessage exiva #DB 0B 06
+waitX 1
+sayMessage exiva > 78 FF FF 06 00 00 $hex-equiped-item:06$ 00 $numbertohex2:{$numericalexp:{$myx$}+2$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ $numbertohex1:{$_count4$}$
+waitX 1
+sayMessage exiva #DB 0B 06
+sayMessage exiva #DB 0B 06
+sayMessage exiva turn0
+sayMessage exiva turn2
+gotoScriptLine $nlineoflabel:start$
+##### DEVOLVER CRYSTAL
+:back2
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_countc4$}$
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_countc4$}$
+fastExiva turn1
+sayMessage Its too much, try again. Max 50 crystal
+waitX 1
+sayMessage exiva #E3 0B 06
+sayMessage exiva #E3 0B 06
+waitX 1
+fastExiva > 78 FF FF 06 00 00 $hex-equiped-item:06$ 00 $numbertohex2:{$numericalexp:{$myx$}+2$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ $numbertohex1:{$_countc4$}$
+waitX 1
+sayMessage exiva #E3 0B 06
+sayMessage exiva #E3 0B 06
+fastExiva turn0
+fastExiva turn2
+gotoScriptLine $nlineoflabel:start$
+##### RUN Crystal
+:run2
+fastExiva _crystal = 1
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_countc3$}$
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 FF FF 03 00 00 $numbertohex1:{$_countc3$}$
+gotoScriptLine $nlineoflabel:run3$
+##### PAYOUT CRYSTAL
+:payout2
+sayMessage exiva #E3 0B 06
+sayMessage exiva #E3 0B 06
+sayMessage exiva #E3 0B 06
+fastExiva _payout = $_countc3$
+fastExiva _payout = $numericalexp:{$_payout$}*165$
+fastExiva _payout = $numericalexp:{$_payout$}/100$
+waitX 1
+sayMessage exiva > 78 FF FF 06 00 00 $hex-equiped-item:06$ 00 $numbertohex2:{$numericalexp:{$myx$}+2$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ $numbertohex1:{$_payout$}$
+waitX 1
+sayMessage exiva #E3 0B 06
+sayMessage exiva #E3 0B 06
+sayMessage exiva #E3 0B 06
+waitX 1
+sayMessage exiva turn0
+sayMessage exiva turn2
+gotoScriptLine $nlineoflabel:start$
+##### FRASES LOSER
+:loser1
+sayMessage You lose Playboy
+gotoScriptLine $nlineoflabel:loserfinal$
+:loser2
+sayMessage Lucky next time
+gotoScriptLine $nlineoflabel:loserfinal$
+:loser3
+sayMessage Perdeu Playboy
+gotoScriptLine $nlineoflabel:loserfinal$
+:loser4
+sayMessage Amen irmao
+gotoScriptLine $nlineoflabel:loserfinal$
+## IF PLATINUM
+:amount2
+# PUXA DECIMAL
+fastExiva > 78 $numbertohex2:{$numericalexp:{$myx$}+1$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ DB 0B 01 FF FF 05 00 00 $numbertohex1:{$_pay2$}$
+fastExiva _pay2 = $numericalexp:{$_pay2$}-10$
+IfTrue ($_pay2$#number>#0) Goto $nlineoflabel:amount2$
+:amount3
+# PUXA UNIDADE
+fastExiva > 78 $numbertohex2:{$numericalexp:{$myx$}+1$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ DB 0B 01 FF FF 05 00 00 $numbertohex1:{$_pay3$}$
+fastExiva _pay3 = $numericalexp:{$_pay3$}-1$
+IfTrue ($_pay3$#number>#0) Goto $nlineoflabel:amount3$
+gotoScriptLine $nlineoflabel:amount4$
+## IF CRYSTAL
+:amountc2
+# PUXA DECIMAL
+fastExiva > 78 $numbertohex2:{$numericalexp:{$myx$}+1$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ E3 0B 01 FF FF 05 00 00 $numbertohex1:{$_pay2$}$
+fastExiva _pay2 = $numericalexp:{$_pay2$}-10$
+IfTrue ($_pay2$#number>#0) Goto $nlineoflabel:amountc2$
+:amountc3
+# PUXA UNIDADE
+fastExiva > 78 $numbertohex2:{$numericalexp:{$myx$}+1$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ E3 0B 01 FF FF 05 00 00 $numbertohex1:{$_pay3$}$
+fastExiva _pay3 = $numericalexp:{$_pay3$}-1$
+IfTrue ($_pay3$#number>#0) Goto $nlineoflabel:amountc3$
+gotoScriptLine $nlineoflabel:amount4$
+##### ERRO CASH TRAVADO MAO >
+:error
+sayMessage Error please wait, do not play in Server Save.
+fastExiva _error = 100
+fastExiva _error2 = 9
+:error2
+# DEVOLVE DECIMAL
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 $numbertohex2:{$numericalexp:{$myx$}+2$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ $numbertohex1:{$_error$}$
+fastExiva _error = $numericalexp:{$_error$}-10$
+IfTrue ($_error$#number>#0) Goto $nlineoflabel:error2$
+:error3
+# DEVOLVE UNIDADE
+sayMessage exiva > 78 FF FF 05 00 00 $hex-equiped-item:05$ 00 $numbertohex2:{$numericalexp:{$myx$}+2$}$ $numbertohex2:{$numericalexp:{$myy$}-1$}$ $numbertohex1:{$myz$}$ $numbertohex1:{$_error2$}$
+fastExiva _error2 = $numericalexp:{$_error2$}-1$
+IfTrue ($_error2$#number>#0) Goto $nlineoflabel:error3$
+sayMessage exiva turn2
+gotoScriptLine $nlineoflabel:start$
