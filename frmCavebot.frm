@@ -1,57 +1,81 @@
 VERSION 5.00
 Begin VB.Form frmCavebot 
    BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Cavebot"
-   ClientHeight    =   8850
+   ClientHeight    =   7005
    ClientLeft      =   45
-   ClientTop       =   435
-   ClientWidth     =   11220
+   ClientTop       =   375
+   ClientWidth     =   6750
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmCavebot.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   8850
-   ScaleWidth      =   11220
+   MinButton       =   0   'False
+   ScaleHeight     =   7005
+   ScaleWidth      =   6750
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdIdlist 
+      BackColor       =   &H0080FF80&
+      Caption         =   "Id List"
+      Height          =   375
+      Left            =   4800
+      Style           =   1  'Graphical
+      TabIndex        =   140
+      ToolTipText     =   "Allows melee kill of this creature"
+      Top             =   2280
+      Width           =   735
+   End
+   Begin VB.CommandButton cmdAdvanced 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Show advanced options"
+      Height          =   375
+      Left            =   3360
+      Style           =   1  'Graphical
+      TabIndex        =   139
+      ToolTipText     =   "When script read this command, it will jump to given line"
+      Top             =   6480
+      Width           =   3255
+   End
    Begin VB.CommandButton cmdLoadCopyPaste 
       BackColor       =   &H0080FF80&
-      Caption         =   "NEW: Load by Copy/Paste"
-      Height          =   495
-      Left            =   120
+      Caption         =   "Edit"
+      Height          =   255
+      Left            =   2640
       Style           =   1  'Graphical
       TabIndex        =   137
       ToolTipText     =   "Loads from given file"
-      Top             =   7800
-      Width           =   2175
+      Top             =   5640
+      Width           =   615
    End
    Begin VB.TextBox txtSetBotValue 
       Height          =   375
-      Left            =   10440
+      Left            =   8880
       TabIndex        =   135
       Text            =   "1"
       ToolTipText     =   "value, for booleans 0=FALSE and 1=TRUE"
-      Top             =   2880
-      Width           =   735
+      Top             =   1920
+      Width           =   375
    End
    Begin VB.ComboBox cmbSetOperator 
       Height          =   315
-      Left            =   8400
+      Left            =   7560
       TabIndex        =   134
       Text            =   "LootAll"
       ToolTipText     =   "Bot internal variable"
-      Top             =   2880
-      Width           =   1935
+      Top             =   1920
+      Width           =   1215
    End
    Begin VB.CommandButton cmdSetBot 
       BackColor       =   &H0000C000&
       Caption         =   "setBot"
       Height          =   375
-      Left            =   7680
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   133
       ToolTipText     =   "set internal bot variable"
-      Top             =   2880
+      Top             =   1920
       Width           =   735
    End
    Begin VB.CommandButton cmdSetChaoticMovesOFF 
@@ -59,12 +83,12 @@ Begin VB.Form frmCavebot
       Caption         =   "setChaoticMovesOFF"
       Enabled         =   0   'False
       Height          =   375
-      Left            =   5280
+      Left            =   4920
       Style           =   1  'Graphical
       TabIndex        =   132
       ToolTipText     =   "Try to always move to exact waypoint"
-      Top             =   2880
-      Width           =   1935
+      Top             =   6000
+      Width           =   1695
    End
    Begin VB.CommandButton cmdSetChaoticMovesON 
       BackColor       =   &H0000C000&
@@ -75,347 +99,347 @@ Begin VB.Form frmCavebot
       Style           =   1  'Graphical
       TabIndex        =   131
       ToolTipText     =   "It will avoid repetitive path detection (enabled by default)"
-      Top             =   2880
-      Width           =   1935
+      Top             =   6000
+      Width           =   1575
    End
    Begin VB.TextBox txtMs2 
       Height          =   285
-      Left            =   5160
+      Left            =   840
       TabIndex        =   129
       Text            =   "700"
-      Top             =   120
-      Width           =   615
+      Top             =   6480
+      Width           =   495
    End
    Begin VB.TextBox txtSetMaxHit 
       Height          =   375
-      Left            =   10440
+      Left            =   8160
       TabIndex        =   127
       Text            =   "10000"
       ToolTipText     =   "If a target hits you more than this then, then ignore it"
-      Top             =   2520
-      Width           =   735
+      Top             =   1560
+      Width           =   615
    End
    Begin VB.CommandButton cmdSetMaxHit 
       BackColor       =   &H0000C000&
       Caption         =   "setMaxHit"
       Height          =   375
-      Left            =   8520
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   126
       ToolTipText     =   "If a target hits you more than this then, then ignore it"
-      Top             =   2520
-      Width           =   1935
+      Top             =   2640
+      Width           =   855
    End
    Begin VB.TextBox txtSetMaxAttackTimeMs 
       Height          =   375
-      Left            =   7680
+      Left            =   8520
       TabIndex        =   125
       Text            =   "40000"
       ToolTipText     =   "if you take more time than that to kill target, then ignore it"
-      Top             =   2520
-      Width           =   735
+      Top             =   1200
+      Width           =   495
    End
    Begin VB.CommandButton cmdSetMaxAttackTimeMs 
       BackColor       =   &H0000C000&
       Caption         =   "setMaxAttackTimeMs"
       Height          =   375
-      Left            =   5760
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   124
       ToolTipText     =   "if you take more time than that to kill target, then ignore it"
-      Top             =   2520
-      Width           =   1935
+      Top             =   1200
+      Width           =   1695
    End
    Begin VB.TextBox txtSetLootDistance 
       Height          =   375
-      Left            =   10560
+      Left            =   7680
       TabIndex        =   123
       Text            =   "3"
       ToolTipText     =   "max distance to the corpse"
-      Top             =   2160
-      Width           =   615
+      Top             =   2640
+      Width           =   495
    End
    Begin VB.CommandButton cmdSetLootDistance 
       BackColor       =   &H0000C000&
       Caption         =   "setLootDistance"
       Height          =   375
-      Left            =   8880
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   122
       ToolTipText     =   "Change max distance to corpse to be lootable"
-      Top             =   2160
-      Width           =   1695
+      Top             =   1560
+      Width           =   1335
    End
    Begin VB.CommandButton cmdSayInTrade 
       BackColor       =   &H0000C000&
-      Caption         =   "sayInTrade"
+      Caption         =   "say in NPC"
       Height          =   375
       Left            =   4560
       Style           =   1  'Graphical
       TabIndex        =   121
       ToolTipText     =   "say this message in trade, if trading"
-      Top             =   5400
-      Width           =   1215
+      Top             =   3840
+      Width           =   1095
    End
    Begin VB.TextBox txtSetSpellKill_Dist 
       Height          =   375
-      Left            =   7080
+      Left            =   6120
       TabIndex        =   113
       Text            =   "3"
       ToolTipText     =   "Enter maximum distance for possible cast"
-      Top             =   3600
+      Top             =   840
       Width           =   495
    End
    Begin VB.TextBox txtSetSpellKill_Spell 
       Height          =   375
-      Left            =   5760
+      Left            =   5160
       TabIndex        =   112
       Text            =   "exori frigo"
       ToolTipText     =   "Enter distance spell"
-      Top             =   3600
-      Width           =   975
+      Top             =   840
+      Width           =   855
    End
    Begin VB.TextBox txtSetSpellKill_Creature 
       Height          =   375
-      Left            =   4320
+      Left            =   4080
       TabIndex        =   111
       Text            =   "larva"
       ToolTipText     =   "Enter creature name"
-      Top             =   3600
-      Width           =   1095
+      Top             =   840
+      Width           =   975
    End
    Begin VB.CommandButton cmdSetSpellKill 
       BackColor       =   &H0000C000&
-      Caption         =   "setSpellKill"
+      Caption         =   "Spell Kill"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   110
       ToolTipText     =   "set more priority in some monsters. Default = 0 ; higher value = more priority"
-      Top             =   3600
-      Width           =   975
+      Top             =   840
+      Width           =   735
    End
    Begin VB.TextBox txtPriority2 
       Height          =   375
-      Left            =   5760
+      Left            =   5640
       MaxLength       =   7
       TabIndex        =   109
       Text            =   "+1"
       ToolTipText     =   "positive values = more priority than default ; negative values = less priority than default"
-      Top             =   2160
+      Top             =   1800
       Width           =   975
    End
    Begin VB.TextBox txtPriority1 
       Height          =   375
-      Left            =   4320
+      Left            =   4080
       TabIndex        =   107
       Text            =   "necromancer"
       ToolTipText     =   "Enter creature name"
-      Top             =   2160
-      Width           =   1095
+      Top             =   1800
+      Width           =   1455
    End
    Begin VB.CommandButton cmdSetPriority 
       BackColor       =   &H0000C000&
-      Caption         =   "setPriority"
+      Caption         =   "Priority"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   106
       ToolTipText     =   "set more priority in some monsters. Default = 0 ; higher value = more priority"
-      Top             =   2160
-      Width           =   975
+      Top             =   1800
+      Width           =   735
    End
    Begin VB.CheckBox chkLootProtection 
       BackColor       =   &H00000000&
       Caption         =   "Allow looting when a person is near (if using a friendly mode)"
       ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Left            =   7800
+      Height          =   1095
+      Left            =   9840
       TabIndex        =   105
-      Top             =   6240
+      Top             =   4800
       Value           =   1  'Checked
-      Width           =   3135
+      Width           =   1455
    End
    Begin VB.CommandButton cmdSetExoriMort 
       BackColor       =   &H0000C000&
       Caption         =   "setExoriMort"
       Height          =   375
-      Left            =   7560
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   104
       ToolTipText     =   "Kill monster with exori mort, also forces standing in front"
-      Top             =   720
+      Top             =   120
       Width           =   1095
    End
    Begin VB.TextBox txtMort 
       Height          =   375
-      Left            =   8640
+      Left            =   7920
       TabIndex        =   103
       Text            =   "larva"
       ToolTipText     =   "Enter creature name"
-      Top             =   720
+      Top             =   120
       Width           =   735
    End
    Begin VB.CommandButton cmdSetSDkill 
       BackColor       =   &H0000C000&
-      Caption         =   "setSDKill"
+      Caption         =   "Set SD"
       Height          =   375
-      Left            =   9360
+      Left            =   5160
       Style           =   1  'Graphical
       TabIndex        =   101
       ToolTipText     =   "Set the cavebot to kill it with SD runes"
-      Top             =   360
-      Width           =   1215
+      Top             =   1320
+      Width           =   735
    End
    Begin VB.TextBox txtSetSDKill 
       Height          =   375
-      Left            =   10560
+      Left            =   5880
       TabIndex        =   102
       Text            =   "demon"
       ToolTipText     =   "Enter creature name"
-      Top             =   360
-      Width           =   615
+      Top             =   1320
+      Width           =   735
    End
    Begin VB.HScrollBar scrollExorivis 
       Height          =   255
-      Left            =   9000
+      Left            =   8040
       Max             =   100
       TabIndex        =   99
-      Top             =   4200
+      Top             =   5520
       Value           =   75
-      Width           =   1455
+      Width           =   1095
    End
    Begin VB.TextBox txtAvoid 
       Height          =   375
-      Left            =   10560
+      Left            =   4560
       TabIndex        =   97
       Text            =   "dragon"
       ToolTipText     =   "Enter creature name"
-      Top             =   720
-      Width           =   615
+      Top             =   2760
+      Width           =   975
    End
    Begin VB.TextBox txtExori 
       Height          =   375
-      Left            =   8640
+      Left            =   4080
       TabIndex        =   96
       Text            =   "larva"
       ToolTipText     =   "Enter creature name"
-      Top             =   360
-      Width           =   735
+      Top             =   1320
+      Width           =   975
    End
    Begin VB.OptionButton Option2 
       BackColor       =   &H00000000&
       Caption         =   "Kill the monsters when you have been blocked more than ..."
       ForeColor       =   &H00FFFFFF&
       Height          =   375
-      Left            =   7920
+      Left            =   6840
       TabIndex        =   80
-      Top             =   5400
-      Width           =   3255
+      Top             =   6480
+      Width           =   2655
    End
    Begin VB.CommandButton cmdSetAvoidFront 
       BackColor       =   &H0000C000&
-      Caption         =   "setAvoidFront"
+      Caption         =   "Avoid Wave"
       Height          =   375
-      Left            =   9360
+      Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   95
       ToolTipText     =   "Avoid front of monster"
-      Top             =   720
+      Top             =   2760
       Width           =   1215
    End
    Begin VB.CommandButton cmdResetKillables 
       BackColor       =   &H0000C000&
       Caption         =   "resetKill"
       Height          =   375
-      Left            =   6600
+      Left            =   10560
       Style           =   1  'Graphical
       TabIndex        =   94
       ToolTipText     =   "reset setMeleeKill and setHmmKill"
-      Top             =   5040
-      Width           =   975
+      Top             =   1560
+      Width           =   735
    End
    Begin VB.CommandButton cmdSetExoriVis 
       BackColor       =   &H0000C000&
-      Caption         =   "setExoriVis"
+      Caption         =   "Exori Vis"
       Height          =   375
-      Left            =   7560
+      Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   93
       ToolTipText     =   "Kill monster with exori vis, also forces standing in front"
-      Top             =   360
-      Width           =   1095
+      Top             =   1320
+      Width           =   735
    End
    Begin VB.CommandButton cmdDontRetryAttacks 
       BackColor       =   &H0000C000&
       Caption         =   "setDontRetryAttacks"
       Height          =   375
-      Left            =   5040
+      Left            =   8760
       Style           =   1  'Graphical
       TabIndex        =   92
       ToolTipText     =   "Send attack order once. This might be dangerous if this order is lost."
-      Top             =   1800
-      Width           =   1695
+      Top             =   480
+      Width           =   1575
    End
    Begin VB.CommandButton cmdRetryAttacks 
       BackColor       =   &H0000C000&
       Caption         =   "setRetryAttacks"
       Height          =   375
-      Left            =   3360
+      Left            =   9720
       Style           =   1  'Graphical
       TabIndex        =   91
       ToolTipText     =   "Attack the monster all the time (DEFAULT)"
-      Top             =   1800
-      Width           =   1695
+      Top             =   2280
+      Width           =   1215
    End
    Begin VB.TextBox txtFastExivaMessage 
       Height          =   375
-      Left            =   4560
+      Left            =   7560
       TabIndex        =   90
       Text            =   "_myvariable = 1"
       ToolTipText     =   "Execute this exiva command and jump to next line instantly"
-      Top             =   5760
-      Width           =   3015
+      Top             =   3480
+      Width           =   615
    End
    Begin VB.CommandButton fastExiva 
       BackColor       =   &H0000C000&
       Caption         =   "fastExiva"
       Height          =   375
-      Left            =   3360
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   89
       ToolTipText     =   "process a exiva command and instantly jump to next line"
-      Top             =   5760
-      Width           =   1215
+      Top             =   3480
+      Width           =   735
    End
    Begin VB.TextBox txtLabel 
       Height          =   375
-      Left            =   9240
+      Left            =   7560
       TabIndex        =   88
       Text            =   "labelname"
       ToolTipText     =   "Text"
-      Top             =   8400
-      Width           =   1935
+      Top             =   3120
+      Width           =   615
    End
    Begin VB.CommandButton cmdLabel 
       BackColor       =   &H0000C000&
-      Caption         =   "Label ( : )"
+      Caption         =   "Label:"
       Height          =   375
-      Left            =   7560
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   87
       ToolTipText     =   "$nlineoflabel:labelname$ translate to its line"
-      Top             =   8400
-      Width           =   1695
+      Top             =   3120
+      Width           =   735
    End
    Begin VB.TextBox txtComment 
       Height          =   375
-      Left            =   5040
+      Left            =   4560
       TabIndex        =   86
       Text            =   "script for my favourite dungeon"
       ToolTipText     =   "Text"
-      Top             =   8400
-      Width           =   2415
+      Top             =   5640
+      Width           =   2055
    End
    Begin VB.CommandButton cmdComment 
       BackColor       =   &H0000C000&
@@ -425,633 +449,632 @@ Begin VB.Form frmCavebot
       Style           =   1  'Graphical
       TabIndex        =   85
       ToolTipText     =   "Comment lines (not executed)"
-      Top             =   8400
-      Width           =   1695
+      Top             =   5640
+      Width           =   1215
    End
    Begin VB.CommandButton cmdChangeTimer 
       BackColor       =   &H00C0FFFF&
       Caption         =   "ok"
       Height          =   285
-      Left            =   10680
+      Left            =   10080
       Style           =   1  'Graphical
       TabIndex        =   84
-      Top             =   5880
+      Top             =   6600
       Width           =   375
    End
    Begin VB.TextBox txtBlockSec 
       Height          =   285
-      Left            =   9960
+      Left            =   9480
       TabIndex        =   81
       Text            =   "30000"
-      Top             =   5880
-      Width           =   735
+      Top             =   6600
+      Width           =   615
    End
    Begin VB.OptionButton Option1 
       BackColor       =   &H00000000&
       Caption         =   "Try alternative path (old mode)"
       ForeColor       =   &H00FFFFFF&
       Height          =   375
-      Left            =   7920
+      Left            =   6840
       TabIndex        =   79
-      Top             =   5040
+      Top             =   6120
       Value           =   -1  'True
       Width           =   2535
    End
    Begin VB.TextBox txtLineIFTRUE 
       Height          =   375
-      Left            =   8280
+      Left            =   10800
       TabIndex        =   73
       Text            =   "0"
       ToolTipText     =   "Jump to this script line"
-      Top             =   6960
-      Width           =   1575
+      Top             =   4200
+      Width           =   495
    End
    Begin VB.TextBox txtThing2 
       Height          =   375
-      Left            =   6600
+      Left            =   9840
       TabIndex        =   71
       Text            =   "100"
       ToolTipText     =   "number, text or $var$ <- read list in events module"
-      Top             =   6960
-      Width           =   855
+      Top             =   4200
+      Width           =   495
    End
    Begin VB.ComboBox cmbOperator 
       Height          =   315
-      Left            =   5040
+      Left            =   8400
       TabIndex        =   70
       Text            =   "#number<=#"
       ToolTipText     =   "Operator"
-      Top             =   6960
+      Top             =   4200
       Width           =   1455
    End
    Begin VB.TextBox txtThing1 
       Height          =   375
-      Left            =   4080
+      Left            =   7560
       TabIndex        =   69
       Text            =   "$mymana$"
       ToolTipText     =   "number, text or $var$ <- read list in events module"
-      Top             =   6960
+      Top             =   4200
       Width           =   855
    End
    Begin VB.CommandButton Command1 
       BackColor       =   &H0000C000&
       Caption         =   "IfTrue ("
       Height          =   375
-      Left            =   3360
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   68
       ToolTipText     =   "If it is true then jump to given line"
-      Top             =   6960
+      Top             =   4200
       Width           =   735
    End
    Begin VB.CommandButton cmdOnPlayerPause 
       BackColor       =   &H0000C000&
       Caption         =   "onPLAYERpause-"
       Height          =   375
-      Left            =   4440
+      Left            =   7800
       Style           =   1  'Graphical
       TabIndex        =   67
       ToolTipText     =   "If you get a player , pause all automatic functions - you wont even autouh! - DO NOT USE  IF NOT NEAR COMPUTER"
-      Top             =   1440
-      Width           =   1695
+      Top             =   840
+      Width           =   1455
    End
    Begin VB.CommandButton cmdOnTrapGiveAlarm 
       BackColor       =   &H0000C000&
       Caption         =   "onTrapGiveAlarm"
       Height          =   375
-      Left            =   9480
+      Left            =   8160
       Style           =   1  'Graphical
       TabIndex        =   66
       ToolTipText     =   "Will give sound alarm at potential traps"
-      Top             =   1080
-      Width           =   1695
+      Top             =   2640
+      Width           =   1455
    End
    Begin VB.CommandButton cmdResetLoot 
       BackColor       =   &H0000C000&
       Caption         =   "resetLoot"
       Height          =   375
-      Left            =   5640
+      Left            =   9720
       Style           =   1  'Graphical
       TabIndex        =   65
       ToolTipText     =   "resets the list of lootable items"
-      Top             =   5040
-      Width           =   975
+      Top             =   1560
+      Width           =   855
    End
    Begin VB.CommandButton cmdOnDangerGoto 
       BackColor       =   &H0000C000&
       Caption         =   "onDangerGoto"
       Height          =   375
-      Left            =   5640
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   13
       ToolTipText     =   "If you get attacked by other creature then jump to this script line"
-      Top             =   1080
+      Top             =   480
       Width           =   1215
    End
    Begin VB.CommandButton cmdSetHmmKill 
       BackColor       =   &H0000C000&
       Caption         =   "setHmmKill"
       Height          =   375
-      Left            =   5640
+      Left            =   8760
       Style           =   1  'Graphical
       TabIndex        =   9
       ToolTipText     =   "Set the cavebot to kill it with HMM runes"
-      Top             =   720
-      Width           =   1215
+      Top             =   120
+      Width           =   975
    End
    Begin VB.CommandButton cmdSetLoot 
       BackColor       =   &H0000C000&
-      Caption         =   "setLoot"
+      Caption         =   "Loot :"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   11
       ToolTipText     =   "Allow looting this. Example: Gold"
-      Top             =   1080
-      Width           =   1215
+      Top             =   2280
+      Width           =   735
    End
    Begin VB.CommandButton cmdSetMeleeKill 
       BackColor       =   &H0000C000&
-      Caption         =   "setMeleeKill"
+      Caption         =   "Attack"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   7
       ToolTipText     =   "Allows melee kill of this creature"
-      Top             =   720
-      Width           =   1215
+      Top             =   360
+      Width           =   735
    End
    Begin VB.CommandButton cmdSetVery 
       BackColor       =   &H0000C000&
       Caption         =   "setVeryFriendly"
       Height          =   375
-      Left            =   6120
+      Left            =   10080
       Style           =   1  'Graphical
       TabIndex        =   64
       ToolTipText     =   "Avoid attack anything whenever a player is on screen"
-      Top             =   1440
-      Width           =   1455
+      Top             =   1920
+      Width           =   1215
    End
    Begin VB.CommandButton cmdOnGMpause 
       BackColor       =   &H0000C000&
       Caption         =   "onGMpause"
       Height          =   375
-      Left            =   3360
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   61
       ToolTipText     =   "If you get a gm pop , pause all automatic functions - Enabled by default"
-      Top             =   1440
-      Width           =   1095
+      Top             =   840
+      Width           =   975
    End
    Begin VB.CommandButton cmdSetFriendly 
       BackColor       =   &H0000C000&
       Caption         =   "setFriendly"
       Height          =   375
-      Left            =   7680
+      Left            =   10320
       Style           =   1  'Graphical
       TabIndex        =   57
       ToolTipText     =   "Avoid attacking others creatures"
-      Top             =   1800
+      Top             =   480
       Width           =   975
    End
    Begin VB.CommandButton cmdSetAny 
       BackColor       =   &H0000C000&
       Caption         =   "setAny"
       Height          =   375
-      Left            =   6720
+      Left            =   10560
       Style           =   1  'Graphical
       TabIndex        =   56
       ToolTipText     =   "Attack any creature (rookgard - nonpvps)"
-      Top             =   1800
-      Width           =   975
+      Top             =   840
+      Width           =   735
    End
    Begin VB.CommandButton cmdOnGMcloseConnection 
       BackColor       =   &H0000C000&
       Caption         =   "onGMcloseConnection"
       Height          =   375
-      Left            =   7560
+      Left            =   9120
       Style           =   1  'Graphical
       TabIndex        =   55
       ToolTipText     =   "disconnects you when a gm comes near you"
-      Top             =   1080
-      Width           =   1935
+      Top             =   1200
+      Width           =   1695
    End
    Begin VB.CommandButton cmdSetLootOff 
       BackColor       =   &H0000C000&
-      Caption         =   "setLootOff"
+      Caption         =   "Loot Off"
       Height          =   375
-      Left            =   7680
+      Left            =   5640
       Style           =   1  'Graphical
       TabIndex        =   54
       ToolTipText     =   "Change loot mode"
-      Top             =   2160
+      Top             =   2280
       Width           =   975
    End
    Begin VB.CommandButton cmdSetLootOn 
       BackColor       =   &H0000C000&
       Caption         =   "setLootOn"
       Height          =   375
-      Left            =   6720
+      Left            =   8880
       Style           =   1  'Graphical
       TabIndex        =   53
       ToolTipText     =   "Change loot mode"
-      Top             =   2160
-      Width           =   975
+      Top             =   1560
+      Width           =   855
    End
    Begin VB.CommandButton cmdUseItem 
       BackColor       =   &H0000C000&
-      Caption         =   "useItem <current x,y,z>"
+      Caption         =   "Ladder"
       Height          =   375
-      Left            =   5640
+      Left            =   4560
       Style           =   1  'Graphical
       TabIndex        =   16
       ToolTipText     =   "Use an item like a ladder or a switch"
-      Top             =   4320
-      Width           =   1935
+      Top             =   3360
+      Width           =   1095
    End
    Begin VB.CommandButton cmdMove 
       BackColor       =   &H0000C000&
-      Caption         =   "move <current x,y,z>"
+      Caption         =   "Walk"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   15
       ToolTipText     =   "Move to this position"
-      Top             =   4320
-      Width           =   1935
+      Top             =   3360
+      Width           =   1095
    End
    Begin VB.CommandButton cmdSetFollow 
       BackColor       =   &H0000C000&
       Caption         =   "setFollow"
       Height          =   375
-      Left            =   8880
+      Left            =   10440
       Style           =   1  'Graphical
       TabIndex        =   48
       ToolTipText     =   "Set mode follow targets"
-      Top             =   1800
-      Width           =   1095
+      Top             =   120
+      Width           =   855
    End
    Begin VB.CommandButton cmdSetNoFollow 
       BackColor       =   &H0000C000&
-      Caption         =   "setNoFollow"
+      Caption         =   "Follow Off"
       Height          =   375
-      Left            =   9960
+      Left            =   5640
       Style           =   1  'Graphical
       TabIndex        =   47
       ToolTipText     =   "Set mode don't follow targets"
-      Top             =   1800
-      Width           =   1215
+      Top             =   2760
+      Width           =   975
    End
    Begin VB.CommandButton cmdStackItems 
       BackColor       =   &H0000C000&
       Caption         =   "stackItems"
       Height          =   375
-      Left            =   4560
+      Left            =   9240
       Style           =   1  'Graphical
       TabIndex        =   44
       ToolTipText     =   "Do all possible stacking "
-      Top             =   5040
-      Width           =   1095
+      Top             =   1920
+      Width           =   855
    End
    Begin VB.CommandButton cmdFish 
       BackColor       =   &H0000C000&
-      Caption         =   "fishX"
+      Caption         =   "Fish"
       Height          =   375
-      Left            =   3360
+      Left            =   5760
       Style           =   1  'Graphical
       TabIndex        =   43
       ToolTipText     =   "Fish X times here"
-      Top             =   4680
-      Width           =   1215
+      Top             =   3840
+      Width           =   495
    End
    Begin VB.CommandButton cmdPutLootOnDepot 
       BackColor       =   &H0000C000&
       Caption         =   "putLootOnDepot"
       Height          =   375
-      Left            =   3360
+      Left            =   6840
       Style           =   1  'Graphical
       TabIndex        =   23
       ToolTipText     =   "Put your loot inside a depot"
-      Top             =   6120
-      Width           =   1935
+      Top             =   2280
+      Width           =   1335
    End
    Begin VB.CommandButton cmdDropLootOnGround 
       BackColor       =   &H0000C000&
       Caption         =   "dropLootOnGround"
       Height          =   375
-      Left            =   5640
+      Left            =   8160
       Style           =   1  'Graphical
       TabIndex        =   22
       ToolTipText     =   "Drop all loot of your containers on ground (house or guildhall)"
-      Top             =   6120
-      Width           =   1935
+      Top             =   2280
+      Width           =   1575
    End
    Begin VB.CommandButton cmdIfTwo 
       BackColor       =   &H0000C000&
       Caption         =   "IfFewItemsGoto"
       Height          =   375
-      Left            =   3360
+      Left            =   8280
       Style           =   1  'Graphical
       TabIndex        =   30
       ToolTipText     =   "Condition. Example: if count(UHs) < 5  go to safe and logout"
-      Top             =   8040
-      Width           =   2775
+      Top             =   3480
+      Width           =   1575
    End
    Begin VB.CommandButton cmdIfOne 
       BackColor       =   &H0000C000&
       Caption         =   "IfEnoughItemsGoto"
       Height          =   375
-      Left            =   3360
+      Left            =   8280
       Style           =   1  'Graphical
       TabIndex        =   26
       ToolTipText     =   "Condition. Example: if gold >= 1000 then go to house and drop loot"
-      Top             =   7680
-      Width           =   2775
+      Top             =   3120
+      Width           =   1575
    End
    Begin VB.CommandButton cmdClose 
       BackColor       =   &H0000C000&
       Caption         =   "closeConnection"
       Height          =   375
-      Left            =   5640
+      Left            =   9240
       Style           =   1  'Graphical
       TabIndex        =   19
       ToolTipText     =   "close conection for this client"
-      Top             =   4680
-      Width           =   1935
+      Top             =   840
+      Width           =   1335
    End
    Begin VB.CommandButton cmdSayMessage 
       BackColor       =   &H0000C000&
-      Caption         =   "sayMessage"
+      Caption         =   "say in Default"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   20
       ToolTipText     =   "Always say this message at this script point"
-      Top             =   5400
-      Width           =   1215
+      Top             =   3840
+      Width           =   1095
    End
    Begin VB.CommandButton cmdWait 
       BackColor       =   &H0000C000&
-      Caption         =   "waitX"
+      Caption         =   "Wait"
       Height          =   375
-      Left            =   3360
+      Left            =   5760
       Style           =   1  'Graphical
       TabIndex        =   17
       ToolTipText     =   "Wait some seconds at this script point"
-      Top             =   5040
-      Width           =   735
+      Top             =   3360
+      Width           =   495
    End
    Begin VB.CommandButton cmdGotoScriptLine 
-      BackColor       =   &H0000C000&
+      BackColor       =   &H0080FF80&
       Caption         =   "gotoScriptLine"
       Height          =   375
       Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   24
       ToolTipText     =   "When script read this command, it will jump to given line"
-      Top             =   7320
-      Width           =   1215
+      Top             =   4680
+      Width           =   2295
    End
    Begin VB.ComboBox txtFile 
       Height          =   315
-      Left            =   480
+      Left            =   120
       TabIndex        =   63
       Text            =   "default.txt"
-      Top             =   6600
-      Width           =   1815
+      Top             =   5520
+      Width           =   2415
    End
    Begin VB.CommandButton cmdReload 
       BackColor       =   &H0000C000&
-      Caption         =   "Update file list"
+      Caption         =   "refresh"
       Height          =   255
-      Left            =   480
+      Left            =   1800
       Style           =   1  'Graphical
       TabIndex        =   62
-      Top             =   6960
-      Width           =   1335
+      Top             =   5880
+      Width           =   735
    End
    Begin VB.HScrollBar scrollPkHeal 
       Height          =   255
-      Left            =   8280
+      Left            =   7320
       Max             =   100
       TabIndex        =   59
-      Top             =   3840
+      Top             =   5160
       Value           =   75
-      Width           =   2175
+      Width           =   1695
    End
    Begin VB.CheckBox chkChangePkHeal 
       BackColor       =   &H00000000&
       Caption         =   "Change % autoheal at PK to"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7800
+      Left            =   6840
       TabIndex        =   58
-      Top             =   3600
-      Value           =   1  'Checked
+      Top             =   4920
       Width           =   2415
    End
    Begin VB.CommandButton cmdChange 
       BackColor       =   &H0000C000&
       Caption         =   "Change"
-      Height          =   375
-      Left            =   6480
+      Height          =   255
+      Left            =   1800
       Style           =   1  'Graphical
       TabIndex        =   52
       ToolTipText     =   "Change global timer"
-      Top             =   120
+      Top             =   6480
       Width           =   735
    End
    Begin VB.TextBox txtMs 
       Height          =   285
-      Left            =   4200
+      Left            =   120
       TabIndex        =   51
       Text            =   "300"
-      Top             =   120
-      Width           =   615
+      Top             =   6480
+      Width           =   495
    End
    Begin VB.TextBox txtFishTimes 
       Height          =   375
-      Left            =   4560
+      Left            =   6240
       TabIndex        =   46
       Text            =   "10"
       ToolTipText     =   "aprox number of casts desired"
-      Top             =   4680
-      Width           =   615
+      Top             =   3840
+      Width           =   375
    End
    Begin VB.Timer TimerScript 
       Enabled         =   0   'False
       Interval        =   50
-      Left            =   2160
-      Top             =   480
+      Left            =   5160
+      Top             =   5160
    End
    Begin VB.CommandButton cmdSaveScript 
       BackColor       =   &H0000C000&
-      Caption         =   "Save script"
-      Height          =   255
-      Left            =   1320
-      Style           =   1  'Graphical
-      TabIndex        =   6
-      ToolTipText     =   "Saves to given file"
-      Top             =   7440
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdLoadScript 
-      BackColor       =   &H0000C000&
-      Caption         =   "Load script"
+      Caption         =   "Save"
       Height          =   255
       Left            =   120
       Style           =   1  'Graphical
+      TabIndex        =   6
+      ToolTipText     =   "Saves to given file"
+      Top             =   5880
+      Width           =   735
+   End
+   Begin VB.CommandButton cmdLoadScript 
+      BackColor       =   &H0000C000&
+      Caption         =   "Load"
+      Height          =   255
+      Left            =   960
+      Style           =   1  'Graphical
       TabIndex        =   5
       ToolTipText     =   "Loads from given file"
-      Top             =   7440
-      Width           =   975
+      Top             =   5880
+      Width           =   735
    End
    Begin VB.CommandButton cmdDeleteSelected 
       BackColor       =   &H0000C000&
-      Caption         =   "Delete selected"
+      Caption         =   "del"
       Height          =   255
-      Left            =   480
+      Left            =   2640
       Style           =   1  'Graphical
       TabIndex        =   4
       ToolTipText     =   "Deletes current selected item in the list box"
-      Top             =   6000
-      Width           =   1335
+      Top             =   5160
+      Width           =   615
    End
    Begin VB.TextBox txtEdit 
       Height          =   375
       Left            =   120
       TabIndex        =   3
-      Top             =   5640
+      Top             =   4800
       Width           =   3135
    End
    Begin VB.TextBox txtIfTwo_Item 
       Height          =   375
-      Left            =   6240
+      Left            =   9840
       TabIndex        =   31
       Text            =   "58 0C"
       ToolTipText     =   "Get tileIDs with the tool module. The example is: UH"
-      Top             =   8040
+      Top             =   3480
       Width           =   615
    End
    Begin VB.TextBox txtIfTwo_Goto 
       Height          =   375
-      Left            =   7560
+      Left            =   10920
       TabIndex        =   33
       Text            =   "0"
       ToolTipText     =   "if condition is validated then jump here"
-      Top             =   8040
-      Width           =   1575
+      Top             =   3480
+      Width           =   375
    End
    Begin VB.TextBox txtIfTwo_Ammount 
       Height          =   375
-      Left            =   6960
+      Left            =   10440
       TabIndex        =   32
       Text            =   "5"
       ToolTipText     =   "this ammount or less to validate condition"
-      Top             =   8040
+      Top             =   3480
       Width           =   495
    End
    Begin VB.TextBox txtIfOne_Item 
       Height          =   375
-      Left            =   6240
+      Left            =   9840
       TabIndex        =   27
       Text            =   "D7 0B"
       ToolTipText     =   "Get tileIDs with the tool module. The example is: gold"
-      Top             =   7680
+      Top             =   3120
       Width           =   615
    End
    Begin VB.TextBox txtIfOne_Goto 
       Height          =   375
-      Left            =   7560
+      Left            =   10920
       TabIndex        =   29
       Text            =   "0"
       ToolTipText     =   "if condition is validated then jump here"
-      Top             =   7680
-      Width           =   1575
+      Top             =   3120
+      Width           =   375
    End
    Begin VB.TextBox txtIfOne_Ammount 
       Height          =   375
-      Left            =   6960
+      Left            =   10440
       TabIndex        =   28
       Text            =   "1000"
       ToolTipText     =   "at least this ammount to validate condition"
-      Top             =   7680
+      Top             =   3120
       Width           =   495
    End
    Begin VB.TextBox txtSetLoot 
       Height          =   375
-      Left            =   4560
+      Left            =   4080
       TabIndex        =   12
       Text            =   "D7 0B"
       ToolTipText     =   "Get tileIDs with the tool module. The example is: gold"
-      Top             =   1080
+      Top             =   2280
       Width           =   615
    End
    Begin VB.TextBox txtSetHmmKill 
       Height          =   375
-      Left            =   6840
+      Left            =   9720
       TabIndex        =   10
       Text            =   "scarab"
       ToolTipText     =   "Enter creature name"
-      Top             =   720
+      Top             =   120
       Width           =   615
    End
    Begin VB.TextBox txtSetMeleeKill 
       Height          =   375
-      Left            =   4560
+      Left            =   4080
       TabIndex        =   8
       Text            =   "larva"
       ToolTipText     =   "Enter creature name"
-      Top             =   720
-      Width           =   615
+      Top             =   360
+      Width           =   975
    End
    Begin VB.TextBox txtSayMessage 
       Height          =   375
-      Left            =   5760
+      Left            =   3360
       TabIndex        =   21
       Text            =   "message"
       ToolTipText     =   "Say this message at this script point"
-      Top             =   5400
-      Width           =   1815
+      Top             =   4200
+      Width           =   2295
    End
    Begin VB.TextBox txtWait 
       Height          =   375
-      Left            =   4080
+      Left            =   6240
       TabIndex        =   18
       Text            =   "10"
       ToolTipText     =   "time in seconds"
-      Top             =   5040
-      Width           =   495
+      Top             =   3360
+      Width           =   375
    End
    Begin VB.TextBox txtOnDangerGoto 
       Height          =   375
-      Left            =   6840
+      Left            =   8040
       TabIndex        =   14
       Text            =   "0"
       ToolTipText     =   "jump to this script line"
-      Top             =   1080
+      Top             =   480
       Width           =   615
    End
    Begin VB.TextBox txtGotoScriptLine 
       Height          =   375
-      Left            =   4560
+      Left            =   5640
       TabIndex        =   25
       Text            =   "0"
       ToolTipText     =   "Jump to this script line"
-      Top             =   7320
-      Width           =   1575
+      Top             =   4680
+      Width           =   975
    End
    Begin VB.ComboBox cmbCharacter 
       Height          =   315
-      Left            =   720
+      Left            =   120
       TabIndex        =   0
       Text            =   "-"
       ToolTipText     =   "Select one of your connected characters"
-      Top             =   120
-      Width           =   2535
+      Top             =   360
+      Width           =   3135
    End
    Begin VB.ListBox lstScript 
-      Height          =   1620
+      Height          =   3180
       Left            =   120
       TabIndex        =   2
       Top             =   840
@@ -1059,14 +1082,14 @@ Begin VB.Form frmCavebot
    End
    Begin VB.CheckBox chkEnabled 
       BackColor       =   &H00000000&
-      Caption         =   "Activate cavebot"
+      Caption         =   "Follow waypoints"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   120
+      Left            =   3360
       TabIndex        =   1
       ToolTipText     =   "Activate cavebot for this character"
-      Top             =   480
-      Width           =   2415
+      Top             =   5160
+      Width           =   1575
    End
    Begin VB.Label lblWarning 
       BackColor       =   &H00000000&
@@ -1080,30 +1103,30 @@ Begin VB.Form frmCavebot
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H0000FFFF&
-      Height          =   495
-      Left            =   120
+      Height          =   375
+      Left            =   840
       TabIndex        =   138
-      Top             =   2640
-      Width           =   3135
+      Top             =   4440
+      Width           =   2415
    End
    Begin VB.Label Label25 
       BackColor       =   &H00000000&
       Caption         =   "="
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   10360
+      Left            =   8805
       TabIndex        =   136
-      Top             =   2880
+      Top             =   1920
       Width           =   255
    End
    Begin VB.Label Label24 
       BackColor       =   &H00000000&
       Caption         =   "ms"
       ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Left            =   5880
+      Height          =   255
+      Left            =   1560
       TabIndex        =   130
-      Top             =   120
+      Top             =   6480
       Width           =   375
    End
    Begin VB.Label Label23 
@@ -1111,9 +1134,9 @@ Begin VB.Form frmCavebot
       Caption         =   "Limits before ignoring target ->"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3480
+      Left            =   480
       TabIndex        =   128
-      Top             =   2640
+      Top             =   7560
       Width           =   2175
    End
    Begin VB.Label Label22 
@@ -1121,9 +1144,9 @@ Begin VB.Form frmCavebot
       Caption         =   "onGMcloseConnection is ignored in Tibia 8.11+"
       ForeColor       =   &H00FFFFFF&
       Height          =   375
-      Left            =   7680
+      Left            =   360
       TabIndex        =   120
-      Top             =   1440
+      Top             =   8280
       Width           =   3495
    End
    Begin VB.Label Label21 
@@ -1131,9 +1154,9 @@ Begin VB.Form frmCavebot
       Caption         =   "you might prefer setSpellKill instead setExoriVis"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7560
+      Left            =   2160
       TabIndex        =   119
-      Top             =   120
+      Top             =   8040
       Width           =   3495
    End
    Begin VB.Label Label20 
@@ -1150,9 +1173,9 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   4440
+      Left            =   2520
       TabIndex        =   118
-      Top             =   3360
+      Top             =   7800
       Width           =   495
    End
    Begin VB.Label Label19 
@@ -1169,10 +1192,10 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7080
+      Left            =   6240
       TabIndex        =   117
-      Top             =   3360
-      Width           =   495
+      Top             =   600
+      Width           =   255
    End
    Begin VB.Label Label18 
       BackColor       =   &H00000000&
@@ -1188,10 +1211,10 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   5760
+      Left            =   5520
       TabIndex        =   116
-      Top             =   3360
-      Width           =   735
+      Top             =   600
+      Width           =   375
    End
    Begin VB.Label Label17 
       BackColor       =   &H00000000&
@@ -1200,7 +1223,7 @@ Begin VB.Form frmCavebot
       Height          =   255
       Left            =   6840
       TabIndex        =   115
-      Top             =   3720
+      Top             =   1800
       Width           =   255
    End
    Begin VB.Label Label16 
@@ -1208,9 +1231,9 @@ Begin VB.Form frmCavebot
       Caption         =   ","
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   5520
+      Left            =   3960
       TabIndex        =   114
-      Top             =   3720
+      Top             =   8280
       Width           =   255
    End
    Begin VB.Label Label14 
@@ -1220,7 +1243,7 @@ Begin VB.Form frmCavebot
       Height          =   255
       Left            =   5520
       TabIndex        =   108
-      Top             =   2280
+      Top             =   1920
       Width           =   255
    End
    Begin VB.Label lblExorivisValue 
@@ -1228,19 +1251,19 @@ Begin VB.Form frmCavebot
       Caption         =   "50 %"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   10560
+      Left            =   9240
       TabIndex        =   100
-      Top             =   4200
-      Width           =   615
+      Top             =   5520
+      Width           =   495
    End
    Begin VB.Label Label15 
       BackColor       =   &H00000000&
       Caption         =   "HP for exori vis and runes"
       ForeColor       =   &H00FFFFFF&
       Height          =   375
-      Left            =   7800
+      Left            =   6840
       TabIndex        =   98
-      Top             =   4080
+      Top             =   5400
       Width           =   1335
    End
    Begin VB.Label Label13 
@@ -1248,19 +1271,19 @@ Begin VB.Form frmCavebot
       Caption         =   "If blocked by killable monsters not yours:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7920
+      Left            =   6840
       TabIndex        =   83
-      Top             =   4800
-      Width           =   3375
+      Top             =   5880
+      Width           =   2895
    End
    Begin VB.Label Label12 
       BackColor       =   &H00000000&
       Caption         =   "time(ms) :"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   9240
+      Left            =   9480
       TabIndex        =   82
-      Top             =   5880
+      Top             =   6360
       Width           =   735
    End
    Begin VB.Label Label11 
@@ -1268,9 +1291,9 @@ Begin VB.Form frmCavebot
       Caption         =   "Cavebot global settings:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7800
+      Left            =   6840
       TabIndex        =   78
-      Top             =   3360
+      Top             =   4680
       Width           =   2295
    End
    Begin VB.Label Label10 
@@ -1287,10 +1310,10 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   8280
+      Left            =   10920
       TabIndex        =   77
-      Top             =   6720
-      Width           =   375
+      Top             =   3960
+      Width           =   255
    End
    Begin VB.Label Label9 
       BackColor       =   &H00000000&
@@ -1306,10 +1329,10 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   5040
+      Left            =   8880
       TabIndex        =   76
-      Top             =   6720
-      Width           =   735
+      Top             =   3960
+      Width           =   615
    End
    Begin VB.Label Label8 
       BackColor       =   &H00000000&
@@ -1325,10 +1348,10 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   6720
+      Left            =   9840
       TabIndex        =   75
-      Top             =   6720
-      Width           =   495
+      Top             =   3960
+      Width           =   375
    End
    Begin VB.Label Label7 
       BackColor       =   &H00000000&
@@ -1344,9 +1367,9 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   4200
+      Left            =   7680
       TabIndex        =   74
-      Top             =   6720
+      Top             =   3960
       Width           =   495
    End
    Begin VB.Label Label4 
@@ -1354,9 +1377,9 @@ Begin VB.Form frmCavebot
       Caption         =   ") Goto"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7560
+      Left            =   10320
       TabIndex        =   72
-      Top             =   6960
+      Top             =   4320
       Width           =   495
    End
    Begin VB.Label lblPKhealValue 
@@ -1364,40 +1387,40 @@ Begin VB.Form frmCavebot
       Caption         =   "75 %"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   10560
+      Left            =   9240
       TabIndex        =   60
-      Top             =   3960
-      Width           =   615
+      Top             =   5160
+      Width           =   495
    End
    Begin VB.Label Label6 
       BackColor       =   &H00000000&
       Caption         =   "->"
       ForeColor       =   &H00FFFFFF&
       Height          =   375
-      Left            =   4920
+      Left            =   600
       TabIndex        =   50
-      Top             =   120
+      Top             =   6480
       Width           =   255
    End
    Begin VB.Label Label5 
       BackColor       =   &H00000000&
-      Caption         =   "Timer:"
+      Caption         =   "Set Cavebot speed:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3480
+      Left            =   120
       TabIndex        =   49
-      Top             =   120
-      Width           =   735
+      Top             =   6240
+      Width           =   1455
    End
    Begin VB.Label lblEdit 
       BackColor       =   &H00000000&
-      Caption         =   "Edit current line ()"
+      Caption         =   "Edit line:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
       TabIndex        =   38
-      Top             =   5400
-      Width           =   2295
+      Top             =   4560
+      Width           =   735
    End
    Begin VB.Label lblInfo 
       BackColor       =   &H00000000&
@@ -1412,10 +1435,10 @@ Begin VB.Form frmCavebot
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H0000C000&
-      Height          =   1215
+      Height          =   255
       Left            =   120
       TabIndex        =   45
-      Top             =   3360
+      Top             =   4200
       Width           =   3135
    End
    Begin VB.Label Label3 
@@ -1432,10 +1455,10 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   7560
+      Left            =   11040
       TabIndex        =   42
-      Top             =   7440
-      Width           =   375
+      Top             =   2880
+      Width           =   255
    End
    Begin VB.Label Label2 
       BackColor       =   &H00000000&
@@ -1451,9 +1474,9 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   6975
+      Left            =   10455
       TabIndex        =   41
-      Top             =   7440
+      Top             =   2880
       Width           =   615
    End
    Begin VB.Label Label1 
@@ -1470,29 +1493,29 @@ Begin VB.Form frmCavebot
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   6345
+      Left            =   9945
       TabIndex        =   40
-      Top             =   7440
+      Top             =   2880
       Width           =   495
    End
    Begin VB.Label lblFile 
       BackColor       =   &H00000000&
-      Caption         =   "File:"
+      Caption         =   "Saving and Loading settings"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
       TabIndex        =   39
-      Top             =   6600
-      Width           =   975
+      Top             =   5280
+      Width           =   2055
    End
    Begin VB.Label lblScriptCommands 
       BackColor       =   &H00000000&
       Caption         =   "Script commands:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3360
+      Left            =   480
       TabIndex        =   37
-      Top             =   6480
+      Top             =   7800
       Width           =   1815
    End
    Begin VB.Label lblActions 
@@ -1500,9 +1523,9 @@ Begin VB.Form frmCavebot
       Caption         =   "Action commands:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3480
+      Left            =   480
       TabIndex        =   36
-      Top             =   4080
+      Top             =   8040
       Width           =   1455
    End
    Begin VB.Label lblConfigComands 
@@ -1510,20 +1533,20 @@ Begin VB.Form frmCavebot
       Caption         =   "Configuration commands:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3480
+      Left            =   2640
       TabIndex        =   35
-      Top             =   480
-      Width           =   3495
+      Top             =   7560
+      Width           =   1815
    End
    Begin VB.Label lblChar 
       BackColor       =   &H00000000&
-      Caption         =   "Char:"
+      Caption         =   "Select your cnaracter:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
       TabIndex        =   34
       Top             =   120
-      Width           =   975
+      Width           =   1695
    End
 End
 Attribute VB_Name = "frmCavebot"
@@ -1983,6 +2006,15 @@ Private Sub cmdGotoScriptLine_Click()
   End If
 End Sub
 
+Private Sub cmdIdlist_Click()
+
+  frmIdlist.WindowState = vbNormal
+  frmIdlist.Show
+  frmIdlist.SetFocus
+  SetWindowPos frmIdlist.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+
+End Sub
+
 Private Sub cmdIfOne_Click()
   If cavebotIDselected > 0 Then
     AddScriptLine "IfEnoughItemsGoto " & CStr(txtIfOne_Item.Text) & "," & _
@@ -2411,6 +2443,19 @@ Private Sub Command1_Click()
   End If
 End Sub
 
+Private Sub cmdAdvanced_Click()
+  ' pressed Show advanced options / Hide advanced options
+  If blnShowAdvancedOptions2 = False Then
+    blnShowAdvancedOptions2 = True
+    frmCavebot.Width = 11490
+  Else
+    blnShowAdvancedOptions2 = False
+    frmCavebot.Width = 6840
+  End If
+End Sub
+
+
+
 Private Sub fastExiva_Click()
   If cavebotIDselected > 0 Then
     AddScriptLine "fastExiva " & CStr(txtFastExivaMessage.Text)
@@ -2460,10 +2505,6 @@ Private Sub Form_Unload(Cancel As Integer)
   Me.Hide
   Cancel = BlockUnload
 End Sub
-
-
-
-
 
 
 

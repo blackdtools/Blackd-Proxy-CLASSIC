@@ -1,99 +1,101 @@
 VERSION 5.00
+Object = "{F247AF03-2671-4421-A87A-846ED80CD2A9}#1.0#0"; "JwldButn2b.ocx"
 Begin VB.Form frmTrainer 
-   BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Trainer"
-   ClientHeight    =   7650
+   ClientHeight    =   6285
    ClientLeft      =   45
-   ClientTop       =   435
-   ClientWidth     =   7305
+   ClientTop       =   375
+   ClientWidth     =   7170
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmTrainer.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   7650
-   ScaleWidth      =   7305
+   MinButton       =   0   'False
+   ScaleHeight     =   6285
+   ScaleWidth      =   7170
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin JwldButn2b.JeweledButton cmdLastAttackedID 
+      Height          =   255
+      Left            =   5280
+      TabIndex        =   85
+      Top             =   5520
+      Width           =   1815
+      _ExtentX        =   3201
+      _ExtentY        =   450
+      Caption         =   "Get ID of last attacked"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
    Begin VB.TextBox txtTrainerTimer2 
       Height          =   285
-      Left            =   4680
-      TabIndex        =   84
+      Left            =   5040
+      TabIndex        =   82
       Text            =   "1000"
-      Top             =   7000
-      Width           =   735
-   End
-   Begin VB.CommandButton cmdChangeTrainerTimer 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "CHANGE"
-      Height          =   285
-      Left            =   6360
-      Style           =   1  'Graphical
-      TabIndex        =   83
-      ToolTipText     =   "Drop all loot of your containers on ground (house or guildhall)"
-      Top             =   7020
-      Width           =   855
+      Top             =   5880
+      Width           =   495
    End
    Begin VB.TextBox txtTrainerTimer 
       Height          =   285
-      Left            =   3240
-      TabIndex        =   81
+      Left            =   4200
+      TabIndex        =   80
       Text            =   "300"
-      Top             =   7000
-      Width           =   735
+      Top             =   5880
+      Width           =   495
    End
    Begin VB.CheckBox chkEnableTrainer 
-      BackColor       =   &H0000C000&
       Caption         =   "Enable trainer"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   375
-      Left            =   2280
-      TabIndex        =   79
+      Left            =   240
+      TabIndex        =   78
       Top             =   120
       Width           =   975
    End
    Begin VB.Timer timerTrainer 
       Enabled         =   0   'False
       Interval        =   300
-      Left            =   6600
-      Top             =   5880
-   End
-   Begin VB.CommandButton cmdLastAttackedID 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "Get ID of last attacked"
-      Height          =   285
-      Left            =   5160
-      Style           =   1  'Graphical
-      TabIndex        =   73
-      ToolTipText     =   "Drop all loot of your containers on ground (house or guildhall)"
-      Top             =   6360
-      Width           =   2055
+      Left            =   3000
+      Top             =   120
    End
    Begin VB.TextBox txtExceptionID 
       Height          =   285
-      Left            =   3480
+      Left            =   3600
       TabIndex        =   72
       Text            =   "0"
-      Top             =   6360
+      Top             =   5520
       Width           =   1575
    End
    Begin VB.CheckBox chkAvoidID 
-      BackColor       =   &H00000000&
       Caption         =   "Avoid attacking the monster with this ID:"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Left            =   3480
+      ForeColor       =   &H00000000&
+      Height          =   255
+      Left            =   3600
       TabIndex        =   71
-      Top             =   5880
+      Top             =   5160
       Width           =   3495
    End
    Begin VB.CheckBox chkDance14min 
-      BackColor       =   &H00000000&
       Caption         =   "Dance at 15 minutes autologout warning"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Left            =   3480
+      ForeColor       =   &H00000000&
+      Height          =   255
+      Left            =   3600
       TabIndex        =   70
-      Top             =   5520
+      Top             =   4830
       Width           =   3495
    End
    Begin VB.TextBox txtMinAllowedHP 
@@ -101,113 +103,112 @@ Begin VB.Form frmTrainer
       Left            =   6240
       TabIndex        =   68
       Text            =   "50"
-      Top             =   5200
+      Top             =   4490
       Width           =   375
    End
    Begin VB.CheckBox chkStopLowHp 
-      BackColor       =   &H00000000&
       Caption         =   "Stop attacking target until regen"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Left            =   3480
+      ForeColor       =   &H00000000&
+      Height          =   255
+      Left            =   3600
       TabIndex        =   67
-      Top             =   5160
+      Top             =   4500
       Width           =   2775
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
       Index           =   10
-      Left            =   6240
+      Left            =   6360
       TabIndex        =   65
-      Text            =   "1"
-      Top             =   4350
-      Width           =   735
-   End
-   Begin VB.TextBox txtSlotAmmount 
-      Height          =   285
-      Index           =   9
-      Left            =   6240
-      TabIndex        =   64
-      Text            =   "1"
-      Top             =   3990
-      Width           =   735
-   End
-   Begin VB.TextBox txtSlotAmmount 
-      Height          =   285
-      Index           =   8
-      Left            =   6240
-      TabIndex        =   63
       Text            =   "1"
       Top             =   3630
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   7
-      Left            =   6240
-      TabIndex        =   62
+      Index           =   9
+      Left            =   6360
+      TabIndex        =   64
       Text            =   "1"
       Top             =   3270
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   6
-      Left            =   6240
-      TabIndex        =   61
+      Index           =   8
+      Left            =   6360
+      TabIndex        =   63
       Text            =   "1"
       Top             =   2910
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   5
-      Left            =   6240
-      TabIndex        =   60
+      Index           =   7
+      Left            =   6360
+      TabIndex        =   62
       Text            =   "1"
       Top             =   2550
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   4
-      Left            =   6240
-      TabIndex        =   59
+      Index           =   6
+      Left            =   6360
+      TabIndex        =   61
       Text            =   "1"
       Top             =   2190
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   3
-      Left            =   6240
-      TabIndex        =   58
+      Index           =   5
+      Left            =   6360
+      TabIndex        =   60
       Text            =   "1"
       Top             =   1830
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   2
-      Left            =   6240
-      TabIndex        =   57
+      Index           =   4
+      Left            =   6360
+      TabIndex        =   59
       Text            =   "1"
       Top             =   1470
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
-      Index           =   1
-      Left            =   6240
-      TabIndex        =   55
+      Index           =   3
+      Left            =   6360
+      TabIndex        =   58
       Text            =   "1"
       Top             =   1110
       Width           =   735
    End
    Begin VB.TextBox txtSlotAmmount 
       Height          =   285
+      Index           =   2
+      Left            =   6360
+      TabIndex        =   57
+      Text            =   "1"
+      Top             =   750
+      Width           =   735
+   End
+   Begin VB.TextBox txtSlotAmmount 
+      Height          =   285
+      Index           =   1
+      Left            =   6360
+      TabIndex        =   55
+      Text            =   "1"
+      Top             =   390
+      Width           =   735
+   End
+   Begin VB.TextBox txtSlotAmmount 
+      Height          =   285
       Index           =   0
-      Left            =   6720
+      Left            =   7200
       TabIndex        =   54
       TabStop         =   0   'False
       Text            =   "1"
@@ -218,207 +219,197 @@ Begin VB.Form frmTrainer
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
       Index           =   10
-      Left            =   5280
+      Left            =   5400
       TabIndex        =   53
-      Text            =   "CD 0C"
-      Top             =   4350
-      Width           =   735
-   End
-   Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Ammo:"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Index           =   10
-      Left            =   3480
-      TabIndex        =   52
-      Top             =   4320
-      Width           =   1455
-   End
-   Begin VB.TextBox txtSlotRefill 
-      Height          =   285
-      Index           =   9
-      Left            =   5280
-      TabIndex        =   51
-      Text            =   "CD 0C"
-      Top             =   3990
-      Width           =   735
-   End
-   Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Ring:"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   375
-      Index           =   9
-      Left            =   3480
-      TabIndex        =   50
-      Top             =   3960
-      Width           =   1455
-   End
-   Begin VB.TextBox txtSlotRefill 
-      Height          =   285
-      Index           =   8
-      Left            =   5280
-      TabIndex        =   49
       Text            =   "CD 0C"
       Top             =   3630
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Boots:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Ammo:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   8
-      Left            =   3480
-      TabIndex        =   48
+      Index           =   10
+      Left            =   3600
+      TabIndex        =   52
       Top             =   3600
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   7
-      Left            =   5280
-      TabIndex        =   47
+      Index           =   9
+      Left            =   5400
+      TabIndex        =   51
       Text            =   "CD 0C"
       Top             =   3270
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Legs:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Ring:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   7
-      Left            =   3480
-      TabIndex        =   46
+      Index           =   9
+      Left            =   3600
+      TabIndex        =   50
       Top             =   3240
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   6
-      Left            =   5280
-      TabIndex        =   45
+      Index           =   8
+      Left            =   5400
+      TabIndex        =   49
       Text            =   "CD 0C"
       Top             =   2910
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Left hand:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Boots:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   6
-      Left            =   3480
-      TabIndex        =   44
+      Index           =   8
+      Left            =   3600
+      TabIndex        =   48
       Top             =   2880
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   5
-      Left            =   5280
-      TabIndex        =   43
+      Index           =   7
+      Left            =   5400
+      TabIndex        =   47
       Text            =   "CD 0C"
       Top             =   2550
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Right hand:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Legs:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   5
-      Left            =   3480
-      TabIndex        =   42
+      Index           =   7
+      Left            =   3600
+      TabIndex        =   46
       Top             =   2520
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   4
-      Left            =   5280
-      TabIndex        =   41
+      Index           =   6
+      Left            =   5400
+      TabIndex        =   45
       Text            =   "CD 0C"
       Top             =   2190
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Chest:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Left hand:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   4
-      Left            =   3480
-      TabIndex        =   40
+      Index           =   6
+      Left            =   3600
+      TabIndex        =   44
       Top             =   2160
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   3
-      Left            =   5280
-      TabIndex        =   39
+      Index           =   5
+      Left            =   5400
+      TabIndex        =   43
       Text            =   "CD 0C"
       Top             =   1830
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Backpack:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Right hand:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   3
-      Left            =   3480
-      TabIndex        =   38
+      Index           =   5
+      Left            =   3600
+      TabIndex        =   42
       Top             =   1800
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   2
-      Left            =   5280
-      TabIndex        =   37
+      Index           =   4
+      Left            =   5400
+      TabIndex        =   41
       Text            =   "CD 0C"
       Top             =   1470
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Neck:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Chest:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   2
-      Left            =   3480
-      TabIndex        =   36
+      Index           =   4
+      Left            =   3600
+      TabIndex        =   40
       Top             =   1440
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
-      Index           =   1
-      Left            =   5280
-      TabIndex        =   35
+      Index           =   3
+      Left            =   5400
+      TabIndex        =   39
       Text            =   "CD 0C"
       Top             =   1110
       Width           =   735
    End
    Begin VB.CheckBox chkSlotRefill 
-      BackColor       =   &H00000000&
-      Caption         =   "Head:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Backpack:"
+      ForeColor       =   &H00000000&
       Height          =   375
-      Index           =   1
-      Left            =   3480
-      TabIndex        =   34
+      Index           =   3
+      Left            =   3600
+      TabIndex        =   38
       Top             =   1080
       Width           =   1455
    End
    Begin VB.TextBox txtSlotRefill 
       Height          =   285
+      Index           =   2
+      Left            =   5400
+      TabIndex        =   37
+      Text            =   "CD 0C"
+      Top             =   750
+      Width           =   735
+   End
+   Begin VB.CheckBox chkSlotRefill 
+      Caption         =   "Neck:"
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Index           =   2
+      Left            =   3600
+      TabIndex        =   36
+      Top             =   720
+      Width           =   1455
+   End
+   Begin VB.TextBox txtSlotRefill 
+      Height          =   285
+      Index           =   1
+      Left            =   5400
+      TabIndex        =   35
+      Text            =   "CD 0C"
+      Top             =   390
+      Width           =   735
+   End
+   Begin VB.CheckBox chkSlotRefill 
+      Caption         =   "Head:"
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Index           =   1
+      Left            =   3600
+      TabIndex        =   34
+      Top             =   360
+      Width           =   1455
+   End
+   Begin VB.TextBox txtSlotRefill 
+      Height          =   285
       Index           =   0
-      Left            =   6720
+      Left            =   7200
       TabIndex        =   31
       TabStop         =   0   'False
       Top             =   360
@@ -431,7 +422,7 @@ Begin VB.Form frmTrainer
       ForeColor       =   &H00FFFFFF&
       Height          =   375
       Index           =   0
-      Left            =   6720
+      Left            =   7200
       TabIndex        =   30
       TabStop         =   0   'False
       Top             =   0
@@ -440,25 +431,25 @@ Begin VB.Form frmTrainer
    End
    Begin VB.TextBox txtMaxPickUp 
       Height          =   285
-      Left            =   2400
+      Left            =   2640
       TabIndex        =   28
       Text            =   "4"
-      Top             =   6600
+      Top             =   5760
       Width           =   735
    End
    Begin VB.TextBox txtPickupID 
       Height          =   285
-      Left            =   960
+      Left            =   1080
       TabIndex        =   25
       Text            =   "CD 0C"
-      Top             =   4755
+      Top             =   4170
       Width           =   735
    End
    Begin VB.CommandButton cmdPickup 
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   8
-      Left            =   2190
+      Left            =   2310
       Picture         =   "frmTrainer.frx":0442
       Style           =   1  'Graphical
       TabIndex        =   13
@@ -470,7 +461,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   7
-      Left            =   1155
+      Left            =   1275
       Picture         =   "frmTrainer.frx":3814
       Style           =   1  'Graphical
       TabIndex        =   12
@@ -482,7 +473,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   6
-      Left            =   120
+      Left            =   240
       Picture         =   "frmTrainer.frx":6BE6
       Style           =   1  'Graphical
       TabIndex        =   11
@@ -494,43 +485,43 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   5
-      Left            =   2190
+      Left            =   2310
       Picture         =   "frmTrainer.frx":9FB8
       Style           =   1  'Graphical
       TabIndex        =   10
       TabStop         =   0   'False
-      Top             =   2000
+      Top             =   1995
       Width           =   1040
    End
    Begin VB.CommandButton cmdPickup 
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   4
-      Left            =   1155
+      Left            =   1275
       Picture         =   "frmTrainer.frx":D38A
       Style           =   1  'Graphical
       TabIndex        =   9
       TabStop         =   0   'False
-      Top             =   2000
+      Top             =   1995
       Width           =   1040
    End
    Begin VB.CommandButton cmdPickup 
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   3
-      Left            =   120
+      Left            =   240
       Picture         =   "frmTrainer.frx":1075C
       Style           =   1  'Graphical
       TabIndex        =   8
       TabStop         =   0   'False
-      Top             =   2000
+      Top             =   1995
       Width           =   1040
    End
    Begin VB.CommandButton cmdPickup 
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   2
-      Left            =   2190
+      Left            =   2310
       Picture         =   "frmTrainer.frx":13B2E
       Style           =   1  'Graphical
       TabIndex        =   7
@@ -542,7 +533,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   1
-      Left            =   1155
+      Left            =   1275
       Picture         =   "frmTrainer.frx":16F00
       Style           =   1  'Graphical
       TabIndex        =   6
@@ -554,7 +545,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   0
-      Left            =   120
+      Left            =   240
       Picture         =   "frmTrainer.frx":1A2D2
       Style           =   1  'Graphical
       TabIndex        =   0
@@ -566,7 +557,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   8
-      Left            =   2190
+      Left            =   2310
       Picture         =   "frmTrainer.frx":1D6A4
       Style           =   1  'Graphical
       TabIndex        =   22
@@ -579,7 +570,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   7
-      Left            =   1155
+      Left            =   1275
       Picture         =   "frmTrainer.frx":20A76
       Style           =   1  'Graphical
       TabIndex        =   21
@@ -592,7 +583,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   6
-      Left            =   120
+      Left            =   240
       Picture         =   "frmTrainer.frx":23E48
       Style           =   1  'Graphical
       TabIndex        =   20
@@ -605,12 +596,12 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   5
-      Left            =   2190
+      Left            =   2310
       Picture         =   "frmTrainer.frx":2721A
       Style           =   1  'Graphical
       TabIndex        =   19
       TabStop         =   0   'False
-      Top             =   2000
+      Top             =   1995
       Visible         =   0   'False
       Width           =   1040
    End
@@ -618,12 +609,12 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   4
-      Left            =   1155
+      Left            =   1275
       Picture         =   "frmTrainer.frx":2A5EC
       Style           =   1  'Graphical
       TabIndex        =   18
       TabStop         =   0   'False
-      Top             =   2000
+      Top             =   1995
       Visible         =   0   'False
       Width           =   1040
    End
@@ -631,12 +622,12 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   3
-      Left            =   120
+      Left            =   240
       Picture         =   "frmTrainer.frx":2D9BE
       Style           =   1  'Graphical
       TabIndex        =   17
       TabStop         =   0   'False
-      Top             =   2000
+      Top             =   1995
       Visible         =   0   'False
       Width           =   1040
    End
@@ -644,7 +635,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   2
-      Left            =   2190
+      Left            =   2310
       Picture         =   "frmTrainer.frx":30D90
       Style           =   1  'Graphical
       TabIndex        =   16
@@ -657,7 +648,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   1
-      Left            =   1155
+      Left            =   1275
       Picture         =   "frmTrainer.frx":34162
       Style           =   1  'Graphical
       TabIndex        =   15
@@ -670,7 +661,7 @@ Begin VB.Form frmTrainer
       BackColor       =   &H00000000&
       Height          =   1040
       Index           =   0
-      Left            =   120
+      Left            =   240
       Picture         =   "frmTrainer.frx":37534
       Style           =   1  'Graphical
       TabIndex        =   14
@@ -680,51 +671,46 @@ Begin VB.Form frmTrainer
       Width           =   1040
    End
    Begin VB.Frame frmPickDestination 
-      BackColor       =   &H00000000&
       Caption         =   "Destination of items"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   1095
-      Left            =   120
+      Left            =   240
       TabIndex        =   4
-      Top             =   5400
+      Top             =   4560
       Width           =   3135
       Begin VB.OptionButton OptionDest 
-         BackColor       =   &H00000000&
          Caption         =   "Ammo slot"
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H00000000&
          Height          =   255
          Index           =   3
          Left            =   1800
-         TabIndex        =   78
+         TabIndex        =   77
          Top             =   720
          Width           =   1215
       End
       Begin VB.OptionButton OptionDest 
-         BackColor       =   &H00000000&
          Caption         =   "Any backpack"
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H00000000&
          Height          =   255
          Index           =   2
          Left            =   120
-         TabIndex        =   77
+         TabIndex        =   76
          Top             =   720
          Width           =   1455
       End
       Begin VB.OptionButton OptionDest 
-         BackColor       =   &H00000000&
          Caption         =   "Right hand"
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H00000000&
          Height          =   255
          Index           =   1
          Left            =   1800
-         TabIndex        =   76
+         TabIndex        =   75
          Top             =   360
          Width           =   1215
       End
       Begin VB.OptionButton OptionDest 
-         BackColor       =   &H00000000&
          Caption         =   "Left hand"
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H00000000&
          Height          =   255
          Index           =   0
          Left            =   120
@@ -736,11 +722,71 @@ Begin VB.Form frmTrainer
    End
    Begin VB.ComboBox cmbCharacter 
       Height          =   315
-      Left            =   600
+      Left            =   1200
       TabIndex        =   2
       Text            =   "-"
       Top             =   120
-      Width           =   1575
+      Width           =   1815
+   End
+   Begin JwldButn2b.JeweledButton cmdChangeTrainerTimer 
+      Height          =   255
+      Left            =   6120
+      TabIndex        =   86
+      Top             =   5880
+      Width           =   975
+      _ExtentX        =   1720
+      _ExtentY        =   450
+      Caption         =   "Change"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin VB.Line Line4 
+      BorderColor     =   &H80000002&
+      X1              =   120
+      X2              =   240
+      Y1              =   720
+      Y2              =   720
+   End
+   Begin VB.Line Line3 
+      BorderColor     =   &H80000002&
+      X1              =   1440
+      X2              =   3480
+      Y1              =   720
+      Y2              =   720
+   End
+   Begin VB.Line Line2 
+      BorderColor     =   &H80000002&
+      X1              =   3480
+      X2              =   3480
+      Y1              =   720
+      Y2              =   6120
+   End
+   Begin VB.Line Line8 
+      BorderColor     =   &H80000002&
+      X1              =   120
+      X2              =   3480
+      Y1              =   6120
+      Y2              =   6120
+   End
+   Begin VB.Line Line6 
+      BorderColor     =   &H80000002&
+      X1              =   120
+      X2              =   120
+      Y1              =   720
+      Y2              =   6120
    End
    Begin VB.Label lblInEffect 
       BackColor       =   &H00000000&
@@ -748,99 +794,92 @@ Begin VB.Form frmTrainer
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   480
-      TabIndex        =   86
+      TabIndex        =   84
       Top             =   7320
       Width           =   6255
    End
    Begin VB.Label Label15 
-      BackColor       =   &H00000000&
       Caption         =   "ms"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   5520
-      TabIndex        =   85
-      Top             =   7035
+      Left            =   5640
+      TabIndex        =   83
+      Top             =   5880
       Width           =   375
    End
    Begin VB.Label Label14 
-      BackColor       =   &H00000000&
-      Caption         =   "ms to"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "to"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   4080
-      TabIndex        =   82
-      Top             =   7080
-      Width           =   735
+      Left            =   4800
+      TabIndex        =   81
+      Top             =   5880
+      Width           =   255
    End
    Begin VB.Label Label13 
-      BackColor       =   &H00000000&
-      Caption         =   "Global trainer timer: Randomized from"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Timer:"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   480
-      TabIndex        =   80
-      Top             =   7080
-      Width           =   2895
+      Left            =   3600
+      TabIndex        =   79
+      Top             =   5880
+      Width           =   495
    End
    Begin VB.Line Line1 
       BorderColor     =   &H00FFFFFF&
-      X1              =   120
-      X2              =   7200
+      X1              =   240
+      X2              =   7320
       Y1              =   6960
       Y2              =   6960
    End
    Begin VB.Label Label12 
-      BackColor       =   &H00000000&
-      Caption         =   "(write 00 00 to pick any item)"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "00 00 = any"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   960
-      TabIndex        =   75
-      Top             =   5040
-      Width           =   2415
+      Left            =   1920
+      TabIndex        =   74
+      Top             =   4200
+      Width           =   855
    End
    Begin VB.Label Label11 
       BackColor       =   &H00000000&
       Caption         =   "WARNING: it will lose that ID if it dies or 'relog' !"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3480
-      TabIndex        =   74
-      Top             =   6720
+      Left            =   7200
+      TabIndex        =   73
+      Top             =   1560
+      Visible         =   0   'False
       Width           =   3615
    End
    Begin VB.Label Label10 
-      BackColor       =   &H00000000&
       Caption         =   "% hp"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   6720
+      Left            =   6600
       TabIndex        =   69
-      Top             =   5250
-      Width           =   615
+      Top             =   4530
+      Width           =   375
    End
    Begin VB.Label Label9 
-      BackColor       =   &H00000000&
-      Caption         =   "MISC TRAINER OPTIONS:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Misc Trainer options:"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   3600
+      Left            =   3720
       TabIndex        =   66
-      Top             =   4920
-      Width           =   3255
+      Top             =   4125
+      Width           =   1575
    End
    Begin VB.Label Label5 
-      BackColor       =   &H00000000&
-      Caption         =   "AUTOREFILL PLAYER SLOTS FROM BACKPACKS, when you have less than X items there:"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   735
-      Left            =   3480
+      Caption         =   "Auto Refill slot"
+      ForeColor       =   &H00000000&
+      Height          =   255
+      Left            =   3840
       TabIndex        =   29
       Top             =   120
-      Width           =   3255
+      Width           =   1095
    End
    Begin VB.Label Label8 
-      BackColor       =   &H00000000&
       Caption         =   "X value"
       BeginProperty Font 
          Name            =   "Arial"
@@ -851,15 +890,15 @@ Begin VB.Form frmTrainer
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   6240
+      Left            =   6480
       TabIndex        =   56
-      Top             =   840
-      Width           =   855
+      Top             =   120
+      Width           =   615
    End
    Begin VB.Label Label7 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "player slot"
       BeginProperty Font 
          Name            =   "Arial"
@@ -870,15 +909,15 @@ Begin VB.Form frmTrainer
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   3840
+      Left            =   7200
       TabIndex        =   33
-      Top             =   840
+      Top             =   2520
+      Visible         =   0   'False
       Width           =   1215
    End
    Begin VB.Label Label6 
-      BackColor       =   &H00000000&
       Caption         =   "itemID"
       BeginProperty Font 
          Name            =   "Arial"
@@ -889,21 +928,20 @@ Begin VB.Form frmTrainer
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   5280
+      Left            =   5520
       TabIndex        =   32
-      Top             =   840
+      Top             =   120
       Width           =   495
    End
    Begin VB.Label Label4 
-      BackColor       =   &H00000000&
       Caption         =   "Max items that you can carry:"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   120
+      Left            =   360
       TabIndex        =   27
-      Top             =   6645
+      Top             =   5805
       Width           =   2295
    End
    Begin VB.Label Label3 
@@ -911,19 +949,19 @@ Begin VB.Form frmTrainer
       Caption         =   "(Default is spear ID)"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   1800
+      Left            =   7200
       TabIndex        =   26
-      Top             =   4800
-      Width           =   1695
+      Top             =   1200
+      Visible         =   0   'False
+      Width           =   1455
    End
    Begin VB.Label Label2 
-      BackColor       =   &H00000000&
       Caption         =   "ITEM ID:"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   120
+      Left            =   240
       TabIndex        =   24
-      Top             =   4800
+      Top             =   4200
       Width           =   855
    End
    Begin VB.Label Label1 
@@ -931,30 +969,31 @@ Begin VB.Form frmTrainer
       Caption         =   "Click on the picture. Leave a spear on the squares allowed for auto pick up."
       ForeColor       =   &H00FFFFFF&
       Height          =   495
-      Left            =   120
+      Left            =   7200
       TabIndex        =   23
-      Top             =   4200
+      Top             =   1920
+      Visible         =   0   'False
       Width           =   3015
    End
    Begin VB.Label lblChar 
-      BackColor       =   &H00000000&
-      Caption         =   "Char:"
-      ForeColor       =   &H00FFFFFF&
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Trainer:"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   120
+      Left            =   7200
       TabIndex        =   3
-      Top             =   120
-      Width           =   975
+      Top             =   840
+      Visible         =   0   'False
+      Width           =   615
    End
    Begin VB.Label lblGlobalEvents 
-      BackColor       =   &H00000000&
-      Caption         =   "PICK UP SPEARS OR OTHER ITEMS:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Pick Up Items"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   120
+      Left            =   360
       TabIndex        =   1
       Top             =   600
-      Width           =   3135
+      Width           =   1095
    End
 End
 Attribute VB_Name = "frmTrainer"
@@ -1181,6 +1220,12 @@ Private Sub Form_Unload(Cancel As Integer)
   Me.Hide
   Cancel = BlockUnload
 End Sub
+
+
+
+
+
+
 
 Private Sub OptionDest_Click(Index As Integer)
   If ((trainerIDselected > 0) And (Index > 0) And OptionDest(Index).Value = True) Then

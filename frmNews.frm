@@ -1,45 +1,50 @@
 VERSION 5.00
 Begin VB.Form frmNews 
-   BackColor       =   &H00000000&
+   BackColor       =   &H00FFFFFF&
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "News"
-   ClientHeight    =   4800
-   ClientLeft      =   60
-   ClientTop       =   510
-   ClientWidth     =   8235
+   ClientHeight    =   4905
+   ClientLeft      =   -15
+   ClientTop       =   375
+   ClientWidth     =   5520
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmNews.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   4800
-   ScaleWidth      =   8235
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   4905
+   ScaleWidth      =   5520
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.TextBox txtBoard 
-      Height          =   3495
-      Left            =   120
+      Height          =   4575
+      Left            =   0
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
       TabIndex        =   1
-      Top             =   720
-      Width           =   8055
+      Top             =   360
+      Width           =   5535
    End
    Begin VB.CommandButton cmdOk 
       BackColor       =   &H00C0FFFF&
       Caption         =   "OK"
       Height          =   375
-      Left            =   3240
+      Left            =   3720
       Style           =   1  'Graphical
       TabIndex        =   0
       Top             =   4320
+      Visible         =   0   'False
       Width           =   1815
    End
    Begin VB.Label lblText 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "What is new in Blackd Proxy?"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   495
+      ForeColor       =   &H00000000&
+      Height          =   255
       Left            =   120
       TabIndex        =   2
       Top             =   120
-      Width           =   8055
+      Width           =   2175
    End
 End
 Attribute VB_Name = "frmNews"
@@ -59,7 +64,19 @@ Private Sub Form_Load()
     Me.lblText = "What is new?"
     strMsg = "Blackd Proxy 40.0" & vbCrLf & _
     "----------------------------" & vbCrLf & _
-     " - Mayor bot update. This merges versions Classic and NG. User can choose its favourite user interface through a switch."
+     " - Mayor bot update. This merges versions Classic and NG. User can choose its favourite user interface through a switch." & vbCrLf & _
+     " - New Healer, now its just select combo list for mana/heal pots" & vbCrLf & _
+     " - Heal method Hotkeys/Warmode now use runes with closed backpack (7.72-)" & vbCrLf & _
+     " - Auto change gold/platinum checkbox" & vbCrLf & _
+     " - MW timer checkbox" & vbCrLf & _
+     " - Added Housing step to safety, runemaker step into house if monster/npc/player not in kill/friend list appear on screen" & vbCrLf & _
+     " - Added Tibia Title, shows character name on Tibia title" & vbCrLf & _
+     " - Revamped Aimbot" & vbCrLf & _
+     " - Added Persistent, so player can execute exiva or say message every X ms" & vbCrLf & _
+     " - Classname changer on Advanced, so its possible to recognize some of custom tibia client (untested). Classname on .txt does not recognize most common custom classname (ÙbiaClient)" & vbCrLf & _
+     " - Revamped CaveBot form, stills with all button you can show/hide advanced button and added Items ID list" & vbCrLf & _
+     " - Added some new exiva comands (exiva sdmax, etc) and hotkeys list inside Hotkeys form" & vbCrLf & _
+     " - Revamped Broadcast, Trainer, Advanced, Proxy forms."
 
     strMsg = strMsg & vbCrLf & "Blackd Proxy 38.0" & vbCrLf & _
     "----------------------------" & vbCrLf & _
@@ -1193,17 +1210,18 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-  If frmNews.WindowState <> vbMinimized Then
-    If frmNews.ScaleHeight < 3000 Then
-      frmNews.Height = 3000
-    End If
-    If frmNews.ScaleWidth < 5800 Then
-      frmNews.Width = 5800
-    End If
-    txtBoard.Height = frmNews.ScaleHeight - 1300
-    txtBoard.Width = frmNews.ScaleWidth - 200
-    cmdOk.Top = frmNews.ScaleHeight - 480
-  End If
+'custom ng
+  'If frmNews.WindowState <> vbMinimized Then
+  '  If frmNews.ScaleHeight < 3000 Then
+  '    frmNews.Height = 3000
+  '  End If
+  '  If frmNews.ScaleWidth < 5800 Then
+  '    frmNews.Width = 5800
+  '  End If
+  '  txtBoard.Height = frmNews.ScaleHeight - 1300
+  '  txtBoard.Width = frmNews.ScaleWidth - 200
+  '  cmdOk.Top = frmNews.ScaleHeight - 480
+  'End If
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

@@ -1,0 +1,27 @@
+Line 19: Class JwldButn2b.JeweledButton of control cmdStop was not a loaded control class.
+Line 117: Class JwldButn2b.JeweledButton of control cmdPlay was not a loaded control class.
+Line 142: Class JwldButn2b.JeweledButton of control cmdRead was not a loaded control class.
+Line 25: The property name _ExtentX in cmdStop is invalid.
+Line 26: The property name _ExtentY in cmdStop is invalid.
+Line 27: The property name Caption in cmdStop is invalid.
+Line 28: The property name PictureSize in cmdStop is invalid.
+Line 29: The property name OriginalPicSizeW in cmdStop is invalid.
+Line 30: The property name OriginalPicSizeH in cmdStop is invalid.
+Line 41: The property name BorderColor_Hover in cmdStop is invalid.
+Line 42: The property name BorderColor_Inner in cmdStop is invalid.
+Line 123: The property name _ExtentX in cmdPlay is invalid.
+Line 124: The property name _ExtentY in cmdPlay is invalid.
+Line 125: The property name Caption in cmdPlay is invalid.
+Line 126: The property name PictureSize in cmdPlay is invalid.
+Line 127: The property name OriginalPicSizeW in cmdPlay is invalid.
+Line 128: The property name OriginalPicSizeH in cmdPlay is invalid.
+Line 139: The property name BorderColor_Hover in cmdPlay is invalid.
+Line 140: The property name BorderColor_Inner in cmdPlay is invalid.
+Line 148: The property name _ExtentX in cmdRead is invalid.
+Line 149: The property name _ExtentY in cmdRead is invalid.
+Line 150: The property name Caption in cmdRead is invalid.
+Line 151: The property name PictureSize in cmdRead is invalid.
+Line 152: The property name OriginalPicSizeW in cmdRead is invalid.
+Line 153: The property name OriginalPicSizeH in cmdRead is invalid.
+Line 164: The property name BorderColor_Hover in cmdRead is invalid.
+Line 165: The property name BorderColor_Inner in cmdRead is invalid.

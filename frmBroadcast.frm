@@ -1,120 +1,168 @@
 VERSION 5.00
+Object = "{F247AF03-2671-4421-A87A-846ED80CD2A9}#1.0#0"; "JwldButn2b.ocx"
 Begin VB.Form frmBroadcast 
-   BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
-   Caption         =   "Broadcast by private messages"
-   ClientHeight    =   7500
+   BorderStyle     =   4  'Fixed ToolWindow
+   Caption         =   "Broadcast"
+   ClientHeight    =   4965
    ClientLeft      =   45
-   ClientTop       =   495
-   ClientWidth     =   7785
+   ClientTop       =   435
+   ClientWidth     =   7215
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmBroadcast.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   7500
-   ScaleWidth      =   7785
+   MinButton       =   0   'False
+   ScaleHeight     =   4965
+   ScaleWidth      =   7215
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CheckBox chkMC 
-      BackColor       =   &H00000000&
-      Caption         =   "(optional) Multiple sources - multiclient broadcast by turns in same server. This allow smaller delay"
-      ForeColor       =   &H00FFFFFF&
+   Begin JwldButn2b.JeweledButton cmdPlay 
+      Height          =   255
+      Left            =   6120
+      TabIndex        =   24
+      Top             =   4320
+      Width           =   975
+      _ExtentX        =   1720
+      _ExtentY        =   450
+      Caption         =   "Play"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdRead 
       Height          =   375
-      Left            =   240
-      TabIndex        =   25
-      Top             =   6720
-      Width           =   7575
+      Left            =   3360
+      TabIndex        =   23
+      Top             =   1920
+      Width           =   735
+      _ExtentX        =   1296
+      _ExtentY        =   661
+      Caption         =   "> read >"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin VB.CheckBox chkMC 
+      Caption         =   "Multiclient broadcast by turns in same server."
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Left            =   120
+      TabIndex        =   22
+      Top             =   4560
+      Width           =   3495
    End
    Begin VB.Timer timerBroadcast 
       Enabled         =   0   'False
       Interval        =   300
-      Left            =   6840
-      Top             =   5640
+      Left            =   3360
+      Top             =   0
    End
    Begin VB.ComboBox cmbCharacter 
       Height          =   315
-      Left            =   3360
-      TabIndex        =   22
+      Left            =   1200
+      TabIndex        =   19
       Text            =   "-"
       ToolTipText     =   "Select one of your connected characters"
-      Top             =   5520
-      Width           =   2535
-   End
-   Begin VB.CommandButton cmdStop 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "STOP"
-      Height          =   375
-      Left            =   1320
-      Style           =   1  'Graphical
-      TabIndex        =   16
-      Top             =   6240
-      Width           =   975
+      Top             =   120
+      Width           =   1815
    End
    Begin VB.TextBox txtBroadcastDelay2 
       Height          =   285
-      Left            =   5760
+      Left            =   2400
       MaxLength       =   7
-      TabIndex        =   12
+      TabIndex        =   10
       Text            =   "30000"
-      Top             =   5160
-      Width           =   855
+      Top             =   4320
+      Width           =   615
    End
    Begin VB.TextBox txtBroadcastDelay1 
       Height          =   285
-      Left            =   4080
+      Left            =   1440
       MaxLength       =   7
-      TabIndex        =   11
-      Text            =   "20000"
-      Top             =   5160
-      Width           =   855
-   End
-   Begin VB.CommandButton cmdPlay 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "PLAY"
-      Height          =   375
-      Left            =   240
-      Style           =   1  'Graphical
       TabIndex        =   9
-      Top             =   6240
-      Width           =   975
+      Text            =   "20000"
+      Top             =   4320
+      Width           =   615
    End
    Begin VB.TextBox txtBroadcastThis 
       Height          =   285
       Left            =   120
-      TabIndex        =   8
-      Top             =   4200
-      Width           =   7575
+      TabIndex        =   7
+      Top             =   3960
+      Width           =   6975
    End
    Begin VB.ListBox lstList 
-      Height          =   2010
-      Left            =   5040
-      TabIndex        =   6
-      Top             =   960
-      Width           =   2655
-   End
-   Begin VB.CommandButton cmdRead 
-      Caption         =   "> read >"
-      Height          =   1455
+      Height          =   2790
       Left            =   4200
       TabIndex        =   5
-      Top             =   2160
-      Width           =   735
+      Top             =   840
+      Width           =   2895
    End
    Begin VB.TextBox txtRaw 
-      Height          =   2655
+      Height          =   2775
       Left            =   120
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
       TabIndex        =   3
-      Top             =   960
-      Width           =   3975
+      Top             =   840
+      Width           =   3135
    End
    Begin VB.TextBox Text1 
       Height          =   285
       Left            =   120
       TabIndex        =   1
       Text            =   "http://www.tibia.com/community/?subtopic=worlds&world=Aldora"
-      Top             =   360
-      Width           =   7575
+      Top             =   7320
+      Width           =   6975
+   End
+   Begin JwldButn2b.JeweledButton cmdStop 
+      Height          =   255
+      Left            =   5040
+      TabIndex        =   25
+      Top             =   4320
+      Width           =   975
+      _ExtentX        =   1720
+      _ExtentY        =   450
+      Caption         =   "Stop"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
    End
    Begin VB.Label lblInfo 
       BackColor       =   &H00000000&
@@ -129,9 +177,9 @@ Begin VB.Form frmBroadcast
       EndProperty
       ForeColor       =   &H0000C000&
       Height          =   375
-      Left            =   120
-      TabIndex        =   24
-      Top             =   7080
+      Left            =   0
+      TabIndex        =   21
+      Top             =   8160
       Width           =   7455
    End
    Begin VB.Label lblPer 
@@ -139,38 +187,37 @@ Begin VB.Form frmBroadcast
       BackColor       =   &H00FFFFC0&
       Caption         =   "0%"
       Height          =   255
-      Left            =   6840
-      TabIndex        =   23
-      Top             =   6240
-      Width           =   855
+      Left            =   6480
+      TabIndex        =   20
+      Top             =   120
+      Width           =   615
    End
    Begin VB.Label Label12 
-      BackColor       =   &H00000000&
-      Caption         =   "Step 6. Select who will send the broadcast:"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Spammer:"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   120
-      TabIndex        =   21
-      Top             =   5520
-      Width           =   3255
+      Left            =   240
+      TabIndex        =   18
+      Top             =   120
+      Width           =   855
    End
    Begin VB.Label lblCurrentBroadcast 
       BackColor       =   &H00FFC0C0&
       Caption         =   "-nobody"
       Height          =   255
-      Left            =   4440
-      TabIndex        =   20
-      Top             =   6240
-      Width           =   2295
+      Left            =   4200
+      TabIndex        =   17
+      Top             =   120
+      Width           =   2175
    End
    Begin VB.Label Label10 
       BackColor       =   &H00000000&
       Caption         =   "Currently broadcasting to:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   2400
-      TabIndex        =   19
-      Top             =   6240
+      Left            =   2280
+      TabIndex        =   16
+      Top             =   6720
       Width           =   2055
    End
    Begin VB.Label Label9 
@@ -179,8 +226,8 @@ Begin VB.Form frmBroadcast
       ForeColor       =   &H00FFC0C0&
       Height          =   255
       Left            =   120
-      TabIndex        =   18
-      Top             =   4800
+      TabIndex        =   15
+      Top             =   5880
       Width           =   6975
    End
    Begin VB.Label Label8 
@@ -189,8 +236,8 @@ Begin VB.Form frmBroadcast
       ForeColor       =   &H00FFC0C0&
       Height          =   255
       Left            =   120
-      TabIndex        =   17
-      Top             =   4560
+      TabIndex        =   14
+      Top             =   5640
       Width           =   6975
    End
    Begin VB.Label Label7 
@@ -198,79 +245,75 @@ Begin VB.Form frmBroadcast
       Caption         =   "Step 7: Press play to start. Press stop if you want to stop it"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   120
-      TabIndex        =   15
-      Top             =   5880
+      Left            =   0
+      TabIndex        =   13
+      Top             =   6360
       Width           =   6375
    End
    Begin VB.Label Label6 
-      BackColor       =   &H00000000&
       Caption         =   "ms"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   6720
-      TabIndex        =   14
-      Top             =   5160
-      Width           =   375
+      Left            =   3120
+      TabIndex        =   12
+      Top             =   4320
+      Width           =   255
    End
    Begin VB.Label Label5 
-      BackColor       =   &H00000000&
-      Caption         =   "ms and"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "to"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   5040
-      TabIndex        =   13
-      Top             =   5160
-      Width           =   735
+      Left            =   2160
+      TabIndex        =   11
+      Top             =   4320
+      Width           =   255
    End
    Begin VB.Label Label4 
-      BackColor       =   &H00000000&
-      Caption         =   "Step 5: Set delay between messages. Delay between..."
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Message delay:"
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
-      TabIndex        =   10
-      Top             =   5160
-      Width           =   4095
+      TabIndex        =   8
+      Top             =   4320
+      Width           =   1215
    End
    Begin VB.Label Label3 
-      BackColor       =   &H00000000&
-      Caption         =   $"frmBroadcast.frx":0442
-      ForeColor       =   &H00FFFFFF&
-      Height          =   495
+      Caption         =   "Message to send:"
+      ForeColor       =   &H00000000&
+      Height          =   255
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   3720
-      Width           =   6975
+      Width           =   1335
    End
    Begin VB.Label Label2 
       BackColor       =   &H00000000&
       Caption         =   "Step 3: press the button below:"
       ForeColor       =   &H00FFFFFF&
       Height          =   1095
-      Left            =   4200
+      Left            =   3360
       TabIndex        =   4
-      Top             =   1080
+      Top             =   840
+      Visible         =   0   'False
       Width           =   735
    End
    Begin VB.Label Label1 
-      BackColor       =   &H00000000&
-      Caption         =   "Step 2: copy/paste the list of online players here. Don't worry about level and class. Paste all."
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Copy/paste the list of online players here. Don't worry about level and class. Paste all."
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   2
-      Top             =   720
+      Top             =   600
       Width           =   6975
    End
    Begin VB.Label lblText 
       BackColor       =   &H00000000&
-      Caption         =   "Step 1: (for real servers) copy/paste this in your browser. Change server at the end:"
+      Caption         =   "Copy/paste this in your browser. Change server at the end:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
       TabIndex        =   0
-      Top             =   120
+      Top             =   7080
       Width           =   6615
    End
 End
@@ -358,6 +401,8 @@ End Function
 
 
 
+
+
 Private Sub cmbCharacter_Click()
   broadcastIDselected = cmbCharacter.ListIndex
 End Sub
@@ -412,6 +457,7 @@ Private Sub cmdStop_Click()
     lblInfo.Caption = "Stopped by user request"
 End Sub
 
+
 Private Sub Form_Load()
 
   LoadBroadcastChars
@@ -448,6 +494,8 @@ Public Sub LoadBroadcastChars()
 goterr:
  LogOnFile "errors.txt", "Error at LoadBroadcastChars(). Err number " & CStr(Err.Number) & " ; Err description " & Err.Description
 End Sub
+
+
 
 
 Private Sub timerBroadcast_Timer()

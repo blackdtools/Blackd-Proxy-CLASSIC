@@ -1,127 +1,148 @@
 VERSION 5.00
 Begin VB.Form frmAdvanced 
-   BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
+   BackColor       =   &H00FFFFFF&
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Advanced Settings"
-   ClientHeight    =   8850
+   ClientHeight    =   5610
    ClientLeft      =   45
-   ClientTop       =   435
-   ClientWidth     =   8205
+   ClientTop       =   375
+   ClientWidth     =   7515
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmAdvanced.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   8850
-   ScaleWidth      =   8205
+   MinButton       =   0   'False
+   ScaleHeight     =   5610
+   ScaleWidth      =   7515
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdChangeClass 
+      Caption         =   "Restore"
+      Height          =   255
+      Left            =   3840
+      TabIndex        =   37
+      Top             =   2400
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdApplyClass 
+      Caption         =   "Change"
+      Height          =   255
+      Left            =   6120
+      TabIndex        =   36
+      Top             =   2040
+      Width           =   1095
+   End
+   Begin VB.TextBox txtClassname 
+      Height          =   285
+      Left            =   3840
+      TabIndex        =   34
+      Text            =   "TibiaClient"
+      Top             =   2040
+      Width           =   2175
+   End
    Begin VB.CheckBox chkAlternativeBinding 
-      BackColor       =   &H00000000&
-      Caption         =   "Alternative mc binding . CLOSE BLACKD PROXY AND ALL TIBIA MCS AFTER CHANGING THIS !!!!"
-      ForeColor       =   &H00FFFFFF&
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Alternative mc binding. Close Bot and Tibia after this!"
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   31
-      Top             =   5570
-      Width           =   8055
+      Top             =   5280
+      Width           =   4095
    End
    Begin VB.ComboBox cmbTibiaServers 
       Height          =   315
-      Left            =   4560
+      Left            =   120
       TabIndex        =   29
-      Top             =   7920
+      Top             =   4800
       Width           =   3495
    End
    Begin VB.TextBox txtLoginCharacter 
       Height          =   285
-      Left            =   4560
+      Left            =   120
       TabIndex        =   27
-      Top             =   7560
+      Top             =   4080
       Width           =   3495
    End
    Begin VB.CheckBox chkWantBypass 
-      BackColor       =   &H00000000&
-      Caption         =   "I want to bypass login server. I understand that I will be banished / deleted if I use it on official servers."
-      ForeColor       =   &H00FFFFFF&
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "I want to bypass login server."
+      ForeColor       =   &H00000000&
       Height          =   375
       Left            =   120
       TabIndex        =   25
-      Top             =   7080
-      Width           =   7935
+      Top             =   3240
+      Width           =   2415
    End
    Begin VB.CommandButton cmdUpdatePIDs 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "UPDATE THIS LIST"
+      Caption         =   "Update this List"
       Height          =   255
-      Left            =   1920
+      Left            =   3840
       Style           =   1  'Graphical
       TabIndex        =   20
-      Top             =   3720
-      Width           =   1935
+      Top             =   1080
+      Width           =   1215
    End
    Begin VB.CommandButton cmdSet25 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "Set 25 FPS (to restore it)"
-      Height          =   375
-      Left            =   5640
+      Caption         =   "Restore FPS"
+      Height          =   255
+      Left            =   6360
       Style           =   1  'Graphical
       TabIndex        =   18
-      Top             =   3960
-      Width           =   2055
+      Top             =   1080
+      Width           =   1095
    End
    Begin VB.CommandButton cmdSet0 
-      BackColor       =   &H00C0FFFF&
       Caption         =   "Set 0 FPS"
-      Height          =   375
-      Left            =   4440
+      Height          =   255
+      Left            =   5160
       Style           =   1  'Graphical
       TabIndex        =   17
-      Top             =   3960
+      Top             =   1080
       Width           =   1095
    End
    Begin VB.ComboBox cmbClients 
       Height          =   315
-      Left            =   840
+      Left            =   4440
       TabIndex        =   14
       Text            =   "0 - First press UPDATETHIS LIST"
-      Top             =   3960
-      Width           =   3495
+      Top             =   720
+      Width           =   2775
    End
    Begin VB.CommandButton cmdChange 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "CLICK HERE TO load a config for a different Tibia Version. This will close ALL. Reload later."
+      Caption         =   "Reset to select different Tibia Version"
       Height          =   375
-      Left            =   240
+      Left            =   120
       Style           =   1  'Graphical
       TabIndex        =   13
-      Top             =   3000
-      Width           =   7695
+      Top             =   2280
+      Width           =   3495
    End
    Begin VB.CheckBox Check1 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Lock priorities"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   2160
+      Left            =   120
       TabIndex        =   12
-      Top             =   240
+      Top             =   1440
       Value           =   1  'Checked
-      Width           =   2055
+      Width           =   1335
    End
    Begin VB.ComboBox cmbTibiaPriority 
       Enabled         =   0   'False
       Height          =   315
-      Left            =   1560
+      Left            =   1320
       TabIndex        =   4
       Text            =   "Default - NORMAL"
-      Top             =   960
-      Width           =   2895
+      Top             =   1080
+      Width           =   2295
    End
    Begin VB.CommandButton cmdApplyPriorities 
-      BackColor       =   &H00C0FFFF&
       Caption         =   "Apply Priorities"
       Enabled         =   0   'False
-      Height          =   375
-      Left            =   120
+      Height          =   255
+      Left            =   2040
       Style           =   1  'Graphical
       TabIndex        =   1
       Top             =   1440
@@ -130,21 +151,100 @@ Begin VB.Form frmAdvanced
    Begin VB.ComboBox cmbMyPriority 
       Enabled         =   0   'False
       Height          =   315
-      Left            =   1560
+      Left            =   1320
       TabIndex        =   0
       Text            =   "Very High - HIGH"
-      Top             =   600
-      Width           =   2895
+      Top             =   720
+      Width           =   2295
+   End
+   Begin VB.Label Label14 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Reset config:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   -1  'True
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   255
+      Left            =   120
+      TabIndex        =   38
+      Top             =   1920
+      Width           =   1335
+   End
+   Begin VB.Label Label16 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Classname:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   -1  'True
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   255
+      Left            =   3840
+      TabIndex        =   35
+      Top             =   1635
+      Width           =   1215
+   End
+   Begin VB.Line Line6 
+      BorderColor     =   &H00FF8080&
+      X1              =   3720
+      X2              =   7320
+      Y1              =   1560
+      Y2              =   1560
+   End
+   Begin VB.Label Label15 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Use this to Blackd recognize some of Tibia custom client"
+      Height          =   375
+      Left            =   5160
+      TabIndex        =   33
+      Top             =   2325
+      Width           =   2055
+   End
+   Begin VB.Line Line5 
+      BorderColor     =   &H00FF8080&
+      X1              =   3720
+      X2              =   3720
+      Y1              =   240
+      Y2              =   2760
+   End
+   Begin VB.Label Label6 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "I understand that I will be banished / deleted if I use it on official servers."
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   4200
+      TabIndex        =   32
+      Top             =   2880
+      Width           =   3255
    End
    Begin VB.Line Line4 
-      BorderColor     =   &H00FFFFFF&
+      BorderColor     =   &H00FF8080&
       X1              =   120
-      X2              =   8040
-      Y1              =   5880
-      Y2              =   5880
+      X2              =   7320
+      Y1              =   2760
+      Y2              =   2760
    End
    Begin VB.Label Label13 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "You still have to do the login virtually in the same way, with the correct account number and the correct password."
       BeginProperty Font 
          Name            =   "Arial"
@@ -155,35 +255,35 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   495
-      Left            =   120
+      ForeColor       =   &H00000000&
+      Height          =   615
+      Left            =   4200
       TabIndex        =   30
-      Top             =   8280
-      Width           =   8055
+      Top             =   4920
+      Width           =   3255
    End
    Begin VB.Label Label12 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Game server where this character belong, or IP :"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   28
-      Top             =   7920
-      Width           =   4335
+      Top             =   4440
+      Width           =   3495
    End
    Begin VB.Label lblPacketChar 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Total exact name of the character you want to connect :"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   26
-      Top             =   7560
-      Width           =   4335
+      Top             =   3720
+      Width           =   4095
    End
    Begin VB.Label Label11 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   $"frmAdvanced.frx":0442
       BeginProperty Font 
          Name            =   "Arial"
@@ -194,15 +294,15 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   735
-      Left            =   120
+      ForeColor       =   &H00000000&
+      Height          =   1455
+      Left            =   4200
       TabIndex        =   24
-      Top             =   6360
-      Width           =   7935
+      Top             =   3360
+      Width           =   3255
    End
    Begin VB.Label Label10 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Bypass login server:"
       BeginProperty Font 
          Name            =   "Arial"
@@ -213,19 +313,19 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   23
-      Top             =   6000
+      Top             =   2880
       Width           =   2295
    End
    Begin VB.Line Line3 
-      BorderColor     =   &H00FFFFFF&
+      BorderColor     =   &H00FF8080&
       X1              =   120
-      X2              =   8040
-      Y1              =   5520
-      Y2              =   5520
+      X2              =   4080
+      Y1              =   5160
+      Y2              =   5160
    End
    Begin VB.Label Label9 
       BackColor       =   &H00000000&
@@ -241,13 +341,14 @@ Begin VB.Form frmAdvanced
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   495
-      Left            =   120
+      Left            =   7440
       TabIndex        =   22
-      Top             =   5040
+      Top             =   1440
+      Visible         =   0   'False
       Width           =   7695
    End
    Begin VB.Label lbl2 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       BeginProperty Font 
          Name            =   "Arial"
          Size            =   8.25
@@ -257,12 +358,12 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H0000FFFF&
+      ForeColor       =   &H00000000&
       Height          =   375
-      Left            =   4080
+      Left            =   5040
       TabIndex        =   21
-      Top             =   3600
-      Width           =   4095
+      Top             =   120
+      Width           =   2415
    End
    Begin VB.Label Label8 
       BackColor       =   &H00000000&
@@ -278,13 +379,14 @@ Begin VB.Form frmAdvanced
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   495
-      Left            =   120
+      Left            =   7440
       TabIndex        =   19
-      Top             =   4440
+      Top             =   840
+      Visible         =   0   'False
       Width           =   7695
    End
    Begin VB.Label Label7 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "FPS limiter:"
       BeginProperty Font 
          Name            =   "Arial"
@@ -295,36 +397,36 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   120
+      Left            =   3840
       TabIndex        =   16
-      Top             =   3600
-      Width           =   1695
+      Top             =   240
+      Width           =   1215
    End
    Begin VB.Label lblChar 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Clients:"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   240
+      Left            =   3840
       TabIndex        =   15
-      Top             =   3960
-      Width           =   975
+      Top             =   720
+      Width           =   615
    End
    Begin VB.Line Line2 
       BorderColor     =   &H00FFFFFF&
       X1              =   120
-      X2              =   8040
-      Y1              =   3480
-      Y2              =   3480
+      X2              =   7560
+      Y1              =   6600
+      Y2              =   6600
    End
    Begin VB.Line Line1 
-      BorderColor     =   &H00FFFFFF&
+      BorderColor     =   &H00FF8080&
       X1              =   120
-      X2              =   8040
-      Y1              =   2760
-      Y2              =   2760
+      X2              =   3720
+      Y1              =   1800
+      Y2              =   1800
    End
    Begin VB.Label Label2 
       BackColor       =   &H00000000&
@@ -340,9 +442,10 @@ Begin VB.Form frmAdvanced
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   120
+      Left            =   7440
       TabIndex        =   11
-      Top             =   2280
+      Top             =   480
+      Visible         =   0   'False
       Width           =   7095
    End
    Begin VB.Label lblWarningCPU 
@@ -359,34 +462,37 @@ Begin VB.Form frmAdvanced
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   120
+      Left            =   7440
       TabIndex        =   10
-      Top             =   1920
+      Top             =   120
+      Visible         =   0   'False
       Width           =   7095
    End
    Begin VB.Label lblForTibia 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Default - NORMAL"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   4680
+      Left            =   7275
       TabIndex        =   9
-      Top             =   960
-      Width           =   3375
+      Top             =   2715
+      Visible         =   0   'False
+      Width           =   1335
    End
    Begin VB.Label lblForMe 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Very High - HIGH"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   4680
+      Left            =   7275
       TabIndex        =   8
-      Top             =   600
-      Width           =   3375
+      Top             =   2325
+      Visible         =   0   'False
+      Width           =   1335
    End
    Begin VB.Label Label5 
-      BackColor       =   &H00000000&
-      Caption         =   "Recommended settings:"
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Recommended:"
       BeginProperty Font 
          Name            =   "Arial"
          Size            =   8.25
@@ -396,15 +502,16 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   4680
+      Left            =   7440
       TabIndex        =   7
-      Top             =   120
-      Width           =   2295
+      Top             =   2040
+      Visible         =   0   'False
+      Width           =   1215
    End
    Begin VB.Label lblMessage 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       BeginProperty Font 
          Name            =   "Arial"
          Size            =   8.25
@@ -414,35 +521,35 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H0000FFFF&
-      Height          =   375
-      Left            =   1920
+      ForeColor       =   &H00000000&
+      Height          =   615
+      Left            =   1440
       TabIndex        =   6
-      Top             =   1440
-      Width           =   5415
+      Top             =   120
+      Width           =   2295
    End
    Begin VB.Label Label4 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Tibia clients:"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   5
-      Top             =   960
-      Width           =   1335
+      Top             =   1080
+      Width           =   975
    End
    Begin VB.Label Label3 
-      BackColor       =   &H00000000&
-      Caption         =   "Blackd Proxy:"
-      ForeColor       =   &H00FFFFFF&
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "Blackd Proxy :"
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   3
-      Top             =   600
-      Width           =   1335
+      Top             =   720
+      Width           =   1095
    End
    Begin VB.Label Label1 
-      BackColor       =   &H00000000&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "CPU Priority:"
       BeginProperty Font 
          Name            =   "Arial"
@@ -453,12 +560,12 @@ Begin VB.Form frmAdvanced
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
       Left            =   120
       TabIndex        =   2
-      Top             =   120
-      Width           =   1935
+      Top             =   240
+      Width           =   1215
    End
 End
 Attribute VB_Name = "frmAdvanced"
@@ -523,6 +630,8 @@ End Sub
 
 
 
+
+
 Private Sub cmbMyPriority_Click()
   MyPriorityID = cmbMyPriority.ListIndex
   lblMessage.Caption = "<- PRESS TO APPLY CHANGES"
@@ -533,6 +642,12 @@ Private Sub cmbTibiaPriority_Click()
   TibiaPriorityID = cmbTibiaPriority.ListIndex
   lblMessage.Caption = "<- PRESS TO APPLY CHANGES"
   lblMessage.ForeColor = &HFFFF&
+End Sub
+
+Private Sub cmdApplyClass_Click()
+
+tibiaclassname = txtClassname.Text
+
 End Sub
 
 Private Sub cmdApplyPriorities_Click()
@@ -716,6 +831,13 @@ End Sub
 Private Sub cmdChange_Click()
   SaveConfigWizard True
   End
+End Sub
+
+Private Sub cmdChangeClass_Click()
+
+tibiaclassname = "TibiaClient"
+txtClassname.Text = "TibiaClient"
+
 End Sub
 
 Private Sub cmdSet0_Click()
@@ -995,7 +1117,3 @@ Private Sub Form_Unload(Cancel As Integer)
   Me.Hide
   Cancel = BlockUnload
 End Sub
-
-
-
-

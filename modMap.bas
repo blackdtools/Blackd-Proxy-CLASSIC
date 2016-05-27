@@ -36,7 +36,7 @@ Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
 Public Const ProxyVersion = "40.0" ' Proxy version ' string version
-Public Const myNumericVersion = 38000 ' numeric version
+Public Const myNumericVersion = 40000 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -284,6 +284,8 @@ Public tmpStack As TypeStackTileInfo ' for map update speed optimization
 Public PlayTheDangerSound As Boolean
 Public PlayMsgSound As Boolean
 Public PlayMsgSound2 As Boolean
+'custom ng
+Public PlayPMSound As Boolean
 
 ' some more trial vars:
 Public TrialMode As Integer  '1=some days / 2 = month
@@ -4834,6 +4836,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
         
         Case verynewchatmessage_HB
@@ -4861,6 +4864,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
         
         
@@ -4888,6 +4892,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
 
       Case oldmessage_H14
@@ -4907,6 +4912,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
       Case oldmessage_H15
         ' say
@@ -4928,6 +4934,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
       Case oldmessage_H0
         ' unknown
@@ -4949,6 +4956,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
       Case oldmessage_H1
         ' say
@@ -4970,6 +4978,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
       Case oldmessage_H2
         ' whisper
@@ -4991,6 +5000,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
       Case oldmessage_H3
         ' yell
@@ -5012,6 +5022,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'PlayPMSound = True
         End If
       Case oldmessage_H4
         ' tell
@@ -5033,7 +5044,9 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         If (GotPacketWarning(idConnection) = False) And (RuneMakerOptions(idConnection).msgSound = True) And _
          (itsMe = False) And (CheatsPaused(idConnection) = False) Then
           PlayMsgSound = True
+          'custom ng sound
         End If
+        PlayPMSound = True
       Case oldmessage_H5
         ' channel
         lonN = GetTheLong(packet(pos + 3), packet(pos + 4))

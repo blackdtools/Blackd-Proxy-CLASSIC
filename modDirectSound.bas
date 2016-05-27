@@ -90,4 +90,3 @@ gotError:
   SoundIsUsable = False
   LogOnFile "errors.txt", "DirectX_SetVolume failed: " & Err.Number & " - " & Err.Description
 End Sub
-

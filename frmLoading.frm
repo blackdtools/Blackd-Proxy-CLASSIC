@@ -107,6 +107,12 @@ Public Sub NotifyLoadProgress(Ammount As Double, reason As String)
   Else
     lblProgress.ForeColor = &HFF00&
   End If
+  
+  'custom ng sound
+  If Ammount = 100 Then
+  DirectX_PlaySound 4
+  End If
+  
   lblStep.Caption = "[" & reason & "]"
   Me.Refresh
   DoEvents

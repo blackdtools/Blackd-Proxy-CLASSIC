@@ -256,7 +256,6 @@ goterr:
 End Function
 
 
-
 Public Function ChaotizeRechargeLevel(ByVal baseLevel As Long)
     Dim lngChaos As Long
     lngChaos = randomNumberBetween(baseLevel - LimitRandomizator, baseLevel + LimitRandomizator)

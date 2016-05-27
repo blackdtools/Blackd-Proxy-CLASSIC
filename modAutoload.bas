@@ -69,6 +69,7 @@ Private Sub LoadThisCharSetting(idConnection As Integer, strVar As String, strVa
         Else
             frmCavebot.TurnCavebotState idConnection, False
         End If
+        
     Case "BEGIN_Runemaker"
         blnTemp = False
         For i = 1 To MAXCLIENTS
@@ -116,6 +117,193 @@ Private Sub LoadThisCharSetting(idConnection As Integer, strVar As String, strVa
         RuneMakerOptions(runemakerIDselected).activated = UnifiedStringToBoolean(strValue)
     Case "END_Runemaker"
         frmRunemaker.UpdateValues
+        
+    'custom ng healing
+    
+    Case "BEGIN_Healing"
+        blnTemp = False
+        For i = 1 To MAXCLIENTS
+            If LCase(frmHealing.cmbCharacter.List(i)) = LCase(CharacterName(idConnection)) Then
+                frmHealing.cmbCharacter.ListIndex = i
+                blnTemp = True
+            End If
+        Next i
+        If blnTemp = True Then
+            healingIDselected = frmHealing.cmbCharacter.ListIndex
+            frmHealing.UpdateValues
+        End If
+    Case "Healing_txtSpellhi"
+        healingCheatsOptions(healingIDselected).txtSpellhi = strValue
+    Case "Healing_txtSpelllo"
+        healingCheatsOptions(healingIDselected).txtSpelllo = strValue
+    Case "Healing_txtPot"
+        healingCheatsOptions(healingIDselected).txtPot = strValue
+    Case "Healing_txtMana"
+        healingCheatsOptions(healingIDselected).txtMana = strValue
+    Case "Healing_txtHealthhi"
+        healingCheatsOptions(healingIDselected).txtHealthhi = strValue
+    Case "Healing_txtHealthlo"
+        healingCheatsOptions(healingIDselected).txtHealthlo = strValue
+    Case "Healing_txtHealpot"
+        healingCheatsOptions(healingIDselected).txtHealpot = strValue
+    Case "Healing_txtManapot"
+        healingCheatsOptions(healingIDselected).txtManapot = strValue
+    Case "Healing_txtManahi"
+        healingCheatsOptions(healingIDselected).txtManahi = strValue
+    Case "Healing_txtManalo"
+        healingCheatsOptions(healingIDselected).txtManalo = strValue
+    Case "Healing_Combo1"
+        healingCheatsOptions(healingIDselected).Combo1 = strValue
+    Case "Healing_Combo2"
+        healingCheatsOptions(healingIDselected).Combo2 = strValue
+    Case "END_Healing"
+        frmHealing.UpdateValues
+        
+        
+    'custom ng extras
+    
+    Case "BEGIN_Extras"
+        blnTemp = False
+        For i = 1 To MAXCLIENTS
+            If LCase(frmExtras.cmbCharacter.List(i)) = LCase(CharacterName(idConnection)) Then
+                frmExtras.cmbCharacter.ListIndex = i
+                blnTemp = True
+            End If
+        Next i
+        If blnTemp = True Then
+            extrasIDselected = frmExtras.cmbCharacter.ListIndex
+            frmExtras.UpdateValues
+        End If
+    Case "Extras_chkMana"
+        extrasOptions(extrasIDselected).chkMana = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkDanger"
+        extrasOptions(extrasIDselected).chkDanger = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkPM"
+        extrasOptions(extrasIDselected).chkPM = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkEat"
+        extrasOptions(extrasIDselected).chkEat = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkautoUtamo"
+        extrasOptions(extrasIDselected).chkautoUtamo = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkautoHur"
+        extrasOptions(extrasIDselected).chkautoHur = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkautogHur"
+        extrasOptions(extrasIDselected).chkautogHur = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkAFK"
+        extrasOptions(extrasIDselected).chkAFK = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkGold"
+        extrasOptions(extrasIDselected).chkGold = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkPlat"
+        extrasOptions(extrasIDselected).chkPlat = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkDash"
+        extrasOptions(extrasIDselected).chkDash = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkMW"
+        extrasOptions(extrasIDselected).chkMW = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkSSA"
+        extrasOptions(extrasIDselected).chkSSA = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkHouse"
+        extrasOptions(extrasIDselected).chkHouse = UnifiedStringToBoolean(strValue)
+    Case "Extras_chkTitle"
+        extrasOptions(extrasIDselected).chkTitle = UnifiedStringToBoolean(strValue)
+    Case "Extras_txtSSA"
+        extrasOptions(extrasIDselected).txtSSA = strValue
+    Case "Extras_cmbHouse"
+        extrasOptions(extrasIDselected).cmbHouse = strValue
+    Case "Extras_txtMana"
+        extrasOptions(extrasIDselected).txtMana = strValue
+    Case "Extras_txtSpell"
+        extrasOptions(extrasIDselected).txtSpell = strValue
+    Case "END_Extras"
+        frmExtras.UpdateValues
+        
+    'custom ng persistent
+    
+    Case "BEGIN_Persistent"
+        blnTemp = False
+        For i = 1 To MAXCLIENTS
+            If LCase(frmPersistent.cmbCharacter.List(i)) = LCase(CharacterName(idConnection)) Then
+                frmPersistent.cmbCharacter.ListIndex = i
+                blnTemp = True
+            End If
+        Next i
+        If blnTemp = True Then
+            persistentIDselected = frmPersistent.cmbCharacter.ListIndex
+            frmPersistent.UpdateValues
+        End If
+    Case "Persistent_txtHk1"
+        persistentOptions(persistentIDselected).txtHk1 = strValue
+    Case "Persistent_txtHk2"
+        persistentOptions(persistentIDselected).txtHk2 = strValue
+    Case "Persistent_txtHk3"
+        persistentOptions(persistentIDselected).txtHk3 = strValue
+    Case "Persistent_txtHk4"
+        persistentOptions(persistentIDselected).txtHk4 = strValue
+    Case "Persistent_txtHk5"
+        persistentOptions(persistentIDselected).txtHk5 = strValue
+    Case "Persistent_txtHk6"
+        persistentOptions(persistentIDselected).txtHk6 = strValue
+    Case "Persistent_txtHk7"
+        persistentOptions(persistentIDselected).txtHk7 = strValue
+    Case "Persistent_txtHk8"
+        persistentOptions(persistentIDselected).txtHk8 = strValue
+    Case "Persistent_txtHk9"
+        persistentOptions(persistentIDselected).txtHk9 = strValue
+    Case "Persistent_txtHk10"
+        persistentOptions(persistentIDselected).txtHk10 = strValue
+    Case "Persistent_txtHk11"
+        persistentOptions(persistentIDselected).txtHk11 = strValue
+    Case "Persistent_txtExiva1"
+        persistentOptions(persistentIDselected).txtExiva1 = strValue
+    Case "Persistent_txtExiva2"
+        persistentOptions(persistentIDselected).txtExiva2 = strValue
+    Case "Persistent_txtExiva3"
+        persistentOptions(persistentIDselected).txtExiva3 = strValue
+    Case "Persistent_txtExiva4"
+        persistentOptions(persistentIDselected).txtExiva4 = strValue
+    Case "Persistent_txtExiva5"
+        persistentOptions(persistentIDselected).txtExiva5 = strValue
+    Case "Persistent_txtExiva6"
+        persistentOptions(persistentIDselected).txtExiva6 = strValue
+    Case "Persistent_txtExiva7"
+        persistentOptions(persistentIDselected).txtExiva7 = strValue
+    Case "Persistent_txtExiva8"
+        persistentOptions(persistentIDselected).txtExiva8 = strValue
+    Case "Persistent_txtExiva9"
+        persistentOptions(persistentIDselected).txtExiva9 = strValue
+    Case "Persistent_txtExiva10"
+        persistentOptions(persistentIDselected).txtExiva10 = strValue
+    Case "Persistent_txtExiva11"
+        persistentOptions(persistentIDselected).txtExiva11 = strValue
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva1 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva2 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva3 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva4 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva5 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva6 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva7 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva8 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva9 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva10 = UnifiedStringToBoolean(strValue)
+    Case "Persistent_chkExiva1"
+        persistentOptions(persistentIDselected).chkExiva11 = UnifiedStringToBoolean(strValue)
+    Case "END_Persistent"
+        frmPersistent.UpdateValues
+        
+        
+        
+        
+        
+        
+        
         
         
     Case "BEGIN_CustomCondEvents"
@@ -391,6 +579,116 @@ Public Sub SaveCharSettings(idConnection As Integer)
         strSettings = strSettings & "Runemaker_activated=" & BooleanToUnifiedString(RuneMakerOptions(runemakerIDselected).activated) & vbCrLf
         strSettings = strSettings & "END_Runemaker=1" & vbCrLf
     End If
+    
+    'custom ng save healing
+    blnTemp = False
+    For i = 1 To MAXCLIENTS
+        If LCase(frmHealing.cmbCharacter.List(i)) = LCase(CharacterName(idConnection)) Then
+            frmHealing.cmbCharacter.ListIndex = i
+            blnTemp = True
+        End If
+    Next i
+    If blnTemp = True Then
+        healingIDselected = frmHealing.cmbCharacter.ListIndex
+        strSettings = strSettings & "BEGIN_Healing=1" & vbCrLf
+        strSettings = strSettings & "Healing_txtSpellhi=" & CStr(healingCheatsOptions(healingIDselected).txtSpellhi) & vbCrLf
+        strSettings = strSettings & "Healing_txtSpelllo=" & CStr(healingCheatsOptions(healingIDselected).txtSpelllo) & vbCrLf
+        strSettings = strSettings & "Healing_txtPot=" & CStr(healingCheatsOptions(healingIDselected).txtPot) & vbCrLf
+        strSettings = strSettings & "Healing_txtMana=" & CStr(healingCheatsOptions(healingIDselected).txtMana) & vbCrLf
+        strSettings = strSettings & "Healing_txtHealthhi=" & CStr(healingCheatsOptions(healingIDselected).txtHealthhi) & vbCrLf
+        strSettings = strSettings & "Healing_txtHealthlo=" & CStr(healingCheatsOptions(healingIDselected).txtHealthlo) & vbCrLf
+        strSettings = strSettings & "Healing_txtHealpot=" & CStr(healingCheatsOptions(healingIDselected).txtHealpot) & vbCrLf
+        strSettings = strSettings & "Healing_txtManapot=" & CStr(healingCheatsOptions(healingIDselected).txtManapot) & vbCrLf
+        strSettings = strSettings & "Healing_txtManahi=" & CStr(healingCheatsOptions(healingIDselected).txtManahi) & vbCrLf
+        strSettings = strSettings & "Healing_txtManalo=" & CStr(healingCheatsOptions(healingIDselected).txtManalo) & vbCrLf
+        strSettings = strSettings & "Healing_Combo1=" & CStr(healingCheatsOptions(healingIDselected).Combo1) & vbCrLf
+        strSettings = strSettings & "Healing_Combo2=" & CStr(healingCheatsOptions(healingIDselected).Combo2) & vbCrLf
+        strSettings = strSettings & "END_Healing=1" & vbCrLf
+    End If
+    
+    'custom ng save extras
+    blnTemp = False
+    For i = 1 To MAXCLIENTS
+        If LCase(frmExtras.cmbCharacter.List(i)) = LCase(CharacterName(idConnection)) Then
+            frmExtras.cmbCharacter.ListIndex = i
+            blnTemp = True
+        End If
+    Next i
+    If blnTemp = True Then
+        extrasIDselected = frmExtras.cmbCharacter.ListIndex
+        strSettings = strSettings & "BEGIN_Extras=1" & vbCrLf
+        strSettings = strSettings & "Extras_txtSpell=" & CStr(extrasOptions(extrasIDselected).txtSpell) & vbCrLf
+        strSettings = strSettings & "Extras_txtMana=" & CStr(extrasOptions(extrasIDselected).txtMana) & vbCrLf
+        strSettings = strSettings & "Extras_txtSSA=" & CStr(extrasOptions(extrasIDselected).txtSSA) & vbCrLf
+        strSettings = strSettings & "Extras_cmbHouse=" & CStr(extrasOptions(extrasIDselected).cmbHouse) & vbCrLf
+        strSettings = strSettings & "Extras_chkEat=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkEat) & vbCrLf
+        strSettings = strSettings & "Extras_chkMana=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkMana) & vbCrLf
+        strSettings = strSettings & "Extras_chkDanger=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkDanger) & vbCrLf
+        strSettings = strSettings & "Extras_chkPM=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkPM) & vbCrLf
+        strSettings = strSettings & "Extras_chkautoUtamo=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkautoUtamo) & vbCrLf
+        strSettings = strSettings & "Extras_chkautoHur=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkautoHur) & vbCrLf
+        strSettings = strSettings & "Extras_chkautogHur=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkautogHur) & vbCrLf
+        strSettings = strSettings & "Extras_chkAFK=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkAFK) & vbCrLf
+        strSettings = strSettings & "Extras_chkGold=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkGold) & vbCrLf
+        strSettings = strSettings & "Extras_chkPlat=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkPlat) & vbCrLf
+        strSettings = strSettings & "Extras_chkDash=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkDash) & vbCrLf
+        strSettings = strSettings & "Extras_chkMW=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkMW) & vbCrLf
+        strSettings = strSettings & "Extras_chkSSA=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkSSA) & vbCrLf
+        strSettings = strSettings & "Extras_chkHouse=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkHouse) & vbCrLf
+        strSettings = strSettings & "Extras_chkTitle=" & BooleanToUnifiedString(extrasOptions(extrasIDselected).chkTitle) & vbCrLf
+        strSettings = strSettings & "END_Extras=1" & vbCrLf
+    End If
+    
+    'custom ng save persistent
+    blnTemp = False
+    For i = 1 To MAXCLIENTS
+        If LCase(frmPersistent.cmbCharacter.List(i)) = LCase(CharacterName(idConnection)) Then
+            frmPersistent.cmbCharacter.ListIndex = i
+            blnTemp = True
+        End If
+    Next i
+    If blnTemp = True Then
+        persistentIDselected = frmPersistent.cmbCharacter.ListIndex
+        strSettings = strSettings & "BEGIN_Persistent=1" & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk1=" & CStr(persistentOptions(persistentIDselected).txtHk1) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk2=" & CStr(persistentOptions(persistentIDselected).txtHk2) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk3=" & CStr(persistentOptions(persistentIDselected).txtHk3) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk4=" & CStr(persistentOptions(persistentIDselected).txtHk4) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk5=" & CStr(persistentOptions(persistentIDselected).txtHk5) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk6=" & CStr(persistentOptions(persistentIDselected).txtHk6) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk7=" & CStr(persistentOptions(persistentIDselected).txtHk7) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk8=" & CStr(persistentOptions(persistentIDselected).txtHk8) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk9=" & CStr(persistentOptions(persistentIDselected).txtHk9) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk10=" & CStr(persistentOptions(persistentIDselected).txtHk10) & vbCrLf
+        strSettings = strSettings & "Persistent_txtHk11=" & CStr(persistentOptions(persistentIDselected).txtHk11) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva1=" & CStr(persistentOptions(persistentIDselected).txtExiva1) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva2=" & CStr(persistentOptions(persistentIDselected).txtExiva2) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva3=" & CStr(persistentOptions(persistentIDselected).txtExiva3) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva4=" & CStr(persistentOptions(persistentIDselected).txtExiva4) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva5=" & CStr(persistentOptions(persistentIDselected).txtExiva5) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva6=" & CStr(persistentOptions(persistentIDselected).txtExiva6) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva7=" & CStr(persistentOptions(persistentIDselected).txtExiva7) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva8=" & CStr(persistentOptions(persistentIDselected).txtExiva8) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva9=" & CStr(persistentOptions(persistentIDselected).txtExiva9) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva10=" & CStr(persistentOptions(persistentIDselected).txtExiva10) & vbCrLf
+        strSettings = strSettings & "Persistent_txtExiva11=" & CStr(persistentOptions(persistentIDselected).txtExiva11) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva1=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva1) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva2=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva2) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva3=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva3) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva4=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva4) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva5=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva5) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva6=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva6) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva7=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva7) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva8=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva8) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva9=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva9) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva10=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva10) & vbCrLf
+        strSettings = strSettings & "Persistent_chkExiva11=" & BooleanToUnifiedString(persistentOptions(persistentIDselected).chkExiva11) & vbCrLf
+        strSettings = strSettings & "END_Persistent=1" & vbCrLf
+    End If
+    
+    
+    
+    
     
     'conds
     blnTemp = False

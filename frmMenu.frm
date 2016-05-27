@@ -1,238 +1,693 @@
 VERSION 5.00
+Object = "{F247AF03-2671-4421-A87A-846ED80CD2A9}#1.0#0"; "JwldButn2b.ocx"
 Begin VB.Form frmMenu 
-   BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
+   BackColor       =   &H00FFFFFF&
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Blackd Proxy"
-   ClientHeight    =   4995
+   ClientHeight    =   975
    ClientLeft      =   45
-   ClientTop       =   435
-   ClientWidth     =   8730
+   ClientTop       =   375
+   ClientWidth     =   6090
+   ForeColor       =   &H00FFFFFF&
    Icon            =   "frmMenu.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   4995
-   ScaleWidth      =   8730
+   MinButton       =   0   'False
+   ScaleHeight     =   975
+   ScaleWidth      =   6090
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdVIPsupport 
       BackColor       =   &H0000FFFF&
       Caption         =   "Go to VIP support page"
       Height          =   315
-      Left            =   6600
+      Left            =   6480
       Style           =   1  'Graphical
-      TabIndex        =   28
-      Top             =   4560
+      TabIndex        =   38
+      Top             =   5040
       Width           =   2055
    End
    Begin VB.CommandButton cmdBroadcast 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   3000
+      Left            =   2880
       Picture         =   "frmMenu.frx":0442
       Style           =   1  'Graphical
-      TabIndex        =   27
-      Top             =   3840
+      TabIndex        =   37
+      Top             =   4320
       Width           =   1335
    End
    Begin VB.CommandButton cmdNews 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   120
+      Left            =   0
       Picture         =   "frmMenu.frx":2122
       Style           =   1  'Graphical
-      TabIndex        =   26
-      Top             =   3840
+      TabIndex        =   36
+      Top             =   4320
       Width           =   1335
    End
    Begin VB.CommandButton cmdLaunchTibiaMC 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   7320
+      Left            =   7200
       Picture         =   "frmMenu.frx":3E17
       Style           =   1  'Graphical
-      TabIndex        =   25
-      Top             =   2760
+      TabIndex        =   35
+      Top             =   3240
       Width           =   1335
    End
    Begin VB.CommandButton cmdLaunchTibia 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   5880
+      Left            =   5760
       Picture         =   "frmMenu.frx":4DFE
       Style           =   1  'Graphical
-      TabIndex        =   24
-      Top             =   2760
+      TabIndex        =   34
+      Top             =   3240
       Width           =   1335
    End
    Begin VB.CommandButton cmdStealth 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   1560
+      Left            =   1440
       Picture         =   "frmMenu.frx":7A59
       Style           =   1  'Graphical
-      TabIndex        =   23
-      Top             =   3840
+      TabIndex        =   33
+      Top             =   4320
       Width           =   1335
    End
    Begin VB.CommandButton cmdAd 
       BackColor       =   &H00C0C000&
       Height          =   975
-      Left            =   4440
+      Left            =   4320
       Picture         =   "frmMenu.frx":9089
       Style           =   1  'Graphical
-      TabIndex        =   22
-      Top             =   2760
+      TabIndex        =   32
+      Top             =   3240
       Width           =   1335
    End
    Begin VB.CommandButton cmdHPmana 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   3000
+      Left            =   2880
       Picture         =   "frmMenu.frx":9E86
       Style           =   1  'Graphical
-      TabIndex        =   21
-      Top             =   2760
+      TabIndex        =   31
+      Top             =   3240
       Width           =   1335
    End
    Begin VB.CommandButton cmdUnknownFeature 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   7320
+      Left            =   7200
       Picture         =   "frmMenu.frx":AEF3
       Style           =   1  'Graphical
-      TabIndex        =   19
-      Top             =   1680
+      TabIndex        =   30
+      Top             =   2160
       Width           =   1335
    End
    Begin VB.CommandButton cmdMagebomb 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   7320
+      Left            =   7200
       Picture         =   "frmMenu.frx":C26D
       Style           =   1  'Graphical
-      TabIndex        =   18
-      Top             =   600
+      TabIndex        =   29
+      Top             =   1080
       Width           =   1335
    End
    Begin VB.CommandButton cmdTrainer 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   4440
+      Left            =   4320
       Picture         =   "frmMenu.frx":D1CE
       Style           =   1  'Graphical
-      TabIndex        =   17
-      Top             =   1680
+      TabIndex        =   28
+      Top             =   2160
       Width           =   1335
    End
    Begin VB.CommandButton cmdWarbot 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   5880
+      Left            =   5760
       Picture         =   "frmMenu.frx":E0AC
       Style           =   1  'Graphical
-      TabIndex        =   16
-      Top             =   600
+      TabIndex        =   27
+      Top             =   1080
       Width           =   1335
    End
    Begin VB.CommandButton cmdEvents 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   5880
+      Left            =   5760
       Picture         =   "frmMenu.frx":F64D
       Style           =   1  'Graphical
-      TabIndex        =   15
-      Top             =   1680
+      TabIndex        =   26
+      Top             =   2160
       Width           =   1335
    End
    Begin VB.CommandButton cmdAdvanced 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   1560
+      Left            =   1440
       Picture         =   "frmMenu.frx":104A6
       Style           =   1  'Graphical
-      TabIndex        =   13
-      Top             =   2760
+      TabIndex        =   25
+      Top             =   3240
       Width           =   1335
    End
    Begin VB.CommandButton cmdHotkeys 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   4440
+      Left            =   4320
       Picture         =   "frmMenu.frx":114FE
       Style           =   1  'Graphical
-      TabIndex        =   12
-      Top             =   600
+      TabIndex        =   24
+      Top             =   1080
       Width           =   1335
    End
    Begin VB.CommandButton cmdStopAlarm 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   3000
+      Left            =   2880
       Picture         =   "frmMenu.frx":12538
       Style           =   1  'Graphical
-      TabIndex        =   7
-      Top             =   1680
+      TabIndex        =   23
+      Top             =   2160
       Width           =   1335
    End
    Begin VB.CommandButton cmdTutorial 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   120
+      Left            =   0
       Picture         =   "frmMenu.frx":13570
       Style           =   1  'Graphical
-      TabIndex        =   6
-      Top             =   2760
+      TabIndex        =   22
+      Top             =   3240
       Width           =   1335
    End
    Begin VB.CommandButton cmdLogs 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   1560
+      Left            =   1440
       Picture         =   "frmMenu.frx":14480
       Style           =   1  'Graphical
-      TabIndex        =   4
-      Top             =   1680
+      TabIndex        =   21
+      Top             =   2160
       Width           =   1335
    End
    Begin VB.CommandButton cmdCheats 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   120
+      Left            =   0
       Picture         =   "frmMenu.frx":151C1
       Style           =   1  'Graphical
-      TabIndex        =   3
-      Top             =   1680
+      TabIndex        =   20
+      Top             =   2160
       Width           =   1335
    End
    Begin VB.CommandButton cmdCavebot 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   3000
+      Left            =   2880
       Picture         =   "frmMenu.frx":162CE
       Style           =   1  'Graphical
-      TabIndex        =   2
-      Top             =   600
+      TabIndex        =   19
+      Top             =   1080
       Width           =   1335
    End
    Begin VB.CommandButton cmdRunemaker 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   1560
+      Left            =   1440
       Picture         =   "frmMenu.frx":1741D
       Style           =   1  'Graphical
-      TabIndex        =   1
-      Top             =   600
+      TabIndex        =   18
+      Top             =   1080
       Width           =   1335
    End
    Begin VB.CommandButton cmdHardcoreCheats 
       BackColor       =   &H00000000&
       Height          =   975
-      Left            =   120
+      Left            =   0
       Picture         =   "frmMenu.frx":18748
       Style           =   1  'Graphical
-      TabIndex        =   0
-      Top             =   600
+      TabIndex        =   17
+      Top             =   1080
       Width           =   1335
+   End
+   Begin JwldButn2b.JeweledButton cmdHealingNG 
+      Height          =   300
+      Left            =   5400
+      TabIndex        =   1
+      Top             =   0
+      Width           =   675
+      _ExtentX        =   1191
+      _ExtentY        =   529
+      Caption         =   "Healing"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdExtrasNG 
+      Height          =   300
+      Left            =   0
+      TabIndex        =   2
+      Top             =   330
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Extras"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdCavebotNG 
+      Height          =   300
+      Left            =   0
+      TabIndex        =   3
+      Top             =   660
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Cavebot"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdAimbot 
+      Height          =   300
+      Left            =   1080
+      TabIndex        =   4
+      Top             =   0
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Aimbot"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdWarbotNG 
+      Height          =   300
+      Left            =   2160
+      TabIndex        =   5
+      Top             =   0
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Friend List"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdStopAlarmNG 
+      Height          =   300
+      Left            =   3240
+      TabIndex        =   6
+      Top             =   0
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Stop Alarm"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdHotkeysNG 
+      Height          =   300
+      Left            =   1080
+      TabIndex        =   7
+      Top             =   330
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Hotkeys"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdTrainerNG 
+      Height          =   300
+      Left            =   2160
+      TabIndex        =   8
+      Top             =   330
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Trainer"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdUnknownFeatureNG 
+      Height          =   300
+      Left            =   3240
+      TabIndex        =   9
+      Top             =   330
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Conditions"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdBoradcastNG 
+      Height          =   300
+      Left            =   1080
+      TabIndex        =   10
+      Top             =   660
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Broadcast"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdLogsNG 
+      Height          =   300
+      Left            =   2160
+      TabIndex        =   11
+      Top             =   660
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Proxy"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdChangeStyle 
+      Height          =   300
+      Left            =   0
+      TabIndex        =   12
+      Top             =   0
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Old Menu"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BackColor       =   16777088
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdLaunchTibiaMCNG 
+      Height          =   300
+      Left            =   3240
+      TabIndex        =   13
+      Top             =   660
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Tibia MC"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdSave 
+      Height          =   300
+      Left            =   4320
+      TabIndex        =   14
+      Top             =   330
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Save"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdAdvancedNG 
+      Height          =   300
+      Left            =   5400
+      TabIndex        =   15
+      Top             =   330
+      Width           =   675
+      _ExtentX        =   1191
+      _ExtentY        =   529
+      Caption         =   "Config"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdLoad 
+      Height          =   300
+      Left            =   4320
+      TabIndex        =   16
+      Top             =   660
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Load"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdNewsNG 
+      Height          =   300
+      Left            =   5400
+      TabIndex        =   0
+      Top             =   660
+      Visible         =   0   'False
+      Width           =   675
+      _ExtentX        =   1191
+      _ExtentY        =   529
+      Caption         =   "News"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton ccmdPersistent 
+      Height          =   300
+      Left            =   4320
+      TabIndex        =   45
+      Top             =   0
+      Width           =   1035
+      _ExtentX        =   1826
+      _ExtentY        =   529
+      Caption         =   "Persistent"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16761024
+      BorderColor_Inner=   16777215
    End
    Begin VB.Label Label3 
       BackColor       =   &H00000000&
@@ -248,9 +703,9 @@ Begin VB.Form frmMenu
       EndProperty
       ForeColor       =   &H00FFFF00&
       Height          =   855
-      Left            =   6600
-      TabIndex        =   14
-      Top             =   3840
+      Left            =   6480
+      TabIndex        =   44
+      Top             =   4320
       Width           =   2055
    End
    Begin VB.Label lblAltSite 
@@ -267,9 +722,9 @@ Begin VB.Form frmMenu
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   4440
-      TabIndex        =   20
-      Top             =   4320
+      Left            =   4320
+      TabIndex        =   43
+      Top             =   4800
       Width           =   2175
    End
    Begin VB.Label lblForum 
@@ -286,9 +741,9 @@ Begin VB.Form frmMenu
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   5520
-      TabIndex        =   11
-      Top             =   4560
+      Left            =   5400
+      TabIndex        =   42
+      Top             =   5040
       Width           =   1095
    End
    Begin VB.Label lblUpdates 
@@ -305,9 +760,9 @@ Begin VB.Form frmMenu
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   4440
-      TabIndex        =   10
-      Top             =   4560
+      Left            =   4320
+      TabIndex        =   41
+      Top             =   5040
       Width           =   975
    End
    Begin VB.Label lblMainSite 
@@ -324,9 +779,9 @@ Begin VB.Form frmMenu
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   4440
-      TabIndex        =   9
-      Top             =   4080
+      Left            =   4320
+      TabIndex        =   40
+      Top             =   4560
       Width           =   2295
    End
    Begin VB.Label Label2 
@@ -343,29 +798,10 @@ Begin VB.Form frmMenu
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   4440
-      TabIndex        =   8
-      Top             =   3840
+      Left            =   4320
+      TabIndex        =   39
+      Top             =   4320
       Width           =   1335
-   End
-   Begin VB.Label Label1 
-      BackColor       =   &H00000000&
-      Caption         =   "Welcome to Blackd Proxy!  Remember to download updates in our web from time to time."
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   255
-      Left            =   120
-      TabIndex        =   5
-      Top             =   120
-      Width           =   8415
    End
    Begin VB.Menu mPopupSys 
       Caption         =   "&SysTray"
@@ -398,6 +834,14 @@ Attribute VB_Exposed = False
 #Const DoSave = 1
 Option Explicit
 
+Private Sub ccmdPersistent_Click()
+  ' show persistent
+  frmPersistent.WindowState = vbNormal
+  frmPersistent.Show
+  frmPersistent.SetFocus
+  SetWindowPos frmPersistent.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
 Private Sub cmdAd_Click()
 Dim a
 
@@ -410,6 +854,28 @@ Private Sub cmdAdvanced_Click()
   frmAdvanced.WindowState = vbNormal
   frmAdvanced.Show
   frmAdvanced.SetFocus
+End Sub
+
+Private Sub cmdAdvancedNG_Click()
+  ' show Advanced form
+  frmAdvanced.WindowState = vbNormal
+  frmAdvanced.Show
+  frmAdvanced.SetFocus
+  SetWindowPos frmAdvanced.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
+Private Sub cmdAimbot_Click()
+  frmAimbot.WindowState = vbNormal
+  frmAimbot.Show
+  frmAimbot.SetFocus
+  SetWindowPos frmAimbot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
+Private Sub cmdBoradcastNG_Click()
+  frmBroadcast.WindowState = vbNormal
+  frmBroadcast.Show
+  frmBroadcast.SetFocus
+  SetWindowPos frmBroadcast.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdBroadcast_Click()
@@ -432,6 +898,22 @@ Private Sub cmdCavebot_Click()
   frmCavebot.SetFocus
 End Sub
 
+Private Sub cmdCavebotNG_Click()
+  ' show cavebot form
+  frmCavebot.WindowState = vbNormal
+  frmCavebot.Show
+  frmCavebot.SetFocus
+  SetWindowPos frmCavebot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
+Private Sub cmdChangeStyle_Click()
+  ' show old skin
+  frmOld.WindowState = vbNormal
+  frmOld.Show
+  frmOld.SetFocus
+  SetWindowPos frmOld.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
 Private Sub cmdCheats_Click()
   ' show Tools form
   frmCheats.WindowState = vbNormal
@@ -445,6 +927,14 @@ Private Sub cmdEvents_Click()
   frmEvents.SetFocus
 End Sub
 
+Private Sub cmdExtrasNG_Click()
+  ' show extrasNG
+  frmExtras.WindowState = vbNormal
+  frmExtras.Show
+  frmExtras.SetFocus
+  SetWindowPos frmExtras.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
 Private Sub cmdHardcoreCheats_Click()
   ' show Cheats form
   frmHardcoreCheats.WindowState = vbNormal
@@ -452,11 +942,27 @@ Private Sub cmdHardcoreCheats_Click()
   frmHardcoreCheats.SetFocus
 End Sub
 
+Private Sub cmdHealingNG_Click()
+  ' show healingNG
+  frmHealing.WindowState = vbNormal
+  frmHealing.Show
+  frmHealing.SetFocus
+  SetWindowPos frmHealing.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
 Private Sub cmdHotkeys_Click()
   ' show hotkeys
   frmHotkeys.WindowState = vbNormal
   frmHotkeys.Show
   frmHotkeys.SetFocus
+End Sub
+
+Private Sub cmdHotkeysNG_Click()
+  ' show hotkeys
+  frmHotkeys.WindowState = vbNormal
+  frmHotkeys.Show
+  frmHotkeys.SetFocus
+  SetWindowPos frmHotkeys.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdHPmana_Click()
@@ -503,11 +1009,48 @@ Private Sub cmdLaunchTibiaMC_Click()
     End If
 End Sub
 
+Private Sub cmdLaunchTibiaMCNG_Click()
+    Dim res As String
+    Dim tpath As String
+    tpath = TibiaExePath
+    If tpath = "" Then
+        Label3.Caption = "FILESYSTEM ERROR"
+        Exit Sub
+    End If
+    res = LaunchTibia(tpath, True)
+    If res <> "" Then
+        Label3.Caption = "TIBIA NOT FOUND"
+        Exit Sub
+    End If
+End Sub
+
+Private Sub cmdLoad_Click()
+Dim aRes As Long
+Dim louade As String
+Dim idConnection As Integer
+Dim i As Integer
+    For i = 1 To MAXCLIENTS
+        idConnection = i
+        louade = "exiva load"
+        aRes = ExecuteInTibia(louade, idConnection, True)
+        aRes = ExecuteInTibia(louade, idConnection, True)
+        DoEvents
+        Next i
+End Sub
+
 Private Sub cmdLogs_Click()
   ' show main form
   frmMain.WindowState = vbNormal
   frmMain.Show
   frmMain.SetFocus
+End Sub
+
+Private Sub cmdLogsNG_Click()
+  ' show main form
+  frmMain.WindowState = vbNormal
+  frmMain.Show
+  frmMain.SetFocus
+  SetWindowPos frmMain.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdMagebomb_Click()
@@ -539,11 +1082,30 @@ Private Sub cmdNews_Click()
   frmNews.SetFocus
 End Sub
 
+Private Sub cmdNewsNG_Click()
+  frmNews.WindowState = vbNormal
+  frmNews.Show
+  frmNews.SetFocus
+End Sub
+
 Private Sub cmdRunemaker_Click()
   ' show Runemaker form
   frmRunemaker.WindowState = vbNormal
   frmRunemaker.Show
   frmRunemaker.SetFocus
+End Sub
+
+Private Sub cmdSave_Click()
+Dim aRes As Long
+Dim idConnection As Integer
+Dim i As Integer
+
+    For i = 1 To MAXCLIENTS
+        idConnection = i
+        aRes = ExecuteInTibia("exiva save", idConnection, True)
+        DoEvents
+    Next i
+    
 End Sub
 
 Private Sub cmdStealth_Click()
@@ -568,10 +1130,42 @@ Private Sub cmdStopAlarm_Click()
   ChangePlayTheDangerSound False
 End Sub
 
+Private Sub cmdStopAlarmNG_Click()
+  ' stop alarms
+  Dim mcid As Integer
+  For mcid = 1 To MAXCLIENTS
+    DangerPK(mcid) = False
+    DangerGM(mcid) = False
+    DangerPlayer(mcid) = False
+    LogoutTimeGM(mcid) = 0
+    moveRetry(mcid) = 0
+    RemoveSpamOrder mcid, 1
+    UHRetryCount(mcid) = 0
+    logoutAllowed(mcid) = 0
+    'custom ng
+    'DangerPK(idConnection) = False
+    'extrasOptions(extrasIDselected).chkPM = False
+    frmRunemaker.chkCloseSound.Value = 0
+    frmHardcoreCheats.chkRuneAlarm.Value = 0
+    frmRunemaker.ChkDangerSound.Value = 0
+    frmEvents.chkReconnectionAlarm.Value = 0
+    frmCavebot.chkChangePkHeal.Value = 0
+    
+  Next mcid
+  ChangePlayTheDangerSound False
+End Sub
+
 Private Sub cmdTrainer_Click()
   frmTrainer.WindowState = vbNormal
   frmTrainer.Show
   frmTrainer.SetFocus
+End Sub
+
+Private Sub cmdTrainerNG_Click()
+  frmTrainer.WindowState = vbNormal
+  frmTrainer.Show
+  frmTrainer.SetFocus
+  SetWindowPos frmTrainer.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdTutorial_Click()
@@ -587,6 +1181,13 @@ Private Sub cmdUnknownFeature_Click()
   frmCondEvents.WindowState = vbNormal
   frmCondEvents.Show
   frmCondEvents.SetFocus
+End Sub
+
+Private Sub cmdUnknownFeatureNG_Click()
+  frmCondEvents.WindowState = vbNormal
+  frmCondEvents.Show
+  frmCondEvents.SetFocus
+  SetWindowPos frmCondEvents.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdVIPsupport_Click()
@@ -605,6 +1206,13 @@ End Sub
 
 
 
+
+Private Sub cmdWarbotNG_Click()
+  frmWarbot.WindowState = vbNormal
+  frmWarbot.Show
+  frmWarbot.SetFocus
+  SetWindowPos frmWarbot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
 
 'Private Sub Command1_Click()
 '  Dim tibiaclient As Long
@@ -670,53 +1278,12 @@ Private Sub Form_Load()
   End If
 End Sub
 
-Public Sub Form_Unload(Cancel As Integer)
-  ' Unload all
-  If thisShouldNotBeLoading = 0 Then
-    Exit Sub
-  End If
-  If confirmedExit = False Then
-    Cancel = True
-    ToggleTopmost frmConfirm.hwnd, True
-    frmConfirm.Show
-    frmConfirm.SetFocus
-    Exit Sub
-  End If
-  #If DoSave Then
-    If LoadWasCompleted = True Then ' check to avoid ini corruption if there was an unexpected fail at loading
-      frmMain.WriteIni
+
+Private Sub Form_Unload(Cancel As Integer)
+    If MustUnload = False Then
+        Cancel = True
+        Me.Hide
     End If
-  #End If
-  BlockUnload = 0
-  frmMain.Timer1.enabled = False 'should not be needed ... just in case
-  frmEvents.timerScheduledActions.enabled = False
-  frmTrainer.timerTrainer.enabled = False
-  frmCondEvents.timerCheck.enabled = False
- 'this removes the icon from the system tray
-  Shell_NotifyIcon NIM_DELETE, nid
-  Refresh 'ensure icon is deleted from tray
-  'LogOnFile "debug.txt", "Ended by user"
-  Unload frmMain
-  Unload frmCheats
-  Unload frmBigText
-  Unload frmCavebot
-  Unload frmTrueMap
-  Unload frmBackpacks
-  Unload frmRunemaker
-  Unload frmHardcoreCheats
-  Unload frmAdvanced
-  Unload frmHotkeys
-  Unload frmMagebomb
-  Unload frmScreenshot
-  Unload frmCondEvents
-  Unload frmHPmana
-  Unload frmNews
-  Unload frmStealth
-  Unload frmBroadcast
-  Set DirectX = Nothing
-  Set DX = Nothing
- 
-  End 'ends all subthreads of this process
 End Sub
 
 
@@ -756,11 +1323,9 @@ Private Sub Form_Resize()
   End If
 End Sub
 
+Private Sub JeweledButton16_Click()
 
-
-
-
-
+End Sub
 
 
 
@@ -984,5 +1549,4 @@ End With
 frmMenu.cmdHardcoreCheats.enabled = True
 #End If
 End Sub
-
 

@@ -134,6 +134,103 @@ Public Const RuneMakerOptions_secondActionText_default = "adura vita"
 Public Const RuneMakerOptions_secondActionMana_default = 400
 Public Const RuneMakerOptions_secondActionSoulpoints_default = 3
 
+'custom ng var
+Public Const healingCheatsOptions_sdmax_default = False
+Public Const healingCheatsOptions_antipush_default = False
+Public Const healingCheatsOptions_pmax_default = False
+Public Const healingCheatsOptions_htarget_default = False
+Public Const healingCheatsOptions_exaustEat_default = 0
+Public Const healingCheatsOptions_HouseX_default = 0
+Public Const healingCheatsOptions_HouseY_default = 0
+
+'custom ng healing
+Public Const healingCheatsOptions_exaust_default = False
+Public Const healingCheatsOptions_txtSpellhi_default = "exura gran"
+Public Const healingCheatsOptions_txtSpelllo_default = "exura vita"
+Public Const healingCheatsOptions_txtPot_default = ""
+Public Const healingCheatsOptions_txtMana_default = ""
+Public Const healingCheatsOptions_txtHealthhi_default = "0"
+Public Const healingCheatsOptions_txtHealthlo_default = "0"
+Public Const healingCheatsOptions_txtHealpot_default = "0"
+Public Const healingCheatsOptions_txtManapot_default = "0"
+Public Const healingCheatsOptions_txtManahi_default = "70"
+Public Const healingCheatsOptions_txtManalo_default = "160"
+Public Const healingCheatsOptions_Combo1_default = "Health Potion"
+Public Const healingCheatsOptions_Combo2_default = "Mana Potion"
+
+'custom ng extras
+Public Const extrasOptions_txtSpell_default = "exura"
+Public Const extrasOptions_txtMana_default = "25"
+Public Const extrasOptions_txtSSA_default = "0"
+Public Const extrasOptions_cmbHouse_default = "North"
+Public Const extrasOptions_chkMana_default = False
+Public Const extrasOptions_chkDanger_default = False
+Public Const extrasOptions_chkPM_default = False
+Public Const extrasOptions_chkEat_default = False
+Public Const extrasOptions_chkautoUtamo_default = False
+Public Const extrasOptions_chkautoHur_default = False
+Public Const extrasOptions_chkautogHur_default = False
+Public Const extrasOptions_chkAFK_default = False
+Public Const extrasOptions_chkGold_default = False
+Public Const extrasOptions_chkPlat_default = False
+Public Const extrasOptions_chkDash_default = False
+Public Const extrasOptions_chkMW_default = False
+Public Const extrasOptions_chkSSA_default = False
+Public Const extrasOptions_chkTitle_default = False
+Public Const extrasOptions_chkHouse_default = False
+
+'custom ng persistent
+Public Const persistentOptions_txtHk1_default = "100"
+Public Const persistentOptions_txtHk2_default = "100"
+Public Const persistentOptions_txtHk3_default = "100"
+Public Const persistentOptions_txtHk4_default = "100"
+Public Const persistentOptions_txtHk5_default = "100"
+Public Const persistentOptions_txtHk6_default = "100"
+Public Const persistentOptions_txtHk7_default = "100"
+Public Const persistentOptions_txtHk8_default = "100"
+Public Const persistentOptions_txtHk9_default = "100"
+Public Const persistentOptions_txtHk10_default = "100"
+Public Const persistentOptions_txtHk11_default = "100"
+Public Const persistentOptions_txtExiva1_default = ""
+Public Const persistentOptions_txtExiva2_default = ""
+Public Const persistentOptions_txtExiva3_default = ""
+Public Const persistentOptions_txtExiva4_default = ""
+Public Const persistentOptions_txtExiva5_default = ""
+Public Const persistentOptions_txtExiva6_default = ""
+Public Const persistentOptions_txtExiva7_default = ""
+Public Const persistentOptions_txtExiva8_default = ""
+Public Const persistentOptions_txtExiva9_default = ""
+Public Const persistentOptions_txtExiva10_default = ""
+Public Const persistentOptions_txtExiva11_default = ""
+Public Const persistentOptions_chkExiva1_default = False
+Public Const persistentOptions_chkExiva2_default = False
+Public Const persistentOptions_chkExiva3_default = False
+Public Const persistentOptions_chkExiva4_default = False
+Public Const persistentOptions_chkExiva5_default = False
+Public Const persistentOptions_chkExiva6_default = False
+Public Const persistentOptions_chkExiva7_default = False
+Public Const persistentOptions_chkExiva8_default = False
+Public Const persistentOptions_chkExiva9_default = False
+Public Const persistentOptions_chkExiva10_default = False
+Public Const persistentOptions_chkExiva11_default = False
+Public Const persistentOptions_persistvar1_default = 0
+Public Const persistentOptions_persistvar2_default = 0
+Public Const persistentOptions_persistvar3_default = 0
+Public Const persistentOptions_persistvar4_default = 0
+Public Const persistentOptions_persistvar5_default = 0
+Public Const persistentOptions_persistvar6_default = 0
+Public Const persistentOptions_persistvar7_default = 0
+Public Const persistentOptions_persistvar8_default = 0
+Public Const persistentOptions_persistvar9_default = 0
+Public Const persistentOptions_persistvar10_default = 0
+Public Const persistentOptions_persistvar11_default = 0
+
+'custom ng aimbot
+Public Const aimbotOptions_chkSDcombo_default = False
+Public Const aimbotOptions_chkUEcombo_default = False
+Public Const aimbotOptions_txtLeader_default = ""
+Public Const aimbotOptions_txtCombo_default = "exevo gran mas vis"
+
 Public Const MAXLOGINMEMORY = 500
 Public Const HIGHEST_ITEM_BPSLOT = 99
 Private Const GW_HWNDFIRST& = 0
@@ -294,6 +391,109 @@ Public Type TypeRuneMakerOptions
   secondActionSoulpoints As Long
 End Type
 
+'custom ng
+Public Type TypehealingCheatsOptions
+exaustEat As Long
+sdmax As Boolean
+HouseX As Long
+HouseY As Long
+htarget As Boolean
+antipush As Boolean
+pmax As Boolean
+exaust As Boolean
+txtSpellhi As String
+txtSpelllo As String
+txtPot As String
+txtMana As String
+txtHealthhi As String
+txtHealthlo As String
+txtHealpot As String
+txtManapot As String
+txtManahi As String
+txtManalo As String
+Combo1 As String
+Combo2 As String
+End Type
+
+'custom ng extras
+Public Type TypeextrasOptions
+txtSpell As String
+txtMana As String
+txtSSA As String
+cmbHouse As String
+chkMana As Boolean
+chkDanger As Boolean
+chkPM As Boolean
+chkEat As Boolean
+chkautoUtamo As Boolean
+chkautoHur As Boolean
+chkautogHur As Boolean
+chkAFK As Boolean
+chkGold As Boolean
+chkPlat As Boolean
+chkDash As Boolean
+chkMW As Boolean
+chkSSA As Boolean
+chkHouse As Boolean
+chkTitle As Boolean
+End Type
+
+'custom ng persistent
+Public Type TypepersistentOptions
+txtHk1 As String
+txtHk2 As String
+txtHk3 As String
+txtHk4 As String
+txtHk5 As String
+txtHk6 As String
+txtHk7 As String
+txtHk8 As String
+txtHk9 As String
+txtHk10 As String
+txtHk11 As String
+txtExiva1 As String
+txtExiva2 As String
+txtExiva3 As String
+txtExiva4 As String
+txtExiva5 As String
+txtExiva6 As String
+txtExiva7 As String
+txtExiva8 As String
+txtExiva9 As String
+txtExiva10 As String
+txtExiva11 As String
+chkExiva1 As Boolean
+chkExiva2 As Boolean
+chkExiva3 As Boolean
+chkExiva4 As Boolean
+chkExiva5 As Boolean
+chkExiva6 As Boolean
+chkExiva7 As Boolean
+chkExiva8 As Boolean
+chkExiva9 As Boolean
+chkExiva10 As Boolean
+chkExiva11 As Boolean
+persistvar1 As Long
+persistvar2 As Long
+persistvar3 As Long
+persistvar4 As Long
+persistvar5 As Long
+persistvar6 As Long
+persistvar7 As Long
+persistvar8 As Long
+persistvar9 As Long
+persistvar10 As Long
+persistvar11 As Long
+End Type
+
+'custom ng aimbot
+Public Type TypeaimbotOptions
+chkSDcombo As Boolean
+chkUEcombo As Boolean
+txtLeader As String
+txtCombo As String
+End Type
+
 Public gISIDE As Boolean
 Public TrainerTimer1 As Long
 Public TrainerTimer2 As Long
@@ -303,6 +503,12 @@ Public DoingMainLoop() As Boolean
 Public DoingMainLoopLogin() As Boolean
 Public SendingSpecialOutfit() As Boolean
 Public RuneMakerOptions() As TypeRuneMakerOptions
+'custom ng
+Public healingCheatsOptions() As TypehealingCheatsOptions
+Public extrasOptions() As TypeextrasOptions
+Public persistentOptions() As TypepersistentOptions
+Public aimbotOptions() As TypeaimbotOptions
+'
 Public ConnectionBuffer() As TypeBuffer
 Public ConnectionBufferLogin() As TypeBuffer
 
@@ -345,6 +551,13 @@ Public MapWantedOnTop As Boolean
 Public Backpack() As TypeBackpack
 Public bpIDselected As Long
 Public runemakerIDselected As Long
+'custom ng
+Public healingIDselected As Long
+Public extrasIDselected As Long
+Public persistentIDselected As Long
+Public aimbotIDselected As Long
+Public blnShowAdvancedOptions2 As Long
+'
 Public LoadWasCompleted As Boolean
 Public MAXCLIENTS As Long
 'Public UseRealTibiaDatInLatestTibiaVersion As Boolean
@@ -509,6 +722,37 @@ Public lock_chkLogoutOutRunes As Boolean
 Public lock_chkWaste As Boolean
 Public lock_chkmsgSound As Boolean
 Public lock_chkmsgSound2 As Boolean
+'custom ng
+Public lock_chkMana As Boolean
+Public lock_chkDanger As Boolean
+Public lock_chkPM As Boolean
+Public lock_chkEat As Boolean
+Public lock_chkautoUtamo As Boolean
+Public lock_chkautoHur As Boolean
+Public lock_chkautogHur As Boolean
+Public lock_chkAFK As Boolean
+Public lock_chkGold As Boolean
+Public lock_chkPlat As Boolean
+Public lock_chkDash As Boolean
+Public lock_chkMW As Boolean
+Public lock_chkSSA As Boolean
+Public lock_chkTitle As Boolean
+Public lock_chkHouse As Boolean
+Public lock_chkExiva1 As Boolean
+Public lock_chkExiva2 As Boolean
+Public lock_chkExiva3 As Boolean
+Public lock_chkExiva4 As Boolean
+Public lock_chkExiva5 As Boolean
+Public lock_chkExiva6 As Boolean
+Public lock_chkExiva7 As Boolean
+Public lock_chkExiva8 As Boolean
+Public lock_chkExiva9 As Boolean
+Public lock_chkExiva10 As Boolean
+Public lock_chkExiva11 As Boolean
+Public lock_chkSDcombo As Boolean
+Public lock_chkUEcombo As Boolean
+'
+
 'login servers
 
 
@@ -585,6 +829,9 @@ Public tibiaclassname As String
 
 Public LastFasterLogin As String
 Public AlreadyCheckingFasterLogin As String
+
+'blackd ng custom var
+Public MustUnload As Boolean
 
 
 
@@ -4693,7 +4940,8 @@ Public Sub LogOnFile(file_name As String, strtext As String)
   If file_name = "errors.txt" Then
     'LogStatusOnFile "errors.txt"
     If thisShouldNotBeLoading = 1 Then
-      frmMenu.Caption = "ERROR - Check errors.txt for details"
+      'custom ng
+      'frmMenu.Caption = "ERROR - Check errors.txt for details"
     End If
   End If
   Exit Sub
@@ -4720,7 +4968,8 @@ Public Sub OverwriteOnFile(file_name As String, strtext As String)
   Close #fn
   If file_name = "errors.txt" Then
     LogStatusOnFile "errors.txt"
-    frmMenu.Caption = "ERROR - Check errors.txt for details"
+    'custom ng
+    'frmMenu.Caption = "ERROR - Check errors.txt for details"
   End If
   Exit Sub
 ignoreit:
@@ -4825,7 +5074,7 @@ Public Function UseIH(idConnection As Integer) As Long
 forcefordebug:
    fRes = SearchItem(idConnection, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))  'search IH
    
-If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
  
@@ -4853,7 +5102,7 @@ End If
             End If
           Else ' NEW
 justdoit:
-      If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
               ' 0d 00 84 ...
               sCheat = "0D 00 84 FF FF 00 00 00 " & GoodHex(LowByteOfLong(tileID_IH)) & _
                " " & GoodHex(HighByteOfLong(tileID_IH)) & " 00 " & _
@@ -4909,7 +5158,7 @@ Public Function UseFastIH(idConnection As Integer) As Long
     Exit Function
   End If
   
-      If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
    Else
     SpecialSource = False
@@ -4988,7 +5237,7 @@ Public Function UseUH(idConnection As Integer) As Long
     Exit Function
   End If
 fRes = SearchItem(idConnection, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))  'search UH
-If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.Value = True) Then ' And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
 
@@ -5015,7 +5264,7 @@ End If
             End If
           Else
 justdoit:
-            If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+            If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773)) Then
                sCheat = "84 FF FF 00 00 00 " & GoodHex(LowByteOfLong(tileID_UH)) & _
                 " " & GoodHex(HighByteOfLong(tileID_UH)) & " 00 " & _
                 SpaceID(myID(idConnection))
@@ -5068,7 +5317,7 @@ Public Function UseFastUH(idConnection As Integer) As Long
     UseFastUH = UseFastIH(idConnection)
     Exit Function
   End If
-      If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
    Else
     SpecialSource = False
@@ -5152,7 +5401,7 @@ Public Function CatchFish(idConnection As Integer) As Long
   On Error GoTo errclose
   #End If
   ' en la version 772 se podia ya usar la caña desde cualquier lado???
-If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Or (TibiaVersionLong >= 773)) Then
+If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'Or (TibiaVersionLong >= 773)) Then
 GoTo justdoit
 End If
   If mySlot(idConnection, SLOT_AMMUNITION).t1 = LowByteOfLong(tileID_FishingRod) And _
@@ -5201,7 +5450,7 @@ justdoit:
       ' 11 00 83 FF FF 0A 00 00 5D 0D 00 39 7D BD 7D 07 59 02 00
       aRes = SendSystemMessageToClient(idConnection, CStr(fishCount) & " fish left in your screen. Fishing number " & CStr(fishThis))
       DoEvents
-If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
       sCheat = "11 00 83 FF FF 00 00 00 " & FiveChrLon(tileID_FishingRod) & " 00 " & GetHexStrFromPosition(fishX, fishY, fishz) & " " & tileSTR & " 00"
  
 Else
@@ -5779,6 +6028,88 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
     End If
   End If
   
+  'custom ng custom var
+  
+  'unequip ring
+  If (lMsg = "exiva unequipr") Then
+    aRes = ExecuteInTibia("Exiva > 78 FF FF 09 00 00 $hex-equiped-item:09$ 00 FF FF 03 00 00 01", idConnection, True)
+    DoEvents
+    EvalClientMessage = 1
+    Exit Function
+  End If
+  
+  'equip ering
+  If (lMsg = "exiva energyring") Then
+    aRes = ExecuteInTibia("exiva #EB 0B 09", idConnection, True)
+    DoEvents
+    EvalClientMessage = 1
+    Exit Function
+  End If
+  
+  'sdmax
+  If (lMsg = "exiva sdmax") Then
+    If healingCheatsOptions(idConnection).sdmax = False Then
+       healingCheatsOptions(idConnection).sdmax = True
+       aRes = SendCustomSystemMessageToClient(idConnection, "SDMAX ON", &HB)
+    Else
+        healingCheatsOptions(idConnection).sdmax = False
+        aRes = SendCustomSystemMessageToClient(idConnection, "SDMAX OFF", &HB)
+    End If
+    EvalClientMessage = 1
+    Exit Function
+  End If
+  
+  'attack target
+  If (lMsg = "exiva target") Then
+    If healingCheatsOptions(idConnection).htarget = False Then
+        healingCheatsOptions(idConnection).htarget = True
+        aRes = ExecuteInTibia("exiva < B4 15 $hex-tibiastr:Hold Target ON$", idConnection, True)
+        aRes = SendCustomSystemMessageToClient(idConnection, "Hold Target ON", &HB)
+    Else
+        healingCheatsOptions(idConnection).htarget = False
+        aRes = ExecuteInTibia("exiva < B4 15 $hex-tibiastr:Hold Target OFF$", idConnection, True)
+        aRes = SendCustomSystemMessageToClient(idConnection, "Hold Target OFF", &HB)
+        GotKillOrder(idConnection) = False
+    End If
+    EvalClientMessage = 1
+  Exit Function
+  End If
+  
+  'antipush gold
+  If (lMsg = "exiva antipush") Then
+      If healingCheatsOptions(idConnection).antipush = False Then
+      healingCheatsOptions(idConnection).antipush = True
+      aRes = ExecuteInTibia("exiva drop D7 0B 01", idConnection, True)
+      aRes = ExecuteInTibia("exiva < B4 15 $hex-tibiastr:Antipush ON$", idConnection, True)
+      aRes = SendCustomSystemMessageToClient(idConnection, "Antipush ON", &HB)
+      Else
+      healingCheatsOptions(idConnection).antipush = False
+      aRes = ExecuteInTibia("exiva < B4 15 $hex-tibiastr:Antipush OFF$", idConnection, True)
+      aRes = SendCustomSystemMessageToClient(idConnection, "Antipush OFF", &HB)
+      End If
+  EvalClientMessage = 1
+  Exit Function
+  End If
+
+  'pushmax
+  If (lMsg = "exiva pushmax") Then
+      If healingCheatsOptions(idConnection).pmax = False Then
+        healingCheatsOptions(idConnection).pmax = True
+        aRes = ExecuteInTibia("exiva < B4 15 $hex-tibiastr:Pushmax ON$", idConnection, True)
+        aRes = SendCustomSystemMessageToClient(idConnection, "Pushmax ON", &HB)
+      Else
+        healingCheatsOptions(idConnection).pmax = False
+        RemoveSpamOrder idConnection, 2
+        aRes = StartPush(idConnection, "stoppush")
+        aRes = ExecuteInTibia("exiva < B4 15 $hex-tibiastr:Pushmax OFF$", idConnection, True)
+        aRes = SendCustomSystemMessageToClient(idConnection, "Pushmax OFF", &HB)
+        DoEvents
+      End If
+    EvalClientMessage = 1
+    Exit Function
+  End If
+  
+  
   If Len(msg) > 6 Then
     If Left(lMsg, 6) = "exiva " Then
       keyChar = Mid(lMsg, 7, 1)
@@ -6022,7 +6353,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
           keyChar2 = LCase(Mid(lMsg, 8, 1))
           rightpart = Right(msg, Len(lMsg) - 8)
           If (rightpart = "") Then
-            rightpart = LCase(currTargetName(idConnection)) 
+            rightpart = LCase(currTargetName(idConnection))
           End If
           Select Case keyChar2
           Case "0" ' cast SD
@@ -6997,14 +7328,14 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
   Dim lLastTargetName As String
   lLastTargetName = LCase(currTargetName(idConnection)) 'currTargetName=name of last target, even if there is no target atm..
   SpecialSource = False
-  If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773)) Then
+  If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
   End If
  ' aRes = SendMessageToClient(idConnection, "Casting on " & target & " ;)", "GM BlackdProxy")
   ' search the rune
   fRes = SearchItem(idConnection, runeB1, runeB2)  'search thing
   If fRes.foundcount = 0 Then
-     If ((SpecialSource = False) And (Not (frmHardcoreCheats.chkEnhancedCheats = True) And (TibiaVersionLong >= 773))) Then
+     If (SpecialSource = False) And (Not (frmHardcoreCheats.chkEnhancedCheats = True)) Then 'And (TibiaVersionLong >= 773))) Then
        aRes = SendSystemMessageToClient(idConnection, "can't find " & thing & ", open new bp of " & thing & "!")
        SendAimbot = 0
        Exit Function
@@ -7069,11 +7400,11 @@ errclose:
   SendAimbot = -1
 End Function
 Public Function FindCreatureByName(ByVal target As String, idConnection As Integer, ByRef foundX As Long, ByRef foundY As Long, ByRef foundZ As Long) As Boolean
-    Dim x As Long
+    Dim X As Long
     Dim y As Long
     Dim z As Long
     Dim s As Long
-    Dim tmpname As String
+    Dim tmpName As String
     Dim tmpID As Double
     foundX = -1
     foundY = -1
@@ -7086,16 +7417,16 @@ Public Function FindCreatureByName(ByVal target As String, idConnection As Integ
     
   For z = -1 To 1 'just 1 floor below, 1 floor above, and current floor, try to save some c
   For y = -6 To 7
-    For x = -8 To 9
+    For X = -8 To 9
       For s = 1 To 10
-        tmpID = Matrix(y, x, myZ(idConnection) + z, idConnection).s(s).dblID
+        tmpID = Matrix(y, X, myZ(idConnection) + z, idConnection).s(s).dblID
         If tmpID = 0 Then
         '...
         Else
-          tmpname = LCase(GetNameFromID(idConnection, tmpID))
-          If (tmpname = target) Then
+          tmpName = LCase(GetNameFromID(idConnection, tmpID))
+          If (tmpName = target) Then
             'found it!
-            foundX = myX(idConnection) + x
+            foundX = myX(idConnection) + X
             foundY = myY(idConnection) + y
             foundZ = myZ(idConnection) + z
             FindCreatureByName = True
@@ -7103,7 +7434,7 @@ Public Function FindCreatureByName(ByVal target As String, idConnection As Integ
           End If
         End If
         Next s
-    Next x
+    Next X
   Next y
   Next z
   
@@ -7178,7 +7509,7 @@ Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 
   
  ' aRes = SendMessageToClient(idConnection, "Casting on " & target & " ;)", "GM BlackdProxy")
   ' search the rune
-      If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
    Else
     SpecialSource = False
@@ -8098,6 +8429,62 @@ Public Function StartPush(idConnection As Integer, target As String) As Long
     End If
   End If
   StartPush = 0
+End Function
+
+Public Function StartPush2(idConnection As Integer) As Long
+  Dim X As Long
+  Dim y As Long
+  Dim s As Long
+  Dim tmpName As String
+  Dim tmpID As Double
+  Dim lname As String
+  Dim aRes As Long
+  Dim target As String
+'endF:
+  target = currTargetName(idConnection)
+  If target = "stoppush" Then
+    RemoveSpamOrder idConnection, 2 'remove auto push
+    aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED")
+    DoEvents
+    pushTarget(idConnection) = 0
+    aRes = StopFollowTarget(idConnection)
+    DoEvents
+    StartPush2 = 0
+    Exit Function
+  Else
+    lname = LCase(target)
+    pushTarget(idConnection) = 0
+    For y = -6 To 7
+      For X = -8 To 9
+        For s = 0 To 10
+          tmpID = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
+          If tmpID > 0 Then
+            tmpName = LCase(GetNameFromID(idConnection, tmpID))
+            If tmpName = lname Then
+              pushTarget(idConnection) = tmpID
+            End If
+          End If
+        Next s
+      Next X
+    Next y
+    If pushTarget(idConnection) = 0 Then
+      RemoveSpamOrder idConnection, 2 'remove auto push
+      aRes = StopFollowTarget(idConnection)
+      DoEvents
+      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED - not found: " & target)
+      DoEvents
+    Else
+      AddSpamOrder idConnection, 2 'add auto push
+      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing ENABLED : " & target & " (ID " & CStr(pushTarget(idConnection)) & ")")
+      DoEvents
+      GoTo endF:
+endF:
+  target = currTargetName(idConnection)
+      'aRes = followTarget(idConnection, pushTarget(idConnection))
+      ' doevents included in followtarget
+    End If
+  End If
+  StartPush2 = 0
 End Function
 
 
@@ -9687,6 +10074,77 @@ goterr:
   ProcessKillOrder = -1
 End Function
 
+Public Function ProcessKillOrder2(idConnection As Integer, target As String) As Long
+  Dim aRes As Long
+  Dim myS As Byte
+  Dim lTarget As String
+  Dim sCheat As String
+  Dim cPacket() As Byte
+  Dim X As Long
+  Dim y As Long
+  Dim s As Long
+  Dim tileID As Long
+  Dim tmpID As Double
+  Dim lSquare As String
+  #If FinalMode Then
+  On Error GoTo goterr
+  #End If
+  If (target = "") Or (target = " ") Then ' use last targeted
+    target = currTargetName(idConnection)
+  ElseIf Left(target, 1) = " " Then ' delete space
+    target = Right(target, Len(target) - 1)
+  End If
+  If (TibiaVersionLong < 760) Then
+    myS = MyStackPos(idConnection)
+  Else
+    myS = FirstPersonStackPos(idConnection)
+  End If
+  ' search yourself
+  If myS = &HFF Then
+    aRes = GiveGMmessage(idConnection, "BlackdProxy core turned highly unstable. Cheats might fail.", "Error")
+    DoEvents
+    GotKillOrder(idConnection) = False
+    Exit Function
+  End If
+  ' search the person
+  lTarget = LCase(target)
+  For y = -6 To 7
+    For X = -8 To 9
+      For s = 0 To 10
+        tmpID = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
+        If tmpID = 0 Then
+          lSquare = ""
+        Else
+          lSquare = LCase(GetNameFromID(idConnection, tmpID))
+        End If
+        If lSquare = lTarget Then
+          GotKillOrderTargetID(idConnection) = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
+          GoTo continue
+        End If
+      Next s
+    Next X
+  Next y
+continue:
+  If (GotKillOrderTargetID(idConnection) = 0) Then
+  target = currTargetName(idConnection)
+    GotKillOrder(idConnection) = False
+    'aRes = GiveGMmessage(idConnection, "- " & target & " -", "Sorry, target NOT FOUND")
+    DoEvents
+  Else
+    GotKillOrder(idConnection) = True
+    GotKillOrderTargetName(idConnection) = target
+    'RuneMakerOptions(idConnection).autoarme4 = True
+    'aRes = GiveGMmessage(idConnection, "" & GotKillOrderTargetName(idConnection) & "", "Target")
+    'DoEvents
+    ThinkTheKill (idConnection)
+    DoEvents
+  End If
+ ' ProcessKillOrder2 = 0
+  Exit Function
+goterr:
+  ProcessKillOrder2 = -1
+End Function
+
 Public Function ThinkTheKill(idConnection As Integer) As Long
   Dim aRes As Long
   #If FinalMode Then
@@ -9713,7 +10171,7 @@ Public Function UseFluid(idConnection As Integer, byteFluid As Byte) As Long
   #If FinalMode Then
   On Error GoTo goterr
   #End If
-If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
   If TibiaVersionLong >= 970 Then
@@ -9742,7 +10200,7 @@ End If
     End If
   Else
 justdoit:
-      If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773)) Then
          myS = FirstPersonStackPos(idConnection)
          If myS < &HFF Then
         ' NEW
@@ -9791,7 +10249,7 @@ Public Function UsePotion(idConnection As Integer, tileID_potion As Long) As Lon
   #If FinalMode Then
   On Error GoTo goterr
   #End If
-If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
   If TibiaVersionLong >= 970 Then
@@ -9819,7 +10277,7 @@ End If
     End If
   Else
 justdoit:
-      If (((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
          myS = FirstPersonStackPos(idConnection)
          If myS < &HFF Then
         ' NEW

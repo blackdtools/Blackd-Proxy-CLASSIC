@@ -151,7 +151,6 @@ Begin VB.Form frmRunemaker
       Left            =   3960
       TabIndex        =   34
       Top             =   3480
-      Value           =   1  'Checked
       Width           =   2055
    End
    Begin VB.TextBox txtFile 
@@ -383,7 +382,6 @@ Begin VB.Form frmRunemaker
       Left            =   3960
       TabIndex        =   25
       Top             =   2920
-      Value           =   1  'Checked
       Width           =   2055
    End
    Begin VB.Label Label5 
@@ -791,10 +789,6 @@ Exit Sub
 goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Warning: connection fail during the runemaker activation - ignoring"
 End Sub
-
-
-
-
 
 Private Sub chkFood_Click()
 If lock_chkFood = False Then
@@ -1355,8 +1349,6 @@ If runemakerIDselected > 0 Then
   RuneMakerOptions(runemakerIDselected).secondActionText = txtAction2.Text
 End If
 End Sub
-
-
 
 Private Sub txtLowMana_Validate(Cancel As Boolean)
   Dim lonN As Long

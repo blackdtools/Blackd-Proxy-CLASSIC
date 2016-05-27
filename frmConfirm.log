@@ -1,0 +1,18 @@
+Line 20: Class JwldButn2b.JeweledButton of control cmdYes was not a loaded control class.
+Line 45: Class JwldButn2b.JeweledButton of control cmdNo was not a loaded control class.
+Line 26: The property name _ExtentX in cmdYes is invalid.
+Line 27: The property name _ExtentY in cmdYes is invalid.
+Line 28: The property name Caption in cmdYes is invalid.
+Line 29: The property name PictureSize in cmdYes is invalid.
+Line 30: The property name OriginalPicSizeW in cmdYes is invalid.
+Line 31: The property name OriginalPicSizeH in cmdYes is invalid.
+Line 42: The property name BorderColor_Hover in cmdYes is invalid.
+Line 43: The property name BorderColor_Inner in cmdYes is invalid.
+Line 51: The property name _ExtentX in cmdNo is invalid.
+Line 52: The property name _ExtentY in cmdNo is invalid.
+Line 53: The property name Caption in cmdNo is invalid.
+Line 54: The property name PictureSize in cmdNo is invalid.
+Line 55: The property name OriginalPicSizeW in cmdNo is invalid.
+Line 56: The property name OriginalPicSizeH in cmdNo is invalid.
+Line 67: The property name BorderColor_Hover in cmdNo is invalid.
+Line 68: The property name BorderColor_Inner in cmdNo is invalid.

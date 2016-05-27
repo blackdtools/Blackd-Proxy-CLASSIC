@@ -115,7 +115,7 @@ Begin VB.Form frmEvents
       Width           =   855
    End
    Begin VB.ListBox lstVar 
-      Height          =   840
+      Height          =   1230
       Left            =   6120
       TabIndex        =   43
       Top             =   480

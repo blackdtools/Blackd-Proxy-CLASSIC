@@ -408,7 +408,7 @@ Public Function isHmm(idConnection As Integer, ByRef str As String) As Boolean
   End If
   If cavebotHMMs(idConnection).Exists("*") = True Then
     isHmm = Not isHmm ' inversed
-  End If  
+  End If
 End Function
 
 
@@ -4550,7 +4550,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   Dim yt As Long
   Dim xdif As Long
   Dim ydif As Long
-  dim absoluteDif As Long
+  Dim absoluteDif As Long
   Dim aRes As Long
   Dim myres As TypeChangeFloorResult
   'myres.result=0 req_wait
@@ -5030,7 +5030,7 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
     stackS = ts
     tileSTR = FiveChrLon(tileID)
   
-    If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
+    If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
         GoTo justdoit
     End If
     If mySlot(idConnection, SLOT_AMMUNITION).t1 = b1 And _
@@ -5051,7 +5051,7 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
        SafeCastCheatString "UseItemHere2", idConnection, sCheat
     Else
 justdoit:
-      If ((((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
           ' NEW
          sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
 
@@ -5163,7 +5163,7 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
             Next ts
         End If
     End If
-    If ((frmHardcoreCheats.chkTotalWaste.Value = True) And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
+    If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
         GoTo justdoit
     End If
     If mySlot(idConnection, SLOT_AMMUNITION).t1 = b1 And _
@@ -5181,7 +5181,7 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
       SafeCastCheatString "PerformUseMyItem2", idConnection, sCheat
     Else
 justdoit:
-      If ((((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
           ' NEW
          sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
 

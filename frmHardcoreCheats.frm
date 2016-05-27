@@ -32,7 +32,6 @@ Begin VB.Form frmHardcoreCheats
       Left            =   5760
       TabIndex        =   72
       Top             =   4920
-      Value           =   1  'Checked
       Width           =   4215
    End
    Begin VB.Frame frmNewCheats 
@@ -62,7 +61,6 @@ Begin VB.Form frmHardcoreCheats
          Left            =   120
          TabIndex        =   70
          Top             =   600
-         Value           =   -1  'True
          Width           =   4815
       End
       Begin VB.OptionButton chkTotalWaste 
@@ -73,6 +71,7 @@ Begin VB.Form frmHardcoreCheats
          Left            =   120
          TabIndex        =   69
          Top             =   960
+         Value           =   -1  'True
          Width           =   4815
       End
    End
@@ -160,7 +159,6 @@ Begin VB.Form frmHardcoreCheats
       Left            =   5760
       TabIndex        =   50
       Top             =   4440
-      Value           =   1  'Checked
       Width           =   2655
    End
    Begin VB.CheckBox chkCaptionExp 
@@ -229,7 +227,6 @@ Begin VB.Form frmHardcoreCheats
       Left            =   5760
       TabIndex        =   43
       Top             =   3960
-      Value           =   1  'Checked
       Width           =   1935
    End
    Begin VB.TextBox pushID 
@@ -328,7 +325,6 @@ Begin VB.Form frmHardcoreCheats
       Left            =   240
       TabIndex        =   26
       Top             =   1320
-      Value           =   1  'Checked
       Width           =   2775
    End
    Begin VB.CommandButton cmdOpenBackpacks 
@@ -855,8 +851,12 @@ Private Sub chkAutoUpdateMap_Click()
   timerAutoUpdater.enabled = False
 End Sub
 
+Private Sub chkEnhancedCheats_Click()
 
+frmHealing.chkClassic.Value = False
+frmHealing.chkTotalWaste.Value = False
 
+End Sub
 
 Private Sub chkLockOnMyFloor_Click()
   If chkLockOnMyFloor.Value = 1 And cmbCharacter.ListIndex = mapIDselected And mapIDselected > 0 Then
@@ -965,8 +965,10 @@ Private Sub cmdReset_Click()
   chkApplyCheats.Value = 1
   chkReveal.Value = 1
   chkLight.Value = 1
-  chkAutoHeal.Value = 1
-  frmMenu.Form_Unload False
+  chkAutoHeal.Value = 0
+  'custom ng error compile
+  'frmMenu.Form_Unload False
+  End
 End Sub
 
 Private Sub cmdUpdateMap_Click()
@@ -1030,14 +1032,6 @@ Private Sub Form_Unload(Cancel As Integer)
   Me.Hide
   Cancel = BlockUnload
 End Sub
-
-
-
-
-
-
-
-
 
 Private Sub pushID_Change()
   #If FinalMode Then

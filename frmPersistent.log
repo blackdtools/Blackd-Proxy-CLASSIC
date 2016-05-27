@@ -1,0 +1,19 @@
+Line 2: Could not create reference: '{F247AF03-2671-4421-A87A-846ED80CD2A9}#1.0#0'.
+Line 305: Class JwldButn2b.JeweledButton of control cmdApply was not a loaded control class.
+Line 330: Class JwldButn2b.JeweledButton of control cmdShowhk was not a loaded control class.
+Line 311: The property name _ExtentX in cmdApply is invalid.
+Line 312: The property name _ExtentY in cmdApply is invalid.
+Line 313: The property name Caption in cmdApply is invalid.
+Line 314: The property name PictureSize in cmdApply is invalid.
+Line 315: The property name OriginalPicSizeW in cmdApply is invalid.
+Line 316: The property name OriginalPicSizeH in cmdApply is invalid.
+Line 327: The property name BorderColor_Hover in cmdApply is invalid.
+Line 328: The property name BorderColor_Inner in cmdApply is invalid.
+Line 336: The property name _ExtentX in cmdShowhk is invalid.
+Line 337: The property name _ExtentY in cmdShowhk is invalid.
+Line 338: The property name Caption in cmdShowhk is invalid.
+Line 339: The property name PictureSize in cmdShowhk is invalid.
+Line 340: The property name OriginalPicSizeW in cmdShowhk is invalid.
+Line 341: The property name OriginalPicSizeH in cmdShowhk is invalid.
+Line 352: The property name BorderColor_Hover in cmdShowhk is invalid.
+Line 353: The property name BorderColor_Inner in cmdShowhk is invalid.

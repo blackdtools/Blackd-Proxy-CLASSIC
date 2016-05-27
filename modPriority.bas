@@ -22,21 +22,21 @@ End Type
 Private Declare Function GetWindowModuleFileName Lib "user32.dll" (ByVal hwnd As Long, ByVal pszFileName As String, ByVal cchFileNameMax As Long) As Long
 
 
-Private Declare Function OpenProcess Lib "Kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
-Private Declare Function CloseHandle Lib "Kernel32" (ByVal hObject As Long) As Long
+Private Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
+Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
 
 
-Private Declare Function GetVersionEx Lib "Kernel32" _
+Private Declare Function GetVersionEx Lib "kernel32" _
  Alias "GetVersionExA" (LpVersionInformation _
  As OSVERSIONINFO) As Long
 Private Declare Function GetCurrentProcess _
-                                                    Lib "Kernel32" () As Long
-Private Declare Function GetCurrentProcessId Lib "Kernel32" () As Long
-Private Declare Function GetCurrentThread Lib "Kernel32" () As Long
-Private Declare Function GetCurrentThreadId Lib "Kernel32" () As Long
-Private Declare Function SetThreadPriority Lib "Kernel32" _
+                                                    Lib "kernel32" () As Long
+Private Declare Function GetCurrentProcessId Lib "kernel32" () As Long
+Private Declare Function GetCurrentThread Lib "kernel32" () As Long
+Private Declare Function GetCurrentThreadId Lib "kernel32" () As Long
+Private Declare Function SetThreadPriority Lib "kernel32" _
                                                        (ByVal hThread As Long, ByVal nPriority As Long) As Long
-Private Declare Function GetThreadPriority Lib "Kernel32" (ByVal hThread As Long) As Long
+Private Declare Function GetThreadPriority Lib "kernel32" (ByVal hThread As Long) As Long
 
 Private Const THREAD_BASE_PRIORITY_LOWRT As Long = 15 ' value that gets a thread to LowRealtime-1
 Private Const THREAD_BASE_PRIORITY_MAX As Long = 2 ' maximum thread base priority boost
@@ -55,13 +55,13 @@ End Enum
 
 Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Long, lpdwProcessId As Long) As Long
 
-Private Declare Function SetPriorityClass Lib "Kernel32" (ByVal hProcess As Long, ByVal dwPriorityClass As Long) As Long
-Private Declare Function GetPriorityClass Lib "Kernel32" (ByVal hProcess As Long) As Long
+Private Declare Function SetPriorityClass Lib "kernel32" (ByVal hProcess As Long, ByVal dwPriorityClass As Long) As Long
+Private Declare Function GetPriorityClass Lib "kernel32" (ByVal hProcess As Long) As Long
 
 Public Declare Function GetLastError _
-    Lib "Kernel32" () As Long
+    Lib "kernel32" () As Long
 Public Declare Function FormatMessage _
-    Lib "Kernel32" _
+    Lib "kernel32" _
     Alias "FormatMessageA" _
    (ByVal dwFlags As Long, _
     lpSource As Any, _
@@ -84,6 +84,12 @@ Private Const ABOVE_NORMAL_PRIORITY_CLASS = 32768
 Private Const IDLE_PRIORITY_CLASS = &H40
 Private Const HIGH_PRIORITY_CLASS = &H80
 Private Const REALTIME_PRIORITY_CLASS = &H100
+
+'custom ng
+Global Const HWND_TOPMOST = -1
+Global Const SWP_NOMOVE = 2
+Global Const SWP_NOSIZE = 1
+Global Const flags = SWP_NOMOVE Or SWP_NOSIZE
 
 Public Enum ProcessPriorities
     ppidle = IDLE_PRIORITY_CLASS

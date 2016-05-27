@@ -1,132 +1,200 @@
 VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{F247AF03-2671-4421-A87A-846ED80CD2A9}#1.0#0"; "JwldButn2b.ocx"
 Begin VB.Form frmHotkeys 
-   BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Hotkeys"
-   ClientHeight    =   4830
+   ClientHeight    =   4305
    ClientLeft      =   45
-   ClientTop       =   435
-   ClientWidth     =   7155
+   ClientTop       =   375
+   ClientWidth     =   5730
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmHotkeys.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   4830
-   ScaleWidth      =   7155
+   MinButton       =   0   'False
+   ScaleHeight     =   4305
+   ScaleWidth      =   5730
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin JwldButn2b.JeweledButton cmdShowhk 
+      Height          =   255
+      Left            =   3960
+      TabIndex        =   9
+      Top             =   120
+      Width           =   1575
+      _ExtentX        =   2778
+      _ExtentY        =   450
+      Caption         =   "Hotkeys list"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16744576
+      BorderColor_Inner=   16777215
+   End
    Begin MSFlexGridLib.MSFlexGrid gridHotkeys 
-      Height          =   2895
+      Height          =   3015
       Left            =   120
-      TabIndex        =   11
-      Top             =   600
-      Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   5106
+      TabIndex        =   8
+      Top             =   480
+      Width           =   5535
+      _ExtentX        =   9763
+      _ExtentY        =   5318
       _Version        =   393216
       Cols            =   3
       FixedCols       =   0
-      BackColorBkg    =   0
+      BackColorBkg    =   16777215
       ScrollBars      =   2
       Appearance      =   0
    End
    Begin VB.TextBox txtDelay 
       Height          =   285
-      Left            =   4440
-      TabIndex        =   9
+      Left            =   1440
+      TabIndex        =   6
       Text            =   "500"
-      Top             =   4400
+      Top             =   3555
       Width           =   615
    End
    Begin VB.CheckBox chkRepeat 
-      BackColor       =   &H00000000&
-      Caption         =   "Repeat action while key pressed, each"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Repeat delay:"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   1200
-      TabIndex        =   8
-      Top             =   4440
-      Width           =   3255
+      Left            =   120
+      TabIndex        =   5
+      Top             =   3600
+      Width           =   1335
    End
    Begin VB.CheckBox chkHotkeysActivated 
-      BackColor       =   &H00000000&
-      Caption         =   "Activate hotkeys"
-      ForeColor       =   &H00FFFFFF&
+      Caption         =   "Hotkeys enabled"
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   1200
-      TabIndex        =   6
-      Top             =   4080
+      Left            =   120
+      TabIndex        =   3
+      Top             =   120
       Value           =   1  'Checked
-      Width           =   1695
+      Width           =   1575
    End
    Begin VB.Timer timerHotkeys 
       Enabled         =   0   'False
       Interval        =   50
-      Left            =   120
-      Top             =   3600
-   End
-   Begin VB.CommandButton cmdSave 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "Save changes"
-      Height          =   375
-      Left            =   5160
-      Style           =   1  'Graphical
-      TabIndex        =   4
-      Top             =   3600
-      Width           =   1575
+      Left            =   2400
+      Top             =   0
    End
    Begin VB.CommandButton cmdCancel 
       BackColor       =   &H00C0FFFF&
       Caption         =   "Cancel changes"
       Height          =   375
-      Left            =   3480
-      Style           =   1  'Graphical
-      TabIndex        =   3
-      Top             =   3600
-      Width           =   1575
-   End
-   Begin VB.CommandButton cmdDeleteSel 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "Delete selected"
-      Height          =   375
-      Left            =   2040
-      Style           =   1  'Graphical
-      TabIndex        =   2
-      Top             =   3600
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdClear 
-      BackColor       =   &H00C0FFFF&
-      Caption         =   "Delete all"
-      Height          =   375
-      Left            =   600
+      Left            =   3360
       Style           =   1  'Graphical
       TabIndex        =   1
+      Top             =   4800
+      Width           =   1575
+   End
+   Begin JwldButn2b.JeweledButton cmdSave 
+      Height          =   255
+      Left            =   4320
+      TabIndex        =   10
       Top             =   3600
       Width           =   1335
+      _ExtentX        =   2355
+      _ExtentY        =   450
+      Caption         =   "Save"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16744576
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdDeleteSel 
+      Height          =   255
+      Left            =   2880
+      TabIndex        =   11
+      Top             =   3600
+      Width           =   1335
+      _ExtentX        =   2355
+      _ExtentY        =   450
+      Caption         =   "Delet selected"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16744576
+      BorderColor_Inner=   16777215
+   End
+   Begin JwldButn2b.JeweledButton cmdClear 
+      Height          =   255
+      Left            =   120
+      TabIndex        =   12
+      Top             =   3960
+      Width           =   1335
+      _ExtentX        =   2355
+      _ExtentY        =   450
+      Caption         =   "Clear"
+      PictureSize     =   0
+      OriginalPicSizeW=   0
+      OriginalPicSizeH=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MousePointer    =   99
+      BorderColor_Hover=   16744576
+      BorderColor_Inner=   16777215
    End
    Begin VB.Label Label2 
-      BackColor       =   &H00000000&
       Caption         =   "ms"
-      ForeColor       =   &H00FFFFFF&
+      ForeColor       =   &H00000000&
       Height          =   255
-      Left            =   5160
-      TabIndex        =   10
-      Top             =   4455
-      Width           =   735
+      Left            =   2160
+      TabIndex        =   7
+      Top             =   3600
+      Width           =   375
    End
    Begin VB.Label Label3 
       BackColor       =   &H00000000&
       Caption         =   "OPTIONS:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   240
-      TabIndex        =   7
-      Top             =   4080
+      Left            =   120
+      TabIndex        =   4
+      Top             =   4440
       Width           =   975
    End
    Begin VB.Label lblDebug 
-      BackColor       =   &H00000000&
       Caption         =   "-"
       BeginProperty Font 
          Name            =   "Arial"
@@ -139,10 +207,10 @@ Begin VB.Form frmHotkeys
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   375
-      Left            =   4320
-      TabIndex        =   5
-      Top             =   120
-      Width           =   2655
+      Left            =   2880
+      TabIndex        =   2
+      Top             =   3960
+      Width           =   2775
    End
    Begin VB.Label Label1 
       BackColor       =   &H00000000&
@@ -160,7 +228,7 @@ Begin VB.Form frmHotkeys
       Height          =   255
       Left            =   120
       TabIndex        =   0
-      Top             =   120
+      Top             =   4920
       Width           =   3015
    End
 End
@@ -173,6 +241,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private reenableHotkeyTime As Long
+
+
+
 Private Sub cmdCancel_Click()
   Dim res As Integer
   ReleasePressKey
@@ -378,6 +449,13 @@ Private Sub cmdSave_Click()
   End If
 End Sub
 
+Private Sub cmdShowhk_Click()
+  frmShowhk.WindowState = vbNormal
+  frmShowhk.Show
+  frmShowhk.SetFocus
+  SetWindowPos frmShowhk.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+End Sub
+
 Private Sub Form_Load()
   Dim res As Integer
   Dim sRes As String
@@ -541,6 +619,7 @@ Private Sub gridHotkeys_KeyPress(KeyAscii As Integer)
   Hotkeys(sRow - 1).command = gridHotkeys.TextMatrix(sRow, sCol)
   End If
 End Sub
+
 
 Private Sub timerHotkeys_Timer()
   #If FinalMode Then

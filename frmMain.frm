@@ -631,7 +631,7 @@ Private Function InitSounds(thehwnd As Long) As Boolean
   Dim loadingThisSound As String
   soundErrorLine = "<nothing>"
   SoundErrorWasThis = "Executing: " & soundErrorLine & vbCrLf & "Got error number " & CStr(0) & " : " & "<no error>"
-  bRes = DirectX_Init(thehwnd, 3)
+  bRes = DirectX_Init(thehwnd, 4)
   If bRes = True Then
     soundErrorLine = "loadingThisSound = App.Path & ""\player.wav"""
     loadingThisSound = App.path & "\player.wav"
@@ -645,6 +645,11 @@ Private Function InitSounds(thehwnd As Long) As Boolean
     loadingThisSound = App.path & "\ding.wav"
     soundErrorLine = "DirectX_LoadSound loadingThisSound, 3"
     DirectX_LoadSound loadingThisSound, 3
+    'custom ng
+    soundErrorLine = "loadingThisSound = App.Path & ""\newsound1.wav"""
+    loadingThisSound = App.path & "\newsound1.wav"
+    soundErrorLine = "DirectX_LoadSound loadingThisSound, 4"
+    DirectX_LoadSound loadingThisSound, 4
     InitSounds = True
   Else
     InitSounds = False
@@ -757,6 +762,12 @@ Private Sub Form_Load()
   MagebombsLoaded = 0
   givenUFO = False ' used to debug truemap. Avoids giving certain strange error more than 1 time.
   runemakerIDselected = 0 ' current runemaker character selected
+  'custom ng
+  healingIDselected = 0
+  extrasIDselected = 0
+  persistentIDselected = 0
+  aimbotIDselected = 0
+  '
   PUSHDELAYTIMES = 9 ' ticks between 2 push in exiva push
   dblAmLoaded = 30
   frmLoading.NotifyLoadProgress dblAmLoaded, "Reading high priority info"
@@ -799,6 +810,37 @@ Private Sub Form_Load()
   ChangePlayTheDangerSound False
   PlayMsgSound = False
   PlayMsgSound2 = False
+  'custom ng
+  PlayPMSound = False
+  lock_chkMana = False
+  lock_chkDanger = False
+  lock_chkPM = False
+  lock_chkEat = False
+  lock_chkautoUtamo = False
+  lock_chkautoHur = False
+  lock_chkautogHur = False
+  lock_chkAFK = False
+  lock_chkGold = False
+  lock_chkPlat = False
+  lock_chkDash = False
+  lock_chkMW = False
+  lock_chkSSA = False
+  lock_chkHouse = False
+  lock_chkTitle = False
+  lock_chkExiva1 = False
+  lock_chkExiva2 = False
+  lock_chkExiva3 = False
+  lock_chkExiva4 = False
+  lock_chkExiva5 = False
+  lock_chkExiva6 = False
+  lock_chkExiva7 = False
+  lock_chkExiva8 = False
+  lock_chkExiva9 = False
+  lock_chkExiva10 = False
+  lock_chkExiva11 = False
+  lock_chkSDcombo = False
+  lock_chkUEcombo = False
+  '
   
   ResetSpamOrders ' Init list of requested actions that require spam (autoUH, autoPush)
   
@@ -1047,6 +1089,95 @@ lastLoadLine = 660
     RuneMakerOptions(i).secondActionMana = RuneMakerOptions_secondActionMana_default
     RuneMakerOptions(i).secondActionSoulpoints = RuneMakerOptions_secondActionSoulpoints_default
 
+    'custom ng var
+    healingCheatsOptions(i).sdmax = healingCheatsOptions_sdmax_default
+    healingCheatsOptions(i).antipush = healingCheatsOptions_antipush_default
+    healingCheatsOptions(i).pmax = healingCheatsOptions_pmax_default
+    healingCheatsOptions(i).htarget = healingCheatsOptions_htarget_default
+    healingCheatsOptions(i).exaustEat = healingCheatsOptions_exaustEat_default
+    healingCheatsOptions(i).HouseX = healingCheatsOptions_HouseX_default
+    healingCheatsOptions(i).HouseY = healingCheatsOptions_HouseY_default
+    
+    'custom ng
+    'healing
+    healingCheatsOptions(i).txtSpellhi = healingCheatsOptions_txtSpellhi_default
+    healingCheatsOptions(i).txtSpelllo = healingCheatsOptions_txtSpelllo_default
+    healingCheatsOptions(i).txtPot = healingCheatsOptions_txtPot_default
+    healingCheatsOptions(i).txtMana = healingCheatsOptions_txtMana_default
+    healingCheatsOptions(i).txtHealthhi = healingCheatsOptions_txtHealthhi_default
+    healingCheatsOptions(i).txtHealthlo = healingCheatsOptions_txtHealthlo_default
+    healingCheatsOptions(i).txtHealpot = healingCheatsOptions_txtHealpot_default
+    healingCheatsOptions(i).txtManapot = healingCheatsOptions_txtManapot_default
+    healingCheatsOptions(i).txtManahi = healingCheatsOptions_txtManahi_default
+    healingCheatsOptions(i).txtManalo = healingCheatsOptions_txtManalo_default
+    healingCheatsOptions(i).Combo1 = healingCheatsOptions_Combo1_default
+    healingCheatsOptions(i).Combo2 = healingCheatsOptions_Combo2_default
+    
+    'custom ng
+    'extras
+    extrasOptions(i).txtSpell = extrasOptions_txtSpell_default
+    extrasOptions(i).txtMana = extrasOptions_txtMana_default
+    extrasOptions(i).txtSSA = extrasOptions_txtSSA_default
+    extrasOptions(i).cmbHouse = extrasOptions_cmbHouse_default
+    extrasOptions(i).chkMana = extrasOptions_chkMana_default
+    extrasOptions(i).chkDanger = extrasOptions_chkDanger_default
+    extrasOptions(i).chkPM = extrasOptions_chkPM_default
+    extrasOptions(i).chkEat = extrasOptions_chkEat_default
+    extrasOptions(i).chkautoUtamo = extrasOptions_chkautoUtamo_default
+    extrasOptions(i).chkautoHur = extrasOptions_chkautoHur_default
+    extrasOptions(i).chkautogHur = extrasOptions_chkautogHur_default
+    extrasOptions(i).chkAFK = extrasOptions_chkAFK_default
+    extrasOptions(i).chkGold = extrasOptions_chkGold_default
+    extrasOptions(i).chkPlat = extrasOptions_chkPlat_default
+    extrasOptions(i).chkDash = extrasOptions_chkDash_default
+    extrasOptions(i).chkMW = extrasOptions_chkMW_default
+    extrasOptions(i).chkSSA = extrasOptions_chkSSA_default
+    extrasOptions(i).chkTitle = extrasOptions_chkTitle_default
+    extrasOptions(i).chkHouse = extrasOptions_chkHouse_default
+    
+    'custom ng
+    'persistent
+    persistentOptions(i).txtHk1 = persistentOptions_txtHk1_default
+    persistentOptions(i).txtHk2 = persistentOptions_txtHk2_default
+    persistentOptions(i).txtHk3 = persistentOptions_txtHk3_default
+    persistentOptions(i).txtHk4 = persistentOptions_txtHk4_default
+    persistentOptions(i).txtHk5 = persistentOptions_txtHk5_default
+    persistentOptions(i).txtHk6 = persistentOptions_txtHk6_default
+    persistentOptions(i).txtHk7 = persistentOptions_txtHk7_default
+    persistentOptions(i).txtHk8 = persistentOptions_txtHk8_default
+    persistentOptions(i).txtHk9 = persistentOptions_txtHk9_default
+    persistentOptions(i).txtHk10 = persistentOptions_txtHk10_default
+    persistentOptions(i).txtHk11 = persistentOptions_txtHk11_default
+    persistentOptions(i).txtExiva1 = persistentOptions_txtExiva1_default
+    persistentOptions(i).txtExiva2 = persistentOptions_txtExiva2_default
+    persistentOptions(i).txtExiva3 = persistentOptions_txtExiva3_default
+    persistentOptions(i).txtExiva4 = persistentOptions_txtExiva4_default
+    persistentOptions(i).txtExiva5 = persistentOptions_txtExiva5_default
+    persistentOptions(i).txtExiva6 = persistentOptions_txtExiva6_default
+    persistentOptions(i).txtExiva7 = persistentOptions_txtExiva7_default
+    persistentOptions(i).txtExiva8 = persistentOptions_txtExiva8_default
+    persistentOptions(i).txtExiva9 = persistentOptions_txtExiva9_default
+    persistentOptions(i).txtExiva10 = persistentOptions_txtExiva10_default
+    persistentOptions(i).txtExiva11 = persistentOptions_txtExiva11_default
+    persistentOptions(i).chkExiva1 = persistentOptions_chkExiva1_default
+    persistentOptions(i).chkExiva2 = persistentOptions_chkExiva2_default
+    persistentOptions(i).chkExiva3 = persistentOptions_chkExiva3_default
+    persistentOptions(i).chkExiva4 = persistentOptions_chkExiva4_default
+    persistentOptions(i).chkExiva5 = persistentOptions_chkExiva5_default
+    persistentOptions(i).chkExiva6 = persistentOptions_chkExiva6_default
+    persistentOptions(i).chkExiva7 = persistentOptions_chkExiva7_default
+    persistentOptions(i).chkExiva8 = persistentOptions_chkExiva8_default
+    persistentOptions(i).chkExiva9 = persistentOptions_chkExiva9_default
+    persistentOptions(i).chkExiva10 = persistentOptions_chkExiva10_default
+    persistentOptions(i).chkExiva11 = persistentOptions_chkExiva11_default
+    
+    'custom ng
+    'aimbot
+    aimbotOptions(i).chkSDcombo = aimbotOptions_chkSDcombo_default
+    aimbotOptions(i).chkUEcombo = aimbotOptions_chkUEcombo_default
+    aimbotOptions(i).txtLeader = aimbotOptions_txtLeader_default
+    aimbotOptions(i).txtCombo = aimbotOptions_txtCombo_default
+    
     dblAmLoaded = 67
     frmLoading.NotifyLoadProgress dblAmLoaded, "Creating activex dictionaries"
     ' Init dictionary objects:
@@ -1143,6 +1274,7 @@ lastLoadLine = 660
   dblAmLoaded = 79
   frmLoading.NotifyLoadProgress dblAmLoaded, "Loading modules: runemaker"
     lastLoadLine = 749
+  '
   Load frmRunemaker
   runemakerIDselected = 0
   frmRunemaker.lstFriends.Clear
@@ -1150,6 +1282,28 @@ lastLoadLine = 660
   frmRunemaker.Hide
   cavebotIDselected = 0
   dblAmLoaded = 80
+  '
+  'custom ng healing load
+  Load frmHealing
+  healingIDselected = 0
+  frmHealing.UpdateValues
+  frmHealing.Hide
+  'custom ng extras load
+  Load frmExtras
+  extrasIDselected = 0
+  frmExtras.UpdateValues
+  frmExtras.Hide
+  'custom ng persistent load
+  Load frmPersistent
+  persistentIDselected = 0
+  frmPersistent.UpdateValues
+  frmPersistent.Hide
+  'custom ng aimbot load
+  Load frmAimbot
+  aimbotIDselected = 0
+  frmAimbot.UpdateValues
+  frmAimbot.Hide
+  
   frmLoading.NotifyLoadProgress dblAmLoaded, "Loading modules: hotkeys" 'antes puse cavebot por error
     lastLoadLine = 750
   Load frmHotkeys
@@ -1710,7 +1864,94 @@ Public Sub DoCloseActions(ByVal Index As Integer)
   RuneMakerOptions(Index).secondActionMana = RuneMakerOptions_secondActionMana_default
   RuneMakerOptions(Index).secondActionSoulpoints = RuneMakerOptions_secondActionSoulpoints_default
   
+  'custom ng var
+  healingCheatsOptions(Index).sdmax = healingCheatsOptions_sdmax_default
+  healingCheatsOptions(Index).antipush = healingCheatsOptions_antipush_default
+  healingCheatsOptions(Index).pmax = healingCheatsOptions_pmax_default
+  healingCheatsOptions(Index).htarget = healingCheatsOptions_htarget_default
+  healingCheatsOptions(Index).exaustEat = healingCheatsOptions_exaustEat_default
+  healingCheatsOptions(Index).HouseX = healingCheatsOptions_HouseX_default
+  healingCheatsOptions(Index).HouseY = healingCheatsOptions_HouseY_default
+  
+  'custom ng healing
+    healingCheatsOptions(Index).txtSpellhi = healingCheatsOptions_txtSpellhi_default
+    healingCheatsOptions(Index).txtSpelllo = healingCheatsOptions_txtSpelllo_default
+    healingCheatsOptions(Index).txtPot = healingCheatsOptions_txtPot_default
+    healingCheatsOptions(Index).txtMana = healingCheatsOptions_txtMana_default
+    healingCheatsOptions(Index).txtHealthhi = healingCheatsOptions_txtHealthhi_default
+    healingCheatsOptions(Index).txtHealthlo = healingCheatsOptions_txtHealthlo_default
+    healingCheatsOptions(Index).txtHealpot = healingCheatsOptions_txtHealpot_default
+    healingCheatsOptions(Index).txtManapot = healingCheatsOptions_txtManapot_default
+    healingCheatsOptions(Index).txtManahi = healingCheatsOptions_txtManahi_default
+    healingCheatsOptions(Index).txtManalo = healingCheatsOptions_txtManalo_default
+    healingCheatsOptions(Index).Combo1 = healingCheatsOptions_Combo1_default
+    healingCheatsOptions(Index).Combo2 = healingCheatsOptions_Combo2_default
+  
+    'custom ng
+    'extras
+    extrasOptions(Index).txtSpell = extrasOptions_txtSpell_default
+    extrasOptions(Index).txtMana = extrasOptions_txtMana_default
+    extrasOptions(Index).txtSSA = extrasOptions_txtSSA_default
+    extrasOptions(Index).cmbHouse = extrasOptions_cmbHouse_default
+    extrasOptions(Index).chkMana = extrasOptions_chkMana_default
+    extrasOptions(Index).chkDanger = extrasOptions_chkDanger_default
+    extrasOptions(Index).chkPM = extrasOptions_chkPM_default
+    extrasOptions(Index).chkEat = extrasOptions_chkEat_default
+    extrasOptions(Index).chkautoUtamo = extrasOptions_chkautoUtamo_default
+    extrasOptions(Index).chkautoHur = extrasOptions_chkautoHur_default
+    extrasOptions(Index).chkautogHur = extrasOptions_chkautogHur_default
+    extrasOptions(Index).chkAFK = extrasOptions_chkAFK_default
+    extrasOptions(Index).chkGold = extrasOptions_chkGold_default
+    extrasOptions(Index).chkPlat = extrasOptions_chkPlat_default
+    extrasOptions(Index).chkDash = extrasOptions_chkDash_default
+    extrasOptions(Index).chkMW = extrasOptions_chkMW_default
+    extrasOptions(Index).chkSSA = extrasOptions_chkSSA_default
+    extrasOptions(Index).chkTitle = extrasOptions_chkTitle_default
+    extrasOptions(Index).chkHouse = extrasOptions_chkHouse_default
 
+    'custom ng
+    'persistent
+    persistentOptions(Index).txtHk1 = persistentOptions_txtHk1_default
+    persistentOptions(Index).txtHk2 = persistentOptions_txtHk2_default
+    persistentOptions(Index).txtHk3 = persistentOptions_txtHk3_default
+    persistentOptions(Index).txtHk4 = persistentOptions_txtHk4_default
+    persistentOptions(Index).txtHk5 = persistentOptions_txtHk5_default
+    persistentOptions(Index).txtHk6 = persistentOptions_txtHk6_default
+    persistentOptions(Index).txtHk7 = persistentOptions_txtHk7_default
+    persistentOptions(Index).txtHk8 = persistentOptions_txtHk8_default
+    persistentOptions(Index).txtHk9 = persistentOptions_txtHk9_default
+    persistentOptions(Index).txtHk10 = persistentOptions_txtHk10_default
+    persistentOptions(Index).txtHk11 = persistentOptions_txtHk11_default
+    persistentOptions(Index).txtExiva1 = persistentOptions_txtExiva1_default
+    persistentOptions(Index).txtExiva2 = persistentOptions_txtExiva2_default
+    persistentOptions(Index).txtExiva3 = persistentOptions_txtExiva3_default
+    persistentOptions(Index).txtExiva4 = persistentOptions_txtExiva4_default
+    persistentOptions(Index).txtExiva5 = persistentOptions_txtExiva5_default
+    persistentOptions(Index).txtExiva6 = persistentOptions_txtExiva6_default
+    persistentOptions(Index).txtExiva7 = persistentOptions_txtExiva7_default
+    persistentOptions(Index).txtExiva8 = persistentOptions_txtExiva8_default
+    persistentOptions(Index).txtExiva9 = persistentOptions_txtExiva9_default
+    persistentOptions(Index).txtExiva10 = persistentOptions_txtExiva10_default
+    persistentOptions(Index).txtExiva11 = persistentOptions_txtExiva11_default
+    persistentOptions(Index).chkExiva1 = persistentOptions_chkExiva1_default
+    persistentOptions(Index).chkExiva2 = persistentOptions_chkExiva2_default
+    persistentOptions(Index).chkExiva3 = persistentOptions_chkExiva3_default
+    persistentOptions(Index).chkExiva4 = persistentOptions_chkExiva4_default
+    persistentOptions(Index).chkExiva5 = persistentOptions_chkExiva5_default
+    persistentOptions(Index).chkExiva6 = persistentOptions_chkExiva6_default
+    persistentOptions(Index).chkExiva7 = persistentOptions_chkExiva7_default
+    persistentOptions(Index).chkExiva8 = persistentOptions_chkExiva8_default
+    persistentOptions(Index).chkExiva9 = persistentOptions_chkExiva9_default
+    persistentOptions(Index).chkExiva10 = persistentOptions_chkExiva10_default
+    persistentOptions(Index).chkExiva11 = persistentOptions_chkExiva11_default
+    
+    'ng custom aimbot
+    aimbotOptions(Index).chkSDcombo = aimbotOptions_chkSDcombo_default
+    aimbotOptions(Index).chkUEcombo = aimbotOptions_chkUEcombo_default
+    aimbotOptions(Index).txtLeader = aimbotOptions_txtLeader_default
+    aimbotOptions(Index).txtCombo = aimbotOptions_txtCombo_default
+    
+    
   sentWelcome(Index) = False
   For j = 0 To HIGHEST_BP_ID
     Backpack(Index, j).open = False
@@ -1722,6 +1963,11 @@ Public Sub DoCloseActions(ByVal Index As Integer)
   frmRunemaker.LoadRuneChars
   frmHPmana.LoadHPmanaChars
   frmStealth.LoadStealthChars
+  'custom ng
+  frmHealing.LoadHealingChars
+  frmExtras.LoadextrasChars
+  frmPersistent.LoadPersistentChars
+  frmAimbot.LoadAimbotChars
   
   
   frmEvents.LoadEventChars
@@ -1764,8 +2010,11 @@ Private Sub HideAdvancedOptions()
   chkAutoHide.enabled = False
   cmbPrefered.enabled = False
   frmMain.Width = 6900
-  frmMain.Height = 6550
+  'frmMain.Height = 6550
+  'custom ng
+  frmMain.Height = 2490
 End Sub
+
 Private Sub ShowAdvancedOptions()
   ' Show advanced options
   cmdAdvanced.Caption = "Hide advanced options"
@@ -3378,6 +3627,12 @@ ReDim DoingNewLootMAXGTC(1 To MAXCLIENTS)
   ReDim GotPacketWarning(1 To MAXCLIENTS)
   ReDim DatTiles(0 To MAXDATTILES)
   ReDim RuneMakerOptions(1 To MAXCLIENTS)
+  'custom ng
+  ReDim healingCheatsOptions(1 To MAXCLIENTS)
+  ReDim extrasOptions(1 To MAXCLIENTS)
+  ReDim persistentOptions(1 To MAXCLIENTS)
+  ReDim aimbotOptions(1 To MAXCLIENTS)
+  '
   ReDim AfterLoginLogoutReason(1 To MAXCLIENTS)
   ReDim myExp(1 To MAXCLIENTS)
   ReDim myLevel(1 To MAXCLIENTS)
@@ -3887,7 +4142,6 @@ Public Sub ReadIni()
   Else
     UseCrackd = True
   End If
-
   
   strInfo = String$(10, 0)
   i = getBlackdINI("Log", "LogPacketsEnabled", "", strInfo, Len(strInfo), here)
@@ -4533,7 +4787,9 @@ Public Sub ReadIni()
   Else
     BroadcastDelay2 = 30000
   End If
-  frmBroadcast.chkMC.Value = BroadcastMC
+  
+  'custom ng dont load with this
+  'frmBroadcast.chkMC.Value = BroadcastMC
   frmBroadcast.txtBroadcastDelay1.Text = BroadcastDelay1
   frmBroadcast.txtBroadcastDelay2.Text = BroadcastDelay2
   
@@ -4592,14 +4848,15 @@ Public Sub ReadIni()
     frmHardcoreCheats.tibiaTittleFormat = "$charactername$ - $expleft$ exp to lv $nextlevel$ - $exph$ exp/h"
   End If
   
-  strInfo = String$(10, 0)
-  i = getBlackdINI("Cheats", "ColorEffects", "", strInfo, Len(strInfo), here)
-  strInfo = Left(strInfo, i)
-  If strInfo = "1" Then
-    frmHardcoreCheats.chkColorEffects.Value = 1
-  Else
-    frmHardcoreCheats.chkColorEffects.Value = 0
-  End If
+  'custom ng
+  'strInfo = String$(10, 0)
+  'i = getBlackdINI("Cheats", "ColorEffects", "", strInfo, Len(strInfo), here)
+  'strInfo = Left(strInfo, i)
+  'If strInfo = "1" Then
+  '  frmHardcoreCheats.chkColorEffects.Value = 1
+  'Else
+  '  frmHardcoreCheats.chkColorEffects.Value = 0
+  'End If
   
   'chkCaptionExp
   strInfo = String$(10, 0)
@@ -4611,15 +4868,16 @@ Public Sub ReadIni()
     frmHardcoreCheats.chkCaptionExp.Value = 1
   End If
   
+  'custom ng
   'chkAutoGratz
-  strInfo = String$(10, 0)
-  i = getBlackdINI("Cheats", "chkAutoGratz", "", strInfo, Len(strInfo), here)
-  strInfo = Left(strInfo, i)
-  If strInfo = "0" Then
-    frmHardcoreCheats.chkAutoGratz.Value = 0
-  Else
-    frmHardcoreCheats.chkAutoGratz.Value = 1
-  End If
+  'strInfo = String$(10, 0)
+  'i = getBlackdINI("Cheats", "chkAutoGratz", "", strInfo, Len(strInfo), here)
+  'strInfo = Left(strInfo, i)
+  'If strInfo = "1" Then
+  '  frmHardcoreCheats.chkAutoGratz.Value = 1
+  'Else
+  '  frmHardcoreCheats.chkAutoGratz.Value = 0
+  'End If
   
   'chkAutorelog
   strInfo = String$(10, 0)
@@ -4660,26 +4918,27 @@ Public Sub ReadIni()
   End If
 
   
-  
+  'custom ng
   'chkProtectedShots
-  strInfo = String$(10, 0)
-  i = getBlackdINI("Cheats", "chkProtectedShots", "", strInfo, Len(strInfo), here)
-  strInfo = Left(strInfo, i)
-  If strInfo = "0" Then
-    frmHardcoreCheats.chkProtectedShots.Value = 0
-  Else
-    frmHardcoreCheats.chkProtectedShots.Value = 1
-  End If
+  'strInfo = String$(10, 0)
+  'i = getBlackdINI("Cheats", "chkProtectedShots", "", strInfo, Len(strInfo), here)
+  'strInfo = Left(strInfo, i)
+  'If strInfo = "0" Then
+  '  frmHardcoreCheats.chkProtectedShots.Value = 0
+  'Else
+  '  frmHardcoreCheats.chkProtectedShots.Value = 1
+  'End If
   
+  'custom ng
   'chkGmMessagesPauseAll
-  strInfo = String$(10, 0)
-  i = getBlackdINI("Cheats", "chkGmMessagesPauseAll", "", strInfo, Len(strInfo), here)
-  strInfo = Left(strInfo, i)
-  If strInfo = "0" Then
-    frmHardcoreCheats.chkGmMessagesPauseAll.Value = 0
-  Else
-    frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1
-  End If
+  'strInfo = String$(10, 0)
+  'i = getBlackdINI("Cheats", "chkGmMessagesPauseAll", "", strInfo, Len(strInfo), here)
+  'strInfo = Left(strInfo, i)
+  'If strInfo = "0" Then
+  '  frmHardcoreCheats.chkGmMessagesPauseAll.Value = 0
+  'Else
+  '  frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1
+  'End If
 
   strInfo = String$(250, 0)
   i = getBlackdINI("Cheats", "txtExuraVita", "", strInfo, Len(strInfo), here)
@@ -5039,23 +5298,25 @@ Public Sub ReadIni()
 frmRunemaker.txrRunemakerChaos.Text = CStr(RunemakerChaos)
 frmRunemaker.txrRunemakerChaos2.Text = CStr(RunemakerChaos2)
 
-  strInfo = String$(10, 0)
-  i = getBlackdINI("Runemaker", "ChkDangerSound", "", strInfo, Len(strInfo), here)
-  strInfo = Left(strInfo, i)
-  If strInfo = "0" Then
-    frmRunemaker.ChkDangerSound.Value = 0
-  Else
-    frmRunemaker.ChkDangerSound.Value = 1
-  End If
+'custom ng dont load with this
+  'strInfo = String$(10, 0)
+  'i = getBlackdINI("Runemaker", "ChkDangerSound", "", strInfo, Len(strInfo), here)
+  'strInfo = Left(strInfo, i)
+  'If strInfo = "0" Then
+  '  frmRunemaker.ChkDangerSound.Value = 0
+  'Else
+  '  frmRunemaker.ChkDangerSound.Value = 1
+  'End If
 
-  strInfo = String$(10, 0)
-  i = getBlackdINI("Runemaker", "ChkCloseSound", "", strInfo, Len(strInfo), here)
-  strInfo = Left(strInfo, i)
-  If strInfo = "0" Then
-    frmRunemaker.chkCloseSound.Value = 0
-  Else
-    frmRunemaker.chkCloseSound.Value = 1
-  End If
+'custom ng dont load with this
+  'strInfo = String$(10, 0)
+  'i = getBlackdINI("Runemaker", "ChkCloseSound", "", strInfo, Len(strInfo), here)
+  'strInfo = Left(strInfo, i)
+  'If strInfo = "0" Then
+  '  frmRunemaker.chkCloseSound.Value = 0
+  'Else
+  '  frmRunemaker.chkCloseSound.Value = 1
+  'End If
   
   strInfo = String$(10, 0)
   i = getBlackdINI("Runemaker", "ChkOnDangerSS2", "", strInfo, Len(strInfo), here)
@@ -6806,6 +7067,12 @@ workAroundForRareError:
      ' events that happens when a char complete the login stage
     frmTrueMap.LoadChars
     frmRunemaker.LoadRuneChars
+    'custom ng
+    frmHealing.LoadHealingChars
+    frmExtras.LoadextrasChars
+    frmPersistent.LoadPersistentChars
+    frmAimbot.LoadAimbotChars
+    '
     frmStealth.LoadStealthChars
     frmHPmana.LoadHPmanaChars
     frmEvents.LoadEventChars
