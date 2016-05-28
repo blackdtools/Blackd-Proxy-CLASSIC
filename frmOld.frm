@@ -3,16 +3,26 @@ Begin VB.Form frmOld
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Blackd Proxy"
-   ClientHeight    =   4470
+   ClientHeight    =   4770
    ClientLeft      =   45
    ClientTop       =   375
    ClientWidth     =   8745
    Icon            =   "frmOld.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   4470
+   ScaleHeight     =   4770
    ScaleWidth      =   8745
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CheckBox chkOldMenu 
+      BackColor       =   &H00000000&
+      Caption         =   "Set this Menu default. Next time Blackd is open this will be the main menu."
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   120
+      TabIndex        =   28
+      Top             =   4440
+      Width           =   5775
+   End
    Begin VB.CommandButton cmdVIPsupport 
       BackColor       =   &H0000FFFF&
       Caption         =   "Go to VIP support page"
@@ -363,6 +373,31 @@ Attribute VB_Exposed = False
 #Const DoSave = 1
 Option Explicit
 
+Private Sub chkOldMenu_Click()
+  'custom ng
+  ' write ini file
+  Dim i As Integer
+  Dim strInfo As String
+  Dim here As String
+  Dim idLoginSP As Long
+
+  
+  If configPath = "" Then
+    here = myMainConfigINIPath()
+  Else
+    here = App.path & "\" & configPath & "\config.ini"
+  End If
+  
+  If chkOldMenu.Value = 1 Then
+  strInfo = CStr(frmOld.chkOldMenu.Value)
+  i = setBlackdINI("OldMenu", "chkOldMenu", strInfo, here)
+  Else
+  strInfo = CStr(frmOld.chkOldMenu.Value)
+  i = setBlackdINI("OldMenu", "chkOldMenu", strInfo, here)
+  End If
+
+End Sub
+
 Private Sub cmdAd_Click()
 Dim a
 
@@ -375,6 +410,7 @@ Private Sub cmdAdvanced_Click()
   frmAdvanced.WindowState = vbNormal
   frmAdvanced.Show
   frmAdvanced.SetFocus
+  SetWindowPos frmAdvanced.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -382,6 +418,7 @@ Private Sub cmdBroadcast_Click()
   frmBroadcast.WindowState = vbNormal
   frmBroadcast.Show
   frmBroadcast.SetFocus
+  SetWindowPos frmBroadcast.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 '#Const FinalMode =0
@@ -396,6 +433,7 @@ Private Sub cmdCavebot_Click()
   frmCavebot.WindowState = vbNormal
   frmCavebot.Show
   frmCavebot.SetFocus
+  SetWindowPos frmCavebot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -404,12 +442,14 @@ Private Sub cmdCheats_Click()
   frmCheats.WindowState = vbNormal
   frmCheats.Show
   frmCheats.SetFocus
+  SetWindowPos frmCheats.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdEvents_Click()
   frmEvents.WindowState = vbNormal
   frmEvents.Show
   frmEvents.SetFocus
+  SetWindowPos frmEvents.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdHardcoreCheats_Click()
@@ -417,6 +457,7 @@ Private Sub cmdHardcoreCheats_Click()
   frmHardcoreCheats.WindowState = vbNormal
   frmHardcoreCheats.Show
   frmHardcoreCheats.SetFocus
+  SetWindowPos frmHardcoreCheats.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdHotkeys_Click()
@@ -424,6 +465,7 @@ Private Sub cmdHotkeys_Click()
   frmHotkeys.WindowState = vbNormal
   frmHotkeys.Show
   frmHotkeys.SetFocus
+  SetWindowPos frmHotkeys.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -432,6 +474,7 @@ Private Sub cmdHPmana_Click()
   frmHPmana.WindowState = vbNormal
   frmHPmana.Show
   frmHPmana.SetFocus
+  SetWindowPos frmHPmana.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -491,6 +534,7 @@ Private Sub cmdLogs_Click()
   frmMain.WindowState = vbNormal
   frmMain.Show
   frmMain.SetFocus
+  SetWindowPos frmMain.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -498,6 +542,7 @@ Private Sub cmdMagebomb_Click()
   frmMagebomb.WindowState = vbNormal
   frmMagebomb.Show
   frmMagebomb.SetFocus
+  SetWindowPos frmMagebomb.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 'Private Sub cmdMagebot_Click()
@@ -521,6 +566,7 @@ Private Sub cmdNews_Click()
   frmNews.WindowState = vbNormal
   frmNews.Show
   frmNews.SetFocus
+  SetWindowPos frmNews.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -529,6 +575,7 @@ Private Sub cmdRunemaker_Click()
   frmRunemaker.WindowState = vbNormal
   frmRunemaker.Show
   frmRunemaker.SetFocus
+  SetWindowPos frmRunemaker.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdSave_Click()
@@ -550,6 +597,7 @@ Private Sub cmdStealth_Click()
   frmStealth.WindowState = vbNormal
   frmStealth.Show
   frmStealth.SetFocus
+  SetWindowPos frmStealth.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdStopAlarm_Click()
@@ -588,6 +636,7 @@ Private Sub cmdTrainer_Click()
   frmTrainer.WindowState = vbNormal
   frmTrainer.Show
   frmTrainer.SetFocus
+  SetWindowPos frmTrainer.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -604,6 +653,7 @@ Private Sub cmdUnknownFeature_Click()
   frmCondEvents.WindowState = vbNormal
   frmCondEvents.Show
   frmCondEvents.SetFocus
+  SetWindowPos frmCondEvents.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -618,6 +668,7 @@ Private Sub cmdWarbot_Click()
   frmWarbot.WindowState = vbNormal
   frmWarbot.Show
   frmWarbot.SetFocus
+  SetWindowPos frmWarbot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 

@@ -475,21 +475,15 @@ giveError:
 
 End Sub
 
-
-
-
-
-
-
-
-
-
-
-
 Private Sub Timer1_Timer()
   If LoadWasCompleted = True Then
     Timer1.enabled = False
-    frmMenu.Show
+    'custom ng startup
+    If frmOld.chkOldMenu.Value = 0 Then
+        frmMenu.Show
+    Else
+        frmOld.Show
+    End If
     'frmMenu.givePathMsg
     Unload Me
   ElseIf LoadingStarted = False Then

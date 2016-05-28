@@ -544,7 +544,7 @@ Private Sub cmbCharacter_Click()
 
 End Sub
 
-Private Sub cmbHouse_Change()
+Private Sub cmbHouse_Click()
 
 If extrasIDselected > 0 Then
 
@@ -602,14 +602,23 @@ Dim moveY As Long
 
 
 If KeyB.key(88) > 0 And KeyB.key(54) > 0 Then   'teset show
-If frmMenu.Visible = False Then
-          ' frmMenu.WindowState = vbNormal
+    
+    If frmOld.chkOldMenu.Value = 0 Then
+        If frmMenu.Visible = False Then
            frmMenu.Show
-           'frmMenu.SetFocus
            SetWindowPos frmMenu.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
-Else
-        frmMenu.Hide
-  End If
+        Else
+           frmMenu.Hide
+        End If
+    Else
+        If frmOld.Visible = False Then
+           frmOld.Show
+           SetWindowPos frmOld.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+        Else
+           frmOld.Hide
+        End If
+    End If
+    
 End If
 
 For idConnection = 1 To MAXCLIENTS

@@ -1596,6 +1596,12 @@ lastLoadLine = 895
   txtTibiaPath.Text = TibiaPath
   Load frmMenu
   
+  'custom ng
+  If frmOld.chkOldMenu.Value = 1 Then
+    frmMenu.Hide
+  End If
+  
+  
   For i = 1 To MAXSCHEDULED
     scheduledActions(i).pending = False
     scheduledActions(i).action = ""
@@ -5418,6 +5424,17 @@ frmRunemaker.txrRunemakerChaos2.Text = CStr(RunemakerChaos2)
   End If
   frmCondEvents.txtMs2.Text = CStr(TimerConditionTick2)
   
+  'custom ng save old menu
+  strInfo = String$(10, 0)
+  i = getBlackdINI("OldMenu", "chkOldMenu", "", strInfo, Len(strInfo), here)
+  
+  strInfo = Left(strInfo, i)
+  If strInfo = "1" Then
+    frmOld.chkOldMenu.Value = 1
+    'frmOld.chkOldMenu_Click
+  Else
+    frmOld.chkOldMenu.Value = 0
+  End If
   
   
   ' CheatsEnabled and Version SHOULD BE LAST THINGS TO READ
@@ -5963,6 +5980,10 @@ Public Sub WriteIni()
   'chkApplyCheats
   strInfo = CStr(frmHardcoreCheats.chkApplyCheats.Value)
   i = setBlackdINI("Cheats", "CheatsEnabled", strInfo, here)
+  
+  'custom ng save old menu
+  strInfo = CStr(frmOld.chkOldMenu.Value)
+  i = setBlackdINI("OldMenu", "chkOldMenu", strInfo, here)
   
   
     'cmbOrderType

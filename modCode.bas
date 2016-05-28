@@ -11153,12 +11153,12 @@ Public Function CountOnFloor(idConnection As Integer, strFloor As String, _
           tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
           If tileID = 97 Then
            nameofgivenID = GetNameFromID(idConnection, Matrix(y, X, z, idConnection).s(s).dblID)
-            If ((isMelee(idConnection, nameofgivenID) = True) Or (isHmm(idConnection, nameofgivenID) = True)) And (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
+            If ((isMelee(idConnection, nameofgivenID) = True) Or (isHmm(idConnection, nameofgivenID) = True)) And (frmWarbot.IsAutoHealFriend(LCase(nameofgivenID)) = False) Then
               If (blnCountMeleeTargets = True And nameofgivenID <> CharacterName(idConnection)) Then
                 lngCount = lngCount + 1
               End If
             Else
-            If (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
+            If (frmWarbot.IsAutoHealFriend(LCase(nameofgivenID)) = False) Then
               If (nameofgivenID <> CharacterName(idConnection)) Then
                 If (IsGM(nameofgivenID) = True) Then
                   If (blnCountGMs = True) Then

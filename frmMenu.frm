@@ -34,7 +34,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":0442
       Style           =   1  'Graphical
       TabIndex        =   37
-      Top             =   4320
+      Top             =   4680
       Width           =   1335
    End
    Begin VB.CommandButton cmdNews 
@@ -44,7 +44,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":2122
       Style           =   1  'Graphical
       TabIndex        =   36
-      Top             =   4320
+      Top             =   4680
       Width           =   1335
    End
    Begin VB.CommandButton cmdLaunchTibiaMC 
@@ -64,7 +64,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":4DFE
       Style           =   1  'Graphical
       TabIndex        =   34
-      Top             =   3240
+      Top             =   3600
       Width           =   1335
    End
    Begin VB.CommandButton cmdStealth 
@@ -74,7 +74,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":7A59
       Style           =   1  'Graphical
       TabIndex        =   33
-      Top             =   4320
+      Top             =   4680
       Width           =   1335
    End
    Begin VB.CommandButton cmdAd 
@@ -84,7 +84,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":9089
       Style           =   1  'Graphical
       TabIndex        =   32
-      Top             =   3240
+      Top             =   3600
       Width           =   1335
    End
    Begin VB.CommandButton cmdHPmana 
@@ -94,7 +94,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":9E86
       Style           =   1  'Graphical
       TabIndex        =   31
-      Top             =   3240
+      Top             =   3600
       Width           =   1335
    End
    Begin VB.CommandButton cmdUnknownFeature 
@@ -124,7 +124,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":D1CE
       Style           =   1  'Graphical
       TabIndex        =   28
-      Top             =   2160
+      Top             =   2520
       Width           =   1335
    End
    Begin VB.CommandButton cmdWarbot 
@@ -134,7 +134,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":E0AC
       Style           =   1  'Graphical
       TabIndex        =   27
-      Top             =   1080
+      Top             =   1440
       Width           =   1335
    End
    Begin VB.CommandButton cmdEvents 
@@ -144,7 +144,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":F64D
       Style           =   1  'Graphical
       TabIndex        =   26
-      Top             =   2160
+      Top             =   2520
       Width           =   1335
    End
    Begin VB.CommandButton cmdAdvanced 
@@ -154,7 +154,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":104A6
       Style           =   1  'Graphical
       TabIndex        =   25
-      Top             =   3240
+      Top             =   3600
       Width           =   1335
    End
    Begin VB.CommandButton cmdHotkeys 
@@ -164,7 +164,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":114FE
       Style           =   1  'Graphical
       TabIndex        =   24
-      Top             =   1080
+      Top             =   1440
       Width           =   1335
    End
    Begin VB.CommandButton cmdStopAlarm 
@@ -174,7 +174,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":12538
       Style           =   1  'Graphical
       TabIndex        =   23
-      Top             =   2160
+      Top             =   2520
       Width           =   1335
    End
    Begin VB.CommandButton cmdTutorial 
@@ -184,7 +184,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":13570
       Style           =   1  'Graphical
       TabIndex        =   22
-      Top             =   3240
+      Top             =   3600
       Width           =   1335
    End
    Begin VB.CommandButton cmdLogs 
@@ -194,7 +194,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":14480
       Style           =   1  'Graphical
       TabIndex        =   21
-      Top             =   2160
+      Top             =   2520
       Width           =   1335
    End
    Begin VB.CommandButton cmdCheats 
@@ -204,7 +204,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":151C1
       Style           =   1  'Graphical
       TabIndex        =   20
-      Top             =   2160
+      Top             =   2520
       Width           =   1335
    End
    Begin VB.CommandButton cmdCavebot 
@@ -214,7 +214,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":162CE
       Style           =   1  'Graphical
       TabIndex        =   19
-      Top             =   1080
+      Top             =   1440
       Width           =   1335
    End
    Begin VB.CommandButton cmdRunemaker 
@@ -224,7 +224,7 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":1741D
       Style           =   1  'Graphical
       TabIndex        =   18
-      Top             =   1080
+      Top             =   1440
       Width           =   1335
    End
    Begin VB.CommandButton cmdHardcoreCheats 
@@ -234,16 +234,16 @@ Begin VB.Form frmMenu
       Picture         =   "frmMenu.frx":18748
       Style           =   1  'Graphical
       TabIndex        =   17
-      Top             =   1080
+      Top             =   1440
       Width           =   1335
    End
    Begin JwldButn2b.JeweledButton cmdHealingNG 
       Height          =   300
-      Left            =   5400
+      Left            =   0
       TabIndex        =   1
       Top             =   0
-      Width           =   675
-      _ExtentX        =   1191
+      Width           =   1035
+      _ExtentX        =   1826
       _ExtentY        =   529
       Caption         =   "Healing"
       PictureSize     =   0
@@ -514,7 +514,7 @@ Begin VB.Form frmMenu
    End
    Begin JwldButn2b.JeweledButton cmdChangeStyle 
       Height          =   300
-      Left            =   0
+      Left            =   4320
       TabIndex        =   12
       Top             =   0
       Width           =   1035
@@ -666,13 +666,13 @@ Begin VB.Form frmMenu
    End
    Begin JwldButn2b.JeweledButton ccmdPersistent 
       Height          =   300
-      Left            =   4320
+      Left            =   5400
       TabIndex        =   45
       Top             =   0
-      Width           =   1035
-      _ExtentX        =   1826
+      Width           =   675
+      _ExtentX        =   1191
       _ExtentY        =   529
-      Caption         =   "Persistent"
+      Caption         =   "Persist"
       PictureSize     =   0
       OriginalPicSizeW=   0
       OriginalPicSizeH=   0
@@ -724,7 +724,7 @@ Begin VB.Form frmMenu
       Height          =   255
       Left            =   4320
       TabIndex        =   43
-      Top             =   4800
+      Top             =   5160
       Width           =   2175
    End
    Begin VB.Label lblForum 
@@ -743,7 +743,7 @@ Begin VB.Form frmMenu
       Height          =   255
       Left            =   5400
       TabIndex        =   42
-      Top             =   5040
+      Top             =   5400
       Width           =   1095
    End
    Begin VB.Label lblUpdates 
@@ -762,7 +762,7 @@ Begin VB.Form frmMenu
       Height          =   255
       Left            =   4320
       TabIndex        =   41
-      Top             =   5040
+      Top             =   5400
       Width           =   975
    End
    Begin VB.Label lblMainSite 
@@ -781,7 +781,7 @@ Begin VB.Form frmMenu
       Height          =   255
       Left            =   4320
       TabIndex        =   40
-      Top             =   4560
+      Top             =   4920
       Width           =   2295
    End
    Begin VB.Label Label2 
@@ -800,7 +800,7 @@ Begin VB.Form frmMenu
       Height          =   255
       Left            =   4320
       TabIndex        =   39
-      Top             =   4320
+      Top             =   4680
       Width           =   1335
    End
    Begin VB.Menu mPopupSys 
@@ -912,6 +912,7 @@ Private Sub cmdChangeStyle_Click()
   frmOld.Show
   frmOld.SetFocus
   SetWindowPos frmOld.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  Me.Hide
 End Sub
 
 Private Sub cmdCheats_Click()
@@ -1057,6 +1058,7 @@ Private Sub cmdMagebomb_Click()
   frmMagebomb.WindowState = vbNormal
   frmMagebomb.Show
   frmMagebomb.SetFocus
+  SetWindowPos frmMagebomb.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 'Private Sub cmdMagebot_Click()
@@ -1086,6 +1088,7 @@ Private Sub cmdNewsNG_Click()
   frmNews.WindowState = vbNormal
   frmNews.Show
   frmNews.SetFocus
+  SetWindowPos frmNews.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdRunemaker_Click()
@@ -1238,6 +1241,7 @@ Private Sub Form_Load()
   
   If TibiaVersionLong >= 841 Then
     frmMenu.cmdMagebomb.enabled = False
+    frmOld.cmdMagebomb.enabled = False
   End If
   
   'If IamAdmin = True Then
@@ -1366,6 +1370,8 @@ Private Sub mPopExit_Click()
   If confirmedExit = False Then
     frmConfirm.Show
     frmConfirm.SetFocus
+    'custom ng
+    SetWindowPos frmConfirm.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
     Exit Sub
   End If
   'called when user clicks the popup menu Exit command
