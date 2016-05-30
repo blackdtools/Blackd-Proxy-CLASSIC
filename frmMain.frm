@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -1616,6 +1616,16 @@ lastLoadLine = 895
 goterr:
   'LogOnFile "debug.txt", "Terminated by critical error (-4)"
   Select Case lastLoadLine
+  Case 749 ' first jwldbutton
+    strHint = "Details: Unable to init buttons." & vbCrLf & _
+     "This usually means that somehow JwldButn2b.ocx" & vbCrLf & _
+     "was not correctly installed or registered." & vbCrLf & _
+     "Did you really run the installer??." & vbCrLf & _
+     "If installer doesn't register it then ..." & vbCrLf & _
+     "Copy JwldButn2b.ocx and JwldButn2b.oca to your" & vbCrLf & _
+     "dll folder, usually: windows\system32\" & vbCrLf & _
+     "and register it using regsvr32" & vbCrLf & _
+     "(please search a -how to register an ocx- in Google)"
   Case 601, 602, 603 ' first dictionary
     strHint = "Details: Unable to create the first dictionary object." & vbCrLf & _
      "This usually means that somehow scrrun.dll" & vbCrLf & _
@@ -1625,7 +1635,7 @@ goterr:
      "Download scrrun.dll from Microsoft or google it," & vbCrLf & _
      "then save it on windows\system32\" & vbCrLf & _
      "and register it using regsvr32" & vbCrLf & _
-     "(please search a -how to register a dll- in google)"
+     "(please search a -how to register a dll- in Google)"
   Case 651
     strHint = "Details: Outstanding debug in basic instructions, subpoint " & CStr(subdebug651)
   Case Else

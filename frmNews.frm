@@ -62,7 +62,11 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-        strMsg = "Blackd Proxy 40.1" & vbCrLf & _
+    strMsg = "Blackd Proxy 40.2" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixes a small bug at loading."
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 40.1" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Fixes several bugs reported by users." & vbCrLf & _
      " - Added button to initialize with classic Menu if user choose to."

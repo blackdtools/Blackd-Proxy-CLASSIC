@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Blackd Proxy"
-#define MyAppVersion "40.1"
+#define MyAppVersion "40.2"
 #define MyAppPublisher "blackdtools.com"
 #define MyAppURL "http://blackdtools.com"
 #define MyAppExeName "Tibia.exe"
@@ -76,6 +76,11 @@ Source: "mswinsck.ocx"; DestDir: "{app}"; Flags:
 
 Source: "JwldButn2b.oca"; DestDir: "{app}"; Flags: 
 Source: "JwldButn2b.ocx"; DestDir: "{app}"; Flags: 
+Source: "JwldButn2b.oca"; DestDir: {sys}; Flags: onlyifdoesntexist
+Source: "JwldButn2b.oca"; DestDir: {sys}; Flags: onlyifdoesntexist
+Source: "JwldButn2b.ocx"; DestDir: {sys}; Flags: onlyifdoesntexist regserver 32bit
+Source: "JwldButn2b.ocx"; DestDir: {sys}; Flags: onlyifdoesntexist regserver 64bit; Check: IsWin64
+
 
 
 Source: "mswsock.dll"; DestDir: "{app}"; Flags: 
