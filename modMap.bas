@@ -35,8 +35,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "40.2" ' Proxy version ' string version
-Public Const myNumericVersion = 40200 ' numeric version
+Public Const ProxyVersion = "40.3" ' Proxy version ' string version
+Public Const myNumericVersion = 40300 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -4660,41 +4660,44 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' my skills
       pos = pos + 15
       If TibiaVersionLong >= 872 Then
-'    WriteByte(0xA1);
-'    WriteByte(*PLAYER_FIST);
-'    WriteByte(*PLAYER_FIST_PER);
-'    WriteByte(0); // unknown - flash client
-'    WriteByte(*PLAYER_CLUB);
-'    WriteByte(*PLAYER_CLUB_PER);
-'    WriteByte(0); // unknown - flash client
-'    WriteByte(*PLAYER_SWORD);
-'    WriteByte(*PLAYER_SWORD_PER);
-'    WriteByte(0); // unknown - flash client
-'    WriteByte(*PLAYER_AXE);
-'    WriteByte(*PLAYER_AXE_PER);
-'    WriteByte(0); // unknown - flash client
-'    WriteByte(*PLAYER_DIST);
-'    WriteByte(*PLAYER_DIST_PER);
-'    WriteByte(0); // unknown - flash client
-'    WriteByte(*PLAYER_SHIELD);
-'    WriteByte(*PLAYER_SHIELD_PER);
-'    WriteByte(0); // unknown - flash client
-'    WriteByte(*PLAYER_FISH);
-'    WriteByte(*PLAYER_FISH_PER);
-'    WriteByte(0); // unknown - flash client
-
+        '    WriteByte(0xA1);
+        '    WriteByte(*PLAYER_FIST);
+        '    WriteByte(*PLAYER_FIST_PER);
+        '    WriteByte(0); // unknown - flash client
+        '    WriteByte(*PLAYER_CLUB);
+        '    WriteByte(*PLAYER_CLUB_PER);
+        '    WriteByte(0); // unknown - flash client
+        '    WriteByte(*PLAYER_SWORD);
+        '    WriteByte(*PLAYER_SWORD_PER);
+        '    WriteByte(0); // unknown - flash client
+        '    WriteByte(*PLAYER_AXE);
+        '    WriteByte(*PLAYER_AXE_PER);
+        '    WriteByte(0); // unknown - flash client
+        '    WriteByte(*PLAYER_DIST);
+        '    WriteByte(*PLAYER_DIST_PER);
+        '    WriteByte(0); // unknown - flash client
+        '    WriteByte(*PLAYER_SHIELD);
+        '    WriteByte(*PLAYER_SHIELD_PER);
+        '    WriteByte(0); // unknown - flash client
+        '    WriteByte(*PLAYER_FISH);
+        '    WriteByte(*PLAYER_FISH_PER);
+        '    WriteByte(0); // unknown - flash client
         pos = pos + 7
       End If
-      
-      
-    If TibiaVersionLong >= 1035 Then
-' new skills ??
+      If TibiaVersionLong >= 1035 Then
+        ' new skills since 10.35
         pos = pos + 14
       End If
-
-    'Case &H20
-      ' unknown, 1 byte, usually 20 0D
-    '  pos = pos + 2
+      If TibiaVersionLong >= 1094 Then
+        ' 6 new skills since 10.94. 4 bytes for each value
+        ' Critical Chance
+        ' Critical Damage
+        ' Life Leech Chance
+        ' Life Leech
+        ' Mana Leech Chance
+        ' Mana Leech
+        pos = pos + 24
+      End If
     Case &HA2
       ' add 1 status (lock,skull,etc)
       ' A2 00 40 - pz

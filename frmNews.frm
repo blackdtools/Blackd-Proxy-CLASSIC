@@ -62,7 +62,11 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 40.2" & vbCrLf & _
+    strMsg = "Blackd Proxy 40.3" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Minimum changes to work in all Tibia versions up to 10.94"
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 40.2" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Fixes a small bug at loading."
      
