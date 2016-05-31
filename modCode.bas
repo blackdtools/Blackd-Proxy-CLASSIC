@@ -93,7 +93,6 @@ Public Const sndLoop = &H8
 Public Const sndNoStop = &H10
 
 
-
       'constants required by Shell_NotifyIcon API call:
       Public Const NIM_ADD = &H0
       Public Const NIM_MODIFY = &H1
@@ -515,6 +514,7 @@ Public ConnectionBufferLogin() As TypeBuffer
 Public CharacterList As TypeCharacterList
 Public CharacterList2() As TypeCharacterList2
 
+Public shouldOpenErrorsTXTfolder As Boolean
 
 Public Connected() As Boolean
 Public nextLight() As String
@@ -872,7 +872,7 @@ Public ForceDisableEncryption As Boolean
 Public CloseLoginServerAfterCharList As Boolean
 
 Public Function MemoryChangeFloor(idConnection As Integer, relfloornumber As String) As Long 'receives mc id and relative floor increase desired
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim floornumber As Long
     Dim pid As Long
     Dim relChange As Long
@@ -909,7 +909,7 @@ Public Function MemoryChangeFloor(idConnection As Integer, relfloornumber As Str
     Next i
     MemoryChangeFloor = 0 ' sucess
     Exit Function
-goterr:
+gotErr:
     MemoryChangeFloor = -1 ' failure (unknown)
 End Function
 
@@ -1067,12 +1067,12 @@ Public Sub AddProcessIdIPrelation(strIP As String, strProcessID As Long)
   ProcessidIPrelations.item(strIP) = strProcessID
 End Sub
 Public Sub ResetProcessidIPrelations()
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim a As Long
   a = 0
   ProcessidIPrelations.RemoveAll
   Exit Sub
-goterr:
+gotErr:
   a = -1
 End Sub
 Public Function GetProcessIdFromIP(strIP As String) As Long
@@ -1141,17 +1141,17 @@ ignoreit:
 End Sub
 
 Public Sub AddUserVar(ByVal strUservar As String, ByVal strValue As String)
-  On Error GoTo goterr
+  On Error GoTo gotErr
   ' add item to dictionary
   Dim res As Boolean
   ValueOfUservar.item(strUservar) = strValue
   Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "Get error at AddUserVar : " & Err.Description
 End Sub
 
 Public Function GetUserVar(ByVal strUservar As String) As String
-  On Error GoTo goterr
+  On Error GoTo gotErr
   ' get the IPandport from server name
   Dim aRes As String
   Dim res As Boolean
@@ -1161,7 +1161,7 @@ Public Function GetUserVar(ByVal strUservar As String) As String
     GetUserVar = ""
   End If
   Exit Function
-goterr:
+gotErr:
   LogOnFile "errors.txt", "Got error at AddUserVar : " & Err.Description
   GetUserVar = ""
 End Function
@@ -1291,7 +1291,7 @@ End Sub
 Public Function ValidateTibiaPath(str As String) As String
   Dim res As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If TibiaVersionLong >= 800 Then
   
@@ -1329,7 +1329,7 @@ Public Function ValidateTibiaPath(str As String) As String
   
   End If
   Exit Function
-goterr:
+gotErr:
   ValidateTibiaPath = "PATH NOT CONFIGURED! USE THIS BUTTON TO BROWSE -->"
 End Function
 
@@ -1715,12 +1715,12 @@ End Function
 
 
 Public Function ReadyToChangeTibiaIP() As Boolean
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim theubound As Long
     theubound = UBound(memLoginServer)
     ReadyToChangeTibiaIP = True
     Exit Function
-goterr:
+gotErr:
     ReadyToChangeTibiaIP = False
 End Function
 
@@ -2042,7 +2042,7 @@ End Function
 Public Function FourBytesLong(byte1 As Byte, byte2 As Byte, byte3 As Byte, byte4 As Byte) As Long
   Dim res As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If byte4 = &HFF Then
     ' should not happen
@@ -2053,19 +2053,19 @@ Public Function FourBytesLong(byte1 As Byte, byte2 As Byte, byte3 As Byte, byte4
   End If
   FourBytesLong = res
   Exit Function
-goterr:
+gotErr:
   FourBytesLong = -1
 End Function
 
 Public Function FourBytesDouble(byte1 As Byte, byte2 As Byte, byte3 As Byte, byte4 As Byte) As Double
   Dim res As Double
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   res = CDbl(byte4) * 16777216 + CDbl(byte3) * 65536 + CDbl(byte2) * 256 + CDbl(byte1)
   FourBytesDouble = res
   Exit Function
-goterr:
+gotErr:
   FourBytesDouble = -1
 End Function
 
@@ -4911,6 +4911,7 @@ Public Sub LogOnFile(file_name As String, strtext As String)
   a = 0
   fn = FreeFile
   If file_name = "errors.txt" Then
+    openErrorsTXTfolder
     errheader = "[" & Format(Date, "dd/mm/yyyy") & " " & Format(Time, "hh:mm:ss") & " using version " & ProxyVersion & " , with config.ini v" & CStr(TibiaVersionLong) & " ] "
     If TibiaVersionLong < highestTibiaVersionLong Then
         If frmMain.TrueServer3.Value = True Then
@@ -5477,7 +5478,7 @@ Public Function FiveChrLon(num As Long) As String
 End Function
 
 Public Function GetTheByteFromTwoChr(str As String) As Byte
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim b1 As Byte
   Dim b2 As Byte
   Dim res As Long
@@ -5489,11 +5490,11 @@ Public Function GetTheByteFromTwoChr(str As String) As Byte
   End If
   GetTheByteFromTwoChr = CByte(res)
   Exit Function
-goterr:
+gotErr:
   GetTheByteFromTwoChr = 0
 End Function
 Public Function GetTheLongFromFiveChr(str As String) As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim b1 As Byte
   Dim b2 As Byte
   Dim b3 As Byte
@@ -5510,7 +5511,7 @@ Public Function GetTheLongFromFiveChr(str As String) As Long
   End If
   GetTheLongFromFiveChr = res
   Exit Function
-goterr:
+gotErr:
   GetTheLongFromFiveChr = -1 'new in 8.21 +
 End Function
 
@@ -8047,7 +8048,7 @@ Public Sub UpdateExpVars(idConnection As Integer)
   var_played(idConnection) = Thour & "h " & Tmin & "m " & Tsec & "s"
   var_expgained(idConnection) = CStr(ExpGain)
   Exit Sub
-goterr:
+gotErr:
   substr = ""
 End Sub
 
@@ -8360,7 +8361,7 @@ Public Function GiveExpInfo(idConnection As Integer, formatStr As String) As Lon
   Dim mycolorm As Byte
   Dim leftp As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   'mycolorm = &H13 ' white
   leftp = Left$(frmHardcoreCheats.cmbWhere.Text, 2)
@@ -8377,7 +8378,7 @@ Public Function GiveExpInfo(idConnection As Integer, formatStr As String) As Lon
   DoEvents
   GiveExpInfo = 0
   Exit Function
-goterr:
+gotErr:
   GiveExpInfo = -1
 End Function
 
@@ -8491,7 +8492,7 @@ End Function
 Public Function StopFollowTarget(idConnection As Integer) As Long
   Dim cPacket(6) As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   cPacket(0) = &H5
   cPacket(1) = &H0
@@ -8505,7 +8506,7 @@ Public Function StopFollowTarget(idConnection As Integer) As Long
   DoEvents
   StopFollowTarget = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at StopFollowTarget #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -8518,7 +8519,7 @@ Public Function DoTurbo(idConnection As Integer) As Long
   Dim cPacket(3) As Byte
   Dim curDirPlayer As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   cPacket(0) = &H1
   cPacket(1) = &H0
@@ -8540,7 +8541,7 @@ Public Function DoTurbo(idConnection As Integer) As Long
   DoEvents
   DoTurbo = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at DoTurbo #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -8559,7 +8560,7 @@ Public Function followTarget(idConnection As Integer, targetID As Double) As Lon
   Dim inRes As Integer
   Dim posibleCount As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   lTarget = targetID
          ' aRes = SendLogSystemMessageToClient(idConnection, "Searching ID: " & CStr(lTarget))
@@ -8585,7 +8586,7 @@ Public Function followTarget(idConnection As Integer, targetID As Double) As Lon
   Next y
   followTarget = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at FollowTarget #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -8616,7 +8617,7 @@ Public Function DoPush(idConnection As Integer) As Long
   Dim b3 As Byte
   Dim b4 As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   foundTarget = False
   optIni = 0
@@ -8899,7 +8900,7 @@ reRoll:
 
   DoPush = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at DoPush #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -8922,7 +8923,7 @@ Public Function ViewFloor(idConnection As Integer, strFloor As String) As Long
   Dim squareLim As Long
   Dim drawNext As Boolean
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   floor = CLng(strFloor) + myZ(idConnection)
   If floor < 0 Or floor > 15 Then
@@ -9028,7 +9029,7 @@ drawGot:
   StartReconnection idConnection
   ViewFloor = 0
   Exit Function
-goterr:
+gotErr:
   ViewFloor = -1
 End Function
 
@@ -9046,7 +9047,7 @@ Public Function GameInspect(idConnection As Integer, X As Long, y As Long, z As 
   Dim inRes As Integer
   Dim zdif As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   '09 00 8C 3C 7D AA 7D 08 E8 09 02
   'aRes = SendLogSystemMessageToClient(idConnection, "Inspecting " & X & "," & Y & "," & Z)
@@ -9101,7 +9102,7 @@ Public Function GameInspect(idConnection As Integer, X As Long, y As Long, z As 
 
   GameInspect = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at GameInspect #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -9113,7 +9114,7 @@ Public Sub DoRandomMove(idConnection As Integer)
   Dim sCheat As String
   Dim moveType As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   
 '  cPacket(0) = &H1
@@ -9153,7 +9154,7 @@ Public Sub DoRandomMove(idConnection As Integer)
     SafeCastCheatString "DoRandomMove1", idConnection, sCheat
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at DoRandomMove #"
   frmMain.DoCloseActions idConnection
 End Sub
@@ -9162,7 +9163,7 @@ Public Sub DoManualMove(idConnection As Integer, moveType As Byte)
   Dim aRes As Long
   Dim cPacket(2) As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   cPacket(0) = &H1
   cPacket(1) = &H0
@@ -9200,7 +9201,7 @@ Public Sub DoManualMove(idConnection As Integer, moveType As Byte)
     DoEvents
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at DoManualMove #"
   frmMain.DoCloseActions idConnection
 End Sub
@@ -9211,7 +9212,7 @@ End Sub
 Public Function ValidateOutfitNumber(strNumber As String) As Long
   Dim intNumber As Long
   Dim evNumber As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   intNumber = -1
   evNumber = CLng(strNumber)
   If (evNumber < firstValidOutfit) Or (evNumber > lastValidOutfit) Then
@@ -9226,14 +9227,14 @@ Public Function ValidateOutfitNumber(strNumber As String) As Long
   End Select
   ValidateOutfitNumber = intNumber
   Exit Function
-goterr:
+gotErr:
   ValidateOutfitNumber = -1
 End Function
 
 Public Function NewValidateOutfitNumber(strNumber As String) As Long
   Dim intNumber As Long
   Dim evNumber As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   intNumber = -1
   evNumber = CLng(strNumber)
   If (evNumber < firstValidOutfit) Or (evNumber > lastValidOutfit) Then
@@ -9248,7 +9249,7 @@ Public Function NewValidateOutfitNumber(strNumber As String) As Long
   End Select
   NewValidateOutfitNumber = intNumber
   Exit Function
-goterr:
+gotErr:
   NewValidateOutfitNumber = -1
 End Function
 
@@ -9263,7 +9264,7 @@ Public Function SendOutfit(idConnection As Integer, strNumber As String) As Long
   Dim b1 As Byte
   Dim b2 As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If TibiaVersionLong <= 750 Then
       '08 00 C8 02 00 00 00 00 02 86
@@ -9326,7 +9327,7 @@ Public Function SendOutfit(idConnection As Integer, strNumber As String) As Long
   End If
   SendOutfit = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " got error at SendOutfit #"
   'frmMain.DoCloseActions idConnection
   'DoEvents
@@ -9339,7 +9340,7 @@ Public Function SendOutfit2(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
   Dim inRes As Integer
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   '0A 00 8E 0C 4D 9C 00 82 00 4D 5E 72
   aRes = SendLogSystemMessageToClient(idConnection, _
@@ -9357,7 +9358,7 @@ Public Function SendOutfit2(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
 '  DoEvents
   SendOutfit2 = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at SendOutfit2 #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -9369,7 +9370,7 @@ Public Function SendOutfit3(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
   Dim myBpos As Long
   Dim pid As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   ' Change outfit by memory
   GetProcessIDs idConnection
@@ -9387,7 +9388,7 @@ Public Function SendOutfit3(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
   Memory_WriteByte adrOutfit + 16 + (myBpos * CharDist), b5, pid
   SendOutfit3 = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at SendOutfit2 #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -9400,7 +9401,7 @@ Public Function SendOutfit4(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
   Dim inRes As Integer
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   ' tibia 7.61+
   '0B 00 8E 0C 4D 9C 00 82 00 4D 5E 72
@@ -9431,7 +9432,7 @@ Public Function SendOutfit4(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
 '  DoEvents
   SendOutfit4 = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at SendOutfit4 #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -9982,7 +9983,7 @@ End Function
 Public Function expReset(idConnection As Integer) As Long
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   myInitialExp(idConnection) = myExp(idConnection)
   myInitialTickCount(idConnection) = GetTickCount()
@@ -9990,7 +9991,7 @@ Public Function expReset(idConnection As Integer) As Long
   DoEvents
   expReset = 0
   Exit Function
-goterr:
+gotErr:
   expReset = -1
 End Function
 
@@ -10007,7 +10008,7 @@ Public Function ProcessKillOrder(idConnection As Integer, target As String) As L
   Dim tmpID As Double
   Dim lSquare As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (target = "") Or (target = " ") Then ' use last targeted
     target = currTargetName(idConnection)
@@ -10070,7 +10071,7 @@ continue:
   End If
   ProcessKillOrder = 0
   Exit Function
-goterr:
+gotErr:
   ProcessKillOrder = -1
 End Function
 
@@ -10087,7 +10088,7 @@ Public Function ProcessKillOrder2(idConnection As Integer, target As String) As 
   Dim tmpID As Double
   Dim lSquare As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (target = "") Or (target = " ") Then ' use last targeted
     target = currTargetName(idConnection)
@@ -10141,14 +10142,14 @@ continue:
   End If
  ' ProcessKillOrder2 = 0
   Exit Function
-goterr:
+gotErr:
   ProcessKillOrder2 = -1
 End Function
 
 Public Function ThinkTheKill(idConnection As Integer) As Long
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   'aRes = SendLogSystemMessageToClient(idConnection, "Attacking " & GotKillOrderTargetName(idConnection) & " ...")
   'DoEvents
@@ -10156,7 +10157,7 @@ Public Function ThinkTheKill(idConnection As Integer) As Long
   DoEvents
   ThinkTheKill = 0
   Exit Function
-goterr:
+gotErr:
   ThinkTheKill = -1
 End Function
 
@@ -10169,7 +10170,7 @@ Public Function UseFluid(idConnection As Integer, byteFluid As Byte) As Long
   Dim sCheat As String
   Dim myS As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
 If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
@@ -10229,7 +10230,7 @@ justdoit:
     End If
   End If
   UseFluid = 0
-goterr:
+gotErr:
   UseFluid = -1
 End Function
 
@@ -10247,7 +10248,7 @@ Public Function UsePotion(idConnection As Integer, tileID_potion As Long) As Lon
   Dim sCheat As String
   Dim myS As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
 If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
@@ -10308,14 +10309,14 @@ justdoit:
   End If
   UsePotion = 0
   Exit Function
-goterr:
+gotErr:
   UsePotion = -1
 End Function
 
 Public Sub StartReconnection(idConnection As Integer)
   ' reconnect character
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim tmpPORT As Long
   Dim tmpHost As String
@@ -10381,14 +10382,14 @@ Public Sub StartReconnection(idConnection As Integer)
   frmMain.sckServerGame(idConnection).Connect
   DoEvents
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Reconnection function crashed. Canceling the process. Error: " & Err.Description
   frmMain.DoCloseActions idConnection
 End Sub
 
 Public Function openBP(idConnection As Integer) As Long
   #If FinalMode Then
-    On Error GoTo goterr
+    On Error GoTo gotErr
   #End If
   Dim i As Byte
   Dim j As Byte
@@ -10472,7 +10473,7 @@ Public Function openBP(idConnection As Integer) As Long
   End If
   openBP = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "openbp function failed : " & Err.Description
 openBP = -1
 End Function
@@ -10491,7 +10492,7 @@ Public Function GetRandomLineOf(strFileName As String) As String
   Dim rcounter As Long
   Dim theL As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Set fso = New scripting.FileSystemObject
   filename = App.path & "\randline\" & strFileName
@@ -10521,7 +10522,7 @@ Public Function GetRandomLineOf(strFileName As String) As String
     GetRandomLineOf = "FILE DO NOT EXIST"
   End If
   Exit Function
-goterr:
+gotErr:
   GetRandomLineOf = "UNKNOWN ERROR"
 End Function
 
@@ -10529,12 +10530,12 @@ Public Sub TurnMe(idConnection As Integer, direction As Byte)
   Dim sCheat As String
   Dim iRes As Integer
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   sCheat = GoodHex(&H6F + direction)
   SafeCastCheatString "TurnMe1", idConnection, sCheat
   Exit Sub
-goterr:
+gotErr:
   sCheat = ""
 End Sub
 
@@ -10617,7 +10618,7 @@ End Function
 
 
 Public Function equipmentInfo(idConnection As Integer, lngMode As Long, strPos As String) As String
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim ucaseStrPos As String
   Dim idSlot As Long
   Dim strRes As String
@@ -10679,12 +10680,12 @@ Public Function equipmentInfo(idConnection As Integer, lngMode As Long, strPos A
   End Select
   equipmentInfo = strRes
   Exit Function
-goterr:
+gotErr:
   equipmentInfo = "ERROR"
 End Function
 
 Public Function sendString(idConnection As Integer, str As String, toServer As Boolean, safeMode As Boolean) As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim strSending As String
   Dim ub As Long
   Dim lopa As Long
@@ -10760,7 +10761,7 @@ Public Function sendString(idConnection As Integer, str As String, toServer As B
     Exit Function
   End If
   Exit Function
-goterr:
+gotErr:
   sendString = -1
 End Function
 
@@ -10768,7 +10769,7 @@ Public Function IDofName(idConnection As Integer, strName As String, lngOption A
   '0 = name
   '1 = my id
   '2 = last attacked
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim lTarget As String
   Dim i As Long
   Dim lim As Long
@@ -10858,14 +10859,14 @@ Public Function IDofName(idConnection As Integer, strName As String, lngOption A
     IDofName = SpaceID(currTargetID(idConnection))
     Exit Function
   End Select
-goterr:
+gotErr:
   IDofName = "00 00 00 00"
   Exit Function
 End Function
 
 Public Function storeVar(idConnection As Integer, strRawStore As String)
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim aRes As Long
   Dim strVariable As String
@@ -10902,33 +10903,33 @@ Public Function storeVar(idConnection As Integer, strRawStore As String)
   End If
   storeVar = 0
   Exit Function
-goterr:
+gotErr:
   storeVar = -1
 End Function
 
 Public Function safeLong(strString As String) As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim lngRes As Long
   lngRes = CLng(strString)
   safeLong = lngRes
   Exit Function
-goterr:
+gotErr:
   safeLong = 0
 End Function
 
 Public Function safeDouble(strString As String) As Double
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim dblRes As Double
   dblRes = CDbl(strString)
   safeDouble = dblRes
   Exit Function
-goterr:
+gotErr:
   safeDouble = 0
 End Function
 
 Public Function NumericValueOfExpresion(strExp As String) As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim strFilteredExp As String
   Dim lngSymbolPosition As String
@@ -10973,12 +10974,12 @@ Public Function NumericValueOfExpresion(strExp As String) As Long
   End Select
   NumericValueOfExpresion = strRes
   Exit Function
-goterr:
+gotErr:
   NumericValueOfExpresion = 0
 End Function
 
 Public Function HexConverter(strExpr As String, intOpType As Long) As String
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim strFilteredExpr As String
   Dim strRes As String
   strFilteredExpr = UCase(Trim$(strExpr))
@@ -10995,7 +10996,7 @@ Public Function HexConverter(strExpr As String, intOpType As Long) As String
   End Select
   HexConverter = strRes
   Exit Function
-goterr:
+gotErr:
   Select Case intOpType
   Case 1 'numbertohex1
     HexConverter = "00"
@@ -11015,7 +11016,7 @@ End Function
 
 
 Public Function NameOfHexID(idConnection As Integer, strName As String) As String
-On Error GoTo goterr
+On Error GoTo gotErr
   Dim dblID As Double
   Dim strRes As String
   Dim strFiltered As String
@@ -11046,7 +11047,7 @@ On Error GoTo goterr
   strRes = GetNameFromID(idConnection, dblID)
   NameOfHexID = strRes
   Exit Function
-goterr:
+gotErr:
   NameOfHexID = ""
 End Function
 
@@ -11072,7 +11073,7 @@ End Function
 
 Public Function DoAutocombo(idConnection As Integer, strChannel As String) As Long
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim useChannel As String
   Dim aRes As Long
@@ -11122,7 +11123,7 @@ Public Function DoAutocombo(idConnection As Integer, strChannel As String) As Lo
   aRes = sendString(idConnection, strToSend, True, True)
   DoAutocombo = 0
   Exit Function
-goterr:
+gotErr:
   LogOnFile "errors.txt", "Unexpected error at DoAutocombo : (" & CStr(Err.Number) & ") : " & Err.Description
   DoAutocombo = -1
   Exit Function
@@ -11181,12 +11182,12 @@ Public Function CountOnFloor(idConnection As Integer, strFloor As String, _
   
   CountOnFloor = lngCount
   Exit Function
-goterr:
+gotErr:
   CountOnFloor = 0
 End Function
 
 Public Function GetStatusBit(idConnection As Integer, strBit As String) As String
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim lngBit As Long
   lngBit = CLng(Trim$(strBit))
   If lngBit > 0 And lngBit < 16 Then
@@ -11195,13 +11196,13 @@ Public Function GetStatusBit(idConnection As Integer, strBit As String) As Strin
     GetStatusBit = "?"
   End If
   Exit Function
-goterr:
+gotErr:
   GetStatusBit = "?"
 End Function
 
 Public Function CountTheItemsForUser(idConnection As Integer, strTile As String) As Long
     #If FinalMode = 1 Then
-        On Error GoTo goterr
+        On Error GoTo gotErr
     #End If
     Dim res As Long
     Dim lngLen As Long
@@ -11228,7 +11229,7 @@ Public Function CountTheItemsForUser(idConnection As Integer, strTile As String)
     End If
     CountTheItemsForUser = lngTotal
     Exit Function
-goterr:
+gotErr:
     CountTheItemsForUser = 0
 End Function
 
@@ -11270,7 +11271,7 @@ Public Function SafeGiveIDinfo(idConnection As Integer, strName As String, whati
     SafeGiveIDinfo = 0
   End Select
   Exit Function
-goterr:
+gotErr:
   SafeGiveIDinfo = 0
 End Function
 
@@ -11291,7 +11292,7 @@ Public Function SayInTrade(ByRef idConnection As Integer, ByVal strMsg As String
     Dim b4 As Byte
     Dim inRes As Integer
     #If FinalMode Then
-    On Error GoTo goterr
+    On Error GoTo gotErr
     #End If
     If (doingTrade(idConnection) = False) Then
         SayInTrade = 0
@@ -11316,7 +11317,7 @@ Public Function SayInTrade(ByRef idConnection As Integer, ByVal strMsg As String
     DoEvents
     SayInTrade = 0
     Exit Function
-goterr:
+gotErr:
     SayInTrade = -1
 End Function
 
@@ -11338,7 +11339,7 @@ Public Function SellInTrade(ByRef idConnection As Integer, ByVal strMsg As Strin
     Dim gtc As Long
     
     #If FinalMode Then
-    On Error GoTo goterr
+    On Error GoTo gotErr
     #End If
     If (doingTrade2(idConnection) = False) Then
         aRes = SendLogSystemMessageToClient(idConnection, "Blackd Proxy is unable to sell that: trade window is not opened")
@@ -11426,7 +11427,7 @@ Public Function SellInTrade(ByRef idConnection As Integer, ByVal strMsg As Strin
     
     SellInTrade = 0
     Exit Function
-goterr:
+gotErr:
     aRes = SendLogSystemMessageToClient(idConnection, "Blackd Proxy is unable to sell that: unknown error, vb err code " & CStr(Err.Number))
     DoEvents
     SellInTrade = -1
@@ -11448,7 +11449,7 @@ Public Function BuyInTrade(ByRef idConnection As Integer, ByVal strMsg As String
     Dim gtc As Long
     Dim nextgtc As Long
     #If FinalMode Then
-    On Error GoTo goterr
+    On Error GoTo gotErr
     #End If
     If (doingTrade2(idConnection) = False) Then
         aRes = SendLogSystemMessageToClient(idConnection, "Blackd Proxy is unable to buy that: trade window is not opened")
@@ -11526,14 +11527,14 @@ Public Function BuyInTrade(ByRef idConnection As Integer, ByVal strMsg As String
     ClientExecutingLongCommand(idConnection) = False
     BuyInTrade = 0
     Exit Function
-goterr:
+gotErr:
     aRes = SendLogSystemMessageToClient(idConnection, "Blackd Proxy is unable to buy that: unknown error, vb err code " & CStr(Err.Number))
     DoEvents
     BuyInTrade = -1
 End Function
 
 Private Function ProcessVarRandom(strRight As String) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim pos As Long
     Dim lpart As String
     Dim rpart As String
@@ -11546,12 +11547,12 @@ Private Function ProcessVarRandom(strRight As String) As Long
     lon2 = CLng(rpart)
     ProcessVarRandom = randomNumberBetween(lon1, lon2)
     Exit Function
-goterr:
+gotErr:
     ProcessVarRandom = 0
 End Function
 
 Public Sub ChaotizeNextMaxAttackTime(ByVal idConnection As Integer)
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim dblBase As Double
     Dim dblPercent As Double
     Dim dblMaxIncrease As Double
@@ -11564,7 +11565,7 @@ Public Sub ChaotizeNextMaxAttackTime(ByVal idConnection As Integer)
     lngChaos = randomNumberBetween(CLng(Round(dblMaxDecrease)), CLng(Round(dblMaxIncrease)))
     maxAttackTimeCHAOS(idConnection) = lngChaos
     Exit Sub
-goterr:
+gotErr:
     maxAttackTimeCHAOS(idConnection) = maxAttackTime(idConnection)
 End Sub
 
@@ -11641,7 +11642,7 @@ Public Function IngameCheck2(ByVal idConnection As Integer, ByVal X As Long, ByV
 End Function
 Public Function IngameCheck(ByVal idConnection As Integer, ByVal strXYZ As String) As Long
     #If FinalMode = 1 Then
-        On Error GoTo goterr
+        On Error GoTo gotErr
     #End If
     Dim X As String
     Dim y As String
@@ -11728,7 +11729,7 @@ Public Function IngameCheck(ByVal idConnection As Integer, ByVal strXYZ As Strin
     End If
     IngameCheck = IngameCheck2(idConnection, X, y, z)
     Exit Function
-goterr:
+gotErr:
     aRes = GiveGMmessage(idConnection, "Unexpected error " & CStr(Err.Number), "Exiva check error")
     DoEvents
     IngameCheck = -1
@@ -11736,7 +11737,7 @@ goterr:
 End Function
 
 Public Function TibiaDatExists() As Boolean
-    On Error GoTo goterr
+    On Error GoTo gotErr
   Dim tibiadathere As String
   Dim fs As FileSystemObject
   Set fs = New scripting.FileSystemObject
@@ -11753,7 +11754,7 @@ Public Function TibiaDatExists() As Boolean
   End If
   TibiaDatExists = True
   Exit Function
-goterr:
+gotErr:
   DBGtileError = "Error number = " & CStr(Err.Number) & vbCrLf & " ; Error description = " & Err.Description & " ; Path = " & tibiadathere
   TibiaDatExists = False
 End Function
@@ -11772,7 +11773,7 @@ Public Function UseItemWithAmount(idConnection As Integer, strTile As String) As
 'strTile: "DB 0F FF,1" == use DB 0F with 1 ammount//len10
 
     #If FinalMode = 1 Then
-        On Error GoTo goterr
+        On Error GoTo gotErr
     #End If
     Dim res As Long
     Dim tmpLong As Long
@@ -11807,13 +11808,13 @@ Public Function UseItemWithAmount(idConnection As Integer, strTile As String) As
     UseItemWithAmount = -1
     End If
     Exit Function
-goterr:
+gotErr:
     UseItemWithAmount = -1
 End Function
 
 
 Public Function GetSizeOfFile(ByVal strFilePath As String) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim fn As Integer
     Dim res As Long
     fn = FreeFile
@@ -11822,12 +11823,12 @@ Public Function GetSizeOfFile(ByVal strFilePath As String) As Long
     Close fn
     GetSizeOfFile = res
     Exit Function
-goterr:
+gotErr:
     GetSizeOfFile = -1
 End Function
 
 Public Function GetDATEOfFile(ByVal strFilePath As String) As Date
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim strLine As String
     strLine = "Dim FileTS As Date"
     Dim FileTS As Date
@@ -11836,7 +11837,7 @@ Public Function GetDATEOfFile(ByVal strFilePath As String) As Date
     strLine = "GetDATEOfFile = FileTS"
     GetDATEOfFile = FileTS
     Exit Function
-goterr:
+gotErr:
     dateErrDescription = "Error " & Err.Number & " at GetDATEOfFile. Here:" & vbCrLf & _
      strLine & vbCrLf & vbCrLf & "Error description: " & Err.Description
     GetDATEOfFile = MyErrorDate
@@ -11883,7 +11884,7 @@ Public Function setBlackdINI(ByRef par1 As String, ByRef par2 As String, _
 End Function
 
 Public Sub SaveConfigWizard(ByVal blnValue As Boolean)
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim res As Boolean
   Dim strInfo As String
   Dim i As Long
@@ -11901,7 +11902,7 @@ Public Sub SaveConfigWizard(ByVal blnValue As Boolean)
   i = setBlackdINI("Proxy", "LastTimeDisplayedConfig", strInfo, "")
   
   Exit Sub
-goterr:
+gotErr:
   res = False
 End Sub
 
@@ -11916,7 +11917,7 @@ Public Function myMainConfigINIPath() As String
 End Function
 
 Public Sub SaveFirstScreenConfig()
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim res As Boolean
   Dim strInfo As String
   Dim here As String
@@ -11950,14 +11951,14 @@ Public Sub SaveFirstScreenConfig()
 
   
 Exit Sub
-goterr:
+gotErr:
   res = False
 End Sub
 
 
 
 Public Function CheckVariableCondition(par As String) As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim res As String
     Dim parts() As String
     Dim blnRes As Boolean
@@ -11966,7 +11967,7 @@ Public Function CheckVariableCondition(par As String) As String
     res = "0"
     parts = Split(par, ",")
     If UBound(parts) <> 2 Then
-        GoTo goterr
+        GoTo gotErr
     End If
     trop = Trim$(parts(1))
     op = Mid$(trop, 2, Len(trop) - 2)
@@ -11979,19 +11980,19 @@ Public Function CheckVariableCondition(par As String) As String
     End If
     CheckVariableCondition = res
     Exit Function
-goterr:
+gotErr:
     CheckVariableCondition = "error"
 End Function
 
 Public Function CheckIsTrue(par As String) As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim res As String
     Dim parts() As String
     Dim lastPart As Long
     Dim i As Long
     res = "0"
     If par = "" Then
-        GoTo goterr
+        GoTo gotErr
     End If
     parts = Split(par, ",")
     lastPart = UBound(parts)
@@ -12003,20 +12004,20 @@ Public Function CheckIsTrue(par As String) As String
     Next i
     CheckIsTrue = res
     Exit Function
-goterr:
+gotErr:
     CheckIsTrue = "error"
 End Function
 
 Public Function FixLastMSG(idConnection As Integer) As String
     Dim res As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     
     res = var_lastmsg(idConnection)
     res = Replace(res, "{", "")
     res = Replace(res, "}", "")
     FixLastMSG = res
     Exit Function
-goterr:
+gotErr:
     FixLastMSG = "error"
 End Function
 
@@ -12054,7 +12055,7 @@ Public Function UseItemOnName(idConnection As Integer, ByVal strTile As String) 
 'will use the item and return 0 (if item and name found), or -1.
 
     #If FinalMode = 1 Then
-        On Error GoTo goterr
+        On Error GoTo gotErr
     #End If
     Dim ItemID As Long
     Dim skipBytes As Integer
@@ -12082,7 +12083,7 @@ Public Function UseItemOnName(idConnection As Integer, ByVal strTile As String) 
     UseItemOnName = -1
     End If
     Exit Function
-goterr:
+gotErr:
     UseItemOnName = -1
 End Function
 
@@ -12154,3 +12155,13 @@ Function ExtractUrl(ByVal strUrl As String) As URL
     
     ExtractUrl = retURL
 End Function
+Public Sub openErrorsTXTfolder()
+On Error GoTo gotErr
+If (shouldOpenErrorsTXTfolder = True) Then
+shouldOpenErrorsTXTfolder = False
+Shell "explorer " & App.path
+End If
+Exit Sub
+gotErr:
+
+End Sub

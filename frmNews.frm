@@ -62,7 +62,12 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 40.3" & vbCrLf & _
+    strMsg = "Blackd Proxy 40.4" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - Fixed a bug with mana with Tibia 10.94" & vbCrLf & _
+     " - Bot will now show you the folder of errors.txt when a critical error happens."
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 40.3" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Minimum changes to work in all Tibia versions up to 10.94"
      

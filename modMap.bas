@@ -35,8 +35,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "40.3" ' Proxy version ' string version
-Public Const myNumericVersion = 40300 ' numeric version
+Public Const ProxyVersion = "40.4" ' Proxy version ' string version
+Public Const myNumericVersion = 40400 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -5575,7 +5575,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                  var_lastmsg(idConnection) = mobName
                  ProcessEventMsg idConnection, &H0
                 
-        Case &H19, &H1A, &H1C, &H1D
+        Case &H19, &H1A, &H1C, &H1D, &H2B
               ' B4 1D AE 7E 5C 7D 0F 32 00 00 00 D7 2D 00 41 20 6D 69 6E 6F 74 61 75 72 20 67 75 61 72 64 20 67 61 69 6E 65 64 20 35 30 20 65 78 70 65 72 69 65 6E 63 65 20 70 6F 69 6E 74 73 2E
             
               
