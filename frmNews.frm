@@ -64,6 +64,10 @@ Private Sub Form_Load()
     Me.lblText = "What is new?"
     strMsg = "Blackd Proxy 40.5" & vbCrLf & _
     "----------------------------" & vbCrLf & _
+     " - Minimum changes to work in all Tibia versions up to 10.96"
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 40.5" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
      " - Minimum changes to work in all Tibia versions up to 10.95"
      
     strMsg = strMsg & vbCrLf & "Blackd Proxy 40.4" & vbCrLf & _
