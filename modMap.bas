@@ -35,8 +35,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "40.6" ' Proxy version ' string version
-Public Const myNumericVersion = 40600 ' numeric version
+Public Const ProxyVersion = "40.7" ' Proxy version ' string version
+Public Const myNumericVersion = 40700 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -2820,6 +2820,8 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
   ' 10.35: 0F 64 6A 83 78 78 78 78 78 82 8D 9F A2 92 B4 93 92 90 1E A0 A1
   
   ' 10.38: 0F 64 6A 83 78 78 78 78 78 78 78 82 8D 9F A2 92 D2 B4 9E 93 92 90 AC A0 A1
+  ' 10.97: 0F 64 6A 83 78 78 82 9F 9C A2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 B4 B4 9E 0F A8 B8 B7 1E 8D 90 92 93 92 F5 A0 A1
+  
   Do
     lastGoodPos = pos
     mobName = ""
@@ -2874,6 +2876,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       CheatsPaused(idConnection) = True
       IDstring(idConnection) = GoodHex(packet(pos + 1)) & GoodHex(packet(pos + 2)) & GoodHex(packet(pos + 3)) & GoodHex(packet(pos + 4))
       myID(idConnection) = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
+      
       If TibiaVersionLong >= 1080 Then
       ' tibia 10.80+
       ' 17 FA D5 7B 02 32 00 03 0F 15 0D 80 03 A9 FC 03 80 03 7E D5 B6 7F 00 01 01 24 00 68 74 74 70 3A 2F 2F 73 74 61 74 69 63 2E 74 69 62 69 61 2E 63 6F 6D 2F 69 6D 61 67 65 73 2F 73 74 6F 72 65 19 00 0A
@@ -2887,6 +2890,9 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       Else
        pos = pos + 24
       End If
+    Case &H19 ' tibia 10.97 - ???
+      ' 19 00 01
+      pos = pos + 3
     Case &H1D ' tibia 9.5
       ' server ping ??
       If publicDebugMode = True Then
@@ -4270,15 +4276,21 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       Else
         pos = pos + 3
       End If
-      
     Case &H9E
-      ' 9E 05 00 01 02 03 04 00
-      ' 9E 05 0B 00 01 02 03 01
-      ' 9E 01 0E 01
-      lonN = CLng(packet(pos + 1))
       ' new since Tibia 10.38
       ' "Premium features" window
-      pos = pos + 3 + lonN
+      If TibiaVersionLong >= 1097 Then
+        ' tibia 10.97:
+        ' 9E 06 00 01 02 03 04 0F
+        ' 9E 06 00 01 02 03 04 0F
+        pos = pos + 7
+      Else
+        ' 9E 05 00 01 02 03 04 00
+        ' 9E 05 0B 00 01 02 03 01
+        ' 9E 01 0E 01
+        lonN = CLng(packet(pos + 1))
+        pos = pos + 3 + lonN
+      End If
     Case &H9F
       ' 9F 00 01 01 00 0A
       ' 9.5   9F 00 04 2B 00 01 02 04 05 06 07 08 09 0A 0B 0C 0E 11 14 19 1A 1B 1D 1E 1F 20 26 27 2A 2C 32 4B 4C 4D 4E 51 53 54 58 59 5B 5E 70 71 72 79 92 94
@@ -4296,11 +4308,53 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' full stats update : hp,mana,exp,etc
       ' necesita ser revisado
       oldHP = myHP(idConnection)
-      If (TibiaVersionLong >= 1054) Then
+      If (TibiaVersionLong >= 1097) Then
+        ' A0 31 01 31 01 24 0D 01 00 58 15 01 00 87 F6 06 00 00 00 00 00 20 00 07 64 00 00 00 25 00 00 00 96 00 89 02 2A 03 1D 1D 52 64 D8 09 8D 00 00 00 D0 02 00 00 00
+          '  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52
+        
+      
+       lonN = GetTheLong(packet(pos + 1), packet(pos + 2)) ' current hp
+        If lonN <> myHP(idConnection) Then
+          myres.gotHPupdate = True
+          myHP(idConnection) = lonN
+        End If
+        myMaxHP(idConnection) = GetTheLong(packet(pos + 3), packet(pos + 4)) ' max hp
+        lonN = GetTheLong(packet(pos + 34), packet(pos + 35)) 'PLAYER_MANA
+        If lonN <> myMana(idConnection) Then
+          myres.gotManaupdate = True
+          myMana(idConnection) = lonN
+        End If
+        myCap(idConnection) = FourBytesLong(packet(pos + 5), packet(pos + 6), packet(pos + 7), packet(pos + 8)) ' cap x 100
+        myExp(idConnection) = FourBytesLong(packet(pos + 13), packet(pos + 14), packet(pos + 15), packet(pos + 16))
+       
+        lonN = GetTheLong(packet(pos + 21), packet(pos + 22)) ' PLAYER_LEVEL
+        If lonN > myLevel(idConnection) Then
+          If sentWelcome(idConnection) = True Then
+            If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+              SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
+              DoEvents
+            End If
+          End If
+        End If
+        myLevel(idConnection) = lonN
+          myMaxMana(idConnection) = GetTheLong(packet(pos + 36), packet(pos + 37))
+          myMagLevel(idConnection) = CLng(packet(pos + 33))
+    
+          lonN = CLng(packet(pos + 40)) ' PLAYER_MAGIC_LEVEL_PER
+          myNewStat(idConnection) = lonN
+          
+          lonN = CLng(packet(pos + 41)) ' soulpoints
+          If lonN <> mySoulpoints(idConnection) Then
+            myres.gotSoulupdate = True
+          End If
+          mySoulpoints(idConnection) = lonN
+          myStamina(idConnection) = GetTheLong(packet(pos + 42), packet(pos + 43))
+          pos = pos + 53
+      ElseIf (TibiaVersionLong >= 1054) Then
 '      If ((TibiaVersionLong >= 1053) And (tibiaclassname = "TibiaClientPreview")) Then
         ' tibia 10.53 preview
         ' A0 39 00 96 00 F8 7A 00 00 40 9C 00 00 5C 00 00 00 00 00 00 00 01 00 5C 04 0F 27 00 80 05 00 05 00 00 00 00 64 D8 09 6E 00 00 00 D0 02
-          '  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38
+          '  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44
         
         
         
@@ -4315,11 +4369,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           myHP(idConnection) = lonN
         End If
         myMaxHP(idConnection) = GetTheLong(packet(pos + 3), packet(pos + 4)) ' max hp
-        lonN = GetTheLong(packet(pos + 24), packet(pos + 25)) 'PLAYER_MANA
-        If lonN <> myMana(idConnection) Then
-          myres.gotManaupdate = True
-          myMana(idConnection) = lonN
-        End If
+
         myCap(idConnection) = FourBytesLong(packet(pos + 5), packet(pos + 6), packet(pos + 7), packet(pos + 8)) ' cap x 100
         myExp(idConnection) = FourBytesLong(packet(pos + 13), packet(pos + 14), packet(pos + 15), packet(pos + 16))
        
@@ -4755,7 +4805,10 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' new since Tibia 9.9 - pvp modes?
       ' example: A7 01 01 01 00
       pos = pos + 5
-
+    Case &HA8
+     ' new since Tibia 10.97 - ??
+     ' example: A8 00
+     pos = pos + 2
     Case &HAA
  
  
@@ -5638,7 +5691,8 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                    End If
               
         End Select
-
+      'Debug.Print ("messasage from '" & var_lastsender(idConnection) & "' : '" & var_lastmsg(idConnection) & "'")
+            
         If (tempb1 = &H15) Then
           lastIngameCheck(idConnection) = mobName
         End If
