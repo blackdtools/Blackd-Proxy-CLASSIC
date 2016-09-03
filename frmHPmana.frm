@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmHPmana 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -680,7 +680,7 @@ Private Sub cmdLoadFromHD_Click()
 End Sub
 
 Private Sub cmdSaveLimitRandomizator_Click()
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim lngCast As Long
     lngCast = CLng(Me.txtLimitRandomizator.Text)
     If ((lngCast >= 0) And (lngCast <= 99)) Then
@@ -688,12 +688,12 @@ Private Sub cmdSaveLimitRandomizator_Click()
         Me.txtLimitRandomizator.Text = CStr(LimitRandomizator)
         cmdSaveLimitRandomizator.Caption = "CHANGE ( current = " & CStr(LimitRandomizator) & " % )"
     Else
-        GoTo goterr
+        GoTo gotErr
     End If
     lblMsg.Caption = "Changed limit randomizator succesfully"
     lblMsg.ForeColor = &HFF00&
     Exit Sub
-goterr:
+gotErr:
     lblMsg.Caption = "Invalid setting"
     lblMsg.ForeColor = &HFF&
 End Sub
@@ -780,7 +780,7 @@ Private Sub cmdSaveOnMemory_Click()
 End Sub
 
 Private Sub cmdSaveRecast_Click()
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim lngCast As Long
     lngCast = CLng(Me.txtRecast.Text)
     If ((lngCast >= 20) And (lngCast <= HPmanaRECAST2)) Then
@@ -788,12 +788,12 @@ Private Sub cmdSaveRecast_Click()
         Me.txtRecast.Text = CStr(HPmanaRECAST)
         cmdSaveRecast.Caption = "CHANGE ( current = " & CStr(HPmanaRECAST) & " ms )"
     Else
-        GoTo goterr
+        GoTo gotErr
     End If
     lblMsg.Caption = "Changed recast succesfully"
     lblMsg.ForeColor = &HFF00&
     Exit Sub
-goterr:
+gotErr:
     lblMsg.Caption = "Invalid setting"
     lblMsg.ForeColor = &HFF&
 End Sub
@@ -801,7 +801,7 @@ End Sub
 
 
 Private Sub cmdSaveRecast2_Click()
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim lngCast As Long
     lngCast = CLng(Me.txtRecast2.Text)
     If ((lngCast >= 20) And (lngCast >= HPmanaRECAST)) Then
@@ -809,12 +809,12 @@ Private Sub cmdSaveRecast2_Click()
         Me.txtRecast2.Text = CStr(HPmanaRECAST2)
         cmdSaveRecast2.Caption = "CHANGE ( current = " & CStr(HPmanaRECAST2) & " ms )"
     Else
-        GoTo goterr
+        GoTo gotErr
     End If
     lblMsg.Caption = "Changed recast succesfully"
     lblMsg.ForeColor = &HFF00&
     Exit Sub
-goterr:
+gotErr:
     lblMsg.Caption = "Invalid setting"
     lblMsg.ForeColor = &HFF&
 End Sub

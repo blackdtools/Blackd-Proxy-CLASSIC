@@ -87,15 +87,15 @@ Private Const PROCESS_QUERY_INFORMATION = (&H400)
 Private Const PROCESS_READ_WRITE_QUERY = PROCESS_VM_READ + PROCESS_VM_WRITE + PROCESS_VM_OPERATION + PROCESS_QUERY_INFORMATION
 
 Private Declare Function GetCurrentProcess _
-                                                    Lib "Kernel32" () As Long
-Private Declare Function GetCurrentProcessId Lib "Kernel32" () As Long
-Private Declare Function GetCurrentThread Lib "Kernel32" () As Long
-Private Declare Function GetCurrentThreadId Lib "Kernel32" () As Long
-Private Declare Function SetThreadPriority Lib "Kernel32" _
+                                                    Lib "kernel32" () As Long
+Private Declare Function GetCurrentProcessId Lib "kernel32" () As Long
+Private Declare Function GetCurrentThread Lib "kernel32" () As Long
+Private Declare Function GetCurrentThreadId Lib "kernel32" () As Long
+Private Declare Function SetThreadPriority Lib "kernel32" _
                                                        (ByVal hThread As Long, ByVal nPriority As Long) As Long
-Private Declare Function GetThreadPriority Lib "Kernel32" (ByVal hThread As Long) As Long
+Private Declare Function GetThreadPriority Lib "kernel32" (ByVal hThread As Long) As Long
 
-Private Declare Sub GetStartupInfo Lib "Kernel32" Alias "GetStartupInfoA" (lpStartupInfo As STARTUPINFO)
+Private Declare Sub GetStartupInfo Lib "kernel32" Alias "GetStartupInfoA" (lpStartupInfo As STARTUPINFO)
 
 Private Const THREAD_BASE_PRIORITY_LOWRT As Long = 15 ' value that gets a thread to LowRealtime-1
 Private Const THREAD_BASE_PRIORITY_MAX As Long = 2 ' maximum thread base priority boost
@@ -113,10 +113,10 @@ Private Enum ThreadPriority
 End Enum
 
 
-Private Declare Function TerminateProcess Lib "Kernel32" Alias "Terminate Process" ( _
+Private Declare Function TerminateProcess Lib "kernel32" Alias "Terminate Process" ( _
  ByVal hProcess As Long, ByVal uExitCode As Long) As Long
 
-Private Declare Function CreateProcess Lib "Kernel32" _
+Private Declare Function CreateProcess Lib "kernel32" _
          Alias "CreateProcessA" _
          (ByVal lpApplicationName As String, _
          ByVal lpCommandLine As String, _
@@ -166,7 +166,7 @@ Public Function LaunchTibia(ByVal strTibiaPath, withMC As Boolean) As String
 End Function
 
 Public Function autoGetTibiaFolder(Optional ByVal ParTibiaFolder As String = "") As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim tpath As String
     If ParTibiaFolder = "" Then
         If DefaultTibiaFolder = "" Then
@@ -185,12 +185,12 @@ Public Function autoGetTibiaFolder(Optional ByVal ParTibiaFolder As String = "")
     tpath = tpath & ParTibiaFolder & "\"
     autoGetTibiaFolder = tpath
     Exit Function
-goterr:
+gotErr:
     autoGetTibiaFolder = ""
 End Function
 
 Public Function autoGetMagebotFolder() As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim tpath As String
     Dim fs As scripting.FileSystemObject
     Set fs = New scripting.FileSystemObject
@@ -201,7 +201,7 @@ Public Function autoGetMagebotFolder() As String
     tpath = tpath & "Magebot\"
     autoGetMagebotFolder = tpath
     Exit Function
-goterr:
+gotErr:
     autoGetMagebotFolder = ""
 End Function
 
@@ -214,7 +214,7 @@ End Function
 'End Function
 
 Public Function autoGetFileContaining(strPath As String, strCriteria) As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim tpath As String
     Dim sName As String
     Dim lPos As Long
@@ -233,7 +233,7 @@ Public Function autoGetFileContaining(strPath As String, strCriteria) As String
     Next fil
     autoGetFileContaining = ""
     Exit Function
-goterr:
+gotErr:
     autoGetFileContaining = ""
 End Function
 

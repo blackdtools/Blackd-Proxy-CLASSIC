@@ -70,7 +70,7 @@ Public Declare Sub CoTaskMemFree Lib "ole32" (ByVal pvoid As Long)
 
 
 
-Private Declare Function GetVolumeInformation Lib "Kernel32" _
+Private Declare Function GetVolumeInformation Lib "kernel32" _
   Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, _
   ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Long, _
   lpVolumeSerialNumber As Long, lpMaximumComponentLength As Long, _
@@ -115,11 +115,11 @@ End Function
  
 Public Function getHDserialNumber() As Long
   Dim n As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   GetVolumeInformation "C:\", String(255, Chr$(0)), 255, n, 0, 0, String(255, Chr$(0)), 255
   getHDserialNumber = n
   Exit Function
-goterr:
+gotErr:
   getHDserialNumber = -1
 End Function
 

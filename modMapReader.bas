@@ -506,7 +506,7 @@ End Sub
 Public Function ReadHardiskMaps() As Long
   Dim res As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim Ammount As Long
   Dim readed As Long
@@ -561,6 +561,6 @@ Public Function ReadHardiskMaps() As Long
   Next
   ReadHardiskMaps = 0
   Exit Function
-goterr:
+gotErr:
   ReadHardiskMaps = -1
 End Function

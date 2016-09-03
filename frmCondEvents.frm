@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmCondEvents 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -525,7 +525,7 @@ Private Sub cmdDeleteSel_Click()
   Dim difR As Long
   Dim numofEv As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (condEventsIDselected > 0) Then
   vrow = gridEvents.Row
@@ -565,7 +565,7 @@ Private Sub cmdDeleteSel_Click()
   UpdateValues
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Function cmdDeleteSel_Click() - cond - failed : " & Err.Description
   LogOnFile "errors.txt", "Function cmdDeleteSel_Click() - cond - failed : " & Err.Description
 End Sub
@@ -581,7 +581,7 @@ Private Sub cmdLoadEv_Click()
   Dim aRes As Long
   Dim thelo As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Set fso = New scripting.FileSystemObject
   If condEventsIDselected > 0 Then
@@ -610,7 +610,7 @@ Private Sub cmdLoadEv_Click()
   End If
   UpdateValues
   Exit Sub
-goterr:
+gotErr:
   lblInfo.Caption = "Load ERROR (" & Err.Number & "):" & Err.Description
 End Sub
 
@@ -650,7 +650,7 @@ End Sub
 
 Private Sub cmdSaveEv_Click()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim fn As Integer
   Dim i As Long
@@ -670,14 +670,14 @@ Private Sub cmdSaveEv_Click()
     lblInfo.Caption = "Save OK"
   End If
   Exit Sub
-goterr:
+gotErr:
   lblInfo.Caption = "Save ERROR (" & Err.Number & "):" & Err.Description
 End Sub
 
 
 
 Private Sub Form_Load()
- On Error GoTo goterr
+ On Error GoTo gotErr
  With cmbOperator
  .Clear
  .AddItem "#number=#"
@@ -724,7 +724,7 @@ Private Sub Form_Load()
   End With
   ReloadFiles
  Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "Could not load cavebot module. Err number " & CStr(Err.Number) & " ; Err description " & Err.Description
 End Sub
 
@@ -853,7 +853,7 @@ Private Sub timerCheck_Timer()
 End Sub
 
 Private Sub txtMs_Change()
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim lngTick As Long
   lngTick = CLng(txtMs.Text)
   If lngTick < 20 Then
@@ -862,7 +862,7 @@ Private Sub txtMs_Change()
   TimerConditionTick = lngTick
   timerCheck.Interval = lngTick
   Exit Sub
-goterr:
+gotErr:
   txtMs.Text = "300"
   TimerConditionTick = 300
   timerCheck.Interval = 300
@@ -870,7 +870,7 @@ End Sub
 
 Public Sub ReloadFiles()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim strPath As String
   Dim fs As scripting.FileSystemObject
@@ -887,7 +887,7 @@ Public Sub ReloadFiles()
   Next
   txtFile.Text = "c_example.txt"
   Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "ERROR WITH FILESYSTEM OBJECT at ReloadFiles (" & Err.Number & ") : " & Err.Description & " (at cond events - path : " & strPath & ")"
 End Sub
 
@@ -903,7 +903,7 @@ Public Function AddCondEvent(idConnection As Integer, t1 As String, op As String
  t2 As String, de As String, lo As String, ke As String, ac As String) As Long
   Dim curr As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (idConnection <= 0) Then
     AddCondEvent = -2
@@ -925,12 +925,12 @@ Public Function AddCondEvent(idConnection As Integer, t1 As String, op As String
   CustomCondEvents(idConnection).ev(curr).nextunlock = 0
   AddCondEvent = 0
   Exit Function
-goterr:
+gotErr:
   AddCondEvent = -1
 End Function
 
 Private Sub txtMs2_Change()
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim lngTick2 As Long
   lngTick2 = CLng(txtMs2.Text)
   If lngTick2 < (TimerConditionTick + 300) Then
@@ -938,7 +938,7 @@ Private Sub txtMs2_Change()
   End If
   TimerConditionTick2 = lngTick2
   Exit Sub
-goterr:
+gotErr:
   txtMs2.Text = CStr(TimerConditionTick + 300)
   TimerConditionTick2 = TimerConditionTick + 300
 End Sub

@@ -204,7 +204,7 @@ Public Sub SmartLootCorpse(ByVal idConnection As Integer)
   Dim firstAv As Byte
   Dim j As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If DoingNewLoot(idConnection) = False Then
     Exit Sub
@@ -269,6 +269,6 @@ Public Sub SmartLootCorpse(ByVal idConnection As Integer)
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
   DoEvents
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at PerformUseItem"
 End Sub

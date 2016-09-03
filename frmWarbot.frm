@@ -802,7 +802,7 @@ End Sub
 
 Private Sub Form_Load()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   
   allowRename = False
@@ -841,7 +841,7 @@ Private Sub Form_Load()
   Me.cmdStart.Caption = "DEACTIVATED - press to run changer"
   Me.Timer1.enabled = False
   Exit Sub
-goterr:
+gotErr:
   gotDictErr = 1
 End Sub
 
@@ -881,7 +881,7 @@ Private Sub Timer1_Timer()
 End Sub
 
 Private Sub timerFriendHealer_Timer()
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim v1 As Long
     Dim v2 As Long
     v1 = 300
@@ -895,7 +895,7 @@ Private Sub timerFriendHealer_Timer()
     timerFriendHealer.Interval = randomNumberBetween(v1, v2)
   ProcessAllFriendHeals
   Exit Sub
-goterr:
+gotErr:
   txtAutohealDelay.Text = "300"
   txtAutohealDelay2.Text = "700"
 End Sub
@@ -907,7 +907,7 @@ End Sub
 Private Sub txtOutfit_Validate(Index As Integer, Cancel As Boolean)
 Dim byteValue As Byte
 Dim longValue As Long
-On Error GoTo goterr
+On Error GoTo gotErr
   If TibiaVersionLong >= 773 Then
 
   longValue = CLng(txtOutfit(Index).Text)
@@ -968,7 +968,7 @@ On Error GoTo goterr
   
   
   End If
-goterr:
+gotErr:
   txtOutfit(Index).Text = lastValid(Index)
   Cancel = True
 End Sub
@@ -980,7 +980,7 @@ End Sub
 
 Public Sub ReloadAutohealFile()
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim fso As scripting.FileSystemObject
   Dim fn As Integer
@@ -1003,7 +1003,7 @@ Public Sub ReloadAutohealFile()
       Close #fn
     End If
   Exit Sub
-goterr:
+gotErr:
   lstAutoheal.Clear
 End Sub
 
@@ -1015,7 +1015,7 @@ End Sub
 Public Sub SaveAutoHealList()
   Dim i As Long
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim fn As Integer
   Dim limI As Long
@@ -1027,7 +1027,7 @@ Public Sub SaveAutoHealList()
     Next i
   Close #fn
   Exit Sub
-goterr:
+gotErr:
   i = -1
 End Sub
 

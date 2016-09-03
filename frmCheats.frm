@@ -582,9 +582,9 @@ Private Sub cmdToAscii_Click()
   Dim strinput As String
   Dim strByte As String
   Dim res As String
-  #If FinalMode Then
+
   On Error GoTo badF
-  #End If
+ 
   ClosedBoard = False
   frmBigText.lblText = "Enter a hex chain. For example: AE 8C 04 45 0F" & vbCrLf & _
   "Note that you should enter the left zeros too!"

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Blackd Proxy"
-#define MyAppVersion "40.7"
+#define MyAppVersion "40.8"
 #define MyAppPublisher "blackdtools.com"
 #define MyAppURL "http://blackdtools.com"
 #define MyAppExeName "Tibia.exe"

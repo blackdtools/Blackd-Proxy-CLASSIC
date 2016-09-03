@@ -26,7 +26,7 @@ Public Const BIF_RETURNONLYFSDIRS = 1
 Public Const MAX_PATH = 260
 
 Public Declare Sub CoTaskMemFree Lib "ole32.dll" (ByVal hMem As Long)
-Public Declare Function lstrcat Lib "Kernel32" Alias "lstrcatA" (ByVal lpString1 As String, ByVal lpString2 As String) As Long
+Public Declare Function lstrcat Lib "kernel32" Alias "lstrcatA" (ByVal lpString1 As String, ByVal lpString2 As String) As Long
 Public Declare Function SHBrowseForFolder Lib "shell32" (lpbi As BrowseInfo) As Long
 Public Declare Function SHGetPathFromIDList Lib "shell32" (ByVal pidList As Long, ByVal lpBuffer As String) As Long
 

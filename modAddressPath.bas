@@ -30,7 +30,7 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
     Public Function ReadCurrentAddress(ByVal pid As Long, ByRef adrPath As AddressPath, Optional ByVal desiredErrorValue As Long = -1, Optional ByVal readFinalValue As Boolean = True) As Long
         Dim res As Long
         Dim i As Long
-        On Error GoTo goterr
+        On Error GoTo gotErr
         res = 0
         If adrPath.baseAddress = 0 Then
             ReadCurrentAddress = desiredErrorValue
@@ -57,6 +57,6 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
             End If
             ReadCurrentAddress = res
             Exit Function
-goterr:
+gotErr:
             ReadCurrentAddress = desiredErrorValue
 End Function

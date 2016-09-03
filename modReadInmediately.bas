@@ -26,7 +26,7 @@ Public Sub ReadIniVeryFirst()
   Dim debugPoint As Long
   Dim userHere As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   res = -1
   debugPoint = 1
@@ -119,13 +119,13 @@ Public Sub ReadIniVeryFirst()
   arrayConfigVersionsLong = Split(addConfigVersionsLongs, ",")
  
   Exit Sub
-goterr:
+gotErr:
    Debug.Print ("Error ReadIniVeryFirst " & Err.Description)
 End Sub
 
 Public Sub SafeAddNewVersions(ByRef cmbVersion As ComboBox)
   
-  On Error GoTo goterr
+  On Error GoTo gotErr
 
  
     Dim strItem As String
@@ -153,7 +153,7 @@ Public Sub SafeAddNewVersions(ByRef cmbVersion As ComboBox)
         Next i
     End If
 Exit Sub
-goterr:
+gotErr:
     loadDebugStart = loadDebugStart & vbCrLf & "Error at SafeAddNewVersions (code " & CStr(Err.Number) & " ) Description= " & Err.Description
 
 End Sub
@@ -167,7 +167,7 @@ Public Function getConfigPathOf(ByVal caseSel As String) As String
     Dim res As String
     Dim lasti As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
  
  
@@ -198,7 +198,7 @@ Public Function getConfigPathOf(ByVal caseSel As String) As String
     End If
     getConfigPathOf = res
     Exit Function
-goterr:
+gotErr:
     OVERWRITE_OT_MODE = False
     getConfigPathOf = configPath = "config" & highestTibiaVersionLong
 End Function
@@ -206,7 +206,7 @@ End Function
    Public Sub SetFutureTibiaVersion(ByVal parConfigPath As String)
    
      #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
      Dim i As Long
     Dim strTest As String
@@ -228,7 +228,7 @@ End Function
     End If
     
     Exit Sub
-goterr:
+gotErr:
     TibiaVersion = TibiaVersionDefaultString
     TibiaVersionLong = highestTibiaVersionLong
    End Sub

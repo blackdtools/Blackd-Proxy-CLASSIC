@@ -53,12 +53,12 @@ Public AditionalRequireRope() As Long
 Public AditionalRequireShovel() As Long
 
 Public Function protectedMult(lWidth, lHeight, lBlendframes, lXdiv, lYdiv, lAnimcount, lRare, lFactor) As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim res As Long
   res = lWidth * lHeight * lBlendframes * lXdiv * lYdiv * lAnimcount * lRare * lFactor
   protectedMult = res
   Exit Function
-goterr:
+gotErr:
   res = -1
 End Function
 

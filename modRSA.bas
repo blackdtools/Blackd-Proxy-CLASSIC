@@ -84,18 +84,18 @@ Private Function GetMainModuleAddress(ByVal process_Hwnd As Long, ByRef MainModu
   Dim hSnapShot As Long
   Dim uHandle As MODULEENTRY32
   Dim foo As Long
-  Dim Pid As Long
-  GetWindowThreadProcessId process_Hwnd, Pid
+  Dim pid As Long
+  GetWindowThreadProcessId process_Hwnd, pid
   uHandle.dwSize = Len(uHandle) ' DO NOT use Len$ here!
-  hSnapShot = CreateToolhelp32Snapshot(24, Pid) '24=TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32
+  hSnapShot = CreateToolhelp32Snapshot(24, pid) '24=TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32
   If (hSnapShot = INVALID_HANDLE_VALUE) Then
-    Debug.Print "CreateToolhelp32Snapshot failed on pid " & CStr(Pid) & " ...TODO: use GetLastError() for more info about why it failed"
+    Debug.Print "CreateToolhelp32Snapshot failed on pid " & CStr(pid) & " ...TODO: use GetLastError() for more info about why it failed"
     GetMainModuleAddress = False
     Exit Function
   End If
   foo = Module32First(hSnapShot, uHandle)
   If (foo = 0) Then
-    Debug.Print "Module32First failed on pid " & CStr(Pid) & " ...TODO: use GetLastError() for more info about why it failed"
+    Debug.Print "Module32First failed on pid " & CStr(pid) & " ...TODO: use GetLastError() for more info about why it failed"
     CloseHandle (hSnapShot)
     GetMainModuleAddress = False
     Exit Function
@@ -109,7 +109,7 @@ End Function
 
 
 Public Sub AutoUpdateRSA(ByVal pid As Long)
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim pg As Integer
   Dim i As Long
   Dim b As Byte
@@ -125,7 +125,7 @@ Public Sub AutoUpdateRSA(ByVal pid As Long)
   Dim TibiaExeModuleEnd As Long
 
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Trying to autoupdate adrRSA..."
-   If (GetMainModuleAddress(Pid, TibiaExeModuleAddress, TibiaExeModuleSize) = False) Then
+   If (GetMainModuleAddress(pid, TibiaExeModuleAddress, TibiaExeModuleSize) = False) Then
      frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA, GetMainModuleAddress failed.."
      adrRSA = 0
      'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA (" & CStr(Err.Number) & ") : " & Err.Description
@@ -179,7 +179,7 @@ Public Sub AutoUpdateRSA(ByVal pid As Long)
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... MEMORY SCAN COMPLETED WITHOUT RESULTS"
    Exit Sub
    
-goterr:
+gotErr:
   adrRSA = 0
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA (" & CStr(Err.Number) & ") : " & Err.Description
   Exit Sub
@@ -198,7 +198,8 @@ Public Sub TryToUpdateRSA(ByVal process_Hwnd As Long, ByVal strKey As String, Op
     Dim b4 As Byte
     Dim res As Long
     Dim realAddress As Long
-   ' fixRSA = True ' @Programmers: you can uncomment this to obtain adrRSA in old clients. ASLR should be disabled with Microsoft EMET
+    fixRSA = False ' @Programmers: you can uncomment this to obtain adrRSA in old clients. ASLR should be disabled with Microsoft EMET
+    Debug.Print "adrRSA=" & Hex(adrRSA)
     
     If fixRSA = True Then
       If adrRSA = 0 Then

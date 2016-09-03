@@ -1035,11 +1035,11 @@ End Sub
 
 Private Sub pushID_Change()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   PUSHDELAYTIMES = CLng(pushID.Text)
   Exit Sub
-goterr:
+gotErr:
   PUSHDELAYTIMES = 9
   pushID.Text = 9
 End Sub
@@ -1422,13 +1422,13 @@ End Sub
 
 Private Function GetOneTitle(idConnection As Integer) As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   'UpdateExpVars idConnection
   var_lf(idConnection) = ". "
   GetOneTitle = parseVars(idConnection, tibiaTittleFormat.Text)
   Exit Function
-goterr:
+gotErr:
   GetOneTitle = "Tibia"
 End Function
 
@@ -1436,7 +1436,7 @@ Private Sub UpdateTibiaTitles()
   Dim i As Integer
   Dim Message As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If frmStealth.chkStealthExp = 1 Then
     If stealthIDselected <> 0 Then
@@ -1456,7 +1456,7 @@ Private Sub UpdateTibiaTitles()
     End If
   Next i
   End If
-goterr:
+gotErr:
   ' just end...
 End Sub
 

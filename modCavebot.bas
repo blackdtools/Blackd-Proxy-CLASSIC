@@ -235,7 +235,7 @@ End Function
 
 
 Public Sub SafeLoadSpecialGMnames(ByVal filename As String)
-    On Error GoTo goterr
+    On Error GoTo gotErr
   Dim fso As scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
@@ -256,7 +256,7 @@ Public Sub SafeLoadSpecialGMnames(ByVal filename As String)
       Close #fn
     End If
     Exit Sub
-goterr:
+gotErr:
     Exit Sub
 End Sub
 
@@ -536,7 +536,7 @@ Public Sub RemoveIDLine(idConnection As Integer, ByRef lineID As Long)
 End Sub
 Public Function GetStringFromIDLine(idConnection As Integer, ByRef lineID As Long) As String
   ' get the name from an ID
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim res As Boolean
   If cavebotScript(idConnection).Exists(lineID + 1) = True Then
     GetStringFromIDLine = cavebotScript(idConnection).item(lineID + 1)
@@ -544,7 +544,7 @@ Public Function GetStringFromIDLine(idConnection As Integer, ByRef lineID As Lon
     GetStringFromIDLine = "?"
   End If
   Exit Function
-goterr:
+gotErr:
   LogOnFile "errors.txt", "Error atGetStringFromIDLine (" & _
    CStr(idConnection) & ", " & CStr(lineID) & ") , Err number : " & CStr(Err.Number) & _
    " ; Err description : " & Err.Description
@@ -767,7 +767,7 @@ Public Function ParseString(ByRef entireLine As String, ByRef frompos As Long, t
   Dim newChar As String
   Dim res As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   pos = frompos
   res = ""
@@ -787,7 +787,7 @@ Public Function ParseString(ByRef entireLine As String, ByRef frompos As Long, t
   frompos = pos
   ParseString = res
   Exit Function
-goterr:
+gotErr:
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during ParseString. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
    ParseString = ""
 End Function
@@ -797,7 +797,7 @@ Private Sub SkipBlanks(ByRef entireLine As String, ByRef frompos As Long, toEnd 
   Dim pos As Long
   Dim newChar As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   pos = frompos
   Do
@@ -814,7 +814,7 @@ Private Sub SkipBlanks(ByRef entireLine As String, ByRef frompos As Long, toEnd 
   Loop
   frompos = pos
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SkipBlanks. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 
 End Sub
@@ -824,7 +824,7 @@ Public Function MyBattleListPosition(Sid) As Long
   Dim id As Double
   Dim res As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   res = -1
   For c1 = 0 To LAST_BATTLELISTPOS
@@ -836,7 +836,7 @@ Public Function MyBattleListPosition(Sid) As Long
   Next c1
   MyBattleListPosition = res
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during MyBattleListPosition. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
   MyBattleListPosition = -1
 End Function
@@ -869,7 +869,7 @@ Public Sub PerformMove(Sid As Integer, parx As Long, pary As Long, parz As Long)
   Dim awesomeStatus As Integer
   Dim tmpByte As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   status = 1
   completed = False
@@ -1366,12 +1366,12 @@ If (iterac > 20) Then ' if there is no result after 20 iterations, then somethin
 End If
 Loop Until (completed = True)
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during PerformMove. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 
 Public Function ProcessRawCondition(ByVal part1 As String, ByVal opstr As String, ByVal part2 As String) As Boolean
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim res As Boolean
   res = False
   Select Case opstr
@@ -1412,7 +1412,7 @@ Public Function ProcessRawCondition(ByVal part1 As String, ByVal opstr As String
   End Select
   ProcessRawCondition = res
   Exit Function
-goterr:
+gotErr:
   ProcessRawCondition = False
 End Function
 Public Function ProcessCondition(Sid As Integer, currLine As String, pos As Long, lenCurrLine As Long, Optional justReturnLine As Boolean = False) As Long
@@ -1423,7 +1423,7 @@ Public Function ProcessCondition(Sid As Integer, currLine As String, pos As Long
   Dim res As Boolean
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   res = False
   part1 = ParseString(currLine, pos, lenCurrLine, "(")
@@ -1472,7 +1472,7 @@ Public Function ProcessCondition(Sid As Integer, currLine As String, pos As Long
   End If
   ProcessCondition = 0
   Exit Function
-goterr:
+gotErr:
   ProcessCondition = -1
 End Function
 Public Sub ProcessScriptLine(Sid As Integer)
@@ -1502,7 +1502,7 @@ Public Sub ProcessScriptLine(Sid As Integer)
   Dim tmpHP As Long
   Dim stringParts() As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   fastM = False
   mytime = GetTickCount()
@@ -2334,7 +2334,7 @@ fastSet:
     GoTo fastSet
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & Sid & " lost connection at ProcessScriptLine #"
   frmMain.DoCloseActions Sid
   DoEvents
@@ -2396,16 +2396,16 @@ Public Function RightNumberOfClicks(idConnection As Integer) As String
     RightNumberOfClicks = res
 End Function
 Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
-    On Error GoTo goterr
+    On Error GoTo gotErr
     If RedSquare <> &H0 Then
         Memory_WriteLong RedSquare, targetID, ProcessID(idConnection)
     End If
     Exit Sub
-goterr:
+gotErr:
     Exit Sub
 End Sub
 Public Function ReadRedSquare(ByVal idConnection As Integer) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim clicks As Long
     If RedSquare = &H0 Then
         ReadRedSquare = -2
@@ -2416,7 +2416,7 @@ Public Function ReadRedSquare(ByVal idConnection As Integer) As Long
         ReadRedSquare = clicks
     End If
     Exit Function
-goterr:
+gotErr:
     ReadRedSquare = -1
     Exit Function
 End Function
@@ -2514,7 +2514,7 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
   Dim templ1 As Long
   
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (GameConnected(idConnection) = True) And (sentFirstPacket(idConnection) = True) Then
     '05 00 A1 7B 8A 02 40
@@ -2574,7 +2574,7 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
   End If
   MeleeAttack = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at MeleeAttack : " & Err.Description
   frmMain.DoCloseActions idConnection
   MeleeAttack = -1
@@ -2674,7 +2674,7 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   Dim inRes As Integer
   Dim tileID As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   xdif = X - myX(idConnection)
   ydif = y - myY(idConnection)
@@ -2752,7 +2752,7 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
   DoEvents
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at PerformUseItem"
 End Sub
 Public Sub WriteNoSafeToAttack(ByRef idMap As TypeIDmap, X As Long, y As Long)
@@ -2763,7 +2763,7 @@ End Sub
 
 Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long, zt As Long, dblID As Double) As Long
     #If FinalMode Then
-      On Error GoTo goterr
+      On Error GoTo gotErr
     #End If
     Dim myMap As TypeAstarMatrix
     Dim idMap As TypeIDmap
@@ -3026,7 +3026,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
     End If
     DoSpecialCavebot = 0
     Exit Function
-goterr:
+gotErr:
     DoSpecialCavebot = 0
 End Function
 Public Sub LoadCurrentFloorIntoMatrix(idConnection As Integer, ByRef myMap As TypeAstarMatrix, ByRef idMap As TypeIDmap, skipThisPart As Boolean, ByRef cond2 As Boolean)
@@ -3297,7 +3297,7 @@ Public Function ProcessAttacks(idConnection As Integer) As Long
   Dim strNameOfMob As String
   Dim okeval2 As Boolean
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   foundCurrentID = False
   mapLoaded = False
@@ -3619,7 +3619,7 @@ foundOne:
   End If
   ProcessAttacks = 1
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessAttacks"
   SelfDefenseID(idConnection) = 0
   ProcessAttacks = 0
@@ -3637,7 +3637,7 @@ Public Sub ProcessFindDown(idConnection As Integer, X As Integer, y As Integer, 
   Dim tmpID As Double
   Dim s As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   pMatrix.walkable(X, y) = pMatrix.walkable(X, y) Or pMatrix.walkable(X + 1, y + 1) Or pMatrix.walkable(X, y + 1) _
    Or pMatrix.walkable(X + 1, y) Or pMatrix.walkable(X - 1, y - 1) Or pMatrix.walkable(X, y - 1) _
@@ -3674,7 +3674,7 @@ Public Sub ProcessFindDown(idConnection As Integer, X As Integer, y As Integer, 
     Next s
   End If
   Exit Sub
-goterr:
+gotErr:
     frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessFindDown"
 End Sub
 
@@ -4072,7 +4072,7 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   'myres.result=5 req_random_move
   'myres.result>&H60 req_force_move
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   xdif = X - myX(Sid)
   ydif = y - myY(Sid)
@@ -4486,7 +4486,7 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   myres.result = 1 ' move
   PerformMoveDown = myres
   Exit Function
-goterr:
+gotErr:
   myres.X = 0
   myres.y = 0
   myres.z = 0
@@ -4501,7 +4501,7 @@ Public Sub ProcessFindUp(idConnection As Integer, X As Integer, y As Integer, By
   Dim tmpID As Double
   Dim s As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   pMatrix.walkable(X, y) = pMatrix.walkable(X, y) Or pMatrix.walkable(X + 1, y + 1) Or pMatrix.walkable(X, y + 1) _
    Or pMatrix.walkable(X + 1, y) Or pMatrix.walkable(X - 1, y - 1) Or pMatrix.walkable(X, y - 1) _
@@ -4538,7 +4538,7 @@ Public Sub ProcessFindUp(idConnection As Integer, X As Integer, y As Integer, By
     Next s
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessFindUp"
 
 End Sub
@@ -4567,7 +4567,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   'aRes = PerformUseMyItem(sid, LowByteOfLong(tileID_Rope), HighByteOfLong(tileID_Rope), fResult.x, fResult.y, myZ(sid))
   
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   xdif = X - myX(Sid)
   ydif = y - myY(Sid)
@@ -4982,7 +4982,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   myres.result = 1 ' move
   PerformMoveUp = myres
   Exit Function
-goterr:
+gotErr:
   myres.X = 0
   myres.y = 0
   myres.z = 0
@@ -5398,7 +5398,7 @@ Public Sub ExecuteBuffer(idConnection As Integer)
   Dim inRes As Integer
   Dim continue As Boolean
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If ReadyBuffer(idConnection) = True Then
   orders = RequiredMoveBuffer(idConnection)
@@ -5432,7 +5432,7 @@ Public Sub ExecuteBuffer(idConnection As Integer)
   End If
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing ExecuteBuffer"
   DoEvents
 End Sub
@@ -5613,7 +5613,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
   Dim inRes As Integer
   Dim continue As Boolean
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   ChaotizeXYrel idConnection, goalX, goalY, myZ(idConnection)
     
@@ -5726,7 +5726,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
     FindBestPath = 0
   End If
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing FindBestPath"
   DoEvents
   FindBestPath = -1
@@ -5756,7 +5756,7 @@ Public Function FindBestPathV2(ByVal idConnection As Integer, ByVal goalX As Lon
   Dim tryingX As Long
   Dim tryingY As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   ChaotizeXYrel idConnection, goalX, goalY, myZ(idConnection)
   
@@ -5958,7 +5958,7 @@ continue:
     Exit Function
   End If
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing FindBestPathV2"
   DoEvents
   FindBestPathV2 = -1
@@ -5985,7 +5985,7 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
   Dim inRes As Integer
   Dim continue As Boolean
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   startX = 0
   startY = 0
@@ -6133,7 +6133,7 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
     Exit Function
   End If
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing ExistsPath"
   DoEvents
   ExistsPath = -1
@@ -6163,7 +6163,7 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
   Dim difx As Long
   Dim dify As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   startX = 0
   startY = 0
@@ -6332,7 +6332,7 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
     FindAnyLongPath = 0
   End If
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing FindAnyLongPath"
   DoEvents
   FindAnyLongPath = -1
@@ -6368,7 +6368,7 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
   Dim sMinusOne As Byte
   Dim PrevTileID As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   startX = 0
   startY = 0
@@ -6552,7 +6552,7 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
     GetNearestDepot = 0
     Exit Function
   End If
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing GetNearestDepot"
   DoEvents
   GetNearestDepot = -1
@@ -6564,7 +6564,7 @@ Public Sub OpenTheDepot(idConnection As Integer)
   Dim sCheat As String
   Dim cPacket() As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   '0A 00 82 37 7D A7 7D 09 59 0F 02 00
   bpID = frmBackpacks.GetFirstFreeBpID(idConnection)
@@ -6578,7 +6578,7 @@ Public Sub OpenTheDepot(idConnection As Integer)
     DoEvents
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing OpenTheDepot"
 End Sub
 
@@ -6621,7 +6621,7 @@ Public Function DropLoot(idConnection As Integer) As Long
   Dim inRes As Integer
   Dim amount As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   DropDelayerTurn(idConnection) = DropDelayerTurn(idConnection) + 1
   If (DropDelayerTurn(idConnection) < DropDelayerConst) Then
@@ -6730,7 +6730,7 @@ Public Function DropLoot(idConnection As Integer) As Long
       Exit Function
     End If
   End If
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing DropLoot"
   DropLoot = -1
   Exit Function
@@ -6758,7 +6758,7 @@ Public Function DropLootToGround(idConnection As Integer) As Long
   Dim amount As Byte
   Dim b3 As Byte
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   DropDelayerTurn(idConnection) = DropDelayerTurn(idConnection) + 1
   If (DropDelayerTurn(idConnection) < DropDelayerConst) Then
@@ -6834,13 +6834,13 @@ Public Function DropLootToGround(idConnection As Integer) As Long
   SafeCastCheatString "DropLootToGround1", idConnection, sCheat
   DropLootToGround = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing DropLoot"
   DropLootToGround = -1
   Exit Function
 End Function
 Public Function DropItemOnGroundBytes(ByVal idConnection As Integer, ByVal b1 As Byte, ByVal b2 As Byte, maxamount As Byte) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim foundAsource As Boolean
     Dim res1 As TypeSearchItemResult2
     Dim i As Long
@@ -6878,7 +6878,7 @@ Public Function DropItemOnGroundBytes(ByVal idConnection As Integer, ByVal b1 As
     SafeCastCheatString "DropItemOnGroundBytes1", idConnection, sCheat
     DropItemOnGroundBytes = 0
     Exit Function
-goterr:
+gotErr:
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] DropItemOnGround failed (code " & CStr(Err.Number) & ": " & Err.Description & ")")
       DoEvents
@@ -6887,7 +6887,7 @@ goterr:
     Exit Function
 End Function
 Public Function DropItemOnGround(ByVal idConnection As Integer, ByVal strTile As String) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim b1 As Byte
     Dim b2 As Byte
     Dim b3 As Byte
@@ -6900,7 +6900,7 @@ Public Function DropItemOnGround(ByVal idConnection As Integer, ByVal strTile As
        DropItemOnGround = DropItemOnGroundBytes(idConnection, b1, b2, b3)
        Exit Function
     End If
-goterr:
+gotErr:
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] DropItemOnGround failed (bad format)")
       DoEvents
@@ -6932,7 +6932,7 @@ Public Function PrintDictionary(idConnection As Integer) As Long
   Dim showStr As String
   Dim showStr2 As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   aRes = SendLogSystemMessageToClient(idConnection, "Listing all creatures on memory:")
   DoEvents
@@ -6949,7 +6949,7 @@ Public Function PrintDictionary(idConnection As Integer) As Long
   Next
   PrintDictionary = 0
   Exit Function
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at PrintDictionary #"
   frmMain.DoCloseActions idConnection
   DoEvents

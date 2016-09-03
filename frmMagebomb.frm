@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmMagebomb 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -331,7 +331,7 @@ Attribute VB_Exposed = False
 Option Explicit
 Public Sub ReloadMagebombFiles()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim path As String
   path = ""
@@ -349,17 +349,17 @@ Public Sub ReloadMagebombFiles()
   Next
   txtFile.Text = ""
   Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "ERROR WITH FILESYSTEM OBJECT at ReloadMagebombFiles (" & Err.Number & ") : " & Err.Description & " ; path=" & path
 End Sub
 
 Private Function convertThisStrToLong(strLong As String) As Long
   Dim lonResult As Long
-  On Error GoTo goterr
+  On Error GoTo gotErr
   lonResult = CLng(strLong)
   convertThisStrToLong = lonResult
   Exit Function
-goterr:
+gotErr:
   convertThisStrToLong = -1
 End Function
 
@@ -367,7 +367,7 @@ End Function
 Public Function PreloadAbomb(strLoginLogFile As String, strAttackMode As String, _
   strTarget As String, strTimeRetry As String)
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim strMode As String
   Dim longTime As Long
@@ -465,13 +465,13 @@ Public Function PreloadAbomb(strLoginLogFile As String, strAttackMode As String,
     PreloadAbomb = 0
   End If
   Exit Function
-goterr:
+gotErr:
   PreloadAbomb = res
 End Function
 
 Public Sub ProcessArmageddon()
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim limM As Long
   Dim gtc As Long
@@ -749,7 +749,7 @@ Public Sub ProcessArmageddon()
   End If
   errline = 104
   Exit Sub
-goterr:
+gotErr:
   MagebombStage = 0
   armageddonTimer.enabled = False
   LogOnFile "errors.txt", "An error happened at line " & CStr(errline) & " in ProcessArmageddon() , with code " & CStr(Err.Number) & " and description " & Err.Description
@@ -760,7 +760,7 @@ End Sub
 
 Public Sub SendClientless(ByVal Index As Long, ByRef packet() As Byte, ignoreEncryption As Boolean)
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim extrab As Long
   Dim i As Long
@@ -879,7 +879,7 @@ Public Sub SendClientless(ByVal Index As Long, ByRef packet() As Byte, ignoreEnc
   End If
   errline = 28
   Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "An error happened in SendClientless() sub AT LINE " & CStr(errline) & " , with code " & CStr(Err.Number) & " and description " & Err.Description
 End Sub
 
@@ -900,7 +900,7 @@ Private Sub clientLess_Close(Index As Integer)
   Dim aRes As Long
   Dim dRes As Long
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (Magebombs(Index).ConnectionStatus > 0) Then
     Magebombs(Index).ConnectionStatus = 0
@@ -910,7 +910,7 @@ Private Sub clientLess_Close(Index As Integer)
     End If
   End If
   Exit Sub
-goterr:
+gotErr:
   aRes = -1
 End Sub
 
@@ -920,7 +920,7 @@ Private Sub clientLess_Connect(Index As Integer)
   Dim i As Long
   Dim okToContinue As Boolean
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (Magebombs(Index).ConnectionStatus <= 1) Then
     Magebombs(Index).ConnectionStatus = 2
@@ -956,7 +956,7 @@ Private Sub clientLess_Connect(Index As Integer)
     End If
   End If
   Exit Sub
-goterr:
+gotErr:
   aRes = -1
 End Sub
 

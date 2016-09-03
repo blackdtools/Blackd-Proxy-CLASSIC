@@ -14,7 +14,7 @@ Public Function ReadTrial(ByRef backup As String) As TypeTrial
   Dim bDays As Long
   Dim strRan As String
   Dim mode As Integer
-  On Error GoTo goterr
+  On Error GoTo gotErr
   res.bDays = -1
   res.mode = 2
   str = backup
@@ -32,7 +32,7 @@ Public Function ReadTrial(ByRef backup As String) As TypeTrial
   str = Right(str, Len(str) - impNum)
   impNum = CInt(strRan) + 100
   If Len(str) <> (impNum + 2) Then
-    GoTo goterr
+    GoTo gotErr
   End If
   str = Right(str, Len(str) - impNum)
   str = Left(str, 1)
@@ -43,14 +43,14 @@ Public Function ReadTrial(ByRef backup As String) As TypeTrial
   End If
   'valid?
   If (mode <> 3) And ((bDays < 300) Or (bDays > 590)) Then 'max trial can be 1 Aug 2006
-    GoTo goterr
+    GoTo gotErr
   End If
   'sucesfull end
   res.bDays = bDays
   res.mode = mode
   ReadTrial = res
   Exit Function
-goterr:
+gotErr:
   res.bDays = -1
   res.mode = 2
   ReadTrial = res
@@ -61,7 +61,7 @@ Public Function ReadTrialFromFile() As TypeTrial
   Dim fn As Integer
   Dim i As Long
   Dim str As String
-  On Error GoTo goterr
+  On Error GoTo gotErr
   ' load memory adresses for login IPs
   fn = FreeFile
   Open App.path & "\code.txt" For Input As #fn
@@ -69,12 +69,12 @@ Public Function ReadTrialFromFile() As TypeTrial
   Close #fn
   resT = ReadTrial(str)
   If resT.mode = 3 Then
-    GoTo goterr
+    GoTo gotErr
   Else
     ReadTrialFromFile = resT
   End If
   Exit Function
-goterr:
+gotErr:
   resT.bDays = -1
   resT.mode = 2
   ReadTrialFromFile = resT
