@@ -5,17 +5,18 @@ Attribute VB_Name = "modCode"
 Option Explicit
 
 Public Const FIX_addConfigPaths As String = _
-"config1033,config1034,config1035,config1036,config1037,config1038,config1039,config1040,config1041,config1050,config1051,config1051preview,config1052,config1052preview,config1053,config1053preview,config1054,config1055,config1056,config1057,config1058,config1059,config1060,config1061,config1062,config1063,config1064,config1070,config1071,config1072,config1073,config1074,config1075,config1076,config1077,config1078,config1079,config1080,config1081,config1082,config1090,config1091,config1092,config1093,config1094,config1095,config1096,config1097,config1098"
+"config1033,config1034,config1035,config1036,config1037,config1038,config1039,config1040,config1041,config1050,config1051,config1051preview,config1052,config1052preview,config1053,config1053preview,config1054,config1055,config1056,config1057,config1058,config1059,config1060,config1061,config1062,config1063,config1064,config1070,config1071,config1072,config1073,config1074,config1075,config1076,config1077,config1078,config1079,config1080,config1081,config1082,config1090,config1091,config1092,config1093,config1094,config1095,config1096,config1097,config1098,config1099,config1100,config1101"
 
 Public Const FIX_addConfigVersions As String = _
-"10.33,10.34,10.35,10.36,10.37,10.38,10.39,10.4,10.41,10.5,10.51,10.51 preview,10.52,10.52 preview,10.53,10.53 preview,10.54,10.55,10.56,10.57,10.58,10.59,10.60,10.61,10.62,10.63,10.64,10.70,10.71,10.72,10.73,10.74,10.75,10.76,10.77,10.78,10.79,10.80,10.81,10.82,10.90,10.91,10.92,10.93,10.94,10.95,10.96,10.97,10.98"
+"10.33,10.34,10.35,10.36,10.37,10.38,10.39,10.4,10.41,10.5,10.51,10.51 preview,10.52,10.52 preview,10.53,10.53 preview,10.54,10.55,10.56,10.57,10.58,10.59,10.60,10.61,10.62,10.63,10.64,10.70,10.71,10.72,10.73,10.74,10.75,10.76,10.77,10.78,10.79,10.80,10.81,10.82,10.90,10.91,10.92,10.93,10.94,10.95,10.96,10.97,10.98,10.99,11.00,11.01"
 
 Public Const FIX_addConfigVersionsLongs As String = _
-"1033,1034,1035,1036,1037,1038,1039,1040,1041,1050,1051,1051,1052,1052,1053,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1090,1091,1092,1093,1094,1095,1096,1097,1098"
+"1033,1034,1035,1036,1037,1038,1039,1040,1041,1050,1051,1051,1052,1052,1053,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1090,1091,1092,1093,1094,1095,1096,1097,1098,1099,1100,1101"
 
-Public Const FIX_highestTibiaVersionLong As String = "1098"
-Public Const FIX_TibiaVersionDefaultString As String = "10.98"
-Public Const FIX_TibiaVersionForceString As String = "10.98"
+Public Const FIX_highestTibiaVersionLong As String = "1101"
+Public Const FIX_TibiaVersionDefaultString As String = "10.99"
+Public Const FIX_TibiaVersionDefaultLong As String = "1099"
+Public Const FIX_TibiaVersionForceString As String = "10.99"
 
 Public Const EQUIPMENT_SLOTS As Long = 11 ' new slot since Tibia 9.54
 Public Const SLOT_AMMUNITION As Long = 10
@@ -30,10 +31,10 @@ Public Const cte_initMANA = 10000
 Public Const localstr As String = "127.0.0.1"
 Public Const longsecretkey = "pfiwmvjgjikdfzasdruieopqwfhgkvvbnmklpofufrhufhuhsqaewftswgyguuhbvxhchufudhgoipopeqwiueifhjhsfdzvvcdvhfhfruyiurtuiuwfewqweffswqdepoffr"
 
-Type URL
+Type url
     Scheme As String
     Host As String
-    Port As Long
+    port As Long
     uri As String
     Query As String
 End Type
@@ -275,7 +276,7 @@ Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
 
 Private Declare Sub CopyMemory Lib "kernel32" _
 Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal _
-length As Long)
+Length As Long)
 
 'get classname
 Public Declare Function GetClassName Lib "user32" Alias "GetClassNameA" (ByVal hwnd As Long, ByVal lpClassName As String, ByVal nMaxCount As Long) As Long
@@ -826,6 +827,7 @@ Public fakemessagesLevel2 As Byte
 Public confirmedExit As Boolean
 
 Public tibiaclassname As String
+Public tibiamainname As String
 
 Public LastFasterLogin As String
 Public AlreadyCheckingFasterLogin As String
@@ -852,6 +854,8 @@ Public LAST_BATTLELISTPOS As Long
 
 Public CurrentTibiaDatPath As String
 Public CurrentTibiaDatDATE As Date
+Public CurrentTibiaDatVERSION As Long
+Public CurrentTibiaDatFILE As String
 Public MyErrorDate As Date
 
 Public configOverrideByCommand As Boolean
@@ -878,6 +882,10 @@ Public Function MemoryChangeFloor(idConnection As Integer, relfloornumber As Str
     Dim relChange As Long
     Dim ammountOfChanges As Long
     Dim i As Long
+    If (TibiaVersionLong >= 1100) Then
+        MemoryChangeFloor = -1
+        Exit Function
+    End If
     'MemoryChangeFloor = -1 ' not working yet
     'Exit Function
     If IsNumeric(relfloornumber) = False Then
@@ -1047,8 +1055,8 @@ GetProcessIDs idConnection
 ProcessHandle = ProcessID(idConnection)
 
 'read memory
-Dim buffer As Long
-buffer = 0
+Dim Buffer As Long
+Buffer = 0
 If byteS = 1 Then
     readBytes = Memory_ReadByte(address, ProcessHandle)
 Else
@@ -1114,7 +1122,7 @@ Public Sub OverwriteOnFileSimple(file_name As String, strtext As String)
   a = 0
   fn = FreeFile
     writeThis = strtext
-  Open App.path & "\" & file_name For Output As #fn
+  Open App.Path & "\" & file_name For Output As #fn
     Print #fn, writeThis
   Close #fn
 
@@ -1131,7 +1139,7 @@ Public Sub AddwriteOnFileSimple(file_name As String, strtext As String)
   a = 0
   fn = FreeFile
     writeThis = strtext
-  Open App.path & "\" & file_name For Append As #fn
+  Open App.Path & "\" & file_name For Append As #fn
     Print #fn, writeThis
   Close #fn
 
@@ -1233,11 +1241,26 @@ End Sub
 Public Function TryAutoPath() As String
     On Error GoTo cantdoit
     Const ParTibiaFolder As String = "Tibia"
-    If TibiaVersionLong >= 800 Then
-        Dim strAppdata As String
-        Dim strProposal As String
-        Dim strProp2 As String
-        Dim fs As scripting.FileSystemObject
+    Dim strAppdata As String
+    Dim strProposal As String
+    Dim strProp2 As String
+    Dim fs As scripting.FileSystemObject
+        
+    If TibiaVersionLong >= 1100 Then
+        Set fs = New scripting.FileSystemObject
+        strAppdata = GetLocalApplicationDataFolder()
+        strProposal = strAppdata & "\" & ParTibiaFolder & "\packages\Tibia\minimap"
+     
+        If fs.FolderExists(strProposal) = True Then
+            Set fs = Nothing
+            TryAutoPath = strProposal
+            Exit Function
+        Else
+            Set fs = Nothing
+            TryAutoPath = ""
+            Exit Function
+        End If
+    ElseIf TibiaVersionLong >= 800 Then
         Set fs = New scripting.FileSystemObject
         strAppdata = GetAppDataFolder()
          strProposal = strAppdata & "\" & ParTibiaFolder & "\Automap"
@@ -1293,22 +1316,24 @@ Public Function ValidateTibiaPath(str As String) As String
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  If TibiaVersionLong >= 800 Then
-  
-  
-  
-
+  If TibiaVersionLong >= 1100 Then
     If TibiaPath = "" Then
-       res = ""
-    ElseIf LCase(Right(str, 7)) <> "automap" Then
-       res = "PATH NOT CONFIGURED! USE THIS BUTTON TO BROWSE -->"
+        res = ""
+    ElseIf LCase(Right(str, 7)) <> "minimap" Then
+        res = "PATH NOT CONFIGURED! USE THIS BUTTON TO BROWSE -->"
     Else
-      res = str
+        res = str
     End If
-  ValidateTibiaPath = res
-  
-  
-  
+    ValidateTibiaPath = res
+  ElseIf TibiaVersionLong >= 800 Then
+    If TibiaPath = "" Then
+    res = ""
+    ElseIf LCase(Right(str, 7)) <> "automap" Then
+    res = "PATH NOT CONFIGURED! USE THIS BUTTON TO BROWSE -->"
+    Else
+    res = str
+    End If
+    ValidateTibiaPath = res
   Else
   res = str
   
@@ -1749,14 +1774,14 @@ Public Sub nullifyProxyChecker(tibiaclient As Long)
   Dim i As Integer
   Dim packet() As Byte
   Dim ign As Integer
-  Dim lasti As Integer
+  Dim lastI As Integer
   If TibiaVersionLong >= 1012 Then
   Exit Sub
   End If
   
   ign = GetCheatPacket(packet, "8B 40 20 83 38 00 B8 00 00 00 00 0F 95 D0 C3")
-  lasti = UBound(packet)
-  For i = 0 To lasti
+  lastI = UBound(packet)
+  For i = 0 To lastI
     bb = packet(i)
    ' Debug.Print GoodHex(bb)
     Memory_WriteByte proxyChecker + i, bb, tibiaclient, False
@@ -1767,7 +1792,7 @@ Public Function OBTAINmemLoginServer(tibiaclient As Long, nm As Integer) As Long
   Dim adrStruct As Long
   Dim incUnit As Long
   Dim adrPointer As Long
-  Dim crc As String
+  Dim CRC As String
   Dim incTotal As Long
   adrStruct = Memory_ReadLong(LoginServerStartPointer, tibiaclient, False)
   incUnit = LoginServerStep
@@ -1775,8 +1800,8 @@ Public Function OBTAINmemLoginServer(tibiaclient As Long, nm As Integer) As Long
   adrPointer = Memory_ReadLong(adrStruct + incTotal, tibiaclient, True)
   
   #If FinalMode = 0 Then
-  crc = readMemoryString(tibiaclient, adrPointer, 255, True)
-  Debug.Print crc
+  CRC = readMemoryString(tibiaclient, adrPointer, 255, True)
+  Debug.Print CRC
   #End If
   OBTAINmemLoginServer = adrPointer
 End Function
@@ -1786,17 +1811,17 @@ Public Function OBTAINmemIPNumber(tibiaclient As Long, nm As Integer) As Long
   Dim incUnit As Long
   Dim adrPointer As Long
   Dim incTotal As Long
-  Dim crc As String
+  Dim CRC As String
   adrStruct = Memory_ReadLong(LoginServerStartPointer, tibiaclient, False)
   incUnit = LoginServerStep
   incTotal = IPAddressPointerOffset + ((nm - 1) * incUnit)
   adrPointer = Memory_ReadLong(adrStruct + incTotal, tibiaclient, True)
-  crc = CLng(Memory_ReadByte(adrPointer + 0, tibiaclient, True)) & "." & _
+  CRC = CLng(Memory_ReadByte(adrPointer + 0, tibiaclient, True)) & "." & _
         CLng(Memory_ReadByte(adrPointer + 1, tibiaclient, True)) & "." & _
         CLng(Memory_ReadByte(adrPointer + 2, tibiaclient, True)) & "." & _
         CLng(Memory_ReadByte(adrPointer + 3, tibiaclient, True))
   #If FinalMode = 0 Then
-  Debug.Print "Original numeric IP = " & crc
+  Debug.Print "Original numeric IP = " & CRC
   #End If
   ' if you didn't log yet then crc = 0.0.0.0
   ' else you get something
@@ -1810,7 +1835,7 @@ Public Function OBTAINmemLoginPort(tibiaclient As Long, nm As Integer) As Long
   Dim adrStruct As Long
   Dim incUnit As Long
  
-  Dim crc As String
+  Dim CRC As String
   Dim incTotal As Long
   Dim b1 As Byte
   Dim b2 As Byte
@@ -1828,8 +1853,8 @@ Public Function OBTAINmemLoginPort(tibiaclient As Long, nm As Integer) As Long
   b1 = Memory_ReadByte(adrPort, tibiaclient, True)
   b2 = Memory_ReadByte(adrPort + 1, tibiaclient, True)
   tport = GetTheLong(b1, b2)
-  crc = CStr(tport)
-  Debug.Print crc
+  CRC = CStr(tport)
+  Debug.Print CRC
   #End If
  
   OBTAINmemLoginPort = adrPort
@@ -2035,8 +2060,8 @@ Public Function GetTheLong(byte1 As Byte, byte2 As Byte) As Long
 End Function
 
 
-Public Function longToBytes(ByRef ByteArray() As Byte, ByVal thelong As Long) As Byte()
-    CopyMemory ByteArray(0), ByVal VarPtr(thelong), Len(thelong)
+Public Function longToBytes(ByRef byteArray() As Byte, ByVal thelong As Long) As Byte()
+    CopyMemory byteArray(0), ByVal VarPtr(thelong), Len(thelong)
 End Function
 
 Public Function FourBytesLong(byte1 As Byte, byte2 As Byte, byte3 As Byte, byte4 As Byte) As Long
@@ -2490,7 +2515,7 @@ Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As In
     'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "! EVAL : " & GoodHex(pType)
     Select Case pType ' type of subpacket
     Case &H28
-      Debug.Print "&H28 - AUTH"
+     ' Debug.Print "&H28 - AUTH"
       pos = pos + 1
       lontmp1 = GetTheLong(packet(pos), packet(pos + 1))
       pos = pos + 2 + lontmp1
@@ -2510,7 +2535,7 @@ Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As In
       'Debug.Print frmMain.showAsStr(packetNEW, True)
       'Debug.Print "OK"
     Case &H14
-      Debug.Print "&H14 - MOTD"
+     ' Debug.Print "&H14 - MOTD"
       pos = pos + 1
       lontmp1 = GetTheLong(packet(pos), packet(pos + 1))
       pos = pos + 2 + lontmp1
@@ -2530,10 +2555,10 @@ Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As In
       'Debug.Print frmMain.showAsStr(packetNEW, True)
       'Debug.Print "OK"
     Case &HC
-        Debug.Print "&H0C - 0C ??"
+      '  Debug.Print "&H0C - 0C ??"
       pos = pos + 2
     Case &H64
-      Debug.Print "&H64 - CHAR LIST"
+     ' Debug.Print "&H64 - CHAR LIST"
       nRes = NewCharListChanger(packet, packetNew, idConnection, strIP, bstart, pos)
       If (nRes = 1) Then
         res = 1
@@ -4163,6 +4188,7 @@ Public Function GetCharListPositionPre(idConnection As Integer, ByRef selectedch
   Dim theindex As Byte
   Dim theindexLNG As Long
   theindexLNG = ReadCurrentAddress(ProcessID(idConnection), adrSelectedCharIndex, -1, True)
+
   GetCharListPositionPre = CInt(theindexLNG)
   Exit Function
 returnTheResult:
@@ -4954,7 +4980,7 @@ Public Sub LogStatusOnFile(file_name As String)
   On Error GoTo ignoreit
   a = 0
   fn = FreeFile
-  Open App.path & "\" & file_name For Append As #fn
+  Open App.Path & "\" & file_name For Append As #fn
     writeThis = vbCrLf & "ADITIONAL DETAILS:" & vbCrLf
     Print #fn, writeThis
     writeThis = "TibiaVersionLong=" & CStr(TibiaVersionLong)
@@ -5005,12 +5031,12 @@ Public Sub LogOnFile(file_name As String, strtext As String)
   End If
   If Len(file_name) > 4 Then
     If Left$(file_name, 4) = "log_" Then
-      Open App.path & "\mylogs\" & file_name For Append As #fn
+      Open App.Path & "\mylogs\" & file_name For Append As #fn
     Else
-      Open App.path & "\" & file_name For Append As #fn
+      Open App.Path & "\" & file_name For Append As #fn
     End If
   Else
-  Open App.path & "\" & file_name For Append As #fn
+  Open App.Path & "\" & file_name For Append As #fn
   End If
     Print #fn, writeThis
   Close #fn
@@ -5040,7 +5066,7 @@ Public Sub OverwriteOnFile(file_name As String, strtext As String)
   Else
     writeThis = strtext
   End If
-  Open App.path & "\" & file_name For Output As #fn
+  Open App.Path & "\" & file_name For Output As #fn
     Print #fn, writeThis
   Close #fn
   If file_name = "errors.txt" Then
@@ -5156,11 +5182,11 @@ If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >=
 End If
  
     
-          If fRes.foundcount > 0 Then
+          If fRes.foundCount > 0 Then
             myS = FirstPersonStackPos(idConnection)
             If myS < &HFF Then
               res = 0
-              aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundcount) & " IHs found - Casting one from bp ID " & _
+              aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " IHs found - Casting one from bp ID " & _
                CStr(CLng(fRes.bpID)) & " slot " & CStr(CLng(fRes.slotID)) & " to stackpos " & GoodHex(myS))
                
               ' 11 00 83 FF FF ...
@@ -5193,10 +5219,10 @@ justdoit:
           End If
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundcount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
-        If fRes.foundcount = 0 Then
+        If fRes.foundCount = 0 Then
             aRes = GiveGMmessage(idConnection, "Can't find IHs, open new bp of IHs!", "BlackdProxy")
         Else
             aRes = GiveGMmessage(idConnection, "Warning: You are low of IHs!", "BlackdProxy")
@@ -5244,7 +5270,7 @@ Public Function UseFastIH(idConnection As Integer) As Long
      
    If SpecialSource = False Then
 
-          If fRes.foundcount > 0 Then
+          If fRes.foundCount > 0 Then
             myS = FirstPersonStackPos(idConnection)
             If myS < &HFF Then
               'aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " IHs found - Casting one from bp ID " & _
@@ -5273,10 +5299,10 @@ Public Function UseFastIH(idConnection As Integer) As Long
   res = 0
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundcount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
-        If fRes.foundcount = 0 Then
+        If fRes.foundCount = 0 Then
             aRes = GiveGMmessage(idConnection, "Can't find IHs, open new bp of IHs!", "BlackdProxy")
         Else
             aRes = GiveGMmessage(idConnection, "Warning: You are low of IHs!", "BlackdProxy")
@@ -5319,11 +5345,11 @@ If (frmHardcoreCheats.chkTotalWaste.Value = True) Then ' And (TibiaVersionLong >
 End If
 
        
-          If fRes.foundcount > 0 Then
+          If fRes.foundCount > 0 Then
             myS = FirstPersonStackPos(idConnection)
             If myS < &HFF Then
               res = 0
-              aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundcount) & " UHs found - Casting one from bp ID " & _
+              aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " UHs found - Casting one from bp ID " & _
                CStr(CLng(fRes.bpID)) & " slot " & CStr(CLng(fRes.slotID)) & " to stackpos " & GoodHex(myS))
               sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
                GoodHex(fRes.slotID) & " " & FiveChrLon(tileID_UH) & " " & GoodHex(fRes.slotID) & " " & MyHexPosition(idConnection) & " 63 00 " & GoodHex(myS)
@@ -5354,10 +5380,10 @@ justdoit:
           End If
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundcount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
-        If fRes.foundcount = 0 Then
+        If fRes.foundCount = 0 Then
             aRes = GiveGMmessage(idConnection, "Can't find UHs, open new bp of UHs!", "BlackdProxy")
         Else
             aRes = GiveGMmessage(idConnection, "Warning: You are low of UHs!", "BlackdProxy")
@@ -5404,7 +5430,7 @@ Public Function UseFastUH(idConnection As Integer) As Long
    
    If SpecialSource = False Then
        
-          If fRes.foundcount > 0 Then
+          If fRes.foundCount > 0 Then
             myS = FirstPersonStackPos(idConnection)
             If myS < &HFF Then
               'aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " UHs found - Casting one from bp ID " & _
@@ -5434,10 +5460,10 @@ End If
   res = 0
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundcount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
-        If fRes.foundcount = 0 Then
+        If fRes.foundCount = 0 Then
             aRes = GiveGMmessage(idConnection, "Can't find UHs, open new bp of UHs!", "BlackdProxy")
         Else
             aRes = GiveGMmessage(idConnection, "Warning: You are low of UHs!", "BlackdProxy")
@@ -7198,7 +7224,7 @@ End Function
 Public Function ApplyHardcoreCheats(ByRef packet() As Byte, ByVal idConnection As Integer, Optional forceEval As Boolean = False) As Integer
   Dim res As Integer
   Dim lon As Long
-  Dim target As String
+  Dim Target As String
   Dim tellMsg As String
   Dim cPacket() As Byte
   Dim sCheat As String
@@ -7337,7 +7363,7 @@ badError:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "got UNEXPECTED ERROR IN ID " & idConnection & " (" & Err.Description & ") when client sent a packet . Description: " & Err.Description
   ApplyHardcoreCheats = 0
 End Function
-Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As Byte, runeB2 As Byte) As Long
+Public Function SendAimbot(Target As String, idConnection As Integer, runeB1 As Byte, runeB2 As Byte) As Long
   Dim aRes As Long
   Dim lTarget As String
   Dim lSquare As String
@@ -7411,7 +7437,7 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
  ' aRes = SendMessageToClient(idConnection, "Casting on " & target & " ;)", "GM BlackdProxy")
   ' search the rune
   fRes = SearchItem(idConnection, runeB1, runeB2)  'search thing
-  If fRes.foundcount = 0 Then
+  If fRes.foundCount = 0 Then
      If (SpecialSource = False) And (Not (frmHardcoreCheats.chkEnhancedCheats = True)) Then 'And (TibiaVersionLong >= 773))) Then
        aRes = SendSystemMessageToClient(idConnection, "can't find " & thing & ", open new bp of " & thing & "!")
        SendAimbot = 0
@@ -7432,7 +7458,7 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
     Exit Function
   End If
   ' search the person
-  lTarget = LCase(target)
+  lTarget = LCase(Target)
   Dim RedSquareID As Long
   RedSquareID = ReadRedSquare(idConnection)
   For y = -6 To 7
@@ -7452,7 +7478,7 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
                " 63 00 " & GoodHex(CByte(s))
                SafeCastCheatString "SendAimbot1", idConnection, sCheat
           Else
-               aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundcount) & " " & thing & " found - Casting one from bp ID " & _
+               aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " " & thing & " found - Casting one from bp ID " & _
                 CStr(CLng(fRes.bpID)) & " slot " & CStr(CLng(fRes.slotID)))
                DoEvents 'added in 8.71
                sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
@@ -7467,7 +7493,7 @@ Public Function SendAimbot(target As String, idConnection As Integer, runeB1 As 
       Next s
     Next X
   Next y
-  aRes = SendSystemMessageToClient(idConnection, "Sorry, " & target & " is not on BlackdProxy track")
+  aRes = SendSystemMessageToClient(idConnection, "Sorry, " & Target & " is not on BlackdProxy track")
   SendAimbot = 0
   Exit Function
 errclose:
@@ -7476,7 +7502,7 @@ errclose:
   DoEvents
   SendAimbot = -1
 End Function
-Public Function FindCreatureByName(ByVal target As String, idConnection As Integer, ByRef foundX As Long, ByRef foundY As Long, ByRef foundZ As Long) As Boolean
+Public Function FindCreatureByName(ByVal Target As String, idConnection As Integer, ByRef foundX As Long, ByRef foundY As Long, ByRef foundZ As Long) As Boolean
     Dim X As Long
     Dim y As Long
     Dim z As Long
@@ -7486,11 +7512,11 @@ Public Function FindCreatureByName(ByVal target As String, idConnection As Integ
     foundX = -1
     foundY = -1
     foundZ = -1
-    If (Len(target) = 0) Then
+    If (Len(Target) = 0) Then
         FindCreatureByName = False
         Exit Function
     End If
-    target = LCase(target)
+    Target = LCase(Target)
     
   For z = -1 To 1 'just 1 floor below, 1 floor above, and current floor, try to save some c
   For y = -6 To 7
@@ -7501,7 +7527,7 @@ Public Function FindCreatureByName(ByVal target As String, idConnection As Integ
         '...
         Else
           tmpName = LCase(GetNameFromID(idConnection, tmpID))
-          If (tmpName = target) Then
+          If (tmpName = Target) Then
             'found it!
             foundX = myX(idConnection) + X
             foundY = myY(idConnection) + y
@@ -7520,7 +7546,7 @@ Public Function FindCreatureByName(ByVal target As String, idConnection As Integ
 End Function
 
 
-Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 As Byte, runeB2 As Byte) As Long
+Public Function SendMobAimbot(Target As String, idConnection As Integer, runeB1 As Byte, runeB2 As Byte) As Long
   Dim aRes As Long
   Dim lTarget As String
   Dim lSquare As String
@@ -7593,7 +7619,7 @@ Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 
     fRes = SearchItem(idConnection, runeB1, runeB2)  'search thing
 
 
-  If fRes.foundcount = 0 Then
+  If fRes.foundCount = 0 Then
      aRes = SendSystemMessageToClient(idConnection, "can't find " & thing & ", open new bp of " & thing & "!")
      DoEvents
      SendMobAimbot = 0
@@ -7612,9 +7638,9 @@ Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 
     Exit Function
   End If
   
-  If target = "" Then ' use last targeted
+  If Target = "" Then ' use last targeted
     If SpecialSource = False Then
-            aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundcount) & " " & thing & " found - Casting one from bp ID " & _
+            aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " " & thing & " found - Casting one from bp ID " & _
            CStr(CLng(fRes.bpID)) & " slot " & CStr(CLng(fRes.slotID)))
          ' GetHexStrFromPosition(myX(idConnection)
           sCheat = "84 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
@@ -7630,7 +7656,7 @@ Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 
     End If
   End If
   ' search the creature
-  lTarget = LCase(target)
+  lTarget = LCase(Target)
   For y = -6 To 7
     For X = -8 To 9
       For s = 0 To 10
@@ -7643,7 +7669,7 @@ Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 
         If lSquare = lTarget Then
             If SpecialSource = False Then
         '0D 00 84 FF FF 40 00 00 40 0C 00 CB DD 01 40
-              aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundcount) & " " & thing & " found - Casting one from bp ID " & _
+              aRes = SendSystemMessageToClient(idConnection, CStr(fRes.foundCount) & " " & thing & " found - Casting one from bp ID " & _
               CStr(CLng(fRes.bpID)) & " slot " & CStr(CLng(fRes.slotID)))
         
               sCheat = "84 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
@@ -7662,7 +7688,7 @@ Public Function SendMobAimbot(target As String, idConnection As Integer, runeB1 
       Next s
     Next X
   Next y
-  aRes = SendSystemMessageToClient(idConnection, "Sorry, " & target & " is not on BlackdProxy track")
+  aRes = SendSystemMessageToClient(idConnection, "Sorry, " & Target & " is not on BlackdProxy track")
   SendMobAimbot = 0
   Exit Function
 errclose:
@@ -7815,7 +7841,7 @@ Public Function MoveItemToRightHand(idConnection As Integer, b1 As Byte, b2 As B
       Exit Function
     End If
     resF = SearchItemWithAmount(idConnection, b1, b2, b3)
-    If resF.foundcount = 0 Then
+    If resF.foundCount = 0 Then
       MoveItemToRightHand = 0
       Exit Function
     Else
@@ -7936,7 +7962,7 @@ Public Function MoveItemToLeftHand(idConnection As Integer, b1 As Byte, b2 As By
       Exit Function
     End If
     resF = SearchItemWithAmount(idConnection, b1, b2, b3)
-    If resF.foundcount = 0 Then
+    If resF.foundCount = 0 Then
       MoveItemToLeftHand = 0
       Exit Function
     Else
@@ -8458,7 +8484,7 @@ gotErr:
   GiveExpInfo = -1
 End Function
 
-Public Function StartPush(idConnection As Integer, target As String) As Long
+Public Function StartPush(idConnection As Integer, Target As String) As Long
   Dim X As Long
   Dim y As Long
   Dim s As Long
@@ -8466,7 +8492,7 @@ Public Function StartPush(idConnection As Integer, target As String) As Long
   Dim tmpID As Double
   Dim lname As String
   Dim aRes As Long
-  If target = "" Then
+  If Target = "" Then
     RemoveSpamOrder idConnection, 2 'remove auto push
     aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED")
     DoEvents
@@ -8476,7 +8502,7 @@ Public Function StartPush(idConnection As Integer, target As String) As Long
     StartPush = 0
     Exit Function
   Else
-    lname = LCase(target)
+    lname = LCase(Target)
     pushTarget(idConnection) = 0
     For y = -6 To 7
       For X = -8 To 9
@@ -8495,11 +8521,11 @@ Public Function StartPush(idConnection As Integer, target As String) As Long
       RemoveSpamOrder idConnection, 2 'remove auto push
       aRes = StopFollowTarget(idConnection)
       DoEvents
-      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED - not found: " & target)
+      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED - not found: " & Target)
       DoEvents
     Else
       AddSpamOrder idConnection, 2 'add auto push
-      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing ENABLED : " & target & " (ID " & CStr(pushTarget(idConnection)) & ")")
+      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing ENABLED : " & Target & " (ID " & CStr(pushTarget(idConnection)) & ")")
       DoEvents
       aRes = followTarget(idConnection, pushTarget(idConnection))
       ' doevents included in followtarget
@@ -8516,10 +8542,10 @@ Public Function StartPush2(idConnection As Integer) As Long
   Dim tmpID As Double
   Dim lname As String
   Dim aRes As Long
-  Dim target As String
+  Dim Target As String
 'endF:
-  target = currTargetName(idConnection)
-  If target = "stoppush" Then
+  Target = currTargetName(idConnection)
+  If Target = "stoppush" Then
     RemoveSpamOrder idConnection, 2 'remove auto push
     aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED")
     DoEvents
@@ -8529,7 +8555,7 @@ Public Function StartPush2(idConnection As Integer) As Long
     StartPush2 = 0
     Exit Function
   Else
-    lname = LCase(target)
+    lname = LCase(Target)
     pushTarget(idConnection) = 0
     For y = -6 To 7
       For X = -8 To 9
@@ -8548,15 +8574,15 @@ Public Function StartPush2(idConnection As Integer) As Long
       RemoveSpamOrder idConnection, 2 'remove auto push
       aRes = StopFollowTarget(idConnection)
       DoEvents
-      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED - not found: " & target)
+      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing DISABLED - not found: " & Target)
       DoEvents
     Else
       AddSpamOrder idConnection, 2 'add auto push
-      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing ENABLED : " & target & " (ID " & CStr(pushTarget(idConnection)) & ")")
+      aRes = SendLogSystemMessageToClient(idConnection, "Auto pushing ENABLED : " & Target & " (ID " & CStr(pushTarget(idConnection)) & ")")
       DoEvents
       GoTo endF:
 endF:
-  target = currTargetName(idConnection)
+  Target = currTargetName(idConnection)
       'aRes = followTarget(idConnection, pushTarget(idConnection))
       ' doevents included in followtarget
     End If
@@ -9449,6 +9475,11 @@ Public Function SendOutfit3(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
   On Error GoTo gotErr
   #End If
   ' Change outfit by memory
+  If TibiaVersionLong >= 1100 Then
+    SendOutfit3 = -1 ' This function is not compatible with Tibia 11+
+    Exit Function
+  End If
+  
   GetProcessIDs idConnection
   aRes = SendLogSystemMessageToClient(idConnection, _
    "BlackdProxy: cheat outfit selected ( " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(b3) & " " & GoodHex(b4) & " " & GoodHex(b5) & " ) Only you will see it")
@@ -9457,11 +9488,13 @@ Public Function SendOutfit3(idConnection As Integer, b1 As Byte, b2 As Byte, b3 
   'change outfit in memory
   pid = ProcessID(idConnection)
   myBpos = MyBattleListPosition(idConnection)
-  Memory_WriteByte adrOutfit + (myBpos * CharDist), b1, pid
-  Memory_WriteByte adrOutfit + 4 + (myBpos * CharDist), b2, pid
-  Memory_WriteByte adrOutfit + 8 + (myBpos * CharDist), b3, pid
-  Memory_WriteByte adrOutfit + 12 + (myBpos * CharDist), b4, pid
-  Memory_WriteByte adrOutfit + 16 + (myBpos * CharDist), b5, pid
+  If (myBpos > -1) Then
+    Memory_WriteByte adrOutfit + (myBpos * CharDist), b1, pid
+    Memory_WriteByte adrOutfit + 4 + (myBpos * CharDist), b2, pid
+    Memory_WriteByte adrOutfit + 8 + (myBpos * CharDist), b3, pid
+    Memory_WriteByte adrOutfit + 12 + (myBpos * CharDist), b4, pid
+    Memory_WriteByte adrOutfit + 16 + (myBpos * CharDist), b5, pid
+  End If
   SendOutfit3 = 0
   Exit Function
 gotErr:
@@ -9586,11 +9619,11 @@ Public Function SaveHand(idConnection As Integer, allowAmmo As Boolean, handID A
     fRes = SearchFreeSlot(idConnection)
   Else
     fRes = SearchFreeSlotInContainer(idConnection, preferedBP)
-    If fRes.foundcount = 0 Then
+    If fRes.foundCount = 0 Then
       fRes = SearchFreeSlot(idConnection)
     End If
   End If
-  If fRes.foundcount = 1 Then
+  If fRes.foundCount = 1 Then
     If publicDebugMode = True Then
       If handID = CByte(SLOT_RIGHTHAND) Then
         aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Moving item " & GoodHex(mySlot(idConnection, SLOT_RIGHTHAND).t1) & " " & GoodHex(mySlot(idConnection, SLOT_RIGHTHAND).t2) & " " & GoodHex(mySlot(idConnection, SLOT_RIGHTHAND).t3) & " to [bpID " & fRes.bpID & " slotid " & fRes.slotID & "] from righthand")
@@ -9680,7 +9713,7 @@ Public Function MoveItemToEquip(idConnection As Integer, b1 As Byte, b2 As Byte,
   #End If
   resF = SearchItem(idConnection, b1, b2)
   
-  If resF.foundcount = 0 Then
+  If resF.foundCount = 0 Then
     'aRes = SendLogSystemMessageToClient(idconnection, "Sorry, can't find such item in any backpack.")
     'DoEvents
   Else
@@ -9853,28 +9886,41 @@ Public Function ChangeSpeed(idConnection As Integer, rawLevel As String)
   If rawLevel = "" Then
     tibiaclient = ProcessID(idConnection)
     lastPos = MyBattleListPosition(idConnection)
-    b1 = Memory_ReadByte(adrNChar + (lastPos * CharDist) + SpeedDist, tibiaclient)
-    b2 = Memory_ReadByte(adrNChar + (lastPos * CharDist) + SpeedDist + 1, tibiaclient)
-    speed = GetTheLong(b1, b2)
-    aRes = SendLogSystemMessageToClient(idConnection, "Your current internal speed is  " & CStr(speed) & Chr(10) & _
-     "Change it with exiva speed X" & Chr(10) & _
-     "For example, to set internal speed = 500: exiva speed 500")
-    DoEvents
-    ChangeSpeed = 0
+    If (lastPos > -1) Then
+        b1 = Memory_ReadByte(adrNChar + (lastPos * CharDist) + SpeedDist, tibiaclient)
+        b2 = Memory_ReadByte(adrNChar + (lastPos * CharDist) + SpeedDist + 1, tibiaclient)
+        speed = GetTheLong(b1, b2)
+        aRes = SendLogSystemMessageToClient(idConnection, "Your current internal speed is  " & CStr(speed) & Chr(10) & _
+         "Change it with exiva speed X" & Chr(10) & _
+         "For example, to set internal speed = 500: exiva speed 500")
+        DoEvents
+        ChangeSpeed = 0
+        Exit Function
+    Else
+        aRes = GiveGMmessage(idConnection, "Unable to use this feature at this moment", "BlackdProxy")
+        ChangeSpeed = -1
+        Exit Function
+    End If
   Else
-  pos = 1
-  toEnd = Len(rawLevel)
-  xs = ParseString(rawLevel, pos, toEnd, ",")
-  speed = CLng(xs)
-  tibiaclient = ProcessID(idConnection)
-  lastPos = MyBattleListPosition(idConnection)
-  b1 = LowByteOfLong(speed)
-  b2 = HighByteOfLong(speed)
-  Memory_WriteByte (adrNChar + (lastPos * CharDist) + SpeedDist), b1, tibiaclient
-  Memory_WriteByte (adrNChar + (lastPos * CharDist) + SpeedDist + 1), b2, tibiaclient
-  aRes = GiveGMmessage(idConnection, "Speed changed. Now your internal speed is " & CStr(speed), "BlackdProxy")
-  DoEvents
-  ChangeSpeed = 0
+    pos = 1
+    toEnd = Len(rawLevel)
+    xs = ParseString(rawLevel, pos, toEnd, ",")
+    speed = CLng(xs)
+    tibiaclient = ProcessID(idConnection)
+    lastPos = MyBattleListPosition(idConnection)
+    If (lastPos > -1) Then
+        b1 = LowByteOfLong(speed)
+        b2 = HighByteOfLong(speed)
+        Memory_WriteByte (adrNChar + (lastPos * CharDist) + SpeedDist), b1, tibiaclient
+        Memory_WriteByte (adrNChar + (lastPos * CharDist) + SpeedDist + 1), b2, tibiaclient
+        aRes = GiveGMmessage(idConnection, "Speed changed. Now your internal speed is " & CStr(speed), "BlackdProxy")
+        DoEvents
+        ChangeSpeed = 0
+    Else
+        aRes = GiveGMmessage(idConnection, "Unable to use this feature at this moment", "BlackdProxy")
+        DoEvents
+        ChangeSpeed = 0
+    End If
   End If
   Exit Function
 errclose:
@@ -10071,7 +10117,7 @@ gotErr:
   expReset = -1
 End Function
 
-Public Function ProcessKillOrder(idConnection As Integer, target As String) As Long
+Public Function ProcessKillOrder(idConnection As Integer, Target As String) As Long
   Dim aRes As Long
   Dim myS As Byte
   Dim lTarget As String
@@ -10086,12 +10132,12 @@ Public Function ProcessKillOrder(idConnection As Integer, target As String) As L
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  If (target = "") Or (target = " ") Then ' use last targeted
-    target = currTargetName(idConnection)
-  ElseIf Left(target, 1) = " " Then ' delete space
-    target = Right(target, Len(target) - 1)
+  If (Target = "") Or (Target = " ") Then ' use last targeted
+    Target = currTargetName(idConnection)
+  ElseIf Left(Target, 1) = " " Then ' delete space
+    Target = Right(Target, Len(Target) - 1)
   End If
-  If (target = GotKillOrderTargetName(idConnection)) Then
+  If (Target = GotKillOrderTargetName(idConnection)) Then
     GotKillOrderTargetName(idConnection) = ""
     GotKillOrderTargetID(idConnection) = 0
     GotKillOrder(idConnection) = False
@@ -10115,7 +10161,7 @@ Public Function ProcessKillOrder(idConnection As Integer, target As String) As L
     Exit Function
   End If
   ' search the person
-  lTarget = LCase(target)
+  lTarget = LCase(Target)
   For y = -6 To 7
     For X = -8 To 9
       For s = 0 To 10
@@ -10135,11 +10181,11 @@ Public Function ProcessKillOrder(idConnection As Integer, target As String) As L
 continue:
   If (GotKillOrderTargetID(idConnection) = 0) Then
     GotKillOrder(idConnection) = False
-    aRes = GiveGMmessage(idConnection, "- " & target & " -", "Sorry, target NOT FOUND")
+    aRes = GiveGMmessage(idConnection, "- " & Target & " -", "Sorry, target NOT FOUND")
     DoEvents
   Else
     GotKillOrder(idConnection) = True
-    GotKillOrderTargetName(idConnection) = target
+    GotKillOrderTargetName(idConnection) = Target
     aRes = GiveGMmessage(idConnection, ">> " & GotKillOrderTargetName(idConnection) & " <<", "Search and destroy")
     DoEvents
     ThinkTheKill (idConnection)
@@ -10151,7 +10197,7 @@ gotErr:
   ProcessKillOrder = -1
 End Function
 
-Public Function ProcessKillOrder2(idConnection As Integer, target As String) As Long
+Public Function ProcessKillOrder2(idConnection As Integer, Target As String) As Long
   Dim aRes As Long
   Dim myS As Byte
   Dim lTarget As String
@@ -10166,10 +10212,10 @@ Public Function ProcessKillOrder2(idConnection As Integer, target As String) As 
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  If (target = "") Or (target = " ") Then ' use last targeted
-    target = currTargetName(idConnection)
-  ElseIf Left(target, 1) = " " Then ' delete space
-    target = Right(target, Len(target) - 1)
+  If (Target = "") Or (Target = " ") Then ' use last targeted
+    Target = currTargetName(idConnection)
+  ElseIf Left(Target, 1) = " " Then ' delete space
+    Target = Right(Target, Len(Target) - 1)
   End If
   If (TibiaVersionLong < 760) Then
     myS = MyStackPos(idConnection)
@@ -10184,7 +10230,7 @@ Public Function ProcessKillOrder2(idConnection As Integer, target As String) As 
     Exit Function
   End If
   ' search the person
-  lTarget = LCase(target)
+  lTarget = LCase(Target)
   For y = -6 To 7
     For X = -8 To 9
       For s = 0 To 10
@@ -10203,13 +10249,13 @@ Public Function ProcessKillOrder2(idConnection As Integer, target As String) As 
   Next y
 continue:
   If (GotKillOrderTargetID(idConnection) = 0) Then
-  target = currTargetName(idConnection)
+  Target = currTargetName(idConnection)
     GotKillOrder(idConnection) = False
     'aRes = GiveGMmessage(idConnection, "- " & target & " -", "Sorry, target NOT FOUND")
     DoEvents
   Else
     GotKillOrder(idConnection) = True
-    GotKillOrderTargetName(idConnection) = target
+    GotKillOrderTargetName(idConnection) = Target
     'RuneMakerOptions(idConnection).autoarme4 = True
     'aRes = GiveGMmessage(idConnection, "" & GotKillOrderTargetName(idConnection) & "", "Target")
     'DoEvents
@@ -10258,7 +10304,7 @@ End If
     fRes = SearchFirstItemWithExactAmmount(idConnection, _
    LowByteOfLong(tileID_flask), HighByteOfLong(tileID_flask), byteFluid) 'search flask with fluid
   End If
-  If fRes.foundcount > 0 Then
+  If fRes.foundCount > 0 Then
     myS = FirstPersonStackPos(idConnection)
     If myS < &HFF Then
       sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
@@ -10336,7 +10382,7 @@ End If
     fRes = SearchFirstItemWithExactAmmount(idConnection, _
    LowByteOfLong(tileID_flask), HighByteOfLong(tileID_potion), 0)
   End If
-  If fRes.foundcount > 0 Then
+  If fRes.foundCount > 0 Then
     myS = FirstPersonStackPos(idConnection)
     If myS < &HFF Then
       sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
@@ -10558,7 +10604,7 @@ Public Function GetRandomLineOf(strFileName As String) As String
   Dim fso As scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
+  Dim Filename As String
   Dim i As Long
   Dim p As Long
   Dim seguir As Boolean
@@ -10571,18 +10617,18 @@ Public Function GetRandomLineOf(strFileName As String) As String
   On Error GoTo gotErr
   #End If
   Set fso = New scripting.FileSystemObject
-  filename = App.path & "\randline\" & strFileName
+  Filename = App.Path & "\randline\" & strFileName
   res = ""
-  If fso.FileExists(filename) = True Then
+  If fso.FileExists(Filename) = True Then
     fn = FreeFile
     rcounter = 0
-    Open filename For Input As #fn
+    Open Filename For Input As #fn
       While Not EOF(fn)
         Line Input #fn, strLine
         rcounter = rcounter + 1
       Wend
       Close #fn
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       i = 0
       theL = randomNumberBetween(1, rcounter)
       While Not EOF(fn)
@@ -10911,7 +10957,7 @@ Public Function IDofName(idConnection As Integer, strName As String, lngOption A
     ' search on memory list
     TheIDisFound = False
     idsOnMemory = NameOfID(idConnection).Keys
-    lim = NameOfID(idConnection).count - 1
+    lim = NameOfID(idConnection).Count - 1
     For i = 0 To lim
       currItem = CDbl(idsOnMemory(i))
       currName = LCase(NameOfID(idConnection).item(currItem))
@@ -11853,14 +11899,14 @@ Public Function UseItemWithAmount(idConnection As Integer, strTile As String) As
     #End If
     Dim res As Long
     Dim tmpLong As Long
-    Dim success As Boolean
+    Dim Success As Boolean
     Dim am As Byte
     Dim b1 As Byte
     Dim b2 As Byte
     Dim i As Long
     Dim amSlot As Byte
     'lngLen = Len(strTile)
-    success = False
+    Success = False
 
     'im trying to find a way to extract the comma,number...
     Dim TmpAmmountString As String
@@ -11877,8 +11923,8 @@ Public Function UseItemWithAmount(idConnection As Integer, strTile As String) As
         b1 = LowByteOfLong(tmpLong)
         b2 = HighByteOfLong(tmpLong)
         
-        success = UseItemWithAmountX(idConnection, b1, b2, CByte(Ammount))
-    If success = True Then
+        Success = UseItemWithAmountX(idConnection, b1, b2, CByte(Ammount))
+    If Success = True Then
     UseItemWithAmount = 0
     Else
     UseItemWithAmount = -1
@@ -11902,6 +11948,7 @@ Public Function GetSizeOfFile(ByVal strFilePath As String) As Long
 gotErr:
     GetSizeOfFile = -1
 End Function
+
 
 Public Function GetDATEOfFile(ByVal strFilePath As String) As Date
     On Error GoTo gotErr
@@ -11941,12 +11988,12 @@ Public Function getBlackdINI(ByRef par1 As String, ByRef par2 As String, _
   End If
     getBlackdINI = GetPrivateProfileString(par1, par2, par3, par4, par5, par6)
   Else
-  tmpNum = GetPrivateProfileString(par1, par2, par3, par4, par5, App.path & "\settings.override.ini")
+  tmpNum = GetPrivateProfileString(par1, par2, par3, par4, par5, App.Path & "\settings.override.ini")
   If (tmpNum > 0) Then 'if above 0, assume success! return, exit function
   getBlackdINI = tmpNum
   Exit Function
   End If
-    getBlackdINI = GetPrivateProfileString(par1, par2, par3, par4, par5, App.path & "\settings.ini")
+    getBlackdINI = GetPrivateProfileString(par1, par2, par3, par4, par5, App.Path & "\settings.ini")
   End If
 End Function
 
@@ -11955,7 +12002,7 @@ Public Function setBlackdINI(ByRef par1 As String, ByRef par2 As String, _
    If ((par1 = "MemoryAddresses") Or (par1 = "tileIDs") Or (par2 = "configPath")) Then
     setBlackdINI = WritePrivateProfileString(par1, par2, par3, par4)
   Else
-    setBlackdINI = WritePrivateProfileString(par1, par2, par3, App.path & "\settings.ini")
+    setBlackdINI = WritePrivateProfileString(par1, par2, par3, App.Path & "\settings.ini")
   End If
 End Function
 
@@ -11964,9 +12011,9 @@ Public Sub SaveConfigWizard(ByVal blnValue As Boolean)
   Dim res As Boolean
   Dim strInfo As String
   Dim i As Long
-  Dim here As String
+  'Dim here As String
   res = True
-  here = App.path & "\" & configPath & "\config.ini"
+  'here = App.path & "\" & configPath & "\config.ini"
   If blnValue = True Then
     strInfo = "1"
   Else
@@ -11984,7 +12031,7 @@ End Sub
 
 Public Function myMainConfigINIPath() As String
     Dim res As String
-    res = App.path
+    res = App.Path
     If ((Right$(res, 1) = "\") Or (Right$(res, 1) = "/")) Then
        myMainConfigINIPath = res & "config.ini"
     Else
@@ -11998,7 +12045,7 @@ Public Sub SaveFirstScreenConfig()
   Dim strInfo As String
   Dim here As String
   Dim i As Long
-  here = App.path & "\" & OVERWRITE_CONFIGPATH & "\config.ini"
+  here = App.Path & "\" & OVERWRITE_CONFIGPATH & "\config.ini"
   res = True
   SaveConfigWizard OVERWRITE_SHOWAGAIN
   
@@ -12138,7 +12185,7 @@ Public Function UseItemOnName(idConnection As Integer, ByVal strTile As String) 
     Dim ItemIDHexStr As String
     Dim LowByte As Byte
     Dim HighByte As Byte
-    Dim success As Boolean
+    Dim Success As Boolean
     ItemIDHexStr = UCase(Left(strTile, 5))
     ItemID = GetTheLongFromFiveChr(ItemIDHexStr)
     LowByte = LowByteOfLong(ItemID)
@@ -12152,8 +12199,8 @@ Public Function UseItemOnName(idConnection As Integer, ByVal strTile As String) 
 
 
     name = strTile
-    success = SendAimbot(name, idConnection, LowByte, HighByte)
-    If success = True Then
+    Success = SendAimbot(name, idConnection, LowByte, HighByte)
+    If Success = True Then
     UseItemOnName = 0
     Else
     UseItemOnName = -1
@@ -12182,11 +12229,11 @@ Private Function CheckIDE() As Boolean ' this is a helper function for Public Fu
 End Function
 
 
-Function ExtractUrl(ByVal strUrl As String) As URL
+Function ExtractUrl(ByVal strUrl As String) As url
     Dim intPos1 As Integer
     Dim intPos2 As Integer
     
-    Dim retURL As URL
+    Dim retURL As url
     
     '1 look for a scheme it ends with ://
     intPos1 = InStr(strUrl, "://")
@@ -12205,7 +12252,7 @@ Function ExtractUrl(ByVal strUrl As String) As URL
         retURL.Host = Mid(strUrl, 1, intPos1 - 1)
         
         If (IsNumeric(Mid(strUrl, intPos1 + 1, intPos2 - intPos1 - 1))) Then
-                retURL.Port = CInt(Mid(strUrl, intPos1 + 1, intPos2 - intPos1 - 1))
+                retURL.port = CInt(Mid(strUrl, intPos1 + 1, intPos2 - intPos1 - 1))
         End If
     ElseIf intPos2 > 0 Then
         retURL.Host = Mid(strUrl, 1, intPos2 - 1)
@@ -12235,7 +12282,7 @@ Public Sub openErrorsTXTfolder()
 On Error GoTo gotErr
 If (shouldOpenErrorsTXTfolder = True) Then
 shouldOpenErrorsTXTfolder = False
-Shell "explorer " & App.path
+Shell "explorer " & App.Path
 End If
 Exit Sub
 gotErr:

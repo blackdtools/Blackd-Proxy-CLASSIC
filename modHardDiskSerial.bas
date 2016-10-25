@@ -111,6 +111,9 @@ Public Function GetProgFolder() As String
     GetProgFolder = SpecFolder(CSIDL_PROGRAM_FILES)
 End Function
 
+Public Function GetLocalApplicationDataFolder() As String
+    GetLocalApplicationDataFolder = SpecFolder(CSIDL_LOCAL_APPDATA)
+End Function
 
  
 Public Function getHDserialNumber() As Long

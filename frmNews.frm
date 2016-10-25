@@ -62,7 +62,16 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 40.9" & vbCrLf & _
+    strMsg = "Blackd Proxy 41.0" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+     " - After a lot of investigation and fixes this bot is now finally compatible with Tibia 11+" & vbCrLf & _
+     " - Minimum changes to work in all Tibia versions up to 11.01" & vbCrLf & _
+     " - Minimum changes to work in all Tibia versions up to 10.99" & vbCrLf & _
+     " - Cavebot movement will be a bit chaotic in Tibia 11+. Sorry for the inconvenience." & vbCrLf & _
+     " - If you want to connect to a Open Tibia 11+, then your ot server web must provide you a launcher or a patch for Tibia.exe" & vbCrLf & _
+     " - All the configs for Tibia 11+ are restricted to customers of tibia gold from blackdtools.com"
+     
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 40.9" & vbCrLf & _
     "----------------------------" & vbCrLf & _
      " - Minimum changes to work in all Tibia versions up to 10.98"
      

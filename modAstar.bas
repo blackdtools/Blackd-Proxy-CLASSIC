@@ -384,8 +384,8 @@ Public Function Astar(x1 As Long, y1 As Long, goalX As Long, goalY As Long, ByRe
     exitf = True
   End If
   Loop Until exitf = True
-  If Len(res) >= 8 Then
-    res = Left$(res, 8)
+  If Len(res) >= maxStepsPerMovement Then
+    res = Left$(res, maxStepsPerMovement)
   End If
   Astar = res
 End Function
@@ -645,8 +645,8 @@ continueIt:
   End If
   Loop Until exitf = True
   ProcesingBigMapPath = False
-  If Len(res) >= 8 Then
-    res = Left$(res, 8)
+  If Len(res) >= maxStepsPerMovement Then
+    res = Left$(res, maxStepsPerMovement)
   End If
   RequiredMoveBuffer(idConnection) = res
   ReadyBuffer(idConnection) = True

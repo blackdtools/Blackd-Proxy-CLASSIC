@@ -34,6 +34,7 @@ Public Type TypeIDmap
   isHmm(-9 To 10, -7 To 8) As Boolean
   dblID(-9 To 10, -7 To 8) As Double
 End Type
+Public moveByMemoryEnabled As Boolean
 Public ClientExecutingLongCommand() As Boolean
 Public TibiaExePath As String
 Public TibiaExePathWITHTIBIADAT As String
@@ -132,6 +133,7 @@ Public adrNChar As Long ' updated - first ID in battlelist
 Public CharDist As Long 'not changed
 Public adrNum As Long  'updated  - yourID - now fixed
 Public adrConnected As Long  ' 0 if not connected / else it is connected
+Public maxStepsPerMovement As Long ' 5 in Tibia 11.00
 Public adrPointerToInternalFPSminusH5D As Long ' pointer to an address near the internal value for FPS (inversely relative to FPS) , add +&H5D and you are there
 Public adrInternalFPS As Long ' only for Tibia 7.6
 Public adrNumberOfAttackClicks As Long ' number of clicks so far
@@ -575,7 +577,7 @@ Public Function DoOneStack(idConnection As Integer) As Long
   
   nextLimit = -1
 nextIter:
-  res1.foundcount = 0
+  res1.foundCount = 0
   res1.bpID = &HFF
   res1.slotID = &HFF
   res1.b4 = 0
@@ -588,7 +590,7 @@ nextIter:
       If DatTiles(tileID).stackable = True And _
        Backpack(idConnection, i).item(j).t3 < 100 Then
         If ((i * 100) + j) > nextLimit Then
-          res1.foundcount = 1
+          res1.foundCount = 1
           res1.bpID = CByte(i)
           res1.slotID = CByte(j)
           res1.b1 = Backpack(idConnection, i).item(j).t1
@@ -605,14 +607,14 @@ nextIter:
       Exit For
     End If
   Next i
-  If res1.foundcount = 0 Then
+  If res1.foundCount = 0 Then
    ' SendLogSystemMessageToClient idConnection, "All is now stacked to the max"
     DoEvents
     DoOneStack = 0
     Exit Function
   End If
   
-  res2.foundcount = 0
+  res2.foundCount = 0
   res2.bpID = &HFF
   res2.slotID = &HFF
   res2.b4 = 0
@@ -627,7 +629,7 @@ nextIter:
          If Not (CByte(i) = res1.bpID And _
           CByte(j) = res1.slotID) Then
            If res1.b1 = Backpack(idConnection, i).item(j).t1 And res1.b2 = Backpack(idConnection, i).item(j).t2 Then
-             res2.foundcount = 1
+             res2.foundCount = 1
              res2.bpID = CByte(i)
              res2.slotID = CByte(j)
              amount2 = Backpack(idConnection, i).item(j).t3
@@ -642,7 +644,7 @@ nextIter:
       Exit For
     End If
   Next i
-  If res2.foundcount = 0 Then
+  If res2.foundCount = 0 Then
     GoTo nextIter
   Else
     '0F 00 78 FF FF 40 00 01 BC 0D 01 FF FF 40 00 03 06
@@ -704,6 +706,10 @@ Public Sub GetProcessIDs(Sid As Integer)
   Dim pidMatch As String
   Dim conMatch As String
   Dim usedWaitX As Boolean
+  If TibiaVersionLong >= 1100 Then
+    ' debug.print "GetProcessIDs should not be needed in Tibia 11+"
+    Exit Sub
+  End If
   If myID(Sid) = 0 Then
     Exit Sub
   End If
@@ -826,6 +832,11 @@ Public Function MyBattleListPosition(Sid) As Long
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
+  If (TibiaVersionLong >= 1100) Then
+    Debug.Print "WARNING: Attempt to use an old memory function in Tibia 11+ !!"
+    MyBattleListPosition = -1
+    Exit Function
+  End If
   res = -1
   For c1 = 0 To LAST_BATTLELISTPOS
     id = CDbl(Memory_ReadLong(adrNChar + (CharDist * c1), ProcessID(Sid)))
@@ -1170,13 +1181,22 @@ Case 20
 Case 21
   ' attacking
   strDebug = strDebug & " > 21"
-  If (Abs(xinc) < 2) And (Abs(yinc) < 2) Then
-    moveRetry(Sid) = 0
-    status = 22
-  ElseIf moveRetry(Sid) < 1500 Then
-    status = 24
+  If (moveByMemoryEnabled = True) Then
+        If (Abs(xinc) < 2) And (Abs(yinc) < 2) Then
+          moveRetry(Sid) = 0
+          status = 22
+        ElseIf moveRetry(Sid) < 1500 Then
+          status = 24
+        Else
+          status = 23
+        End If
   Else
-    status = 23
+        If (Abs(xinc) < 2) And (Abs(yinc) < 2) Then
+          moveRetry(Sid) = 0
+          status = 22
+        Else
+          status = 23
+        End If
   End If
 Case 22
   ' close to the monster we are attacking
@@ -1220,14 +1240,24 @@ Case 27
   strDebug = strDebug & " > 27"
   xinc = X - myX(Sid)
   yinc = y - myY(Sid)
-  If ((Abs(xinc) < 2) And (Abs(yinc) < 2)) Then
-    status = 31
-  ElseIf ((xinc < 10) And (xinc > -9) And (yinc < 8) And (yinc > -7)) Then
-    status = 30
-  ElseIf (moveRetry(Sid) < 5000) Then
-    status = 24
+  If (moveByMemoryEnabled = True) Then
+        If ((Abs(xinc) < 2) And (Abs(yinc) < 2)) Then
+          status = 31
+        ElseIf ((xinc < 10) And (xinc > -9) And (yinc < 8) And (yinc > -7)) Then
+          status = 30
+        ElseIf (moveRetry(Sid) < 5000) Then
+          status = 24
+        Else
+          status = 28
+        End If
   Else
-    status = 28
+        If ((Abs(xinc) < 2) And (Abs(yinc) < 2)) Then
+          status = 31
+        ElseIf ((xinc < 10) And (xinc > -9) And (yinc < 8) And (yinc > -7)) Then
+          status = 30
+        Else
+          status = 28
+        End If
   End If
 Case 28
     AstarBig Sid, myX(Sid), myY(Sid), X, y, myZ(Sid), False
@@ -1257,27 +1287,49 @@ Case 29
 Case 30
   ' a* short move 2
   strDebug = strDebug & " > 30"
-  If (xinc < 10) And (xinc > -9) And (yinc < 8) And (yinc > -7) Then
-    If shouldBeExact = True Then
-      aRes = FindBestPath(Sid, xinc, yinc, False)
-    Else
-      aRes = FindBestPathV2(Sid, xinc, yinc, False)
-    End If
-    '#if can't find short best path, think alternative plan
-    If aRes <> 0 Then
-      If onDepotPhase(Sid) > 0 Then
-        status = 10
-      ElseIf lastAttackedID(Sid) <> 0 Then
-        status = 24
-      Else ' if not attacking, try a long path
-        status = 28
+  If (moveByMemoryEnabled = True) Then
+    If (xinc < 10) And (xinc > -9) And (yinc < 8) And (yinc > -7) Then
+      If shouldBeExact = True Then
+        aRes = FindBestPath(Sid, xinc, yinc, False)
+      Else
+        aRes = FindBestPathV2(Sid, xinc, yinc, False)
+      End If
+      '#if can't find short best path, think alternative plan
+      If aRes <> 0 Then
+        If onDepotPhase(Sid) > 0 Then
+          status = 10
+        ElseIf lastAttackedID(Sid) <> 0 Then
+          status = 24
+        Else ' if not attacking, try a long path
+          status = 28
+        End If
+      Else
+        status = 35
       End If
     Else
-      status = 35
+      'try click move
+      status = 24
     End If
-  Else
-    'try click move
-    status = 24
+  Else ' Emergency method - Only manual moves
+    If (xinc < 10) And (xinc > -9) And (yinc < 8) And (yinc > -7) Then
+      If shouldBeExact = True Then
+        aRes = FindBestPath(Sid, xinc, yinc, False)
+      Else
+        aRes = FindBestPathV2(Sid, xinc, yinc, False)
+      End If
+      '#if can't find short best path, think alternative plan
+      If aRes <> 0 Then
+        If onDepotPhase(Sid) > 0 Then
+          status = 10
+        Else
+          status = 28 ' try long path
+        End If
+      Else
+        status = 35 ' just wait
+      End If
+    Else
+      status = 28 ' try long path
+    End If
   End If
 Case 31
   ' very near move
@@ -2344,6 +2396,10 @@ Public Sub FixRightNumberOfClicks(idConnection As Integer, ByVal clicks As Long)
     If ProcessID(idConnection) = -1 Then
         Exit Sub
     End If
+    If (TibiaVersionLong >= 1100) Then
+        ' This function should not be used because there is no longer a count of attack clicks since Tibia 11.00
+        Exit Sub
+    End If
     Memory_WriteLong adrNumberOfAttackClicks, clicks, ProcessID(idConnection)
 End Sub
 Public Function RightNumberOfClicksJUSTREAD(idConnection As Integer) As String
@@ -2355,6 +2411,11 @@ Public Function RightNumberOfClicksJUSTREAD(idConnection As Integer) As String
         Exit Function
     End If
     If ProcessID(idConnection) = -1 Then
+        RightNumberOfClicksJUSTREAD = ""
+        Exit Function
+    End If
+    If (TibiaVersionLong >= 1100) Then
+        ' This function should not be used because there is no longer a count of attack clicks since Tibia 11.00
         RightNumberOfClicksJUSTREAD = ""
         Exit Function
     End If
@@ -2377,6 +2438,11 @@ Public Function RightNumberOfClicks(idConnection As Integer) As String
     Dim clicks As Long
     Dim fourBytesCRC(3) As Byte
     Dim res As String
+    If (TibiaVersionLong >= 1100) Then
+        ' This function should not be used because there is no longer a count of attack clicks since Tibia 11.00
+        RightNumberOfClicks = ""
+        Exit Function
+    End If
     If TibiaVersionLong < 860 Then
         RightNumberOfClicks = ""
         Exit Function
@@ -2395,10 +2461,53 @@ Public Function RightNumberOfClicks(idConnection As Integer) As String
     Memory_WriteLong adrNumberOfAttackClicks, clicks, ProcessID(idConnection)
     RightNumberOfClicks = res
 End Function
+
+Public Sub WriteBlueSquare(ByVal idConnection As Integer, ByVal targetID As Long)
+    On Error GoTo gotErr
+    Dim currentAdr As Long
+    Dim pid As Long
+    pid = ProcessID(idConnection)
+    If pid = -1 Then
+        Debug.Print "Unable to do WriteBlueSquare (pid = -1)"
+        Exit Sub
+    End If
+    If (TibiaVersionLong >= 1100) Then
+        currentAdr = ReadCurrentAddress(pid, adrNewBlueSquare, -1, False)
+        If (currentAdr = -1) Then
+            Debug.Print "ERROR: adrNewBlueSquare=" & AddressPathToString(adrNewBlueSquare) & " = -1 !!"
+        Else
+            QMemory_Write4Bytes pid, currentAdr, targetID
+'          Debug.Print "WriteBlueSquare OK : " & targetID
+        End If
+    Else
+        Debug.Print "ERROR: WriteBlueSquare not intended for older versions of Tibia"
+    End If
+    Exit Sub
+gotErr:
+    Exit Sub
+End Sub
+
 Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
     On Error GoTo gotErr
-    If RedSquare <> &H0 Then
-        Memory_WriteLong RedSquare, targetID, ProcessID(idConnection)
+    Dim currentAdr As Long
+    Dim pid As Long
+    pid = ProcessID(idConnection)
+    If pid = -1 Then
+        Debug.Print "Unable to do WriteRedSquare (pid = -1)"
+        Exit Sub
+    End If
+    If (TibiaVersionLong >= 1100) Then
+        currentAdr = ReadCurrentAddress(pid, adrNewRedSquare, -1, False)
+        If (currentAdr = -1) Then
+            Debug.Print "ERROR: adrNewRedSquare=" & AddressPathToString(adrNewRedSquare) & " = -1 !!"
+        Else
+            QMemory_Write4Bytes pid, currentAdr, targetID
+           ' Debug.Print "WriteRedSquare OK : " & targetID
+        End If
+    Else
+        If RedSquare <> &H0 Then
+            Memory_WriteLong RedSquare, targetID, pid
+        End If
     End If
     Exit Sub
 gotErr:
@@ -2406,14 +2515,23 @@ gotErr:
 End Sub
 Public Function ReadRedSquare(ByVal idConnection As Integer) As Long
     On Error GoTo gotErr
-    Dim clicks As Long
-    If RedSquare = &H0 Then
-        ReadRedSquare = -2
-    ElseIf ProcessID(idConnection) = -1 Then
+    Dim creatureID As Long
+    Dim pid As Long
+    pid = ProcessID(idConnection)
+    If pid = -1 Then
         ReadRedSquare = -1
+        Exit Function
+    End If
+    If (TibiaVersionLong >= 1100) Then
+        creatureID = ReadCurrentAddress(pid, adrNewRedSquare, -1, True)
+        ReadRedSquare = creatureID
     Else
-        clicks = Memory_ReadLong(RedSquare, ProcessID(idConnection))
-        ReadRedSquare = clicks
+        If RedSquare = &H0 Then
+            ReadRedSquare = -2
+        Else
+            creatureID = Memory_ReadLong(RedSquare, pid)
+            ReadRedSquare = creatureID
+        End If
     End If
     Exit Function
 gotErr:
@@ -2528,10 +2646,15 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
 
     currentRedSquare = ReadRedSquare(idConnection) ' will always return -2 in old versions
     If currentRedSquare = 0 Then
-        TurnsWithRedSquareZero(idConnection) = TurnsWithRedSquareZero(idConnection) + 1
+        If TibiaVersionLong >= 1100 Then
+            TurnsWithRedSquareZero(idConnection) = 3 ' Direct attack
+        Else
+            TurnsWithRedSquareZero(idConnection) = TurnsWithRedSquareZero(idConnection) + 1
+        End If
     Else
         TurnsWithRedSquareZero(idConnection) = 0
     End If
+
     If (currentRedSquare <> 0) Or (TurnsWithRedSquareZero(idConnection) >= 3) Then
         If currentRedSquare <> -1 Then
             If (currTargetID(idConnection)) <> 0 Or (forceSend = True) Then
@@ -2549,14 +2672,34 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
                             End If
                         End If
                     End If
-                    If TibiaVersionLong >= 860 Then
+                    If TibiaVersionLong >= 1100 Then
+                        sCheat = "09 00 A1 " & SpaceID(targetID) & " " & SpaceID(targetID) ' 09 00 A1 CA C1 03 40 A1 CA C1 03
+                        Debug.Print sCheat
+                        ' GAMECLIENT1>( hex ) 09 00 A1 00 00 00 00 00 00 00 00
+                        ' GAMECLIENT1>( hex ) 01 00 BE
+                        WriteBlueSquare idConnection, targetID
+                        WriteRedSquare idConnection, targetID
+                        inRes = GetCheatPacket(cPacket, sCheat)
+                        frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+                  
+                        If (targetID = 0) Then
+                            sCheat = "01 00 BE" ' Explicit stop
+                            inRes = GetCheatPacket(cPacket, sCheat)
+                            frmMain.UnifiedSendToServerGame idConnection, cPacket, True
+                        End If
+                    
+                        'WriteRedSquare idConnection, targetID
+                        DoEvents
+                        MeleeAttack = 0
+                        Exit Function
+                    ElseIf TibiaVersionLong >= 860 Then
                         safeRes = RightNumberOfClicks(idConnection)
                         If safeRes = "" Then
                                 ' error happened, unsafe to attack
                                 MeleeAttack = -1
                                 Exit Function
                         End If
-                        sCheat = "09 00 A1 " & SpaceID(targetID) & safeRes
+                        sCheat = "09 00 A1 " & SpaceID(targetID) & safeRes ' 09 00 A1 CA C1 03 40 05 00 00 00
                     Else
                 
                         sCheat = "05 00 A1 " & SpaceID(targetID)
@@ -2575,6 +2718,7 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
   MeleeAttack = 0
   Exit Function
 gotErr:
+  Debug.Print "Got error at MeleeAttack : " & Err.Description
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at MeleeAttack : " & Err.Description
   frmMain.DoCloseActions idConnection
   MeleeAttack = -1
@@ -2622,7 +2766,7 @@ Public Function CavebotRuneAttack(idConnection As Integer, targetID As Double, r
  ' aRes = SendMessageToClient(idConnection, "Casting on " & target & " ;)", "GM BlackdProxy")
   ' search the rune
   fRes = SearchItem(idConnection, runeB1, runeB2)  'search thing
-  If fRes.foundcount = 0 Then
+  If fRes.foundCount = 0 Then
    ' !!! BUG
      aRes = SendSystemMessageToClient(idConnection, "can't find " & thing & ", open new bp of " & thing & "!")
      CavebotRuneAttack = 0
@@ -5043,9 +5187,9 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
     SafeCastCheatString "UseItemHere1", idConnection, sCheat
   Else ' use from bp
     ' 11 00 83 FF FF 40 00 00 7D 0B 00 EB 7C 99 7D 0C 80 01 00
-    fRes.foundcount = 0
+    fRes.foundCount = 0
     fRes = SearchItem(idConnection, b1, b2)
-    If fRes.foundcount > 0 Then
+    If fRes.foundCount > 0 Then
       sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
        GoodHex(fRes.slotID) & " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(fRes.slotID) & " " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
        SafeCastCheatString "UseItemHere2", idConnection, sCheat
@@ -5173,9 +5317,9 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
      SafeCastCheatString "PerformUseMyItem1", idConnection, sCheat
   Else ' use from bp
     ' 11 00 83 FF FF 40 00 00 7D 0B 00 EB 7C 99 7D 0C 80 01 00
-    fRes.foundcount = 0
+    fRes.foundCount = 0
     fRes = SearchItem(idConnection, b1, b2)
-    If fRes.foundcount > 0 Then
+    If fRes.foundCount > 0 Then
       sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
        GoodHex(fRes.slotID) & " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(fRes.slotID) & " " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
       SafeCastCheatString "PerformUseMyItem2", idConnection, sCheat
@@ -5258,7 +5402,7 @@ Public Function LootGoodItems(idConnection As Integer) As Long
           res1 = SearchItemDestinationForLoot(idConnection, Backpack(idConnection, _
            requestLootBp(idConnection)).item(j).t1, Backpack(idConnection, _
            requestLootBp(idConnection)).item(j).t2, requestLootBp(idConnection))
-          If res1.foundcount > 0 Then
+          If res1.foundCount > 0 Then
             ' if any place was found in containers, move it there
             If Backpack(idConnection, requestLootBp(idConnection)).item(j).t3 = 0 Then
               amount = &H1
@@ -5615,6 +5759,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
+  'showPath = True
   ChaotizeXYrel idConnection, goalX, goalY, myZ(idConnection)
     
   ReadTrueMap idConnection, myMap
@@ -5758,6 +5903,7 @@ Public Function FindBestPathV2(ByVal idConnection As Integer, ByVal goalX As Lon
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
+ ' showPath = True
   ChaotizeXYrel idConnection, goalX, goalY, myZ(idConnection)
   
   optimized = False
@@ -5874,6 +6020,7 @@ continue:
       DoEvents
     End If
     sCheat = FiveChrLon(lOrders + 2) & " 64 " & GoodHex(CByte(lOrders)) & sCheat
+    Debug.Print sCheat
     inRes = GetCheatPacket(cPacket, sCheat)
     frmMain.UnifiedSendToServerGame idConnection, cPacket, True
     
@@ -6595,7 +6742,7 @@ Public Sub OpenDepotChest(idConnection As Integer)
   b2 = HighByteOfLong(tileID_depotChest)
   timeToRetryOpenDepot(idConnection) = GetTickCount() + 5000
   res1 = SearchItem(idConnection, b1, b2)
-  If res1.foundcount > 0 Then
+  If res1.foundCount > 0 Then
     sCheat = "82 FF FF " & GoodHex(&H40 + lastDepotBPID(idConnection)) & " 00 " & GoodHex(res1.slotID) & " " & FiveChrLon(tileID_depotChest) & " " & GoodHex(res1.slotID) & " " & GoodHex(lastDepotBPID(idConnection))
     SafeCastCheatString "OpenDepotChest1", idConnection, sCheat
   End If
@@ -6657,7 +6804,7 @@ Public Function DropLoot(idConnection As Integer) As Long
   
     'NEW since Blackd Proxy 23.8
     res1 = SearchItemWithBPExceptionGoodLoot(idConnection, lastDepotBPID(idConnection))
-    If (res1.foundcount > 0) Then
+    If (res1.foundCount > 0) Then
         foundAsource = True
         sourceB1 = res1.b1
         sourceB2 = res1.b2
@@ -6677,7 +6824,7 @@ Public Function DropLoot(idConnection As Integer) As Long
   'find destination
   foundAdestination = False
   res2 = SearchItemDestinationInDepot(idConnection, sourceB1, sourceB2, lastDepotBPID(idConnection))
-  If res2.foundcount > 0 Then
+  If res2.foundCount > 0 Then
     ' do unit drop
     foundAdestination = True
     nextForcedDepotDeployRetry(idConnection) = GetTickCount() + randomNumberBetween(4000, 6000)
@@ -6706,7 +6853,7 @@ Public Function DropLoot(idConnection As Integer) As Long
   Else
    ', if no free slot found , open container,
     res3 = SearchSubContainer(idConnection, sourceB1, sourceB2, lastDepotBPID(idConnection))
-    If res3.foundcount > 0 Then
+    If res3.foundCount > 0 Then
       foundAdestination = True
       nextForcedDepotDeployRetry(idConnection) = GetTickCount() + randomNumberBetween(4000, 6000)
       somethingChangedInBps(idConnection) = False
@@ -6794,7 +6941,7 @@ Public Function DropLootToGround(idConnection As Integer) As Long
 
     ' new since blackd proxy 23.8
     res1 = SearchItemGoodLoot(idConnection)
-    If res1.foundcount > 0 Then
+    If res1.foundCount > 0 Then
       foundAsource = True
       sourceB1 = res1.b1
       sourceB2 = res1.b2
@@ -6852,7 +6999,7 @@ Public Function DropItemOnGroundBytes(ByVal idConnection As Integer, ByVal b1 As
     Dim cPacket() As Byte
     foundAsource = False
     res1 = SearchItem(idConnection, b1, b2)
-    If res1.foundcount <= 0 Then
+    If res1.foundCount <= 0 Then
         If publicDebugMode = True Then
           aRes = SendLogSystemMessageToClient(idConnection, "[Debug] DropItemOnGround failed (item not found in opened backpacks)")
           DoEvents
@@ -7313,19 +7460,62 @@ Public Sub DoUnifiedClickMove(idConnection As Integer, ByVal Px As Long, ByVal P
     Exit Sub ' Stop because that would be an illegal move
   End If
   
-  
-  myBpos = MyBattleListPosition(Sid)
-  b1 = LowByteOfLong(X)
-  b2 = HighByteOfLong(X)
-  Memory_WriteByte adrXgo, b1, pid
-  Memory_WriteByte adrXgo + 1, b2, pid
-  b1 = LowByteOfLong(y)
-  b2 = HighByteOfLong(y)
-  Memory_WriteByte adrYgo, b1, pid
-  Memory_WriteByte adrYgo + 1, b2, pid
-  b1 = CByte(z)
-  Memory_WriteByte adrZgo, b1, pid
-  Memory_WriteByte adrGo + (myBpos * CharDist), 1, pid
+'  If TibiaVersionLong < 1100 Then
+'    myBpos = MyBattleListPosition(sid)
+'    b1 = LowByteOfLong(x)
+'    b2 = HighByteOfLong(x)
+'    Memory_WriteByte adrXgo, b1, pid
+'    Memory_WriteByte adrXgo + 1, b2, pid
+'    b1 = LowByteOfLong(y)
+'    b2 = HighByteOfLong(y)
+'    Memory_WriteByte adrYgo, b1, pid
+'    Memory_WriteByte adrYgo + 1, b2, pid
+'    b1 = CByte(z)
+'    Memory_WriteByte adrZgo, b1, pid
+'    Memory_WriteByte adrGo + (myBpos * CharDist), 1, pid
+'  Else
+'    ' TODO: read new battle list
+'    Debug.Print "QMoveXYZ not implemented yet"
+'  End If
+  SafeMemoryMoveXYZ Sid, X, y, z
+End Sub
+
+
+Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal X As Long, ByVal y As Long, ByVal z As Long)
+  Dim myBpos As Long
+  Dim b1 As Byte
+  Dim b2 As Byte
+  Dim pid As Long
+  If z <> myZ(idConnection) Then
+    Exit Sub ' Stop because that would be an illegal move
+  End If
+  If X < 0 Then
+    Exit Sub ' Stop because that would be an illegal move
+  End If
+  If y < 0 Then
+    Exit Sub ' Stop because that would be an illegal move
+  End If
+  If z < 0 Then
+    Exit Sub ' Stop because that would be an illegal move
+  End If
+  pid = ProcessID(idConnection)
+  If TibiaVersionLong < 1100 Then
+    myBpos = MyBattleListPosition(idConnection)
+    b1 = LowByteOfLong(X)
+    b2 = HighByteOfLong(X)
+    Memory_WriteByte adrXgo, b1, pid
+    Memory_WriteByte adrXgo + 1, b2, pid
+    b1 = LowByteOfLong(y)
+    b2 = HighByteOfLong(y)
+    Memory_WriteByte adrYgo, b1, pid
+    Memory_WriteByte adrYgo + 1, b2, pid
+    b1 = CByte(z)
+    Memory_WriteByte adrZgo, b1, pid
+    Memory_WriteByte adrGo + (myBpos * CharDist), 1, pid
+  Else
+    ' TODO: read new battle list
+    Debug.Print "SafeMemoryMoveXYZ not ready for Tibia 11+"
+  End If
 End Sub
 
 Public Sub ChaotizeXYrel(ByVal idConnection As Integer, ByRef Px As Long, ByRef Py As Long, ByVal Pz As Long)

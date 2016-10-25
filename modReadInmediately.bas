@@ -30,7 +30,7 @@ Public Sub ReadIniVeryFirst()
   #End If
   res = -1
   debugPoint = 1
-  userHere = App.path
+  userHere = App.Path
   debugPoint = 2
   If Right$(userHere, 1) = "\" Then
     userHere = userHere & "settings.ini"
@@ -95,6 +95,19 @@ Public Sub ReadIniVeryFirst()
     TibiaVersionDefaultString = ""
   End If
   
+  strInfo = String$(10, 0)
+  i = getBlackdINI("Proxy", "TibiaVersionDefaultLong", "", strInfo, Len(strInfo), myMainConfigINIPath(), True)
+  If i > 0 Then
+    strInfo = Left(strInfo, i)
+    lonInfo = CLng(Trim$(strInfo))
+    TibiaVersionDefaultLong = lonInfo
+  Else
+    TibiaVersionDefaultLong = 0
+  End If
+  
+  
+  
+  
   strInfo = String$(250, 0)
   i = getBlackdINI("Proxy", "TibiaVersionForceString", "", strInfo, Len(strInfo), myMainConfigINIPath(), True)
   If i > 0 Then
@@ -111,6 +124,7 @@ Public Sub ReadIniVeryFirst()
     addConfigVersionsLongs = FIX_addConfigVersionsLongs
     highestTibiaVersionLong = CLng(FIX_highestTibiaVersionLong)
     TibiaVersionDefaultString = FIX_TibiaVersionDefaultString
+    TibiaVersionDefaultLong = FIX_TibiaVersionDefaultLong
     TibiaVersionForceString = FIX_TibiaVersionForceString
   End If
   
@@ -131,19 +145,34 @@ Public Sub SafeAddNewVersions(ByRef cmbVersion As ComboBox)
     Dim strItem As String
     Dim addit As String
     Dim addit2 As String
-    Dim lasti As Long
+    Dim lastI As Long
     Dim i As Long
+    Dim skip As Boolean
     loadDebugStart = ""
-    lasti = UBound(arrayConfigVersions)
-    If lasti > -1 Then
-        For i = lasti To 0 Step -1
+    lastI = UBound(arrayConfigVersions)
+    If lastI > -1 Then
+        For i = lastI To 0 Step -1
           strItem = Trim$("" & arrayConfigVersions(i))
           addit = "Tibia " & strItem
-          cmbVersion.AddItem (addit)
           If UBound(arrayConfigVersionsLong) >= i Then
-            If arrayConfigVersionsLong(i) = highestTibiaVersionLong Then
-                addit2 = addit & cteOfficial
-                cmbVersion.AddItem (addit2)
+          skip = False
+            If Tibia11allowed = False Then
+                If CLng(arrayConfigVersionsLong(i)) > CLng(TibiaVersionDefaultLong) Then
+                    skip = True
+                End If
+            End If
+            If (skip = False) Then
+                If CLng(arrayConfigVersionsLong(i)) = CLng(highestTibiaVersionLong) Then
+                    cmbVersion.AddItem (addit)
+                    addit2 = addit & cteOfficial
+                    cmbVersion.AddItem (addit2)
+                Else
+                    cmbVersion.AddItem (addit)
+                    If arrayConfigVersionsLong(i) = TibiaVersionDefaultLong Then
+                        addit2 = addit & cteOfficial
+                        cmbVersion.AddItem (addit2)
+                    End If
+                End If
             End If
           Else
             loadDebugStart = loadDebugStart & vbCrLf & "ERROR: ConfigVersionsLong and ConfigVersions have different number of elements!" & vbCrLf & "addConfigVersionsLongs=" & addConfigVersionsLongs & vbCrLf & _
@@ -165,7 +194,7 @@ Public Function getConfigPathOf(ByVal caseSel As String) As String
     Dim addit As String
     Dim addit2 As String
     Dim res As String
-    Dim lasti As Long
+    Dim lastI As Long
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
@@ -174,14 +203,20 @@ Public Function getConfigPathOf(ByVal caseSel As String) As String
     res = "config" & highestTibiaVersionLong
     OVERWRITE_OT_MODE = True
     
-    lasti = UBound(arrayConfigVersions)
-    If lasti > -1 Then
-        For i = lasti To 0 Step -1
+    lastI = UBound(arrayConfigVersions)
+    If lastI > -1 Then
+        For i = lastI To 0 Step -1
           strItem = "" & arrayConfigVersions(i)
           addit = "Tibia " & strItem
           If caseSel = addit Then
                 res = arrayConfigPaths(i)
                 OVERWRITE_OT_MODE = True
+                getConfigPathOf = res
+                Exit Function
+          End If
+          If caseSel = addit & cteOfficial Then
+                res = arrayConfigPaths(i)
+                OVERWRITE_OT_MODE = False
                 getConfigPathOf = res
                 Exit Function
           End If
@@ -210,15 +245,15 @@ End Function
   #End If
      Dim i As Long
     Dim strTest As String
-        Dim lasti As Long
+        Dim lastI As Long
         Dim strItem As String
     TibiaVersion = TibiaVersionDefaultString
     TibiaVersionLong = highestTibiaVersionLong
     
     
-    lasti = UBound(arrayConfigPaths)
-    If lasti > -1 Then
-        For i = lasti To 0 Step -1
+    lastI = UBound(arrayConfigPaths)
+    If lastI > -1 Then
+        For i = lastI To 0 Step -1
           strItem = "" & arrayConfigPaths(i)
           If arrayConfigPaths(i) = parConfigPath Then
             TibiaVersion = arrayConfigVersions(i)

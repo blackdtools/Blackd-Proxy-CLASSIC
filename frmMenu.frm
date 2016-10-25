@@ -1158,6 +1158,8 @@ Private Sub cmdStopAlarmNG_Click()
   ChangePlayTheDangerSound False
 End Sub
 
+
+
 Private Sub cmdTrainer_Click()
   frmTrainer.WindowState = vbNormal
   frmTrainer.Show

@@ -496,7 +496,10 @@ End Function
 
 Public Function Memory_ReadByte(ByVal address As Long, ByVal process_Hwnd As Long, _
  Optional absoluteAddress As Boolean = False) As Byte
-  
+   If (TibiaVersion >= 1100) Then
+      Memory_ReadByte = QMemory_Read1Byte(process_Hwnd, address)
+      Exit Function
+   End If
    ' Declare some variables we need
    Dim pid As Long         ' Used to hold the Process Id
    Dim phandle As Long     ' Holds the Process Handle

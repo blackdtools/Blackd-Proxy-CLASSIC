@@ -2,11 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Blackd Proxy"
-#define MyAppVersion "40.9"
+#define MyAppVersion "41.0"
 #define MyAppPublisher "blackdtools.com"
 #define MyAppURL "http://blackdtools.com"
 #define MyAppExeName "Tibia.exe"
-
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -84,6 +83,7 @@ Source: "JwldButn2b.ocx"; DestDir: {sys}; Flags: onlyifdoesntexist regserver 64b
 
 
 Source: "mswsock.dll"; DestDir: "{app}"; Flags: 
+Source: "FreeImage.dll"; DestDir: "{app}"; Flags:
 Source: "player.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "newsound1.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "readme.rtf"; DestDir: "{app}"; Flags: ignoreversion
@@ -234,6 +234,9 @@ Source: "config1095\*"; DestDir: "{app}\config1095"; Flags: ignoreversion recurs
 Source: "config1096\*"; DestDir: "{app}\config1096"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1097\*"; DestDir: "{app}\config1097"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1098\*"; DestDir: "{app}\config1098"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "config1099\*"; DestDir: "{app}\config1099"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "config1100\*"; DestDir: "{app}\config1100"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "config1101\*"; DestDir: "{app}\config1101"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "events\*"; DestDir: "{app}\events"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "ips\*"; DestDir: "{app}\ips"; Flags: ignoreversion recursesubdirs createallsubdirs

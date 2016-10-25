@@ -3,7 +3,7 @@ Attribute VB_Name = "modCrackd"
 Option Explicit
 
 Public Type TypeTibiaKey
- key(15) As Byte
+ Key(15) As Byte
 End Type
 ' firstPacketByte is the first byte of the packet array
 ' crackd.dll functions expect to find the rest of the packet bytes after firstPacketByte
@@ -47,8 +47,20 @@ Public packetKey() As TypeTibiaKey
 Public loginPacketKey() As TypeTibiaKey
 Public gotFirstLoginPacket() As Boolean
 Public UseCrackd As Boolean
-Public adrConnectionKey As Long
+Public adrConnectionKey As AddressPath
 Public adrSelectedCharIndex As AddressPath
+Public adrSelectedItem_height As AddressPath
+Public adrSelectedCharName As AddressPath
+Public adrServerList_CollectionStart As AddressPath
+
+Public adrSelectedCharName_afterCharList As AddressPath
+Public adrSelectedServerURL_afterCharList As AddressPath
+Public adrSelectedServerPORT_afterCharList As AddressPath
+Public adrSelectedServerNAME_afterCharList As AddressPath
+
+Public adrNewRedSquare As AddressPath
+Public adrNewBlueSquare As AddressPath
+
 Public adrLastPacket As Long
 Public adrCharListPtr As Long
 Public adrCharListPtrEND As Long
@@ -93,14 +105,21 @@ Public Function readLoginTibiaKeyAtPID(idConnection As Integer, ProcessID As Lon
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
+  Dim startAdr As Long
   Dim abyte As Byte
   Dim i As Integer
   If (ProcessID = -1) Then
     readLoginTibiaKeyAtPID = -1
+    Exit Function
   Else
+    startAdr = ReadCurrentAddress(ProcessID, adrConnectionKey, -1, False)
+    If (startAdr = -1) Then
+        readLoginTibiaKeyAtPID = -1
+        Exit Function
+    End If
     For i = 0 To 15
-      abyte = Memory_ReadByte(adrConnectionKey + i, ProcessID)
-      loginPacketKey(idConnection).key(i) = abyte
+      abyte = Memory_ReadByte(startAdr + i, ProcessID)
+      loginPacketKey(idConnection).Key(i) = abyte
     Next i
     readLoginTibiaKeyAtPID = 0
   End If
@@ -110,13 +129,20 @@ gotErr:
 End Function
 
 Public Function readTibiaKeyAtPID(idConnection As Integer, ProcessID As Long) As Long
-  Dim abyte As Byte
-  Dim i As Integer
+    Dim abyte As Byte
+    Dim i As Integer
+    Dim startAdr As Long
+    startAdr = ReadCurrentAddress(ProcessID, adrConnectionKey, -1, False)
+    If (startAdr = -1) Then
+        readTibiaKeyAtPID = -1
+        Exit Function
+    End If
     For i = 0 To 15
-      abyte = Memory_ReadByte(adrConnectionKey + i, ProcessID)
-      packetKey(idConnection).key(i) = abyte
+        abyte = Memory_ReadByte(startAdr + i, ProcessID)
+        packetKey(idConnection).Key(i) = abyte
     Next i
-  readTibiaKeyAtPID = 0
+    Debug.Print "Obtained XTEA key: " & frmMain.showAsStr(packetKey(idConnection).Key, True)
+    readTibiaKeyAtPID = 0
 End Function
 
 Public Function CompareLastPacket(ByVal pid As Long, ByRef packet() As Byte) As Boolean
@@ -322,12 +348,23 @@ Public Function GetGameServerPort(ByVal ServerName As String) As Long
     res = 0
   Else
     tmps = Right$(allthing, Len(allthing) - pos)
+    If (TibiaVersionLong >= 1100) Then
+        If (GetGameServerDOMAIN(ServerName, True) = "127.0.0.1") Then
+            res = 7171
+        Else
+            res = CLng(tmps)
+        End If
+        GetGameServerPort = res
+        Exit Function
+    Else
+        res = CLng(tmps)
+    End If
     res = CLng(tmps)
   End If
   GetGameServerPort = res
 End Function
 
-Public Function GetGameServerDOMAIN(ByVal ServerName As String) As String
+Public Function GetGameServerDOMAIN(ByVal ServerName As String, Optional ByVal getHiddenValue As Boolean = False) As String
   On Error GoTo gotErr
   ' get the IPandport from server name
   Dim aRes As String
@@ -335,13 +372,29 @@ Public Function GetGameServerDOMAIN(ByVal ServerName As String) As String
   Dim strBuildIt As String
   Dim b(3) As Byte
   Dim i As Long
-  Dim lasti As Long
+  Dim lastI As Long
   Dim strTmp As String
   Dim pos1 As Long
   Dim pos2 As Long
   Dim pos3 As Long
+  Dim resS As String
   If GameServerDictionary.Exists(ServerName) = True Then
-    GetGameServerDOMAIN = GameServerDictionaryDOMAIN.item(ServerName)
+    resS = GameServerDictionaryDOMAIN.item(ServerName)
+    If (TibiaVersionLong >= 1100) Then
+        If resS = "127.0.0.1" Then
+            If (getHiddenValue) Then
+                GetGameServerDOMAIN = resS
+            Else
+                resS = LCase(ServerName) & "-lb.ciproxy.com"
+                Debug.Print "WARNING: Had to use emergency translation: " & ServerName & "=" & resS
+                GetGameServerDOMAIN = resS
+            End If
+        End If
+        GetGameServerDOMAIN = resS
+        Exit Function
+    Else
+        GetGameServerDOMAIN = resS
+    End If
   Else
     GetGameServerDOMAIN = ""
   End If
@@ -358,7 +411,7 @@ Public Function GetIPandPortfromServerName(ByVal ServerName As String) As String
   Dim strBuildIt As String
   Dim b(3) As Byte
   Dim i As Long
-  Dim lasti As Long
+  Dim lastI As Long
   Dim strTmp As String
   Dim pos1 As Long
   Dim pos2 As Long
@@ -367,7 +420,7 @@ Public Function GetIPandPortfromServerName(ByVal ServerName As String) As String
     GetIPandPortfromServerName = GameServerDictionary.item(ServerName)
   Else
     strTmp = GetIPofTibiaServer(ServerName)
-    lasti = Len(strTmp)
+    lastI = Len(strTmp)
     ' search the 3 points of the IP
     pos1 = InStr(1, strTmp, ".")
     If pos1 > 0 Then
@@ -385,7 +438,7 @@ Public Function GetIPandPortfromServerName(ByVal ServerName As String) As String
     b(0) = CByte(CLng(Left$(strTmp, pos1 - 1)))
     b(1) = CByte(CLng(Mid$(strTmp, pos1 + 1, pos2 - pos1 - 1)))
     b(2) = CByte(CLng(Mid$(strTmp, pos2 + 1, pos3 - pos2 - 1)))
-    b(3) = CByte(CLng(Right$(strTmp, lasti - pos3)))
+    b(3) = CByte(CLng(Right$(strTmp, lastI - pos3)))
     strBuildIt = fixThreeDigits(b(0)) & "." & fixThreeDigits(b(1)) & "." & _
      fixThreeDigits(b(2)) & "." & fixThreeDigits(b(3)) & ":7171"
     GetIPandPortfromServerName = strBuildIt
@@ -431,22 +484,26 @@ Public Function GetProcessIdByManualDebug() As Long
 End Function
 
 Public Function GetProcessIdByAdrConnected() As Long
+   If TibiaVersionLong >= 1100 Then
+     GetProcessIdByAdrConnected = GetProcessIdByAdrConnected_TibiaQ()
+     Exit Function
+   End If
    Dim tibiaclient As Long
    Dim bc As Byte
-   Dim foundcount As Long
+   Dim foundCount As Long
    Dim lastfound As Long
    Dim totalclients As Long
    Dim cantbeother As Long
    Dim cantbeotherBYTE As Byte
-   foundcount = 0
+   foundCount = 0
    totalclients = 0
    cantbeother = 0
    Do
     tibiaclient = FindWindowEx(0, tibiaclient, tibiaclassname, vbNullString)
     If tibiaclient = 0 Then
-      If foundcount = 1 Then
+      If foundCount = 1 Then
         GetProcessIdByAdrConnected = lastfound
-      ElseIf foundcount = 0 Then
+      ElseIf foundCount = 0 Then
         If totalclients = 1 Then
             Debug.Print "Warning: only 1 tibiaclient, with connection status " & GoodHex(cantbeotherBYTE)
             GetProcessIdByAdrConnected = cantbeother
@@ -463,12 +520,12 @@ Public Function GetProcessIdByAdrConnected() As Long
         If TibiaVersionLong >= 980 Then
             If ((bc = &H5) Or (bc = &H6) Or (bc = &H8) Or (bc = &H9)) Then ' tibia 10.11 = &H)
                 lastfound = tibiaclient
-                foundcount = foundcount + 1
+                foundCount = foundCount + 1
             End If
         Else
             If ((bc = &H5) Or (bc = &H6)) Then
                 lastfound = tibiaclient
-                foundcount = foundcount + 1
+                foundCount = foundCount + 1
             End If
         End If
         If totalclients = 1 Then

@@ -178,7 +178,11 @@ Public Function autoGetTibiaFolder(Optional ByVal ParTibiaFolder As String = "")
     tpath = ""
     Dim fs As scripting.FileSystemObject
     Set fs = New scripting.FileSystemObject
-    tpath = GetProgFolder()
+    If (TibiaVersionLong >= 1100) Then
+       tpath = GetLocalApplicationDataFolder()
+    Else
+       tpath = GetProgFolder()
+    End If
     If Right$(tpath, 1) <> "\" Then
         tpath = tpath & "\"
     End If

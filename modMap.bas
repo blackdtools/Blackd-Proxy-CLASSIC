@@ -28,15 +28,16 @@ Public Const defaultSelectedTibiaFolder As String = "Tibia"
 'Public Const TibiaVersionForceString As String = "10.33" ' set this version by default (string)
 
 Public highestTibiaVersionLong As Long   ' highest known Tibia version (long)
-Public TibiaVersionDefaultString As String    ' highest known Tibia version (string)
+Public TibiaVersionDefaultString As String    ' default Tibia version (string)
+Public TibiaVersionDefaultLong As String    ' default Tibia version (string)
 Public TibiaVersionForceString As String   ' set this version by default (string)
 
 Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "40.9" ' Proxy version ' string version
-Public Const myNumericVersion = 40900 ' numeric version
+Public Const ProxyVersion = "41.0" ' Proxy version ' string version
+Public Const myNumericVersion = 41000 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -130,7 +131,7 @@ Public Type TypeLearnResult ' result of learning about a packet
   gotNewCorpse As Boolean ' got info about new corpse in screen
 End Type
 Public Type TypeSearchItemResult2 ' result of searching item in backpacks
-  foundcount As Long ' total items found matching the search
+  foundCount As Long ' total items found matching the search
   bpID As Byte ' bestChoose: ID of container
   slotID As Byte ' bestCHoose: slot inside that container
   b1 As Byte ' b1
@@ -513,7 +514,7 @@ Public Function SearchItem(idConnection As Integer, t1 As Byte, t2 As Byte) As T
   Dim i As Long
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.b1 = t1
@@ -526,7 +527,7 @@ Public Function SearchItem(idConnection As Integer, t1 As Byte, t2 As Byte) As T
     For j = 0 To limitJ
       If Backpack(idConnection, i).item(j).t1 = t1 And _
        Backpack(idConnection, i).item(j).t2 = t2 Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -548,7 +549,7 @@ Public Function SearchItemGoodLoot(idConnection As Integer) As TypeSearchItemRes
   Dim j As Long
   Dim limitJ As Long
   Dim tileID As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.b1 = &HFF
@@ -561,7 +562,7 @@ Public Function SearchItemGoodLoot(idConnection As Integer) As TypeSearchItemRes
     For j = 0 To limitJ
       tileID = GetTheLong(Backpack(idConnection, i).item(j).t1, Backpack(idConnection, i).item(j).t2)
       If (IsGoodLoot(idConnection, tileID) = True) Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.b1 = Backpack(idConnection, i).item(j).t1
@@ -582,7 +583,7 @@ Public Function SearchFirstItem(idConnection As Integer, t1 As Byte, t2 As Byte)
   Dim i As Long
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.b1 = t1
@@ -595,7 +596,7 @@ Public Function SearchFirstItem(idConnection As Integer, t1 As Byte, t2 As Byte)
     For j = 0 To limitJ
       If Backpack(idConnection, i).item(j).t1 = t1 And _
        Backpack(idConnection, i).item(j).t2 = t2 Then
-        res.foundcount = 1
+        res.foundCount = 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -618,7 +619,7 @@ Public Function SearchSubContainer(idConnection As Integer, t1 As Byte, t2 As By
   Dim j As Long
   Dim limitJ As Long
   Dim tileID As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.b1 = t1
@@ -630,7 +631,7 @@ Public Function SearchSubContainer(idConnection As Integer, t1 As Byte, t2 As By
     For j = 0 To limitJ
       tileID = GetTheLong(Backpack(idConnection, i).item(j).t1, Backpack(idConnection, i).item(j).t2)
       If DatTiles(tileID).iscontainer = True Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.b1 = Backpack(idConnection, i).item(j).t1
@@ -651,7 +652,7 @@ Public Function SearchItemWithBPException(idConnection As Integer, t1 As Byte, t
   Dim i As Long
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -663,7 +664,7 @@ Public Function SearchItemWithBPException(idConnection As Integer, t1 As Byte, t
     For j = 0 To limitJ
       If Backpack(idConnection, i).item(j).t1 = t1 And _
        Backpack(idConnection, i).item(j).t2 = t2 Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -686,7 +687,7 @@ Public Function SearchItemWithBPExceptionGoodLoot(idConnection As Integer, noVal
   Dim j As Long
   Dim limitJ As Long
   Dim tileID As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -700,7 +701,7 @@ Public Function SearchItemWithBPExceptionGoodLoot(idConnection As Integer, noVal
       If IsGoodLoot(idConnection, tileID) = True Then
         res.b1 = Backpack(idConnection, i).item(j).t1
         res.b2 = Backpack(idConnection, i).item(j).t2
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -795,7 +796,7 @@ Public Function SearchItemWithAmount(idConnection As Integer, t1 As Byte, t2 As 
   Dim i As Long
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -807,7 +808,7 @@ Public Function SearchItemWithAmount(idConnection As Integer, t1 As Byte, t2 As 
       If Backpack(idConnection, i).item(j).t1 = t1 And _
        Backpack(idConnection, i).item(j).t2 = t2 And _
         Backpack(idConnection, i).item(j).t3 >= am Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -831,7 +832,7 @@ Public Function SearchFirstItemWithExactAmmount(idConnection As Integer, t1 As B
   Dim i As Long
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -843,7 +844,7 @@ Public Function SearchFirstItemWithExactAmmount(idConnection As Integer, t1 As B
       If Backpack(idConnection, i).item(j).t1 = t1 And _
        Backpack(idConnection, i).item(j).t2 = t2 And _
        Backpack(idConnection, i).item(j).t3 = am Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.b1 = t1
         res.b2 = t2
         res.bpID = CByte(i)
@@ -887,7 +888,7 @@ Public Function SearchFreeSlot(idConnection As Integer) As TypeSearchItemResult2
   Dim limitJ As Long
   Dim tmpb1 As Byte
   Dim tmpb2 As Byte
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -900,7 +901,7 @@ Public Function SearchFreeSlot(idConnection As Integer) As TypeSearchItemResult2
     tmpb1 = Backpack(idConnection, i).item(j).t1
     tmpb2 = Backpack(idConnection, i).item(j).t2
       If ((tmpb1 = 0) And (tmpb2 = 0)) Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -922,7 +923,7 @@ Public Function SearchFreeSlotInContainer(idConnection As Integer, i As Byte) As
   Dim res As TypeSearchItemResult2
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -932,7 +933,7 @@ Public Function SearchFreeSlotInContainer(idConnection As Integer, i As Byte) As
     For j = 0 To limitJ
       If Backpack(idConnection, i).item(j).t1 = 0 And _
        Backpack(idConnection, i).item(j).t2 = 0 Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.amount = Backpack(idConnection, i).item(j).t3
@@ -955,7 +956,7 @@ Public Function SearchItemInBP(idConnection As Integer, t1 As Byte, t2 As Byte, 
   Dim i As Long
   Dim j As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -964,7 +965,7 @@ Public Function SearchItemInBP(idConnection As Integer, t1 As Byte, t2 As Byte, 
   For j = 0 To limitJ
     If Backpack(idConnection, bpID).item(j).t1 = t1 And _
      Backpack(idConnection, bpID).item(j).t2 = t2 Then
-      res.foundcount = res.foundcount + 1
+      res.foundCount = res.foundCount + 1
       res.bpID = CByte(i)
       res.slotID = CByte(j)
       res.amount = Backpack(idConnection, bpID).item(j).t3
@@ -993,7 +994,7 @@ Public Function SearchItemDestinationForLoot(idConnection As Integer, t1 As Byte
   Dim isStackable As Boolean
   tileID = GetTheLong(t1, t2)
   isStackable = DatTiles(tileID).stackable
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -1007,7 +1008,7 @@ Public Function SearchItemDestinationForLoot(idConnection As Integer, t1 As Byte
         If Backpack(idConnection, i).item(j).t1 = t1 And _
          Backpack(idConnection, i).item(j).t2 = t2 And _
          Backpack(idConnection, i).item(j).t3 < &H64 Then
-          res.foundcount = res.foundcount + 1
+          res.foundCount = res.foundCount + 1
           res.bpID = CByte(i)
           res.slotID = CByte(j)
           res.amount = Backpack(idConnection, i).item(j).t3
@@ -1018,7 +1019,7 @@ Public Function SearchItemDestinationForLoot(idConnection As Integer, t1 As Byte
       Next j
       End If
       If Backpack(idConnection, i).used < Backpack(idConnection, i).cap Then
-          res.foundcount = res.foundcount + 1
+          res.foundCount = res.foundCount + 1
           res.bpID = CByte(i)
           res.slotID = CByte(Backpack(idConnection, i).used)
           res.amount = 0
@@ -1044,7 +1045,7 @@ Public Function SearchItemDestinationInDepot(idConnection As Integer, t1 As Byte
   Dim tileID As Long
   tileID = GetTheLong(t1, t2)
   isStackable = DatTiles(tileID).stackable
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.amount = 0
@@ -1057,7 +1058,7 @@ Public Function SearchItemDestinationInDepot(idConnection As Integer, t1 As Byte
         If Backpack(idConnection, i).item(j).t1 = t1 And _
          Backpack(idConnection, i).item(j).t2 = t2 And _
          Backpack(idConnection, i).item(j).t3 < &H64 Then
-          res.foundcount = res.foundcount + 1
+          res.foundCount = res.foundCount + 1
           res.bpID = CByte(i)
           res.slotID = CByte(j)
           res.amount = Backpack(idConnection, i).item(j).t3
@@ -1068,7 +1069,7 @@ Public Function SearchItemDestinationInDepot(idConnection As Integer, t1 As Byte
       Next j
       End If
       If Backpack(idConnection, i).used < Backpack(idConnection, i).cap Then
-          res.foundcount = res.foundcount + 1
+          res.foundCount = res.foundCount + 1
           res.bpID = CByte(i)
           res.slotID = CByte(Backpack(idConnection, i).used)
           res.amount = 0
@@ -1091,7 +1092,7 @@ Public Function SearchFood(idConnection As Integer) As TypeSearchItemResult2
   Dim j As Long
   Dim tileID As Long
   Dim limitJ As Long
-  res.foundcount = 0
+  res.foundCount = 0
   res.bpID = &HFF
   res.slotID = &HFF
   res.b1 = 0
@@ -1103,7 +1104,7 @@ Public Function SearchFood(idConnection As Integer) As TypeSearchItemResult2
     For j = 0 To limitJ
       tileID = GetTheLong(Backpack(idConnection, i).item(j).t1, Backpack(idConnection, i).item(j).t2)
       If DatTiles(tileID).isFood = True Then
-        res.foundcount = res.foundcount + 1
+        res.foundCount = res.foundCount + 1
         res.bpID = CByte(i)
         res.slotID = CByte(j)
         res.b1 = Backpack(idConnection, i).item(j).t1
@@ -4766,10 +4767,16 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
     Case &HA3
       ' stop attack !
       pos = pos + 1
-      If TibiaVersionLong >= 860 Then
+      If TibiaVersionLong >= 1100 Then
+          ' it can be 00 00 00 00
+          ' or creature id (disengaged at floor change, or killed creature)
+          pos = pos + 4
+      ElseIf TibiaVersionLong >= 860 Then
           'Debug.Print frmMain.showAsStr3(packet, True, pos, pos + 3)
           templ1 = FourBytesLong(packet(pos), packet(pos + 1), packet(pos + 2), packet(pos + 3))
+          'Debug.Print "Attack clicks=" & templ1
           If packet(pos + 3) < &HFF Then
+              ' Debug.Print "Attack clicks at stop=" & GoodHex(packet(pos)) & " " & GoodHex(packet(pos + 1)) & " " & GoodHex(packet(pos + 2)) & " " & GoodHex(packet(pos + 3))
            'Debug.Print "N=" & templ1
             FixRightNumberOfClicks idConnection, templ1
           Else

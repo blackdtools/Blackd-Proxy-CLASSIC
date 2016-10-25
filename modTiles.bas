@@ -1,6 +1,7 @@
 Attribute VB_Name = "modTiles"
 #Const FinalMode = 1
 #Const TileDebug = 0
+#Const ParseProperties = 1
 Option Explicit
 Public DBGtileError As String
 Public Type TypeDatTile
@@ -45,12 +46,18 @@ Public Type TypeDatTile
 End Type
 Public highestDatTile As Long 'number of last Tile loaded
 Public DatTiles() As TypeDatTile ' array of tiles
+'Public DatTiles2() As TypeDatTile ' array of tiles - for debug compare
 Public MAXDATTILES As Long
 Public MAXTILEIDLISTSIZE As Long
 Public AditionalStairsToDownFloor() As Long
 Public AditionalStairsToUpFloor() As Long
 Public AditionalRequireRope() As Long
 Public AditionalRequireShovel() As Long
+
+Private tileLog As String
+Private atGraphicPart As Boolean
+Private debugGraphicPart As Boolean
+Private byteArray() As Byte
 
 Public Function protectedMult(lWidth, lHeight, lBlendframes, lXdiv, lYdiv, lAnimcount, lRare, lFactor) As Long
   On Error GoTo gotErr
@@ -7582,7 +7589,7 @@ Public Function LoadDatFile11(ByVal tibiadathere As String) As Integer
     On Error GoTo badErr
   #End If
   res = 0
-  tileOnDebug = 99999 ' last debug done at tile 2110
+  tileOnDebug = 99999 ' last debug done at tile 238
 
   ' init the array of tiles with default values
   For i = 0 To MAXDATTILES
@@ -7722,16 +7729,17 @@ Public Function LoadDatFile11(ByVal tibiadathere As String) As Integer
             #If TileDebug = 1 Then
               tileLog = tileLog & " " & GoodHex(b1)
             #End If
-            lonNumber = CLng(b1)
+            Get fn, , b2
+            #If TileDebug = 1 Then
+              tileLog = tileLog & " " & GoodHex(b2)
+            #End If
+            lonNumber = GetTheLong(b1, b2)
             DatTiles(i).speed = lonNumber
             If lonNumber = 0 Then
               DatTiles(i).blocking = True
                         
             End If
-            Get fn, , b2 'ignore next opt byte
-            #If TileDebug = 1 Then
-              tileLog = tileLog & " " & GoodHex(b2)
-            #End If
+      
             
         End If
       Case &H1 ' UNMODIFIED
@@ -8383,7 +8391,1085 @@ badErr:
   LoadDatFile11 = -4 ' bad format or wrong version of given tibia.dat
 End Function
 
+Public Function GetOnlyPath(ByVal pathname As String) As String
+    Dim pathstr As String
+  Dim posn As Long
+    posn = InStrRev(pathname, "\")
+    If posn > 0 Then
+        pathstr = Left$(pathname, posn)
+    Else
+        pathstr = ""
+    End If
+    GetOnlyPath = pathstr
+End Function
 
+Private Function movePos(ByRef pos As Long, ByRef positions As Long, _
+Optional ByVal addVBCRLF As Boolean = False, _
+Optional ByVal markPosition0 As Long = -1, _
+Optional ByVal markPosition1 As Long = -1, _
+Optional ByVal markPosition2 As Long = -1)
+    #If TileDebug = 1 Then
+      If (atGraphicPart = False) Or (debugGraphicPart And atGraphicPart) Then
+        Dim i As Integer
+        For i = 0 To positions - 1
+          If (i = markPosition0) Or (i = markPosition1) Or (i = markPosition2) Then
+            tileLog = tileLog & " <" & GoodHex(byteArray(pos + i)) & ">"
+          Else
+            tileLog = tileLog & " " & GoodHex(byteArray(pos + i))
+          End If
+        Next i
+        If (addVBCRLF) Then
+            tileLog = tileLog & vbCrLf
+        End If
+      End If
+    #End If
+    pos = pos + positions
+End Function
+
+
+Private Function readSmartNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef positionsRead As Long) As Long
+     Dim num As Long
+     Dim b1 As Byte
+     Dim b2 As Byte
+     Dim b3 As Byte
+     Dim b4 As Byte
+     On Error GoTo gotErr
+     b1 = arr(pos)
+     num = CLng(b1)
+     If (b1 < &H80) Then
+        positionsRead = 1
+        num = CLng(b1)
+     Else
+        b2 = arr(pos + 1)
+        num = num + (128 * CLng(b2)) - 128
+        If (b2 < &H80) Then
+            positionsRead = 2
+        Else
+            b3 = arr(pos + 2)
+            num = num + (16384 * CLng(b3)) - 16384 ' 16384 = 128*128
+            If (b3 < &H80) Then
+                positionsRead = 3
+            Else
+                b4 = arr(pos + 3)
+                If (b4 < &H80) Then
+                    num = num + (2097152 * CLng(b4)) - 2097152 ' 2097152 = 16384*128
+                    positionsRead = 4
+                Else
+                    ' We should not see that big numbers in our .dat file
+                    positionsRead = 5
+                    readSmartNumber = -1
+                    Exit Function
+                End If
+            End If
+        End If
+     End If
+     readSmartNumber = num
+     Exit Function
+gotErr:
+     readSmartNumber = -2
+End Function
+
+' Example: testSmartNumber ("80 80 01")
+Public Sub testSmartNumber(ByVal str As String)
+    Dim arr() As String
+    Dim arrb() As Byte
+    Dim res As Long
+    Dim i As Integer
+    Dim positions As Long
+    Dim tam As Long
+    str = Trim$(str)
+    arr = Split(str, " ")
+    tam = UBound(arr)
+    ReDim arrb(tam)
+    For i = 0 To UBound(arr)
+        arrb(i) = CByte(CLng("&H" & arr(i)))
+    Next i
+    res = readSmartNumber(arrb, 0, positions)
+    Debug.Print str & " = " & CStr(res) & " (used " & CStr(positions) & " positions)"
+End Sub
+
+Public Sub AddBlackdProxyFlags()
+Dim i As Integer
+ For i = 0 To MAXTILEIDLISTSIZE
+    If (AditionalStairsToUpFloor(i) = 0) Then
+      Exit For
+    Else
+      DatTiles(AditionalStairsToUpFloor(i)).floorChangeUP = True
+    End If
+  Next i
+  For i = 0 To MAXTILEIDLISTSIZE
+    If (AditionalRequireRope(i) = 0) Then
+      Exit For
+    Else
+      DatTiles(AditionalRequireRope(i)).floorChangeUP = True
+      DatTiles(AditionalRequireRope(i)).requireRope = True
+    End If
+  Next i
+  
+  For i = 0 To MAXTILEIDLISTSIZE
+    If (AditionalRequireShovel(i) = 0) Then
+      Exit For
+    Else
+      DatTiles(AditionalRequireShovel(i)).floorChangeDOWN = True
+      DatTiles(AditionalRequireShovel(i)).requireShovel = True
+      DatTiles(AditionalRequireShovel(i)).alwaysOnTop = True
+      DatTiles(AditionalRequireShovel(i)).multitype = False
+    End If
+  Next i
+  
+  
+  For i = 0 To MAXTILEIDLISTSIZE
+    If (AditionalStairsToDownFloor(i) = 0) Then
+      Exit For
+    Else
+      DatTiles(AditionalStairsToDownFloor(i)).floorChangeDOWN = True
+    End If
+  Next i
+End Sub
+
+' Expects a path for tibia 11.0+ dat and catalog-content.json
+' Also allows path+tibia.dat of tibia 10.98
+Public Function LoadDatFileQ(ByVal tibiadathere As String) As Integer
+Const expectedVersion As Long = 17223
+  If (LCase(Right$(tibiadathere, 9)) = "tibia.dat") Then
+    LoadDatFileQ = LoadDatFile11(tibiadathere)
+    Exit Function
+  End If
+  #If FinalMode Then
+    On Error GoTo badErr
+  #End If
+  GetInfoOfNewDatFile TibiaExePathWITHTIBIADAT, CurrentTibiaDatVERSION, CurrentTibiaDatFILE
+  If (CurrentTibiaDatVERSION = -1) Then
+    LoadDatFileQ = -1
+    Exit Function
+  End If
+  ' Debug.Print "Current .dat version=" & CurrentTibiaDatVERSION
+
+  tibiadathere = tibiadathere & CurrentTibiaDatFILE
+  Dim fso As scripting.FileSystemObject
+  Set fso = New scripting.FileSystemObject
+  If fso.FileExists(tibiadathere) = False Then
+    LoadDatFileQ = -1
+    Exit Function
+  End If
+  Dim addToSkipCount As Long
+  Dim res As Integer
+  Dim i As Long
+  Dim j As Long
+  Dim fn As Integer
+  Dim optByte As Byte
+  Dim optbyte2 As Byte
+  Dim b1 As Byte
+  Dim b2 As Byte
+  Dim b3 As Byte
+  Dim b4 As Byte
+  Dim a As String
+  Dim lonNumber As Long
+  Dim lWidth  As Long
+  Dim lHeight As Long
+  Dim lBlendframes As Long
+  Dim lXdiv As Long
+  Dim lYdiv As Long
+  Dim lAnimcount As Long
+  Dim lRare As Long
+  Dim skipcount As Long
+  Dim debugByte As Byte
+  Dim tileOnDebug As Long
+  Dim nextB As Byte
+  Dim expI As Long
+  Dim bTmp As Byte
+  Dim tmpSize As Long
+  Dim tmpI As Long
+  Dim tmpName As String
+  Dim limit_ITEM_COUNT As Long
+  Dim limit_OUTFIT_COUNT As Long
+  Dim limit_EFFECT_COUNT As Long
+  Dim limit_DISTANCE_COUNT As Long
+  Dim dat_version As Long
+  
+
+  res = 0
+  tileOnDebug = 99999 ' last debug done at tile 238
+
+  ' init the array of tiles with default values
+  For i = 0 To MAXDATTILES
+    DatTiles(i).iscontainer = False
+    DatTiles(i).RWInfo = 0
+    DatTiles(i).fluidcontainer = False
+    DatTiles(i).stackable = False
+    DatTiles(i).multitype = False
+    DatTiles(i).useable = False
+    DatTiles(i).notMoveable = False
+    DatTiles(i).alwaysOnTop = False
+    DatTiles(i).groundtile = False
+    DatTiles(i).blocking = False
+    DatTiles(i).pickupable = False
+    DatTiles(i).blockingProjectile = False
+    DatTiles(i).canWalkThrough = False
+    DatTiles(i).noFloorChange = False
+    DatTiles(i).blockpickupable = True
+    DatTiles(i).isDoor = False
+    DatTiles(i).isDoorWithLock = False
+    DatTiles(i).speed = 0
+    DatTiles(i).canDecay = True
+    DatTiles(i).haveExtraByte = False 'custom flag
+    DatTiles(i).haveExtraByte2 = False 'custom flag
+    DatTiles(i).totalExtraBytes = 0 'custom flag
+    DatTiles(i).floorChangeUP = False 'custom flag
+    DatTiles(i).floorChangeDOWN = False 'custom flag
+    DatTiles(i).requireRightClick = False 'custom flag
+    DatTiles(i).requireRope = False 'custom flag
+    DatTiles(i).requireShovel = False 'custom flag
+    DatTiles(i).isWater = False ' custom flag
+ 
+    DatTiles(i).stackPriority = 1
+
+    DatTiles(i).haveFish = False
+    DatTiles(i).isFood = False
+    DatTiles(i).isField = False
+    DatTiles(i).isDepot = False
+    DatTiles(i).moreAlwaysOnTop = False
+    DatTiles(i).usable2 = False
+    DatTiles(i).multiCharge = False
+    DatTiles(i).haveName = False
+    DatTiles(i).itemName = ""
+  Next i
+  DatTiles(0).stackPriority = 0
+
+  DatTiles(97).stackPriority = 2
+  DatTiles(98).stackPriority = 2
+  DatTiles(99).stackPriority = 2
+
+  DatTiles(97).blocking = True
+  DatTiles(98).blocking = True
+  DatTiles(99).blocking = True
+  i = 100 ' i = tileID
+  
+  
+  
+  fn = FreeFile
+  ' Open the file tibia.dat for binary access
+  ' it look for it in the same path than this program (App.Path)
+
+  Dim lastByte As Long
+
+  Dim pos As Long
+
+  Dim nextMarkerWillStartNewItem As Boolean
+  nextMarkerWillStartNewItem = True
+  pos = 0
+  ' read full file at once
+  Open tibiadathere For Binary Access Read As fn
+    lastByte = LOF(fn) - 1
+    If (lastByte > 0) Then
+        ReDim byteArray(lastByte)
+        Get fn, , byteArray
+    End If
+  Close fn
+
+  tileLog = ""
+  debugGraphicPart = False
+ 
+  Dim properties_header_size As Long
+  Dim graphicPart_start As Long
+  Dim graphicPart_size As Long
+  Dim graphicPart_end As Long
+  Dim graphicPart2_size As Long
+  Dim properties_start As Long
+  Dim properties_end As Long
+  Dim properties_size_without_header As Long
+  Dim nextByte As Byte
+  Dim totalSkip As Long
+  Dim totalBytesHere As Long
+  Dim positionsRead As Long
+  Dim currentTile As Long
+  Dim lNew As Long
+  Dim lPrev1 As Long
+  Dim lPrev2 As Long
+  Dim expectedBytes As Long
+  Dim rareBytes As Long
+  Dim gDebug As String
+  #If TileDebug = 1 Then
+    OverwriteOnFile "tibiadatdebug.txt", "Here is what Blackd Proxy could read in your .dat file :"
+  #End If
+  
+  Do While pos < lastByte
+    If (Not (byteArray(pos) = &HA)) Then
+        If (currentTile < 23725) Then
+             #If TileDebug = 1 Then
+                LoadDatFileQ = -1
+                tileLog = tileLog & vbCrLf & "File continues:"
+                movePos pos, 800
+                LogOnFile "tibiadatdebug.txt", tileLog
+             #End If
+             LoadDatFileQ = -1
+             Exit Function
+        Else
+            ' we already finished reading the usefull part for us
+            highestDatTile = currentTile
+            Exit Do
+        End If
+    End If
+    atGraphicPart = True
+    graphicPart_start = pos
+
+    totalBytesHere = readSmartNumber(byteArray, pos + 1, positionsRead)
+    properties_end = pos + positionsRead + totalBytesHere
+    pos = pos + 2 + positionsRead
+    currentTile = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    graphicPart_size = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    lPrev1 = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    lPrev2 = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    graphicPart2_size = readSmartNumber(byteArray, pos, positionsRead)
+        
+    properties_start = pos + positionsRead + graphicPart2_size
+    graphicPart_end = properties_start - 1
+    pos = pos + 1 + positionsRead
+    lXdiv = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    lYdiv = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    lAnimcount = readSmartNumber(byteArray, pos, positionsRead)
+    pos = pos + 1 + positionsRead
+    lNew = readSmartNumber(byteArray, pos, positionsRead)
+    expectedBytes = 10 + (lXdiv * lYdiv * lAnimcount * 4)
+ 
+'    If (currentTile = 134) Then
+'    Debug.Print expectedBytes & "vs" & graphicPart2_size
+'    Debug.Print "ok"
+'    End If
+    If (graphicPart2_size > expectedBytes + 2) Then
+        lRare = 2 ' This is not the real value, however we only need to know that it is bigger than 1
+    Else
+        lRare = 1
+    End If
+    #If TileDebug = 1 Then
+          tileLog = "tile #" & CStr(currentTile) & ":"
+      
+          gDebug = "[lXdiv=" & GoodHex(CByte(lXdiv)) & "] [lYdiv=" & GoodHex(CByte(lYdiv)) & "] [lAnimcount=" & GoodHex(CByte(lAnimcount)) & "]"
+          If (graphicPart2_size > expectedBytes) Then
+              gDebug = gDebug & " [lRare>01]"
+          End If
+          ' Following cases should not happen, else write log about it:
+          If lPrev1 <> 2 Then
+            tileLog = tileLog & "lPrev1!!!!!!!!!!!" & vbCrLf
+          End If
+          If lPrev2 <> 2 Then
+            tileLog = tileLog & "lPrev2!!!!!!!!!!!" & vbCrLf
+          End If
+          If lNew > 1 Then
+            tileLog = tileLog & "lNew!!!!!!!!!!!" & vbCrLf
+          End If
+    #End If
+
+    #If TileDebug = 1 Then
+        If (currentTile = tileOnDebug) Then
+            debugGraphicPart = True
+        Else
+            debugGraphicPart = False
+        End If
+    #End If
+    ' debugGraphicPart = True ' uncomment this line to log full content
+
+
+    pos = graphicPart_start
+    movePos pos, graphicPart_end - graphicPart_start + 1, True
+    
+    ' Skip properties block header (It only contains number of bytes of real properties)
+    properties_size_without_header = readSmartNumber(byteArray, pos, positionsRead)
+    properties_header_size = 1 + positionsRead
+    movePos pos, properties_header_size
+    
+    atGraphicPart = False
+    
+    #If ParseProperties = 0 Then
+        movePos pos, properties_end - properties_start + 1 - properties_header_size, True
+    #Else
+        Do While pos <= properties_end
+            optByte = byteArray(pos)
+            Select Case optByte
+            Case &HA
+            ' OLD <00> "is ground tile"
+            ' 0A 02 08 00
+            ' 0A 03 08 A0 01
+                DatTiles(currentTile).groundtile = True
+                movePos pos, 3, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+                DatTiles(currentTile).speed = lonNumber
+                If lonNumber = 0 Then
+                    DatTiles(currentTile).blocking = True
+                End If
+            Case &H10
+            ' OLD <01> "alwaysOnTop of higher priority"
+            ' 10 01
+                DatTiles(currentTile).moreAlwaysOnTop = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H18
+            ' OLD <02> "always on top"
+            ' 18 01
+                DatTiles(currentTile).alwaysOnTop = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H20
+            ' OLD <03> "can walk through" (open doors, arces ...)
+            ' 20 01
+                DatTiles(currentTile).canWalkThrough = True
+                DatTiles(currentTile).alwaysOnTop = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H28
+            ' OLD <04> "is container"
+            ' 28 01
+              
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                If DatTiles(currentTile).haveName = False Then
+                  DatTiles(currentTile).iscontainer = True
+                End If
+                movePos pos, positionsRead
+            Case &H30
+            ' OLD <05> "is stackable"
+            ' 30 01
+            ' 30 32
+            ' 30 8C 01
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                If lonNumber = 1 Then
+                    DatTiles(currentTile).stackable = True
+                End If
+                movePos pos, positionsRead
+            Case &H38
+            ' OLD <FE> --- unknown meaning
+            ' 38 01
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H40
+            ' OLD <06> "is usable"
+            ' 40 01
+                DatTiles(currentTile).useable = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H48
+            ' OLD <07> "is drinkable"
+            ' 48 01
+                DatTiles(currentTile).usable2 = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H52
+            ' OLD <08> "writtable"
+            ' 52 03 08 C8 01
+                DatTiles(currentTile).RWInfo = 3
+                movePos pos, 3, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H5A
+            ' OLD <09> "read only"
+            ' 5A 03 08 80 08
+                DatTiles(currentTile).RWInfo = 1
+                movePos pos, 3, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H60
+            ' OLD <0B> "multitype"
+            ' 60 01
+                DatTiles(currentTile).multitype = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H68
+            ' OLD <0C> "is blocking"
+            ' 68 01
+                DatTiles(currentTile).blocking = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H70
+            ' OLD <0D> "not moveable" CONFIRMED
+            ' 70 01
+                DatTiles(currentTile).notMoveable = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H78
+            ' OLD <0E> "block missiles"
+            ' 78 01
+                DatTiles(currentTile).blockingProjectile = True
+                movePos pos, 1, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H80
+            ' OLD <0F> AND <1F>
+            ' 80 01 01 = 0F
+            ' 80 02 01 = 1F
+                optbyte2 = byteArray(pos + 1)
+                Select Case optbyte2
+                Case &H1
+                     ' OLD <0F> "slight obstacle"
+                Case &H2
+                     ' OLD <1F> "ground tiles that don't cause level change"
+                     DatTiles(currentTile).noFloorChange = True
+                Case Else
+                    Debug.Print "!!!!!"
+                End Select
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H88
+            ' old <10> AND <20>
+            ' 88 01 01 = OLD <10>
+            ' 88 02 01 = OLD <20>
+                optbyte2 = byteArray(pos + 1)
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                Select Case optbyte2
+                Case &H1
+                     ' OLD <10> "pickupable"
+                     DatTiles(currentTile).pickupable = True
+                Case &H2
+                     ' OLD <20> --- unknown meaning
+                Case Else
+                    Debug.Print "!!!!!"
+                End Select
+                movePos pos, positionsRead
+            Case &H90
+            ' OLD <11> "can see what is under (ladder holes, stairs holes etc)"
+            ' 90 01 01
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H92
+            ' OLD <21> "body restriction"
+            ' 92 02 02 08 01
+                movePos pos, 4, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H98
+            ' old <0A> "fluid container"
+            ' 98 01 01
+                DatTiles(currentTile).fluidcontainer = True
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &H9A
+            ' OLD <23> --- unknown meaning
+            ' 9A 02 02 08 04
+                movePos pos, 4, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HA0
+            ' OLD <12> "action is possible"
+            ' A0 01 01
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HA2
+            ' OLD <22> "have name"
+            ' A2 02 14 08 09 10 66 18 66 22 0C 77 68 69 74 65 20 66 6C 6F 77 65 72
+            ' A2 02 19 08 09 10 80 01 18 80 01 22 0F 73 69 67 6E 65 64 20 63 6F 6E 74 72 61 63 74
+                movePos pos, 6, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+                movePos pos, 1
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+                movePos pos, 1
+                tmpSize = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+                tmpName = ""
+                For tmpI = pos To pos + tmpSize - 1
+                    tmpName = tmpName & Chr(byteArray(tmpI))
+                Next tmpI
+                DatTiles(currentTile).haveName = True
+                DatTiles(currentTile).itemName = tmpName
+                movePos pos, tmpSize
+                #If TileDebug = 1 Then
+                   tileLog = tileLog & " (" & tmpName & ")"
+                #End If
+            Case &HA8
+            ' OLD <25> --- unknown meaning
+            ' A8 02 01
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HAA
+            ' OLD <14> --- unknown meaning
+            ' AA 01 02 08 02
+                movePos pos, 4, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HB0
+            ' OLD <15> --- unknown meaning
+            ' B0 01 01
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HBA
+            ' OLD <16> "makes light"
+            ' BA 01 05 08 03 10 9C 01
+            ' BA 01 05 08 02 10 CE 01
+            ' BA 01 04 08 04 10 23
+                movePos pos, 6, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HC0
+            ' old <17> --- unknown meaning
+            ' C0 01 01
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HC8
+            ' OLD <18> "stairs to lower floor"
+            ' C8 01 01
+                DatTiles(currentTile).floorChangeDOWN = True
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HDA
+            ' OLD <1A> "block pickupable"
+            ' DA 01 02 08 08
+                DatTiles(currentTile).blockpickupable = False
+                movePos pos, 5, , 0
+            Case &HD2
+            ' OLD <19> --- unknown meaning
+            ' D2 01 04 08 08 10 08
+                movePos pos, 7, , 0
+            Case &HE0
+            ' OLD <1B> "corpses that don't decay"
+            ' E0 01 01
+                DatTiles(currentTile).canDecay = False
+                movePos pos, 2, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HF2
+            ' OLD <1D> "color for minimap drawing"
+            ' F2 01 03 08 81 01
+                movePos pos, 4, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                movePos pos, positionsRead
+            Case &HFA
+            ' OLD <1E> "special item"
+            ' FA 01 03 08 CE 08
+                movePos pos, 4, , 0
+                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                optbyte2 = LowByteOfLong(lonNumber)
+                '86 -> openable holes, 77-> can be used to go down, 76 can be used to go up, 82 -> stairs up, 79 switch,...
+                Select Case optbyte2
+                Case &H4C
+                  'ladders
+                  DatTiles(currentTile).floorChangeUP = True
+                  DatTiles(currentTile).requireRightClick = True
+                Case &H4D
+                  'crate - trapdoor
+                  DatTiles(currentTile).requireRightClick = True
+                Case &H4E
+                  'rope spot?
+                  DatTiles(currentTile).floorChangeUP = True
+                  DatTiles(currentTile).requireRope = True
+                Case &H4F
+                  'switch
+                Case &H50
+                  'doors
+                  DatTiles(currentTile).isDoor = True
+                Case &H51
+                  'doors with locks
+                  DatTiles(currentTile).isDoorWithLock = True
+                Case &H52
+                  'stairs to up floor
+                  DatTiles(currentTile).floorChangeUP = True
+                Case &H53
+                  'mailbox
+                Case &H54
+                  'depot
+                  DatTiles(currentTile).isDepot = True
+                Case &H55
+                  'trash
+                Case &H56
+                 'hole
+                  DatTiles(currentTile).floorChangeDOWN = True
+                  DatTiles(currentTile).requireShovel = True
+                  DatTiles(currentTile).alwaysOnTop = True
+                  DatTiles(currentTile).multitype = False
+                Case &H57
+                  'items with special description?
+                Case &H58
+                  'writtable
+                  DatTiles(currentTile).RWInfo = 1 ' read only
+                Case Else
+                  ' should not happen
+                  debugByte = optByte
+                  Debug.Print "Tile loader found unexpected properties at " & GoodHex(optByte) & ": " & GoodHex(optbyte2)
+                  #If TileDebug = 1 Then
+                    tileLog = tileLog & " (unexpected subtype " & GoodHex(optByte) & " !!!!)"
+                  #End If
+                End Select 'optbyte2
+                movePos pos, positionsRead
+            Case Else
+                ' Our parser needs an update
+                #If TileDebug = 1 Then
+                     tileLog = tileLog & vbCrLf & "PARSER ERROR - Unexpected tile: " & GoodHex(optByte) & vbCrLf
+                     tileLog = tileLog & vbCrLf & "File continues:"
+                     movePos pos, 100
+                     LogOnFile "tibiadatdebug.txt", tileLog
+                #End If
+                LoadDatFileQ = -4 ' Unknown property
+                Exit Function
+            End Select
+            
+        Loop
+        #If TileDebug = 1 Then
+           tileLog = tileLog & vbCrLf
+        #End If
+    #End If
+    
+    ' some flags can be made by a combination of existing flags
+    If DatTiles(currentTile).stackable = True Or DatTiles(currentTile).multitype = True Or _
+      DatTiles(currentTile).fluidcontainer = True Then
+      DatTiles(currentTile).haveExtraByte = True
+    End If
+    
+    If DatTiles(currentTile).multiCharge = True Then
+      DatTiles(currentTile).haveExtraByte = True
+    End If
+
+    If DatTiles(currentTile).alwaysOnTop = True Then
+      DatTiles(currentTile).stackPriority = 3 ' high priority
+    End If
+    
+    If DatTiles(currentTile).moreAlwaysOnTop = True Then
+      DatTiles(currentTile).alwaysOnTop = True
+      DatTiles(currentTile).stackPriority = 4 ' max priority
+    End If
+    
+    ' add special cases of floor changers, for cavebot
+    Select Case currentTile
+    ' ramps that change floor when you step in
+    Case tileID_rampToNorth, tileID_rampToSouth, tileID_rampToRightCycMountain, _
+     tileID_rampToLeftCycMountain, tileID_rampToNorth, tileID_desertRamptoUp, _
+     tileID_jungleStairsToNorth, tileID_jungleStairsToLeft
+      DatTiles(currentTile).floorChangeUP = True
+    Case tileID_grassCouldBeHole ' grass that will turn into a hole when you step in
+      DatTiles(currentTile).floorChangeDOWN = True
+    End Select
+    
+    '[CUSTOM FLAGS FOR BLACKDPROXY]
+    'water, for smart autofisher
+    If currentTile = tileID_waterWithFish Then
+      DatTiles(currentTile).isWater = True
+      DatTiles(currentTile).haveFish = True
+    End If
+    If currentTile = tileID_waterEmpty Then
+      DatTiles(currentTile).isWater = True
+    End If
+    
+    If currentTile = tileID_blockingBox Then
+        DatTiles(currentTile).blocking = True
+    End If
+   
+    
+
+
+    If (currentTile >= tileID_waterWithFish) And (currentTile <= tileID_waterWithFishEnd) Then
+      DatTiles(currentTile).isWater = True
+      DatTiles(currentTile).haveFish = True
+    End If
+    If (currentTile >= tileID_waterEmpty) And (currentTile <= tileID_waterEmptyEnd) Then
+      DatTiles(currentTile).isWater = True
+    End If
+
+
+    ' food, for autoeater
+    If currentTile >= tileID_firstFoodTileID And currentTile <= tileID_lastFoodTileID Then
+      DatTiles(currentTile).isFood = True
+    End If
+    If (currentTile >= tileID_firstMushroomTileID) And (currentTile <= tileID_lastMushroomTileID) Then
+      DatTiles(currentTile).isFood = True
+    End If
+    
+    Select Case currentTile ' special food
+    Case &HA9, &H344, &H349, &H385, &HCB2, &H13E8, &H162E, &H1885, &H1886, &H18F8, &H18F9, &H18F9, &H18F9, &H1964, &H198D, &H198E, &H198F, &H1990, &H1991, &H19A9, &H19AE, &H1BF6, &H1BF7, &H1CCC, &H1CCD
+      DatTiles(currentTile).isFood = True
+    End Select
+    
+    If (currentTile >= 8010) And (currentTile <= 8020) Then ' special food
+      DatTiles(currentTile).isFood = True
+    End If
+    
+    
+    ' fields, for a* smart path
+    If currentTile >= tileID_firstFieldRangeStart And currentTile <= tileID_firstFieldRangeEnd Then
+      DatTiles(currentTile).isField = True
+    End If
+    If (currentTile >= tileID_secondFieldRangeStart) And (currentTile <= tileID_secondFieldRangeEnd) Then
+      DatTiles(currentTile).isField = True
+    End If
+    Select Case currentTile
+    Case tileID_campFire1, tileID_campFire2
+      DatTiles(currentTile).isField = True
+    Case tileID_walkableFire1, tileID_walkableFire2, tileID_walkableFire3
+      DatTiles(currentTile).isField = False 'dont consider fields that doesnt do any harm
+    End Select
+    If currentTile = tileID_woodenStairstoUp Then 'special stairs
+      DatTiles(currentTile).floorChangeUP = True
+    End If
+    If currentTile = tileID_WallBugItem Then 'bug on walls, cant pick it!
+      DatTiles(currentTile).pickupable = False
+    End If
+    
+    ' Build some more combined properties:
+    If lRare > &H1 Then
+          DatTiles(currentTile).haveExtraByte2 = True ' UNKNOWN , TEST
+    End If
+    If DatTiles(currentTile).haveExtraByte = True Then 'BYTECOUNTdat5
+      DatTiles(currentTile).totalExtraBytes = DatTiles(currentTile).totalExtraBytes + 1
+    End If
+    If DatTiles(currentTile).haveExtraByte2 = True Then
+      DatTiles(currentTile).totalExtraBytes = DatTiles(currentTile).totalExtraBytes + 1
+    End If
+    
+    #If TileDebug = 1 Then
+         tileLog = tileLog & gDebug & vbCrLf
+         If (Not (tileLog = "")) Then
+           LogOnFile "tibiadatdebug.txt", tileLog
+         End If
+    #End If
+    pos = properties_end + 1
+  Loop
+  AddBlackdProxyFlags ' Add our custom properties
+  
+'  CopyToDatTiles2
+'  Dim resIgnore As Long
+'  resIgnore = LoadDatFile11("c:\tibiaold\Tibia.dat")
+'  CompareDatTiles
+  LoadDatFileQ = 0
+  Exit Function
+  
+badErr:
+  DBGtileError = "Error number = " & CStr(Err.Number) & vbCrLf & "Error description = " & Err.Description & vbCrLf & "Path = " & tibiadathere
+  LoadDatFileQ = -4 ' bad format or wrong version of given tibia.dat
+End Function
+
+
+'Public Sub CopyToDatTiles2()
+'    Dim lastT As Long
+'    Dim i As Integer
+'
+'    lastT = UBound(DatTiles)
+'    ReDim DatTiles2(lastT)
+'    For i = 0 To lastT
+'        DatTiles2(i).alwaysOnTop = DatTiles(i).alwaysOnTop
+'        DatTiles2(i).blocking = DatTiles(i).blocking
+'        DatTiles2(i).blockingProjectile = DatTiles(i).blockingProjectile
+'        DatTiles2(i).blockpickupable = DatTiles(i).blockpickupable
+'        DatTiles2(i).canDecay = DatTiles(i).canDecay
+'        DatTiles2(i).canWalkThrough = DatTiles(i).canWalkThrough
+'        DatTiles2(i).floorChangeDOWN = DatTiles(i).floorChangeDOWN
+'        DatTiles2(i).floorChangeUP = DatTiles(i).floorChangeUP
+'        DatTiles2(i).fluidcontainer = DatTiles(i).fluidcontainer
+'        DatTiles2(i).groundtile = DatTiles(i).groundtile
+'        DatTiles2(i).haveExtraByte = DatTiles(i).haveExtraByte
+'        DatTiles2(i).haveExtraByte2 = DatTiles(i).haveExtraByte2
+'        DatTiles2(i).haveFish = DatTiles(i).haveFish
+'        DatTiles2(i).haveName = DatTiles(i).haveName
+'        DatTiles2(i).iscontainer = DatTiles(i).iscontainer
+'        DatTiles2(i).isDepot = DatTiles(i).isDepot
+'        DatTiles2(i).isDoor = DatTiles(i).isDoor
+'        DatTiles2(i).isDoorWithLock = DatTiles(i).isDoorWithLock
+'        DatTiles2(i).isField = DatTiles(i).isField
+'        DatTiles2(i).isFood = DatTiles(i).isFood
+'        DatTiles2(i).isWater = DatTiles(i).isWater
+'        DatTiles2(i).itemName = DatTiles(i).itemName
+'        DatTiles2(i).moreAlwaysOnTop = DatTiles(i).moreAlwaysOnTop
+'        DatTiles2(i).multiCharge = DatTiles(i).multiCharge
+'        DatTiles2(i).multitype = DatTiles(i).multitype
+'        DatTiles2(i).noFloorChange = DatTiles(i).noFloorChange
+'        DatTiles2(i).notMoveable = DatTiles(i).notMoveable
+'        DatTiles2(i).pickupable = DatTiles(i).pickupable
+'        DatTiles2(i).requireRightClick = DatTiles(i).requireRightClick
+'        DatTiles2(i).requireRope = DatTiles(i).requireRope
+'        DatTiles2(i).requireShovel = DatTiles(i).requireShovel
+'        DatTiles2(i).RWInfo = DatTiles(i).RWInfo
+'        DatTiles2(i).speed = DatTiles(i).speed
+'        DatTiles2(i).stackable = DatTiles(i).stackable
+'        DatTiles2(i).stackPriority = DatTiles(i).stackPriority
+'        DatTiles2(i).totalExtraBytes = DatTiles(i).totalExtraBytes
+'        DatTiles2(i).usable2 = DatTiles(i).usable2
+'        DatTiles2(i).useable = DatTiles(i).useable
+'    Next i
+'End Sub
+'
+'Public Sub CompareDatTiles()
+'    Dim lastT As Long
+'    Dim i As Integer
+'    Dim str As String
+'    OverwriteOnFile "oldnewdiff.txt", "Differences found:" & vbCrLf
+'    lastT = UBound(DatTiles)
+'    For i = 0 To lastT
+'        If Not (DatTiles(i).alwaysOnTop = DatTiles2(i).alwaysOnTop) Then
+'            str = CStr(i) & ": alwaysOnTop"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).blocking = DatTiles2(i).blocking) Then
+'            str = CStr(i) & ": blocking"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).blockingProjectile = DatTiles2(i).blockingProjectile) Then
+'            str = CStr(i) & ": blockingProjectile"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).blockpickupable = DatTiles2(i).blockpickupable) Then
+'            str = CStr(i) & ": blockpickupable"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).canDecay = DatTiles2(i).canDecay) Then
+'            str = CStr(i) & ": canDecay"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).canWalkThrough = DatTiles2(i).canWalkThrough) Then
+'            str = CStr(i) & ": canWalkThrough"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).floorChangeDOWN = DatTiles2(i).floorChangeDOWN) Then
+'            str = CStr(i) & ": floorChangeDOWN"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).floorChangeUP = DatTiles2(i).floorChangeUP) Then
+'            str = CStr(i) & ": floorChangeUP"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).fluidcontainer = DatTiles2(i).fluidcontainer) Then
+'            str = CStr(i) & ": fluidcontainer"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).groundtile = DatTiles2(i).groundtile) Then
+'            str = CStr(i) & ": groundtile"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).haveExtraByte = DatTiles2(i).haveExtraByte) Then
+'            str = CStr(i) & ": haveExtraByte"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).haveExtraByte2 = DatTiles2(i).haveExtraByte2) Then
+'            str = CStr(i) & ": haveExtraByte2"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).haveFish = DatTiles2(i).haveFish) Then
+'            str = CStr(i) & ": haveFish"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).haveName = DatTiles2(i).haveName) Then
+'            str = CStr(i) & ": haveName"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).iscontainer = DatTiles2(i).iscontainer) Then
+'            str = CStr(i) & ": iscontainer"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).isDepot = DatTiles2(i).isDepot) Then
+'            str = CStr(i) & ": isDepot"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).isDoor = DatTiles2(i).isDoor) Then
+'            str = CStr(i) & ": isDoor"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).isDoorWithLock = DatTiles2(i).isDoorWithLock) Then
+'            str = CStr(i) & ": isDoorWithLock"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).isField = DatTiles2(i).isField) Then
+'            str = CStr(i) & ": isField"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).isFood = DatTiles2(i).isFood) Then
+'            str = CStr(i) & ": isFood"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).isWater = DatTiles2(i).isWater) Then
+'            str = CStr(i) & ": isWater"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).itemName = DatTiles2(i).itemName) Then
+'            str = CStr(i) & ": itemName"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).moreAlwaysOnTop = DatTiles2(i).moreAlwaysOnTop) Then
+'            str = CStr(i) & ": moreAlwaysOnTop"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).multiCharge = DatTiles2(i).multiCharge) Then
+'            str = CStr(i) & ": multiCharge"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).multitype = DatTiles2(i).multitype) Then
+'            str = CStr(i) & ": multitype"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).noFloorChange = DatTiles2(i).noFloorChange) Then
+'            str = CStr(i) & ": noFloorChange"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).notMoveable = DatTiles2(i).notMoveable) Then
+'            str = CStr(i) & ": notMoveable"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).pickupable = DatTiles2(i).pickupable) Then
+'            str = CStr(i) & ": pickupable"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).requireRightClick = DatTiles2(i).requireRightClick) Then
+'            str = CStr(i) & ": requireRightClick"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).requireRope = DatTiles2(i).requireRope) Then
+'            str = CStr(i) & ": requireRope"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).requireShovel = DatTiles2(i).requireShovel) Then
+'            str = CStr(i) & ": requireShovel"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).RWInfo = DatTiles2(i).RWInfo) Then
+'            str = CStr(i) & ": RWInfo"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).speed = DatTiles2(i).speed) Then
+'            str = CStr(i) & ": speed"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).stackable = DatTiles2(i).stackable) Then
+'            str = CStr(i) & ": stackable"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).stackPriority = DatTiles2(i).stackPriority) Then
+'            str = CStr(i) & ": stackPriority"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).totalExtraBytes = DatTiles2(i).totalExtraBytes) Then
+'            str = CStr(i) & ": totalExtraBytes"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).usable2 = DatTiles2(i).usable2) Then
+'            str = CStr(i) & ": usable2"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'        If Not (DatTiles(i).useable = DatTiles2(i).useable) Then
+'            str = CStr(i) & ": useable"
+'            LogOnFile "oldnewdiff.txt", str
+'        End If
+'    Next i
+'End Sub
 
 Public Function GetTileInfoString(b1 As Byte, b2 As Byte) As String
   ' 2 bytes indentify a tile in a packet
@@ -8512,6 +9598,71 @@ exitf:
   GetTileInfoString = strRes
 End Function
 
+
+Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As Long, ByRef par_file As String)
+  On Error GoTo gotErr
+  par_version = 0
+  par_file = ""
+  If (Right$(strFilePath, 9) = "tibia.dat") Then
+      par_version = 0
+      par_file = "tibia.dat"
+      Exit Sub
+  End If
+  Dim fso As scripting.FileSystemObject
+  Dim fn As Integer
+  Dim strLine As String
+  Dim Filename As String
+  Dim parts() As String
+  Dim appearancesFound As String
+  Dim mustContinueLoop As Boolean
+  mustContinueLoop = True
+  appearancesFound = False
+  Set fso = New scripting.FileSystemObject
+    Filename = strFilePath & "catalog-content.json"
+    If fso.FileExists(Filename) = True Then
+      fn = FreeFile
+      Open Filename For Input As #fn
+      While ((Not EOF(fn)) And (mustContinueLoop = True))
+        Line Input #fn, strLine
+        strLine = Trim$(strLine)
+        If strLine <> "" Then
+            strLine = Replace(strLine, """", "")
+            strLine = Replace(strLine, ",", "")
+            parts = Split(strLine, ":")
+            If (UBound(parts) > 0) Then
+                If (parts(0) = "type") Then
+                    If (parts(1) = "appearances") Then
+                        appearancesFound = True
+                    End If
+                End If
+                If (parts(0) = "file") Then
+                    If (appearancesFound) Then
+                        par_file = parts(1)
+                    End If
+                End If
+                If (parts(0) = "version") Then
+                    If (appearancesFound) Then
+                        par_version = CLng(parts(1))
+                        mustContinueLoop = False
+                    End If
+                End If
+            End If
+        End If
+        If (Left$(strLine, 1) = "}") Then
+            appearancesFound = False
+        End If
+      Wend
+      Close #fn
+    End If
+    Exit Sub
+gotErr:
+    dateErrDescription = "Error " & Err.Number & " at GetDATEOfFile. Here:" & vbCrLf & _
+     strLine & vbCrLf & vbCrLf & "Error description: " & Err.Description
+    par_version = -1
+    par_file = ""
+End Sub
+
+
 Public Function UnifiedLoadDatFile(ByVal strPath As String) As Long
   Dim res As Long
   If TibiaVersionLong <= 740 Then
@@ -8559,10 +9710,14 @@ Public Function UnifiedLoadDatFile(ByVal strPath As String) As Long
     firstValidOutfit = 2
     lastValidOutfit = 160
     res = LoadDatFile10(strPath)
-  Else
+  ElseIf TibiaVersionLong < 1100 Then
     firstValidOutfit = 2
     lastValidOutfit = 160
     res = LoadDatFile11(strPath)
+  Else
+    firstValidOutfit = 2
+    lastValidOutfit = 160
+    res = LoadDatFileQ(strPath)
   End If
   UnifiedLoadDatFile = res
 End Function

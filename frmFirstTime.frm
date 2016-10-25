@@ -161,10 +161,19 @@ Begin VB.Form frmFirstTime
       Top             =   3480
       Width           =   3735
    End
-   Begin VB.Label Label1 
+   Begin VB.Label lblInfo 
       BackColor       =   &H00000000&
       Caption         =   $"frmFirstTime.frx":0742
-      ForeColor       =   &H0080C0FF&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H0080FF80&
       Height          =   495
       Left            =   240
       TabIndex        =   20
@@ -227,6 +236,7 @@ Private Sub cmbVersion_Click()
     Dim strSelected As String
     Dim samePath As Boolean
     If cmbVersion.ListIndex > -1 Then
+      TibiaVersionLong = parseVersionFromSelection(cmbVersion.List(cmbVersion.ListIndex))
         If InStr(1, cmbVersion.List(cmbVersion.ListIndex), "preview", vbTextCompare) > 0 Then
             Me.txtTibiaClientPath.Text = autoGetTibiaFolder("TibiaPreview")
             If InStr(1, cmbVersion.List(cmbVersion.ListIndex), "official", vbTextCompare) > 0 Then
@@ -261,16 +271,40 @@ Private Sub cmbVersion_Click()
         Case "Tibia 7.92"
           useSamePath = True
         End Select
+       
         If useSamePath = True Then
             Me.txtTibiaClientPath.Text = ""
             Me.txtTibiaMapsPath.Text = ""
         Else
-            TibiaVersionLong = highestTibiaVersionLong
+          
             Me.txtTibiaMapsPath.Text = TryAutoPath()
        End If
     End If
 End Sub
 
+Private Function parseVersionFromSelection(ByVal strtext As String)
+  Dim arrParts() As String
+  Dim arrParts2() As String
+  Dim partA As String
+  Dim partB As String
+  Dim resString As String
+  Dim intString As Integer
+  On Error GoTo gotErr
+  arrParts = Split(strtext, " ", , vbTextCompare)
+  arrParts2 = Split(arrParts(1), ".", , vbTextCompare)
+  partA = Trim$(arrParts2(0))
+  partB = Trim$(arrParts2(1))
+  If (Len(partB) = 1) Then
+    partB = partB & "0"
+  End If
+  resString = partA & partB
+  intString = CLng(resString)
+  'Debug.Print intString
+  parseVersionFromSelection = intString
+  Exit Function
+gotErr:
+  parseVersionFromSelection = highestTibiaVersionLong
+End Function
 Private Sub cmdBrowse_Click()
     Dim res As String
     res = BrowseForFolder(Me.hwnd, "Select your Tibia Client folder")
@@ -299,7 +333,9 @@ Dim crashLine As String
 crashLine = ""
     useSamePath = False
   Me.Caption = "Blackd Proxy " & ProxyVersion & " - First run - Config"
-  
+If Tibia11allowed Then
+    lblInfo.Caption = "Thank you for buying Tibia gold at blackdtools.com You can now use all the configs for Tibia 11+"
+End If
   cmbVersion.Clear
   SafeAddNewVersions Me.cmbVersion
   Dim spversion As String
@@ -391,19 +427,21 @@ crashLine = ""
    End With
    crashLine = "txtTibiaClientPath.Text = autoGetTibiaFolder(" & defaultSelectedTibiaFolder & ")"
    txtTibiaClientPath.Text = autoGetTibiaFolder(defaultSelectedTibiaFolder)
-   crashLine = "TibiaVersionLong = " & highestTibiaVersionLong
-   TibiaVersionLong = highestTibiaVersionLong
+   crashLine = "TibiaVersionLong = " & TibiaVersionDefaultLong
+   TibiaVersionLong = TibiaVersionDefaultLong
    crashLine = "txtTibiaMapsPath.Text = TryAutoPath()"
    txtTibiaMapsPath.Text = TryAutoPath()
    crashLine = "txtTibiaMapsPath.Text = PostLoad"
    PostLoad
    Exit Sub
 gotErr:
-   If MsgBox("Load error, could not read config.ini correctly. Problem found at version '" & spversion & "'" & vbCrLf & "Debug info:" & loadDebugStart & vbCrLf & crashLine & vbCrLf & vbCrLf & "Try to continue anyways?", vbYesNo + vbExclamation, "Warning") Then
+   If MsgBox("Load error, could not read config.ini correctly. Problem found at version '" & spversion & "'" & vbCrLf & "Debug info:" & loadDebugStart & vbCrLf & crashLine & vbCrLf & vbCrLf & "Try to continue anyways?", vbYesNo + vbExclamation, "Warning") = vbYes Then
     Me.txtTibiaClientPath.Text = autoGetTibiaFolder(defaultSelectedTibiaFolder)
     TibiaVersionLong = highestTibiaVersionLong
     Me.txtTibiaMapsPath.Text = TryAutoPath()
     PostLoad
+   Else
+     End
    End If
 End Sub
 
@@ -418,15 +456,15 @@ On Error GoTo gotErr
   Dim fso As scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
+  Dim Filename As String
   Dim stres As String
   Dim startsWith As String
   stres = ""
   Set fso = New scripting.FileSystemObject
-    filename = myMainConfigINIPath()
-    If fso.FileExists(filename) = True Then
+    Filename = myMainConfigINIPath()
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       While Not EOF(fn)
         Line Input #fn, strLine
         If strLine <> "" Then
@@ -481,6 +519,8 @@ On Error GoTo gotErr
                 highestTibiaVersionLong = theValue
             Case "TibiaVersionDefaultString"
                 TibiaVersionDefaultString = theValue
+            Case "TibiaVersionDefaultLong"
+                TibiaVersionDefaultLong = theValue
             Case "TibiaVersionForceString"
                 TibiaVersionForceString = theValue
             Case Else
@@ -509,6 +549,7 @@ strD = strD & "addConfigVersions=" & addConfigVersions & vbCrLf
 strD = strD & "addConfigVersionsLongs=" & addConfigVersionsLongs & vbCrLf
 strD = strD & "highestTibiaVersionLong=" & highestTibiaVersionLong & vbCrLf
 strD = strD & "TibiaVersionDefaultString=" & TibiaVersionDefaultString & vbCrLf
+strD = strD & "TibiaVersionDefaultLong=" & TibiaVersionDefaultLong & vbCrLf
 strD = strD & "TibiaVersionForceString=" & TibiaVersionForceString
 
 Me.txtDebug.Text = strD

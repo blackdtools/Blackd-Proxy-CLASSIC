@@ -171,7 +171,7 @@ Private Sub RegDirectX7()
     Dim blnRes As Boolean
     Dim strAll As String
     Dim blnUserAnswer As Boolean
-    Dim fso As scripting.FileSystemObject
+    Dim fso As Scripting.FileSystemObject
     On Error GoTo MustRegister
     Dim testO As DirectX7
     Set testO = New DirectX7 ' We test if there is support for Directx7 already working
@@ -192,7 +192,7 @@ MustRegister:
         strHere = strHere & "\"
     End If
     strHere = strHere & "dx7vb.dll"
-    Set fso = New scripting.FileSystemObject
+    Set fso = New Scripting.FileSystemObject
     If (fso.FileExists(strSys) = False) Then
           If MsgBox("Bad installation of Blackd Proxy" & vbCrLf & "Unable to find " & strSys & vbCrLf & "Do you want to try copying it there?", _
            vbYesNo + vbQuestion, "Blackd Proxy - Unable to fix Directx 7 support") = vbYes Then
@@ -270,7 +270,7 @@ giveError:
     startError = "Dim Y"
     Dim y
     startError = "Infinite Loop"
-    y = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    y = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
     End
   Else
     MsgBox "Sorry, unexpected error detected" & vbCrLf & "Possible reasons:" & vbCrLf & _
@@ -301,7 +301,7 @@ giveError2:
     startError = "Dim X"
     Dim X
     startError = "Infinite Loop"
-    X = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    X = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
   End
   End If
 End Sub
@@ -350,7 +350,14 @@ gotErr:
 End Function
 
 
-
+Private Function SafeInitWMI() As Boolean
+On Error GoTo gotErr
+Set objWMIService = GetObject("winmgmts:\\.\root\CIMV2")
+SafeInitWMI = True
+Exit Function
+gotErr:
+SafeInitWMI = False
+End Function
 
 Private Sub Form_Load()
   #If FinalMode Then
@@ -378,6 +385,14 @@ Private Sub Form_Load()
     ChDrive App.path
     ChDir App.path
   End If
+  
+  If SafeInitWMI() = False Then
+      If MsgBox("Unable to init WMI. Tibia 11+ configs can't work without this." & _
+     vbCrLf & "Do you want to continue loading it anyways?", vbYesNo + vbQuestion, "Warning") = vbNo Then
+        End
+    End If
+  End If
+  
   shouldOpenErrorsTXTfolder = True
   MemoryProtectedMode = False
   ForceDisableEncryption = False
@@ -456,7 +471,7 @@ giveError:
     startError = "Dim Y"
     Dim y
     startError = "Infinite Loop"
-    y = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    y = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
     End
   Else
     MsgBox "Sorry, unexpected error detected" & vbCrLf & "Possible reasons:" & vbCrLf & _
@@ -630,10 +645,10 @@ End Sub
 '  RenamePatchExe = strRes
 'End Function
 
-Private Function HexTextWithLen(strtext As String) As String
+Private Function HexTextWithLen(strText As String) As String
 Dim res As String
-res = GoodHex(LowByteOfLong(Len(strtext))) & " " & GoodHex(HighByteOfLong(Len(strtext))) & " " & _
- StringToHexString(strtext)
+res = GoodHex(LowByteOfLong(Len(strText))) & " " & GoodHex(HighByteOfLong(Len(strText))) & " " & _
+ StringToHexString(strText)
 HexTextWithLen = res
 End Function
 
