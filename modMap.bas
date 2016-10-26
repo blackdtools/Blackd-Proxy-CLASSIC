@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "41.0" ' Proxy version ' string version
-Public Const myNumericVersion = 41000 ' numeric version
+Public Const ProxyVersion = "41.1" ' Proxy version ' string version
+Public Const myNumericVersion = 41100 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -1358,7 +1358,7 @@ Public Function ReadMap(idConnection As Integer, ByRef packet() As Byte, firstBy
   ' firstByte of first map packet should be &H64
   Dim pos As Long ' packet position
   Dim idTile As Long
-  Dim count As Long
+  Dim Count As Long
   Dim resF As TypePlayerInfo
   Dim strRes As String 'temp
   Dim zstep As Long
@@ -1369,7 +1369,7 @@ Public Function ReadMap(idConnection As Integer, ByRef packet() As Byte, firstBy
   Dim expectedPositions As Long ' expected map positions info (including skiped positions)
   Dim posX As Long
   Dim posY As Long
-  Dim posZ As Long
+  Dim posz As Long
   Dim nx As Long
   Dim ny As Long
   Dim nz As Long
@@ -1410,7 +1410,7 @@ Public Function ReadMap(idConnection As Integer, ByRef packet() As Byte, firstBy
 
 
   ' init counters
-  count = 0
+  Count = 0
   skipcount = 0
   ' ENTER THE MATRIX!!
    #If MapDebug = 1 Then
@@ -1433,7 +1433,7 @@ Public Function ReadMap(idConnection As Integer, ByRef packet() As Byte, firstBy
             'Matrix(ny, nx, nz, idconnection).s(0).t3 = &H0
             'Matrix(ny, nx, nz, idconnection).s(0).dblID = 0
             RtlMoveMemory Matrix(ny, nx, nz, idConnection), tmpStack, OptCte3
-            count = count + 1
+            Count = Count + 1
           Else 'else we have info about ground tile
 '            If count = expectedPositions Then
 '              Debug.Print "hey"
@@ -1453,19 +1453,19 @@ Public Function ReadMap(idConnection As Integer, ByRef packet() As Byte, firstBy
                     #End If
                 End If
                 pos = pos + 2
-                count = count + 1
+                Count = Count + 1
            ' End If
           End If
         Else
           ' skip a map position (no info)
           ' the TrueMap module will read a ground tile &H00 &H00 as "no info" -> colour black
-          count = count + 1
+          Count = Count + 1
 
 
           skipcount = skipcount - 1
           
           #If MapDebug = 1 Then
-            AddwriteOnFileSimple "mapdebug.txt", "[POSITION " & CStr(count) & " SKIPED, REAMINING SKIPS=" & CStr(skipcount) & "]"
+            AddwriteOnFileSimple "mapdebug.txt", "[POSITION " & CStr(Count) & " SKIPED, REAMINING SKIPS=" & CStr(skipcount) & "]"
           #End If
           'Matrix(ny, nx, nz, idconnection).s(0).t1 = &H0
           'Matrix(ny, nx, nz, idconnection).s(0).t2 = &H0
@@ -1497,7 +1497,7 @@ Public Function ReadNewFloors(idConnection As Integer, ByRef packet() As Byte, f
   ' firstByte of first map packet should be &H64
   Dim pos As Long ' packet position
   Dim idTile As Long
-  Dim count As Long
+  Dim Count As Long
   Dim resF As TypePlayerInfo
   Dim strRes As String 'temp
   Dim z As Long 'my z
@@ -1505,7 +1505,7 @@ Public Function ReadNewFloors(idConnection As Integer, ByRef packet() As Byte, f
 
   Dim posX As Long
   Dim posY As Long
-  Dim posZ As Long
+  Dim posz As Long
   Dim nx As Long
   Dim ny As Long
   Dim nz As Long
@@ -1517,7 +1517,7 @@ Public Function ReadNewFloors(idConnection As Integer, ByRef packet() As Byte, f
   pos = firstByte + 1
 
   ' init counters
-  count = 0
+  Count = 0
   skipcount = 0
   ' ENTER THE MATRIX!!
   For nz = startz To endz Step zstep
@@ -1535,7 +1535,7 @@ Public Function ReadNewFloors(idConnection As Integer, ByRef packet() As Byte, f
             'Matrix(ny, nx, nz, idconnection).s(0).t3 = &H0
             'Matrix(ny, nx, nz, idconnection).s(0).dblID = 0
             RtlMoveMemory Matrix(ny, nx, nz, idConnection), tmpStack, OptCte3
-            count = count + 1
+            Count = Count + 1
           Else 'else we have info about ground tile
 '            If count = expectedPositions Then
 '              Debug.Print "hey"
@@ -1550,13 +1550,13 @@ Public Function ReadNewFloors(idConnection As Integer, ByRef packet() As Byte, f
 
                 skipcount = skipcount + packet(pos)
                 pos = pos + 2
-                count = count + 1
+                Count = Count + 1
            ' End If
           End If
         Else
           ' skip a map position (no info)
           ' the TrueMap module will read a ground tile &H00 &H00 as "no info" -> colour black
-          count = count + 1
+          Count = Count + 1
           skipcount = skipcount - 1
           'Matrix(ny, nx, nz, idconnection).s(0).t1 = &H0
           'Matrix(ny, nx, nz, idconnection).s(0).t2 = &H0
@@ -1785,7 +1785,7 @@ Public Function UpdateRightSide(idConnection As Integer, packet() As Byte, start
   Dim ny As Long
   Dim nz As Long
   Dim skipcount As Long
-  Dim count As Long
+  Dim Count As Long
   Dim idTile As Long
   Dim resF As TypePlayerInfo
   Dim nameofgivenID As String
@@ -1796,7 +1796,7 @@ Public Function UpdateRightSide(idConnection As Integer, packet() As Byte, start
   Dim resT As Long
   Dim tmpdebugstrange As Long
   Dim Nfloors As Long
-  count = 0
+  Count = 0
   skipcount = 0
   pos = startPos + 1 ' skip type byte
   nx = 9
@@ -1834,7 +1834,7 @@ Public Function UpdateRightSide(idConnection As Integer, packet() As Byte, start
             'Matrix(ny, nx, nz, idconnection).s(0).t3 = &H0
             'Matrix(ny, nx, nz, idconnection).s(0).dblID = 0
             RtlMoveMemory Matrix(ny, nx, nz, idConnection), tmpStack, OptCte3
-            count = count + 1
+            Count = Count + 1
           Else 'else we have info about ground tile
 '            If count = expectedPositions Then
 '              Debug.Print "hey"
@@ -1849,13 +1849,13 @@ Public Function UpdateRightSide(idConnection As Integer, packet() As Byte, start
 
                 skipcount = skipcount + packet(pos)
                 pos = pos + 2
-                count = count + 1
+                Count = Count + 1
             'End If
           End If
         Else
           ' skip a map position (no info)
           ' the TrueMap module will read a ground tile &H00 &H00 as "no info" -> colour black
-          count = count + 1
+          Count = Count + 1
           skipcount = skipcount - 1
           'Matrix(ny, nx, nz, idconnection).s(0).t1 = &H0
           'Matrix(ny, nx, nz, idconnection).s(0).t2 = &H0
@@ -1881,7 +1881,7 @@ Public Function UpdateLeftSide(idConnection As Integer, packet() As Byte, startP
   Dim ny As Long
   Dim nz As Long
   Dim skipcount As Long
-  Dim count As Long
+  Dim Count As Long
   Dim idTile As Long
   Dim resF As TypePlayerInfo
   Dim nameofgivenID As String
@@ -1891,7 +1891,7 @@ Public Function UpdateLeftSide(idConnection As Integer, packet() As Byte, startP
   Dim zstep As Long
   Dim resT As Long
   Dim tmpdebugstrange As Long
-  count = 0
+  Count = 0
   skipcount = 0
   pos = startPos + 1 ' skip type byte
   nx = -8
@@ -1921,7 +1921,7 @@ Public Function UpdateLeftSide(idConnection As Integer, packet() As Byte, startP
             'Matrix(ny, nx, nz, idconnection).s(0).t3 = &H0
             'Matrix(ny, nx, nz, idconnection).s(0).dblID = 0
             RtlMoveMemory Matrix(ny, nx, nz, idConnection), tmpStack, OptCte3
-            count = count + 1
+            Count = Count + 1
           Else 'else we have info about ground tile
 '            If count = expectedPositions Then
 '              Debug.Print "hey"
@@ -1936,13 +1936,13 @@ Public Function UpdateLeftSide(idConnection As Integer, packet() As Byte, startP
 
                 skipcount = skipcount + packet(pos)
                 pos = pos + 2
-                count = count + 1
+                Count = Count + 1
             'End If
           End If
         Else
           ' skip a map position (no info)
           ' the TrueMap module will read a ground tile &H00 &H00 as "no info" -> colour black
-          count = count + 1
+          Count = Count + 1
           skipcount = skipcount - 1
           'Matrix(ny, nx, nz, idconnection).s(0).t1 = &H0
           'Matrix(ny, nx, nz, idconnection).s(0).t2 = &H0
@@ -1965,7 +1965,7 @@ Public Function UpdateNorthSide(idConnection As Integer, packet() As Byte, start
   Dim nz As Long
   Dim stackpos As Long
   Dim skipcount As Long
-  Dim count As Long
+  Dim Count As Long
   Dim idTile As Long
   Dim resF As TypePlayerInfo
   Dim nameofgivenID As String
@@ -1975,7 +1975,7 @@ Public Function UpdateNorthSide(idConnection As Integer, packet() As Byte, start
   Dim zstep As Long
   Dim resT As Long
   Dim tmpdebugstrange As Long
-  count = 0
+  Count = 0
   skipcount = 0
   pos = startPos + 1 ' skip type byte
   nx = myX(idConnection)
@@ -2005,7 +2005,7 @@ Public Function UpdateNorthSide(idConnection As Integer, packet() As Byte, start
             'Matrix(ny, nx, nz, idconnection).s(0).t3 = &H0
             'Matrix(ny, nx, nz, idconnection).s(0).dblID = 0
             RtlMoveMemory Matrix(ny, nx, nz, idConnection), tmpStack, OptCte3
-            count = count + 1
+            Count = Count + 1
           Else 'else we have info about ground tile
 '            If count = expectedPositions Then
 '              Debug.Print "hey"
@@ -2020,13 +2020,13 @@ Public Function UpdateNorthSide(idConnection As Integer, packet() As Byte, start
 
                 skipcount = skipcount + packet(pos)
                 pos = pos + 2
-                count = count + 1
+                Count = Count + 1
           '  End If
           End If
         Else
           ' skip a map position (no info)
           ' the TrueMap module will read a ground tile &H00 &H00 as "no info" -> colour black
-          count = count + 1
+          Count = Count + 1
           skipcount = skipcount - 1
           'Matrix(ny, nx, nz, idconnection).s(0).t1 = &H0
           'Matrix(ny, nx, nz, idconnection).s(0).t2 = &H0
@@ -2048,7 +2048,7 @@ Public Function UpdateSouthSide(idConnection As Integer, packet() As Byte, start
   Dim ny As Long
   Dim nz As Long
   Dim skipcount As Long
-  Dim count As Long
+  Dim Count As Long
   Dim idTile As Long
   Dim resF As TypePlayerInfo
   Dim nameofgivenID As String
@@ -2059,7 +2059,7 @@ Public Function UpdateSouthSide(idConnection As Integer, packet() As Byte, start
   Dim resT As Long
   Dim debugstrange As Long
   Dim Nfloors As Long
-  count = 0
+  Count = 0
   skipcount = 0
   pos = startPos + 1 ' skip type byte
   nx = myX(idConnection)
@@ -2095,7 +2095,7 @@ Public Function UpdateSouthSide(idConnection As Integer, packet() As Byte, start
             'Matrix(ny, nx, nz, idconnection).s(0).t3 = &H0
             'Matrix(ny, nx, nz, idconnection).s(0).dblID = 0
             RtlMoveMemory Matrix(ny, nx, nz, idConnection), tmpStack, OptCte3
-            count = count + 1
+            Count = Count + 1
           Else 'else we have info about ground tile
 '            If count = expectedPositions Then
 '              Debug.Print "hey"
@@ -2110,14 +2110,14 @@ Public Function UpdateSouthSide(idConnection As Integer, packet() As Byte, start
 
                 skipcount = skipcount + packet(pos)
                 pos = pos + 2
-                count = count + 1
+                Count = Count + 1
 '            End If
           End If
         Else
           ' skip a map position (no info)
           ' the TrueMap module will read a ground tile &H00 &H00 as "no info" -> colour black
 
-          count = count + 1
+          Count = Count + 1
 
           skipcount = skipcount - 1
           'Matrix(ny, nx, nz, idconnection).s(0).t1 = &H0
