@@ -104,18 +104,18 @@ End Sub
 
 Public Function LoadHPmanaConfig() As String
     On Error GoTo gotErr
-  Dim fso As scripting.FileSystemObject
-  Set fso = New scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  If fso.FileExists(App.path & "\HPmana.cfg") = False Then
+  If fso.FileExists(App.Path & "\HPmana.cfg") = False Then
     ReDim HPmanaConfig(0)
     Exit Function
   End If
   Set fso = Nothing
   ReDim HPmanaConfig(0)
   fn = FreeFile
-  Open App.path & "\HPmana.cfg" For Input As #fn
+  Open App.Path & "\HPmana.cfg" For Input As #fn
     While EOF(fn) = False
       Line Input #fn, strLine
       parseConfigLine strLine

@@ -453,14 +453,14 @@ End Sub
 
 Private Sub cmdReloadHD_Click()
 On Error GoTo gotErr
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
   Dim Filename As String
   Dim stres As String
   Dim startsWith As String
   stres = ""
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
     Filename = myMainConfigINIPath()
     If fso.FileExists(Filename) = True Then
       fn = FreeFile

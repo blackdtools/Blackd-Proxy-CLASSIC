@@ -4,11 +4,11 @@ Option Explicit
 '''''''
 'Types
 '''''''
-Private Type guid
-   data1 As Long
-   data2 As Integer
-   data3 As Integer
-   data4(7) As Byte
+Private Type Guid
+   Data1 As Long
+   Data2 As Integer
+   Data3 As Integer
+   Data4(7) As Byte
 End Type
 
 Private Type PicBmp
@@ -34,13 +34,13 @@ Private Declare Function GetDesktopWindow Lib "user32" () As Long
 
 Private Declare Function GetWindowRect Lib "user32" (ByVal hwnd As Long, lpRect As RECT) As Long
 Private Declare Function GetWindowDC Lib "user32" (ByVal hwnd As Long) As Long
-Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hdc As Long) As Long
-Private Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hdc As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
-Private Declare Function DeleteDC Lib "gdi32" (ByVal hdc As Long) As Long
-Private Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
-Private Declare Function BitBlt Lib "gdi32" (ByVal hDCDest As Long, ByVal XDest As Long, ByVal YDest As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hDCSrc As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
-Private Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
-Private Declare Function OleCreatePictureIndirect Lib "olepro32" (PicDesc As PicBmp, RefIID As guid, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
+Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDC As Long) As Long
+Private Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Private Declare Function DeleteDC Lib "gdi32" (ByVal hDC As Long) As Long
+Private Declare Function SelectObject Lib "gdi32" (ByVal hDC As Long, ByVal hObject As Long) As Long
+Private Declare Function BitBlt Lib "gdi32" (ByVal hdcDest As Long, ByVal XDest As Long, ByVal YDest As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hdcSrc As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
+Private Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hDC As Long) As Long
+Private Declare Function OleCreatePictureIndirect Lib "olepro32" (PicDesc As PicBmp, RefIID As Guid, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
 Private Declare Function BringWindowToTop Lib "user32" (ByVal hwnd As Long) As Long
         
         
@@ -50,7 +50,7 @@ Public Function GetWindowScreenshot(WndHandle As Long, SavePath As String, Optio
 '
     On Error GoTo ErrorHandler
 
-    Dim hDCSrc As Long
+    Dim hdcSrc As Long
     Dim hDCMemory As Long
     Dim hBmp As Long
     Dim hBmpPrev As Long
@@ -58,7 +58,7 @@ Public Function GetWindowScreenshot(WndHandle As Long, SavePath As String, Optio
     Dim HeightSrc As Long
     Dim Pic As PicBmp
     Dim IPic As IPicture
-    Dim IID_IDispatch As guid
+    Dim IID_IDispatch As Guid
     Dim rc As RECT
     Dim pictr As PictureBox
     
@@ -71,33 +71,33 @@ Public Function GetWindowScreenshot(WndHandle As Long, SavePath As String, Optio
     HeightSrc = rc.Bottom - rc.Top
     
     'Get Window  device context
-    hDCSrc = GetWindowDC(WndHandle)
+    hdcSrc = GetWindowDC(WndHandle)
     
     'create a memory device context
-    hDCMemory = CreateCompatibleDC(hDCSrc)
+    hDCMemory = CreateCompatibleDC(hdcSrc)
     
     'create a bitmap compatible with window hdc
-    hBmp = CreateCompatibleBitmap(hDCSrc, WidthSrc, HeightSrc)
+    hBmp = CreateCompatibleBitmap(hdcSrc, WidthSrc, HeightSrc)
     
     'copy newly created bitmap into memory device context
     hBmpPrev = SelectObject(hDCMemory, hBmp)
     
     'copy window window hdc to memory hdc
     Call BitBlt(hDCMemory, 0, 0, WidthSrc, HeightSrc, _
-                hDCSrc, 0, 0, vbSrcCopy)
+                hdcSrc, 0, 0, vbSrcCopy)
       
     'Get Bmp from memory Dc
     hBmp = SelectObject(hDCMemory, hBmpPrev)
     
     'release the created objects and free memory
     Call DeleteDC(hDCMemory)
-    Call ReleaseDC(WndHandle, hDCSrc)
+    Call ReleaseDC(WndHandle, hdcSrc)
     
     'fill in OLE IDispatch Interface ID
     With IID_IDispatch
-       .data1 = &H20400
-       .data4(0) = &HC0
-       .data4(7) = &H46
+       .Data1 = &H20400
+       .Data4(0) = &HC0
+       .Data4(7) = &H46
      End With
     
     'fill Pic with necessary parts
@@ -130,7 +130,7 @@ Public Sub GetScreenshot(ByRef frmS As Form, pictureName As String)
   Dim strCompleteName As String
   Dim sRes As String
   Dim hwnd As Long
-  strCompleteName = App.path & "\" & pictureName
+  strCompleteName = App.Path & "\" & pictureName
   hwnd = GetDesktopWindow()
   sRes = GetWindowScreenshot(hwnd, strCompleteName, 0)
   If sRes <> "" Then
@@ -170,7 +170,7 @@ Public Sub GetScreenshot(ByRef frmS As Form, pictureName As String)
   End If
   frmS.picScreen.Picture = Clipboard.GetData(vbCFBitmap)
   DoEvents
-  strCompleteName = App.path & "\" & pictureName
+  strCompleteName = App.Path & "\" & pictureName
   SavePicture frmS.picScreen.Picture, strCompleteName
   'SavePicture frmS.picScreen.Image, strCompleteName
   frmS.Hide

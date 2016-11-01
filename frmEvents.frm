@@ -625,7 +625,7 @@ Public Sub UpdateValues()
     For i = 1 To numofEv
       With gridEvents
       .TextMatrix(i, 0) = CStr(CustomEvents(eventsIDselected).ev(i).id)
-      .TextMatrix(i, 1) = CustomEvents(eventsIDselected).ev(i).flags
+      .TextMatrix(i, 1) = CustomEvents(eventsIDselected).ev(i).Flags
       .TextMatrix(i, 2) = CustomEvents(eventsIDselected).ev(i).trigger
       .TextMatrix(i, 3) = CustomEvents(eventsIDselected).ev(i).action
       .Row = i
@@ -684,7 +684,7 @@ End Sub
 
 
 Public Function AddEvent(idConnection As Integer, id As Integer, fl As String, _
- tr As String, ac As String) As Long
+ tR As String, ac As String) As Long
   Dim curr As Long
   #If FinalMode Then
   On Error GoTo gotErr
@@ -700,8 +700,8 @@ Public Function AddEvent(idConnection As Integer, id As Integer, fl As String, _
   curr = (CustomEvents(idConnection).Number) + 1
   CustomEvents(idConnection).Number = curr
   CustomEvents(idConnection).ev(curr).id = id
-  CustomEvents(idConnection).ev(curr).flags = fl
-  CustomEvents(idConnection).ev(curr).trigger = tr
+  CustomEvents(idConnection).ev(curr).Flags = fl
+  CustomEvents(idConnection).ev(curr).trigger = tR
   CustomEvents(idConnection).ev(curr).action = ac
   AddEvent = 0
   Exit Function
@@ -752,7 +752,7 @@ Private Sub cmdDeleteSel_Click()
   Dim firstrow As Long
   Dim lastrow As Long
   Dim firstI As Long
-  Dim lasti As Long
+  Dim lastI As Long
   Dim i As Long
   Dim difR As Long
   Dim numofEv As Long
@@ -778,12 +778,12 @@ Private Sub cmdDeleteSel_Click()
   Else
   ' lblDebug.Caption = "First = " & firstRow & " ; Last = " & lastRow
    firstI = firstrow
-   lasti = lastrow
-   difR = lasti - firstI + 1
+   lastI = lastrow
+   difR = lastI - firstI + 1
    For i = firstI To numofEv
      If i + difR <= MAXEVENTS Then
        CustomEvents(eventsIDselected).ev(i).id = CustomEvents(eventsIDselected).ev(i + difR).id
-       CustomEvents(eventsIDselected).ev(i).flags = CustomEvents(eventsIDselected).ev(i + difR).flags
+       CustomEvents(eventsIDselected).ev(i).Flags = CustomEvents(eventsIDselected).ev(i + difR).Flags
        CustomEvents(eventsIDselected).ev(i).trigger = CustomEvents(eventsIDselected).ev(i + difR).trigger
        CustomEvents(eventsIDselected).ev(i).action = CustomEvents(eventsIDselected).ev(i + difR).action
       End If
@@ -799,10 +799,10 @@ gotErr:
 End Sub
 
 Private Sub cmdLoadEv_Click()
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine(1 To 4) As String
-  Dim filename As String
+  Dim Filename As String
   Dim i As Long
   Dim p As Long
   Dim completed As Boolean
@@ -811,14 +811,14 @@ Private Sub cmdLoadEv_Click()
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   If eventsIDselected > 0 Then
     lblInfo.Caption = "Load OK"
     DeleteAllEvents eventsIDselected
-    filename = App.path & "\events\" & txtFile.Text
-    If fso.FileExists(filename) = True Then
+    Filename = App.Path & "\events\" & txtFile.Text
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       i = 0
       While Not EOF(fn)
         completed = True
@@ -867,10 +867,10 @@ Private Sub cmdSaveEv_Click()
   Dim i As Long
   If eventsIDselected > 0 Then
     fn = FreeFile
-    Open App.path & "\events\" & txtFile.Text For Output As #fn
+    Open App.Path & "\events\" & txtFile.Text For Output As #fn
     For i = 1 To CustomEvents(eventsIDselected).Number
       Print #fn, CStr(CustomEvents(eventsIDselected).ev(i).id)
-      Print #fn, CustomEvents(eventsIDselected).ev(i).flags
+      Print #fn, CustomEvents(eventsIDselected).ev(i).Flags
       Print #fn, CustomEvents(eventsIDselected).ev(i).trigger
       Print #fn, CustomEvents(eventsIDselected).ev(i).action
     Next i
@@ -1012,11 +1012,11 @@ Public Sub ReloadFiles()
   On Error GoTo gotErr
   #End If
   Dim strPath As String
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
-  Set fs = New scripting.FileSystemObject
-  strPath = App.path & "\events"
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
+  Set fs = New Scripting.FileSystemObject
+  strPath = App.Path & "\events"
   Set f = fs.GetFolder(strPath)
   txtFile.Clear
   For Each f1 In f.Files

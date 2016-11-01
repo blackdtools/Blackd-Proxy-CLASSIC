@@ -187,7 +187,7 @@ MustRegister:
         strSys = strSys & "\"
     End If
     strSys = strSys & "dx7vb.dll"
-    strHere = App.path
+    strHere = App.Path
     If Right$(strHere, 1) <> "\" Then
         strHere = strHere & "\"
     End If
@@ -235,7 +235,7 @@ Private Sub Load2()
   startError = "  Set DirectX = New DirectX7"
   Set DirectX = New DirectX7
   startError = "  Set DX = New DirectX7"
-  Set DX = New DirectX7
+  Set dx = New DirectX7
 continueload:
   #If FinalMode Then
   On Error GoTo giveError
@@ -270,14 +270,14 @@ giveError:
     startError = "Dim Y"
     Dim y
     startError = "Infinite Loop"
-    y = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    y = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
     End
   Else
     MsgBox "Sorry, unexpected error detected" & vbCrLf & "Possible reasons:" & vbCrLf & _
     " - Blackd Proxy not installed correctly" & vbCrLf & _
     " Details:" & vbCrLf & _
     " - Could not execute this: " & startError & vbCrLf & _
-    " - In path: " & App.path & vbCrLf & _
+    " - In path: " & App.Path & vbCrLf & _
     " - Error number: " & Err.Number & vbCrLf & _
     " - Error description: " & Err.Description & _
     " - Last Dll Error: " & Err.LastDllError, _
@@ -301,7 +301,7 @@ giveError2:
     startError = "Dim X"
     Dim X
     startError = "Infinite Loop"
-    X = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    X = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
   End
   End If
 End Sub
@@ -382,8 +382,8 @@ Private Sub Form_Load()
   End If
   
   If IsIDE = True Then
-    ChDrive App.path
-    ChDir App.path
+    ChDrive App.Path
+    ChDir App.Path
   End If
   
   If SafeInitWMI() = False Then
@@ -471,14 +471,14 @@ giveError:
     startError = "Dim Y"
     Dim y
     startError = "Infinite Loop"
-    y = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    y = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
     End
   Else
     MsgBox "Sorry, unexpected error detected" & vbCrLf & "Possible reasons:" & vbCrLf & _
     " - Blackd Proxy not installed correctly" & vbCrLf & _
     " Details:" & vbCrLf & _
     " - Could not execute this: " & startError & vbCrLf & _
-    " - In path: " & App.path & vbCrLf & _
+    " - In path: " & App.Path & vbCrLf & _
     " - Error number: " & Err.Number & vbCrLf & _
     " - Error description: " & Err.Description & _
     " - Last Dll Error: " & Err.LastDllError, _
@@ -645,10 +645,10 @@ End Sub
 '  RenamePatchExe = strRes
 'End Function
 
-Private Function HexTextWithLen(strText As String) As String
+Private Function HexTextWithLen(strtext As String) As String
 Dim res As String
-res = GoodHex(LowByteOfLong(Len(strText))) & " " & GoodHex(HighByteOfLong(Len(strText))) & " " & _
- StringToHexString(strText)
+res = GoodHex(LowByteOfLong(Len(strtext))) & " " & GoodHex(HighByteOfLong(Len(strtext))) & " " & _
+ StringToHexString(strtext)
 HexTextWithLen = res
 End Function
 

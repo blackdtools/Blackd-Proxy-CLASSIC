@@ -205,7 +205,7 @@ Private Function DeleteSubkeys(ByVal section As Long, ByVal _
 Dim hKey As Long
 Dim subkeys As Collection
 Dim subkey_num As Long
-Dim length As Long
+Dim Length As Long
 Dim subkey_name As String
 
     ' Open the key.
@@ -221,10 +221,10 @@ Dim subkey_name As String
     subkey_num = 0
     Do
         ' Enumerate subkeys until we get an error.
-        length = 256
-        subkey_name = Space$(length)
+        Length = 256
+        subkey_name = Space$(Length)
         If RegEnumKey(hKey, subkey_num, _
-            subkey_name, length) _
+            subkey_name, Length) _
                 <> ERROR_SUCCESS Then Exit Do
         subkey_num = subkey_num + 1
 
@@ -234,7 +234,7 @@ Dim subkey_name As String
     Loop
     
     ' Recursively delete the subkeys and their subkeys.
-    For subkey_num = 1 To subkeys.count
+    For subkey_num = 1 To subkeys.Count
         ' Delete the subkey's subkeys.
         DeleteSubkeys section, key_name & "\" & _
             subkeys(subkey_num)
@@ -261,7 +261,7 @@ Dim subkey_values As Collection
 Dim subkey_num As Integer
 Dim subkey_name As String
 Dim subkey_value As String
-Dim length As Long
+Dim Length As Long
 Dim hKey As Long
 Dim txt As String
 Dim subkey_txt As String
@@ -285,10 +285,10 @@ Dim subkey_txt As String
     subkey_num = 0
     Do
         ' Enumerate subkeys until we get an error.
-        length = 256
-        subkey_name = Space$(length)
+        Length = 256
+        subkey_name = Space$(Length)
         If RegEnumKey(hKey, subkey_num, _
-            subkey_name, length) _
+            subkey_name, Length) _
                 <> ERROR_SUCCESS Then Exit Do
         subkey_num = subkey_num + 1
         
@@ -297,16 +297,16 @@ Dim subkey_txt As String
         subkeys.Add subkey_name
     
         ' Get the subkey's value.
-        length = 256
-        subkey_value = Space$(length)
+        Length = 256
+        subkey_value = Space$(Length)
         If RegQueryValue(hKey, subkey_name, _
-            subkey_value, length) _
+            subkey_value, Length) _
             <> ERROR_SUCCESS _
         Then
             subkey_values.Add "Error"
         Else
             ' Remove the trailing null character.
-            subkey_value = Left$(subkey_value, length - 1)
+            subkey_value = Left$(subkey_value, Length - 1)
             subkey_values.Add subkey_value
         End If
     Loop
@@ -318,7 +318,7 @@ Dim subkey_txt As String
     End If
 
     ' Recursively get information on the keys.
-    For subkey_num = 1 To subkeys.count
+    For subkey_num = 1 To subkeys.Count
         subkey_txt = GetKeyInfo(section, key_name & "\" & _
             subkeys(subkey_num), indent + 2)
         txt = txt & Space(indent) & _
@@ -333,10 +333,10 @@ End Function
 
 Public Function BlackdFileCopy(strFrom As String, strTo As String) As String
     On Error GoTo gotErr
-    Dim fs As scripting.FileSystemObject
-    Dim fol As scripting.Folder
-    Dim fil As scripting.Folder
-    Set fs = New scripting.FileSystemObject
+    Dim fs As Scripting.FileSystemObject
+    Dim fol As Scripting.Folder
+    Dim fil As Scripting.Folder
+    Set fs = New Scripting.FileSystemObject
     If fs.FileExists(strTo) = True Then
         fs.DeleteFile strTo, True
     End If
@@ -353,10 +353,10 @@ End Function
 
 Public Function BlackdFileExistCheck(strTo As String) As Boolean
     On Error GoTo gotErr
-    Dim fs As scripting.FileSystemObject
-    Dim fol As scripting.Folder
-    Dim fil As scripting.Folder
-    Set fs = New scripting.FileSystemObject
+    Dim fs As Scripting.FileSystemObject
+    Dim fol As Scripting.Folder
+    Dim fil As Scripting.Folder
+    Set fs = New Scripting.FileSystemObject
     If fs.FileExists(strTo) = False Then
         BlackdFileExistCheck = False
     Else
@@ -434,7 +434,7 @@ Public Function CopyMyselfTo(strNewName As String) As String
     Dim strbase As String
     Dim strFrom As String
     Dim strTo As String
-    strbase = App.path
+    strbase = App.Path
     If Right$(strbase, 1) <> "\" Then
         strbase = strbase & "\"
     End If

@@ -13,10 +13,10 @@ Public AlternativeBinding As Long
 
 Public Sub LoadServerIps()
     On Error GoTo gotErr
-    Dim fso As scripting.FileSystemObject
+    Dim fso As Scripting.FileSystemObject
     Dim fn As Integer
     Dim strLine As String
-    Dim filename As String
+    Dim Filename As String
     Dim lngPosSpace As Long
     Dim readingLine As Long
     Dim strServer As String
@@ -24,11 +24,11 @@ Public Sub LoadServerIps()
     readingLine = 0
     LastServerID = -1
     frmAdvanced.cmbTibiaServers.Clear
-    Set fso = New scripting.FileSystemObject
-    filename = App.path & "\ips\ips.txt"
-    If fso.FileExists(filename) = True Then
+    Set fso = New Scripting.FileSystemObject
+    Filename = App.Path & "\ips\ips.txt"
+    If fso.FileExists(Filename) = True Then
         fn = FreeFile
-        Open filename For Input As #fn
+        Open Filename For Input As #fn
         While Not EOF(fn)
             Line Input #fn, strLine
             readingLine = readingLine + 1

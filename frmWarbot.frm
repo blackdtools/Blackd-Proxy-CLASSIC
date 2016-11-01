@@ -622,7 +622,7 @@ Public Sub cmdChangeOutfit_Click()
   Dim b3 As Byte
   Dim b4 As Byte
   Dim b5 As Byte
-  Dim filename As String
+  Dim Filename As String
   b0 = CByte(CLng(txtOutfit(0).Text))
   If ((b0 = 0) And (TibiaVersionLong > 760)) Then
     b0 = firstValidOutfit
@@ -633,9 +633,9 @@ Public Sub cmdChangeOutfit_Click()
   b4 = CByte(CLng(txtOutfit(4).Text))
   b5 = CByte(CLng(txtOutfit(5).Text))
   If (lstGroups.ListIndex >= 0) Then
-    filename = lstGroups.List(lstGroups.ListIndex)
-    filename = Left$(filename, Len(filename) - 3) & "out"
-    SaveOutfit filename, b0, b1, b2, b3, b4, b5
+    Filename = lstGroups.List(lstGroups.ListIndex)
+    Filename = Left$(Filename, Len(Filename) - 3) & "out"
+    SaveOutfit Filename, b0, b1, b2, b3, b4, b5
     ReLoadAllCharOutfits
   End If
 End Sub
@@ -824,18 +824,18 @@ Private Sub Form_Load()
   txtOutfit(4) = lastValid(4)
   txtOutfit(5) = lastValid(5)
   
-  Set OutfitOfName(0) = New scripting.Dictionary
-  Set OutfitOfName(1) = New scripting.Dictionary
-  Set OutfitOfName(2) = New scripting.Dictionary
-  Set OutfitOfName(3) = New scripting.Dictionary
-  Set OutfitOfName(4) = New scripting.Dictionary
-  Set OutfitOfName(5) = New scripting.Dictionary
-  Set OutfitOfChar(0) = New scripting.Dictionary
-  Set OutfitOfChar(1) = New scripting.Dictionary
-  Set OutfitOfChar(2) = New scripting.Dictionary
-  Set OutfitOfChar(3) = New scripting.Dictionary
-  Set OutfitOfChar(4) = New scripting.Dictionary
-  Set OutfitOfChar(5) = New scripting.Dictionary
+  Set OutfitOfName(0) = New Scripting.Dictionary
+  Set OutfitOfName(1) = New Scripting.Dictionary
+  Set OutfitOfName(2) = New Scripting.Dictionary
+  Set OutfitOfName(3) = New Scripting.Dictionary
+  Set OutfitOfName(4) = New Scripting.Dictionary
+  Set OutfitOfName(5) = New Scripting.Dictionary
+  Set OutfitOfChar(0) = New Scripting.Dictionary
+  Set OutfitOfChar(1) = New Scripting.Dictionary
+  Set OutfitOfChar(2) = New Scripting.Dictionary
+  Set OutfitOfChar(3) = New Scripting.Dictionary
+  Set OutfitOfChar(4) = New Scripting.Dictionary
+  Set OutfitOfChar(5) = New Scripting.Dictionary
   LoadWarbotFiles
   lastClient = -1
   Me.cmdStart.Caption = "DEACTIVATED - press to run changer"
@@ -853,10 +853,10 @@ End Sub
 
 
 Private Sub lstGroups_Click()
-  Dim filename As String
+  Dim Filename As String
   If lstGroups.ListIndex >= 0 Then
-    filename = lstGroups.List(lstGroups.ListIndex)
-    LoadGroupOutfit filename
+    Filename = lstGroups.List(lstGroups.ListIndex)
+    LoadGroupOutfit Filename
   End If
 End Sub
 
@@ -982,16 +982,16 @@ Public Sub ReloadAutohealFile()
   #If FinalMode = 1 Then
   On Error GoTo gotErr
   #End If
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
-  Set fso = New scripting.FileSystemObject
+  Dim Filename As String
+  Set fso = New Scripting.FileSystemObject
     lstAutoheal.Clear
-    filename = App.path & "\" & txtFileName.Text
-    If fso.FileExists(filename) = True Then
+    Filename = App.Path & "\" & txtFileName.Text
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       While Not EOF(fn)
         Line Input #fn, strLine
         If strLine <> "" Then
@@ -1021,7 +1021,7 @@ Public Sub SaveAutoHealList()
   Dim limI As Long
   limI = lstAutoheal.ListCount - 1
   fn = FreeFile
-  Open App.path & "\" & txtFileName.Text For Output As #fn
+  Open App.Path & "\" & txtFileName.Text For Output As #fn
     For i = 0 To limI
       Print #fn, lstAutoheal.List(i)
     Next i

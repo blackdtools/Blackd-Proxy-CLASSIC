@@ -5,6 +5,7 @@ Attribute VB_Name = "modTibia11Functions"
 ' However, you should not share it with other people.
 #Const Tibia11allowed = 0
 #Const FinalMode = 1
+#Const DebugConEvents = 0
 Option Explicit
 #If Tibia11allowed = 1 Then
     Public Const Tibia11allowed As Boolean = True
@@ -12,6 +13,11 @@ Option Explicit
     Public Const Tibia11allowed As Boolean = False
 #End If
 
+#If DebugConEvents = 1 Then
+    Public Const cteDebugConEvents As Boolean = True
+#Else
+    Public Const cteDebugConEvents As Boolean = False
+#End If
 
 Public Const defaultGameServerEnd As String = "-lb.ciproxy.com"
 
@@ -266,7 +272,7 @@ Private Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Lo
 Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
 
 
-Public moduleDictionary As scripting.Dictionary
+Public moduleDictionary As Scripting.Dictionary
 Public objWMIService As Object
 
 
@@ -648,7 +654,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     'Dim count As Long
     Dim uModule As MODULEENTRY32W, lModuleSnapshot&
     If (moduleDictionary Is Nothing) Then
-        Set moduleDictionary = New scripting.Dictionary
+        Set moduleDictionary = New Scripting.Dictionary
     End If
     ' EnumAllWindows will obtain a snapshoot of all current windows references.
     Call EnumAllWindows ' Here we will only call  EnumAllWindows once, to save time.
@@ -733,7 +739,7 @@ End Function
 
 
 Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As Long, ByVal adrSTARTER_ITEM As Long, _
-                                     ByRef dict As scripting.Dictionary, _
+                                     ByRef dict As Scripting.Dictionary, _
                                      ByRef totalItems As Long, ByVal currentDepth As Long, _
                                      ByRef maxDepth As Long, ByRef bytesPerElement As Long, _
                                      Optional ByRef maxValidKeyID As Long = -1, _
@@ -787,7 +793,7 @@ End Sub
 
 Public Sub ReadTibia11Collection(ByRef pid As Long, adrPath As AddressPath, _
                                       ByRef bytesPerElement As Long, _
-                                      ByRef dict As scripting.Dictionary, _
+                                      ByRef dict As Scripting.Dictionary, _
                                       Optional ByVal directAddress As Long = -1, _
                                       Optional ByVal customDepth As Long = -1, _
                                       Optional ByVal maxValidKeyID As Long = -1, _
@@ -799,7 +805,7 @@ Public Sub ReadTibia11Collection(ByRef pid As Long, adrPath As AddressPath, _
  
     Dim maxDepth As Long
     Dim p0, p1, p2 As Long
-    Set dict = New scripting.Dictionary
+    Set dict = New Scripting.Dictionary
     If (directAddress > -1) Then
         adrCOLLECTION_START = directAddress
     Else
@@ -823,169 +829,222 @@ Public Sub ReadTibia11Collection(ByRef pid As Long, adrPath As AddressPath, _
     fillCollectionDictionary pid, p2, adrSTARTER_ITEM, dict, totalItems, 0, maxDepth, bytesPerElement, maxValidKeyID, addBaseAddress
 End Sub
 
-' I am investigating this at this moment. This function does not work yet
-Public Function FindCollectionItemByKey(ByRef pid As Long, adrPath As AddressPath, ByRef keyToSearch As Long) As Long
-    Const maxDepth As Long = 10
-    Dim currentDepth As Long
-    Dim adrCOLLECTION_START As Long
-    Dim adrCurrentItem As Long
-    Dim p0, p1, p2 As Long
-    Dim lowKey, midKey, highKey As Long
-    Dim res As Long
-    Dim keyDiffP0, keyDiffP1, keyDiffP2 As Long
-    adrCOLLECTION_START = ReadCurrentAddress(pid, adrPath, -1, False)
-    adrCurrentItem = QMemory_Read4Bytes(pid, adrCOLLECTION_START)
-    currentDepth = 1
-     Debug.Print "Now searching " & CStr(keyToSearch) & "..."
-    Do
-        p0 = QMemory_Read4Bytes(pid, adrCurrentItem)
-        p1 = QMemory_Read4Bytes(pid, adrCurrentItem + 4)
-        p2 = QMemory_Read4Bytes(pid, adrCurrentItem + 8)
-        lowKey = QMemory_Read4Bytes(pid, p0 + &H10)
-        midKey = QMemory_Read4Bytes(pid, p1 + &H10)
-        highKey = QMemory_Read4Bytes(pid, p2 + &H10)
-        Debug.Print "Iteration #" & CStr(currentDepth) & ": [" & CStr(lowKey) & "," & CStr(midKey) & "," & CStr(highKey) & "]"
-        If (keyToSearch = lowKey) Then
-            Debug.Print "OK: Key " & CStr(keyToSearch) & " found at p0"
-            res = p0
-            Exit Do
-        End If
-        If (keyToSearch = midKey) Then
-            Debug.Print "OK: Key " & CStr(keyToSearch) & " found at p1"
-            res = p1
-            Exit Do
-        End If
-        If (keyToSearch = highKey) Then
-            Debug.Print "OK: Key " & CStr(keyToSearch) & " found at p2"
-            res = p2
-            Exit Do
-        End If
-        If (keyToSearch < lowKey) Then
-            Debug.Print "FAIL: Key " & CStr(keyToSearch) & " not found in this collection"
-            res = -1
-            Exit Do
-        End If
-        If (keyToSearch > highKey) Then
-            Debug.Print "FAIL: Key " & CStr(keyToSearch) & " not found in this collection"
-            res = -1
-            Exit Do
-        End If
-        adrCurrentItem = p1
-        
-        currentDepth = currentDepth + 1
-    Loop Until (currentDepth > maxDepth) ' we set a max number of loops, just in case
-    FindCollectionItemByKey = res
-End Function
-Public Function BitConverter_ToInt16(ByRef arr() As Byte, ByRef pos As Long) As Long
-    Dim i As Integer
-    CopyMemory i, arr(pos), 2
-    BitConverter_ToInt16 = CLng(i)
-End Function
 
-Public Function BitConverter_ToInt32(ByRef arr() As Byte, ByRef pos As Long) As Long
-    Dim l As Long
-    CopyMemory l, arr(pos), 4
-    BitConverter_ToInt32 = l
-End Function
-    
-Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As AddressPath, _
- ByRef res() As TibiaServerEntry, Optional ByVal stopIfPort As Long = -1) As Long
-    Dim tmpRes As scripting.Dictionary
-    Dim resSize As Long
-    Dim tmpElement As TibiaServerEntry
-    Dim i As Long
-    Dim item As Variant
-    Dim Key As Long
-    Dim val() As Byte
-    Dim adrCOLLECTION_START As Long
-    Dim adrSTARTER_ITEM As Long
-    Dim totalItems As Long
-    Dim auxAdr As Long
-    Dim firstChar As String
-    Dim currentPort As Long
-    Const cte_bytesPerRegister As Long = &H24
+Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrentItem As Long, _
+                                     ByVal adrPrev As Long, _
+                                     ByRef dict As Scripting.Dictionary, _
+                                     ByVal currentDepth As Long, _
+                                     ByRef maxDepth As Long, ByRef adrRoot As Long) As Long
     On Error GoTo gotErr
-    If stopIfPort = -1 Then
-        ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, , , , True
-    Else
-        adrCOLLECTION_START = ReadCurrentAddress(pid, adrPath, -1, False)
-        If (adrCOLLECTION_START = -1) Then
-            ReadTibia11ServerList = -1
-            Exit Function
-        End If
-        totalItems = QMemory_Read4Bytes(pid, adrCOLLECTION_START + 4)
-        If (totalItems = 0) Then
-            ReadTibia11ServerList = -1
-            Exit Function
-        End If
-        adrSTARTER_ITEM = QMemory_Read4Bytes(pid, adrCOLLECTION_START)
-        If (auxAdr = -1) Then
-            ReadTibia11ServerList = -1
-            Exit Function
-        End If
-        
-        auxAdr = QMemory_Read4Bytes(pid, adrSTARTER_ITEM)
-        If (auxAdr = -1) Then
-            ReadTibia11ServerList = -1
-            Exit Function
-        End If
-        
-        currentPort = QMemory_Read4Bytes(pid, auxAdr + &H20)
-        If (stopIfPort = 7171) Then
-            auxAdr = QMemory_Read4Bytes(pid, auxAdr + &H1C)
-            If (auxAdr = -1) Then
-                ReadTibia11ServerList = -1
-                Exit Function
-            End If
-            firstChar = QMemory_ReadString(pid, auxAdr, 1)
-            If (firstChar = "1") Then
-                ReadTibia11ServerList = -2
-                Exit Function
-            End If
-        Else
-            If (currentPort = stopIfPort) Then
-                ReadTibia11ServerList = -2
-                Exit Function
+        Dim id As Long
+        Dim c0, c1, c2 As Long
+        Dim Count As Long
+        Count = 1
+        id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
+        If (dict.Exists(id) = False) Then
+            dict(id) = adrCurrentItem
+            If (currentDepth < maxDepth) Then
+                  Dim p0, p1, p2 As Long
+                  p0 = QMemory_Read4Bytes(pid, adrCurrentItem)
+                  p1 = QMemory_Read4Bytes(pid, adrCurrentItem + 4)
+                  p2 = QMemory_Read4Bytes(pid, adrCurrentItem + 8)
+                  If Not ((p0 = adrPrev) Or (p0 = adrRoot)) Then
+                    c0 = fillCollectionDictionaryMIN(pid, p0, adrCurrentItem, dict, currentDepth + 1, maxDepth, adrRoot)
+                    Count = Count + c0
+                  End If
+                  If Not ((p1 = adrPrev) Or (p1 = adrRoot)) Then
+                    c1 = fillCollectionDictionaryMIN(pid, p1, adrCurrentItem, dict, currentDepth + 1, maxDepth, adrRoot)
+                    Count = Count + c1
+                  End If
+                  If Not ((p2 = adrPrev) Or (p2 = adrRoot)) Then
+                   c2 = fillCollectionDictionaryMIN(pid, p2, adrCurrentItem, dict, currentDepth + 1, maxDepth, adrRoot)
+                   Count = Count + c2
+                  End If
             End If
         End If
-        ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, adrCOLLECTION_START, , , True
+        fillCollectionDictionaryMIN = Count
+        Exit Function
+gotErr:
+        fillCollectionDictionaryMIN = 0
+        Debug.Print ("Something failed: " + Err.Description)
+End Function
+Public Sub ReadTibia11CollectionMIN(ByRef pid As Long, adrPath As AddressPath, _
+                                      ByRef dict As Scripting.Dictionary)
+                                    
+    Dim adrCOLLECTION_START As Long
+    Dim totalItems As Long
+    Dim adrSTARTER_ITEM As Long
+    Dim maxDepth As Long
+    Dim p0, p1, p2 As Long
+    Dim item As Variant
+    Dim iterCount As Long
+    Dim c0, c1, c2 As Long
+    Dim adrRoot As Long
+    iterCount = 0
+    Set dict = New Scripting.Dictionary
+    adrCOLLECTION_START = ReadCurrentAddress(pid, adrPath, -1, False)
+    totalItems = QMemory_Read4Bytes(pid, adrCOLLECTION_START + 4)
+    If (totalItems = 0) Then
+        Exit Sub
     End If
-    resSize = tmpRes.Count
-    If (resSize = 0) Then
-        ReadTibia11ServerList = -1
+    maxDepth = totalItems
+    adrSTARTER_ITEM = QMemory_Read4Bytes(pid, adrCOLLECTION_START)
+    adrRoot = adrSTARTER_ITEM
+    p0 = QMemory_Read4Bytes(pid, adrSTARTER_ITEM)
+    p1 = QMemory_Read4Bytes(pid, adrSTARTER_ITEM + 4)
+    p2 = QMemory_Read4Bytes(pid, adrSTARTER_ITEM + 8)
+    c0 = fillCollectionDictionaryMIN(pid, p0, adrSTARTER_ITEM, dict, 0, maxDepth, adrRoot)
+    c1 = fillCollectionDictionaryMIN(pid, p1, adrSTARTER_ITEM, dict, 0, maxDepth, adrRoot)
+    c2 = fillCollectionDictionaryMIN(pid, p2, adrSTARTER_ITEM, dict, 0, maxDepth, adrRoot)
+    iterCount = c0 + c1 + c2
+    Debug.Print "Collection size " & CStr(totalItems) & " took " & CStr(iterCount) & " iterations"
+    '  For Each item In dict
+    '   Debug.Print CStr(item) & " (" & CStr(Hex(item)) & ") found at " & CStr(Hex(dict(item)))
+    '  Next item
+End Sub
+' Works ok. Just need to read full collection
+'Public Function FindCollectionItemByKey(ByRef pid As Long, adrPath As AddressPath, ByRef keyToSearch As Long, ByRef dict As Scripting.Dictionary, Optional ByVal reloadDictionary As Boolean = True) As Long
+'    Dim res As Long
+'    If reloadDictionary Then
+'        Set dict = New Scripting.Dictionary
+'        ReadTibia11CollectionMIN pid, adrPath, dict
+'    End If
+'
+'    If (dict.Exists(keyToSearch) = False) Then
+'        Debug.Print "This key was not in this collection: " & CStr(keyToSearch)
+'        res = -1
+'    Else
+'        res = dict(keyToSearch)
+'    End If
+'    FindCollectionItemByKey = res
+'End Function
+
+
+Public Function FindCollectionItemByKey(ByRef pid As Long, adrPath As AddressPath, ByRef keyToSearch As Long) As Long
+    Dim res As Long
+    Dim adrCOLLECTION_START As Long
+    Dim totalItems As Long
+    Dim pLeft As Long
+    Dim pRight As Long
+    Dim val0 As Long
+    Dim val1 As Long
+    Dim val2 As Long
+    Dim maxDepth As Long
+    Dim adrSTARTER_ITEM As Long
+    Dim p(5) As Long
+    Dim isGoal As Boolean
+    Dim isFail As Boolean
+    Dim currentDepth As Long
+    Const rootval As Long = -1
+    currentDepth = 1
+    adrCOLLECTION_START = ReadCurrentAddress(pid, adrPath, -1, False)
+    totalItems = QMemory_Read4Bytes(pid, adrCOLLECTION_START + 4)
+    If (totalItems = 0) Then
+        FindCollectionItemByKey = -1
         Exit Function
     End If
-    ReDim res(resSize - 1)
-    i = 0
-    For Each item In tmpRes
-        Key = item
-        val = tmpRes(Key)
-        tmpElement.id = Key
-        'tmpElement.rawbytes = val
-        tmpElement.name_adr = BitConverter_ToInt32(val, &H18)
-        tmpElement.url_adr = BitConverter_ToInt32(val, &H1C)
-        tmpElement.name = QMemory_ReadString(pid, tmpElement.name_adr)
-        tmpElement.url = QMemory_ReadString(pid, tmpElement.url_adr)
-        tmpElement.port = BitConverter_ToInt32(val, &H20)
-        tmpElement.this_register_adr = BitConverter_ToInt32(val, cte_bytesPerRegister)  ' trick (we left base address in last 4 bytes)
-        tmpElement.port_adr = tmpElement.this_register_adr + &H20
-        res(tmpElement.id) = tmpElement
-        i = i + 1
-    Next
-    ReadTibia11ServerList = 0
-    Exit Function
-gotErr:
-    ReadTibia11ServerList = -1
+    maxDepth = 1 + (totalItems / 2)
+    adrSTARTER_ITEM = QMemory_Read4Bytes(pid, adrCOLLECTION_START)
+    p(0) = QMemory_Read4Bytes(pid, adrSTARTER_ITEM)
+    p(1) = QMemory_Read4Bytes(pid, adrSTARTER_ITEM + 4)
+    p(2) = QMemory_Read4Bytes(pid, adrSTARTER_ITEM + 8)
+    p(3) = p(0)
+    p(4) = p(1)
+    p(5) = p(2)
+    q_nextIteration pid, adrSTARTER_ITEM, keyToSearch, p, pLeft, pRight, isGoal, isFail
+    If (isGoal) Then
+        res = pLeft
+    End If
+    If (isFail) Then
+        currentDepth = maxDepth + 1
+    End If
+    If (isGoal = False) And (isFail = False) Then
+        'Debug.Print "..."
+        Do
+            currentDepth = currentDepth + 1
+            p(0) = QMemory_Read4Bytes(pid, pLeft)
+            p(1) = QMemory_Read4Bytes(pid, pLeft + 4)
+            p(2) = QMemory_Read4Bytes(pid, pLeft + 8)
+            p(3) = QMemory_Read4Bytes(pid, pRight)
+            p(4) = QMemory_Read4Bytes(pid, pRight + 4)
+            p(5) = QMemory_Read4Bytes(pid, pRight + 8)
+            q_nextIteration pid, adrSTARTER_ITEM, keyToSearch, p, pLeft, pRight, isGoal, isFail
+            If (isGoal) Then
+                res = pLeft
+                Exit Do
+            End If
+            If (isFail) Then
+                currentDepth = maxDepth + 1
+                Exit Do
+            End If
+            ' Debug.Print "..."
+        Loop Until currentDepth > maxDepth
+    End If
+    If (currentDepth > maxDepth) Then
+      ' Debug.Print "WARNING at FindCollectionItemByKey: Key not found (With size=" & CStr(totalItems) & ") Key = " & CStr(keyToSearch) & " (" & CStr(Hex(keyToSearch)) & ")"
+      FindCollectionItemByKey = -1
+    Else
+      ' Debug.Print "(With size=" & CStr(totalItems) & ") Key " & CStr(keyToSearch) & " (" & CStr(Hex(keyToSearch)) & ") found after " & CStr(currentDepth) & " iterations at " & CStr(Hex(res))
+      FindCollectionItemByKey = res
+    End If
 End Function
 
-Public Function ReadCurrentCharName(ByRef pid As Long) As String
-    Dim auxAdr As Long
-    Dim strRes As String
-    auxAdr = ReadCurrentAddress(pid, adrSelectedCharName, -1, True)
-    strRes = QMemory_ReadString(pid, auxAdr)
-    ReadCurrentCharName = ""
-End Function
-    
+Private Sub q_nextIteration(ByRef pid As Long, ByRef adrSTARTER_ITEM As Long, _
+ ByRef keyToSearch As Long, ByRef p() As Long, _
+ ByRef pLeft As Long, ByRef pRight As Long, _
+ ByRef isGoal As Boolean, ByRef isFail As Boolean)
+    Const rootval_min As Long = -2147483648#
+    Const rootval_max As Long = 2147483647
+    Dim val_min(5) As Long
+    Dim val_max(5) As Long
+    Dim best_min_v As Long
+    Dim best_min_i As Long
+    Dim best_max_v As Long
+    Dim best_max_i As Long
+    Dim i As Long
+    isGoal = False
+    isFail = False
+    best_min_i = 0
+    best_min_v = rootval_min
+    best_max_i = 0
+    best_max_v = rootval_max
+    For i = 0 To 5
+        If (p(i) = adrSTARTER_ITEM) Then
+            val_min(i) = rootval_min
+            val_max(i) = rootval_max
+        Else
+            val_min(i) = QMemory_Read4Bytes(pid, p(i) + &H10)
+            val_max(i) = val_min(i)
+        End If
+    Next i
+    'Debug.Print "q_nextIteration options: " & CStr(val(0)) & "," & CStr(val(1)) & "," & CStr(val(2)) & "," & CStr(val(3)) & "," & CStr(val(4)) & "," & CStr(val(5))
+    For i = 0 To 5
+        If (val_min(i) = keyToSearch) Then
+               ' Debug.Print "Goal found at q_nextIteration p(" & CStr(i) & ")"
+                isGoal = True
+                pLeft = p(i)
+                pRight = p(i)
+                Exit Sub
+        End If
+        ' Pick best left
+        If (val_min(i) > best_min_v) And (val_min(i) <= keyToSearch) Then
+            best_min_v = val_min(i)
+            best_min_i = i
+        End If
+        ' Pick best right
+        If (val_max(i) < best_max_v) And (val_max(i) >= keyToSearch) Then
+            best_max_v = val_max(i)
+            best_max_i = i
+        End If
+    Next i
+    pLeft = p(best_min_i)
+    pRight = p(best_max_i)
+    'Debug.Print "Next iteration will search between " & CStr(val_min(best_min_i)) & " and " & CStr(val_max(best_max_i))
+    If (val_min(best_min_i) > keyToSearch) Or (val_max(best_max_i) < keyToSearch) Then
+        isFail = True
+    End If
+End Sub
+
 Public Function TibiaClientConnectionStatus(ByRef pid As Long) As Long
        Dim auxAdr As Long
        Dim auxVal As Double
@@ -1001,8 +1060,6 @@ Public Function TibiaClientConnectionStatus(ByRef pid As Long) As Long
            TibiaClientConnectionStatus = CTE_NOT_CONNECTED
            Exit Function
        End If
-       ' Debug.Print(Hex(auxAdr))
-
        auxVal = QMemory_ReadDouble(pid, auxAdr)
        pixels = Math.Round(auxVal)
        Select Case (pixels)
@@ -1018,13 +1075,20 @@ Public Function TibiaClientConnectionStatus(ByRef pid As Long) As Long
            Case 14
                TibiaClientConnectionStatus = CTE_GAME_CONNECTED ' 3 - Game connected
                Exit Function
-           Case Else ' maybe in a menu
+           Case Else
                Debug.Print ("status code =" & CStr(pixels))
                TibiaClientConnectionStatus = CTE_NOT_CONNECTED
                Exit Function
        End Select
-   End Function
+End Function
 
+Public Function ReadCurrentCharName(ByRef pid As Long) As String
+    Dim auxAdr As Long
+    Dim strRes As String
+    auxAdr = ReadCurrentAddress(pid, adrSelectedCharName, -1, True)
+    strRes = QMemory_ReadString(pid, auxAdr)
+    ReadCurrentCharName = ""
+End Function
 
 Public Function GetProcessIdByAdrConnected_TibiaQ() As Long
     Dim tibia_pids() As Long
@@ -1164,11 +1228,105 @@ Public Sub RestoreAllCharlists()
     
 End Sub
 
-Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' needs to be called often to capture all connections
-    If (debugMode = 1) Then
-      '  ConvertToPlainBitmap "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\test.png", "C:\BlackdProxyCLASSIC\Blackd-Proxy-CLASSIC\test.bmp"
-        Exit Sub
+
+Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As AddressPath, _
+ ByRef res() As TibiaServerEntry, Optional ByVal stopIfPort As Long = -1) As Long
+    Dim tmpRes As Scripting.Dictionary
+    Dim resSize As Long
+    Dim tmpElement As TibiaServerEntry
+    Dim i As Long
+    Dim item As Variant
+    Dim Key As Long
+    Dim val() As Byte
+    Dim adrCOLLECTION_START As Long
+    Dim adrSTARTER_ITEM As Long
+    Dim totalItems As Long
+    Dim auxAdr As Long
+    Dim firstChar As String
+    Dim currentPort As Long
+    Const cte_bytesPerRegister As Long = &H24
+    On Error GoTo gotErr
+    If stopIfPort = -1 Then
+        ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, , , , True
+    Else
+        adrCOLLECTION_START = ReadCurrentAddress(pid, adrPath, -1, False)
+        If (adrCOLLECTION_START = -1) Then
+            ReadTibia11ServerList = -1
+            Exit Function
+        End If
+        totalItems = QMemory_Read4Bytes(pid, adrCOLLECTION_START + 4)
+        If (totalItems = 0) Then
+            ReadTibia11ServerList = -1
+            Exit Function
+        End If
+        adrSTARTER_ITEM = QMemory_Read4Bytes(pid, adrCOLLECTION_START)
+        If (auxAdr = -1) Then
+            ReadTibia11ServerList = -1
+            Exit Function
+        End If
+        
+        auxAdr = QMemory_Read4Bytes(pid, adrSTARTER_ITEM)
+        If (auxAdr = -1) Then
+            ReadTibia11ServerList = -1
+            Exit Function
+        End If
+        
+        currentPort = QMemory_Read4Bytes(pid, auxAdr + &H20)
+        If (stopIfPort = 7171) Then
+            auxAdr = QMemory_Read4Bytes(pid, auxAdr + &H1C)
+            If (auxAdr = -1) Then
+                ReadTibia11ServerList = -1
+                Exit Function
+            End If
+            firstChar = QMemory_ReadString(pid, auxAdr, 1)
+            If (firstChar = "1") Then
+                ReadTibia11ServerList = -2
+                Exit Function
+            End If
+        Else
+            If (currentPort = stopIfPort) Then
+                ReadTibia11ServerList = -2
+                Exit Function
+            End If
+        End If
+        ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, adrCOLLECTION_START, , , True
     End If
+    resSize = tmpRes.Count
+    If (resSize = 0) Then
+        ReadTibia11ServerList = -1
+        Exit Function
+    End If
+    ReDim res(resSize - 1)
+    i = 0
+    For Each item In tmpRes
+        Key = item
+        val = tmpRes(Key)
+        tmpElement.id = Key
+        'tmpElement.rawbytes = val
+        tmpElement.name_adr = BitConverter_ToInt32(val, &H18)
+        tmpElement.url_adr = BitConverter_ToInt32(val, &H1C)
+        tmpElement.name = QMemory_ReadString(pid, tmpElement.name_adr)
+        tmpElement.url = QMemory_ReadString(pid, tmpElement.url_adr)
+        tmpElement.port = BitConverter_ToInt32(val, &H20)
+        tmpElement.this_register_adr = BitConverter_ToInt32(val, cte_bytesPerRegister)  ' trick (we left base address in last 4 bytes)
+        tmpElement.port_adr = tmpElement.this_register_adr + &H20
+        res(tmpElement.id) = tmpElement
+        i = i + 1
+    Next
+    ReadTibia11ServerList = 0
+    Exit Function
+gotErr:
+    ReadTibia11ServerList = -1
+End Function
+
+Public Function BitConverter_ToInt32(ByRef arr() As Byte, ByRef pos As Long) As Long
+    Dim l As Long
+    CopyMemory l, arr(pos), 4
+    BitConverter_ToInt32 = l
+End Function
+
+
+Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' needs to be called often to capture all connections
     If (confirmedExit = True) Then
         ' already closing bot
         Exit Sub
@@ -1193,9 +1351,9 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
     Dim strDefaultServer As String
     Dim showWarning As Boolean
     newPort = CLng(frmMain.sckClientGame(0).LocalPort)
-  
-    
-    
+    If (newPort = 0) Then
+        Exit Sub
+    End If
     For j = 0 To UBound(tibia_pids)
         If (debugMode = 1) Then
 '            readResult = ReadTibia11ServerList(tibia_pids(j), adrServerList_CollectionStart, serverList)
@@ -1208,7 +1366,7 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
 '            End If
             Dim itemAdr As Long
             Const keyToFind As Long = 11
-            ' I am investigating this at this moment. This function does not work yet
+       
             itemAdr = FindCollectionItemByKey(tibia_pids(j), adrServerList_CollectionStart, keyToFind)
             Debug.Print "key " & CStr(keyToFind) & " found at " & CStr(Hex(itemAdr))
         Else
@@ -1235,9 +1393,13 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
                     End If
                     QMemory_Write4Bytes tibia_pids(j), serverList(i).port_adr, newPort ' we always need to update our port
                 Next i
-                Debug.Print "PID " & CStr(tibia_pids(j)) & ": MODIFIED server list. Blackd Proxy is now ready here."
+                If cteDebugConEvents = True Then
+                    LogConEvent "PID " & CStr(tibia_pids(j)) & ": MODIFIED server list. Blackd Proxy is now ready here."
+                End If
                 If (showWarning) Then
-                    Debug.Print "WARNING: Reusing previous char list. Supposing servers = <servername>" & defaultGameServerEnd
+                    If cteDebugConEvents = True Then
+                        LogConEvent "WARNING: Reusing previous char list. Supposing servers = <servername>" & defaultGameServerEnd
+                    End If
                 End If
              Case -1
                '  Debug.Print "PID " & CStr(tibia_pids(j)) & ": NO SERVER LIST YET"
@@ -1287,5 +1449,7 @@ Public Sub BuildCharListForTibiaQ(ByVal idConnection As Integer, ByRef selName A
     If (listPos = -1) Then
         ResetCharList2 idConnection
     End If
-    Debug.Print "Selected char position = " & CStr(listPos)
+    If cteDebugConEvents = True Then
+        LogConEvent "Selected char position = " & CStr(listPos)
+    End If
 End Sub

@@ -333,14 +333,14 @@ Public Sub ReloadMagebombFiles()
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  Dim path As String
-  path = ""
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
-  Set fs = New scripting.FileSystemObject
-  path = App.path & "\magebomb"
-  Set f = fs.GetFolder(path)
+  Dim Path As String
+  Path = ""
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
+  Set fs = New Scripting.FileSystemObject
+  Path = App.Path & "\magebomb"
+  Set f = fs.GetFolder(Path)
   txtFile.Clear
   For Each f1 In f.Files
     If LCase(Right(f1.name, 3)) = "log" Then
@@ -350,7 +350,7 @@ Public Sub ReloadMagebombFiles()
   txtFile.Text = ""
   Exit Sub
 gotErr:
-  LogOnFile "errors.txt", "ERROR WITH FILESYSTEM OBJECT at ReloadMagebombFiles (" & Err.Number & ") : " & Err.Description & " ; path=" & path
+  LogOnFile "errors.txt", "ERROR WITH FILESYSTEM OBJECT at ReloadMagebombFiles (" & Err.Number & ") : " & Err.Description & " ; path=" & Path
 End Sub
 
 Private Function convertThisStrToLong(strLong As String) As Long
@@ -425,9 +425,9 @@ Public Function PreloadAbomb(strLoginLogFile As String, strAttackMode As String,
   End If
   ' log file exist? ...
   res = -7 ' will return - 7 if FileSystemObject fails
-  Dim fso As scripting.FileSystemObject
-  Set fso = New scripting.FileSystemObject
-  logpath = App.path & "\magebomb\" & strLoginLogFile
+  Dim fso As Scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
+  logpath = App.Path & "\magebomb\" & strLoginLogFile
   If (fso.FileExists(logpath) = False) Then
     PreloadAbomb = -8 ' Doesn't exist
     Exit Function
@@ -514,7 +514,7 @@ Public Sub ProcessArmageddon()
   errline = 6
     If clientLess(i).State > 7 Then
     errline = 7
-        Magebombs(i).ConnectionStatus = 0
+        Magebombs(i).connectionStatus = 0
         errline = 8
         If clientLess(i).State = 9 Then
             errline = 9
@@ -523,12 +523,12 @@ Public Sub ProcessArmageddon()
         End If
     End If
     errline = 11
-    Select Case Magebombs(i).ConnectionStatus
+    Select Case Magebombs(i).connectionStatus
     Case 0 ' not started yet
       errline = 12
       anyNotReady = True
       errline = 13
-      Magebombs(i).ConnectionStatus = 1
+      Magebombs(i).connectionStatus = 1
       errline = 14
       Magebombs(i).ConnectionTimeout = gtc + FIRSTCONNECTIONTIMEOUT_ms
       errline = 15
@@ -569,7 +569,7 @@ Public Sub ProcessArmageddon()
       errline = 31
       If (clientLess(i).State <> sckConnected) And (clientLess(i).State <> sckConnecting) Then
         errline = 32
-        Magebombs(i).ConnectionStatus = 1
+        Magebombs(i).connectionStatus = 1
         errline = 33
         Magebombs(i).ConnectionTimeout = gtc + FIRSTCONNECTIONTIMEOUT_ms
         errline = 34
@@ -611,7 +611,7 @@ Public Sub ProcessArmageddon()
             errline = 48
             MagebombStage = 1
             errline = 49
-            Magebombs(i).ConnectionStatus = 0
+            Magebombs(i).connectionStatus = 0
             errline = 50
             If clientLess(i).State = 9 Then
                 errline = 51
@@ -630,7 +630,7 @@ Public Sub ProcessArmageddon()
      errline = 54
      For i = 0 To limM
        errline = 55
-       Magebombs(i).ConnectionStatus = 3
+       Magebombs(i).connectionStatus = 3
        errline = 56
        Magebombs(i).ConnectionTimeout = gtc + SECONDCONNECTIONTIMEOUT_ms
        errline = 57
@@ -666,19 +666,19 @@ Public Sub ProcessArmageddon()
       errline = 68
       If (gtc > Magebombs(i).ConnectionTimeout) Then ' retry time out ?
         errline = 69
-        If ((DebugingMagebomb = True) And (Magebombs(i).ConnectionStatus <> 0)) Then
+        If ((DebugingMagebomb = True) And (Magebombs(i).connectionStatus <> 0)) Then
           errline = 70
           dRes = SendLogSystemMessageToClient(MagebombLeader, CStr(gtc - MagebombStartTime) & " ms : " & Magebombs(i).CharacterName & "  attack timeout. Closing.")
           DoEvents
           errline = 71
         End If
         errline = 72
-        Magebombs(i).ConnectionStatus = 0
+        Magebombs(i).connectionStatus = 0
         errline = 73
         clientLess(i).Close
       Else
         errline = 74
-        If ((clientLess(i).State = sckConnected) And (Magebombs(i).ConnectionStatus = 4)) Then
+        If ((clientLess(i).State = sckConnected) And (Magebombs(i).connectionStatus = 4)) Then
           errline = 75
           anyShooted = True
           errline = 76
@@ -697,7 +697,7 @@ Public Sub ProcessArmageddon()
                 errline = 82
                 Magebombs(i).nextSendLogin = gtc + CLng(frmMagebomb.txtReloginChar.Text)
                 errline = 83
-                Magebombs(i).ConnectionStatus = 2
+                Magebombs(i).connectionStatus = 2
                 errline = 84
                 clientLess(i).Close
                 errline = 85
@@ -798,7 +798,7 @@ Public Sub SendClientless(ByVal Index As Long, ByRef packet() As Byte, ignoreEnc
   errline = 7
   If clientLess(Index).State <> sckConnected Then
     errline = 8
-    Magebombs(Index).ConnectionStatus = 0
+    Magebombs(Index).connectionStatus = 0
     errline = 9
     clientLess(Index).Close
     errline = 10
@@ -824,10 +824,10 @@ Public Sub SendClientless(ByVal Index As Long, ByRef packet() As Byte, ignoreEnc
         RtlMoveMemory goodPacket(6), packet(0), (onlygood)
         goodPacket(0) = LowByteOfLong(UBound(goodPacket) - 1)
         goodPacket(1) = HighByteOfLong(UBound(goodPacket) - 1)
-        pres = EncipherTibiaProtectedSP(goodPacket(0), Magebombs(Index).key(0), UBound(goodPacket), UBound(Magebombs(Index).key))
+        pres = EncipherTibiaProtectedSP(goodPacket(0), Magebombs(Index).Key(0), UBound(goodPacket), UBound(Magebombs(Index).Key))
         If (pres < 0) Then
           errline = 24
-          frmMain.GiveCrackdDllErrorMessage pres, goodPacket, Magebombs(Index).key, UBound(goodPacket), UBound(Magebombs(Index).key), 22
+          frmMain.GiveCrackdDllErrorMessage pres, goodPacket, Magebombs(Index).Key, UBound(goodPacket), UBound(Magebombs(Index).Key), 22
           Exit Sub
         End If
         thedamnCRC = GetTibiaCRC(goodPacket(6), UBound(goodPacket) - 5) ' (number of bytes - 6)
@@ -860,11 +860,11 @@ Public Sub SendClientless(ByVal Index As Long, ByRef packet() As Byte, ignoreEnc
         errline = 21
         goodPacket(1) = HighByteOfLong(totalLong)
         errline = 22
-        pres = EncipherTibiaProtected(goodPacket(0), Magebombs(Index).key(0), UBound(goodPacket), UBound(Magebombs(Index).key))
+        pres = EncipherTibiaProtected(goodPacket(0), Magebombs(Index).Key(0), UBound(goodPacket), UBound(Magebombs(Index).Key))
         errline = 23
         If (pres < 0) Then
           errline = 24
-          frmMain.GiveCrackdDllErrorMessage pres, goodPacket, Magebombs(Index).key, UBound(goodPacket), UBound(Magebombs(Index).key), 10
+          frmMain.GiveCrackdDllErrorMessage pres, goodPacket, Magebombs(Index).Key, UBound(goodPacket), UBound(Magebombs(Index).Key), 10
           Exit Sub
         End If
         errline = 25
@@ -902,8 +902,8 @@ Private Sub clientLess_Close(Index As Integer)
   #If FinalMode = 1 Then
   On Error GoTo gotErr
   #End If
-  If (Magebombs(Index).ConnectionStatus > 0) Then
-    Magebombs(Index).ConnectionStatus = 0
+  If (Magebombs(Index).connectionStatus > 0) Then
+    Magebombs(Index).connectionStatus = 0
     If DebugingMagebomb = True Then
       dRes = SendLogSystemMessageToClient(MagebombLeader, CStr(GetTickCount() - MagebombStartTime) & " ms : " & Magebombs(Index).CharacterName & "  lost connection")
       DoEvents
@@ -922,15 +922,15 @@ Private Sub clientLess_Connect(Index As Integer)
   #If FinalMode = 1 Then
   On Error GoTo gotErr
   #End If
-  If (Magebombs(Index).ConnectionStatus <= 1) Then
-    Magebombs(Index).ConnectionStatus = 2
+  If (Magebombs(Index).connectionStatus <= 1) Then
+    Magebombs(Index).connectionStatus = 2
     If DebugingMagebomb = True Then
       dRes = SendLogSystemMessageToClient(MagebombLeader, CStr(GetTickCount() - MagebombStartTime) & " ms : " & Magebombs(Index).CharacterName & "  is now connected.")
       DoEvents
     End If
     okToContinue = True
     For i = 1 To (MagebombsLoaded - 1)
-      If Magebombs(i).ConnectionStatus <> 2 Then
+      If Magebombs(i).connectionStatus <> 2 Then
         okToContinue = False
       End If
     Next i
@@ -938,8 +938,8 @@ Private Sub clientLess_Connect(Index As Integer)
         DoEvents
         'ProcessArmageddon
       End If
-  ElseIf Magebombs(Index).ConnectionStatus = 2 Then
-       Magebombs(Index).ConnectionStatus = 3
+  ElseIf Magebombs(Index).connectionStatus = 2 Then
+       Magebombs(Index).connectionStatus = 3
        Magebombs(i).nextSendLogin = GetTickCount + CLng(frmMagebomb.txtReloginChar.Text)
        SendClientless CInt(i), Magebombs(i).loginPacket, True
        DoEvents
@@ -949,7 +949,7 @@ Private Sub clientLess_Connect(Index As Integer)
        End If
   Else
     clientLess(Index).Close
-    Magebombs(Index).ConnectionStatus = 0
+    Magebombs(Index).connectionStatus = 0
     If DebugingMagebomb = True Then
       dRes = SendLogSystemMessageToClient(MagebombLeader, CStr(GetTickCount() - MagebombStartTime) & " ms : " & Magebombs(Index).CharacterName & "  did an unexpected connection, closing it.")
       DoEvents
@@ -971,8 +971,8 @@ Private Sub clientLess_DataArrival(Index As Integer, ByVal bytesTotal As Long)
   Dim res As Integer
   Dim pres As Long
   clientLess(Index).GetData packet, vbArray + vbByte
-  If Magebombs(Index).ConnectionStatus < 4 Then
-    Magebombs(Index).ConnectionStatus = 4
+  If Magebombs(Index).connectionStatus < 4 Then
+    Magebombs(Index).connectionStatus = 4
     Magebombs(Index).ConnectionTimeout = GetTickCount() + Magebombs(Index).RetryTime
     If DebugingMagebomb = True Then
       dRes = SendLogSystemMessageToClient(MagebombLeader, CStr(GetTickCount() - MagebombStartTime) & " ms : " & Magebombs(Index).CharacterName & "  is now inside. Starting attack against " & Magebombs(Index).TargetToShot)
@@ -989,7 +989,7 @@ End Sub
 
 Private Sub clientLess_Error(Index As Integer, ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
       Dim dRes As Long
-      Magebombs(Index).ConnectionStatus = 0
+      Magebombs(Index).connectionStatus = 0
       If DebugingMagebomb = True Then
       dRes = SendLogSystemMessageToClient(MagebombLeader, CStr(GetTickCount() - MagebombStartTime) & " ms : Error " & CStr(Number) & " in " & Magebombs(Index).CharacterName & " : " & Description)
       DoEvents
@@ -1064,7 +1064,7 @@ End Sub
 
 Private Sub cmdDeleteSelected_Click()
   Dim firstI As Long
-  Dim lasti As Long
+  Dim lastI As Long
   Dim difR As Long
   Dim numofEv As Long
   Dim vrow As Long
@@ -1091,8 +1091,8 @@ Private Sub cmdDeleteSelected_Click()
     lblStatus.ForeColor = &HFFFF&
   Else
    firstI = firstrow
-   lasti = lastrow
-   difR = lasti - firstI + 1
+   lastI = lastrow
+   difR = lastI - firstI + 1
    gotanyerr = False
    For i = 1 To difR
      If (DeleteMagebombMemory(firstI - 1)) = -1 Then
@@ -1104,7 +1104,7 @@ Private Sub cmdDeleteSelected_Click()
     lblStatus.Caption = "Status: Internal function error. List reseted"
     lblStatus.ForeColor = &HFF&
    Else
-    lblStatus.Caption = "Status: Deleted " & CStr(difR) & " items - from " & CStr(firstI) & " to " & CStr(lasti)
+    lblStatus.Caption = "Status: Deleted " & CStr(difR) & " items - from " & CStr(firstI) & " to " & CStr(lastI)
     lblStatus.ForeColor = &HC000&
    End If
   End If
@@ -1170,7 +1170,7 @@ Public Function SaveMagebombList() As Integer
   #End If
   res = -1
   fn = FreeFile
-  Open App.path & "\" & txtFileName.Text For Output As #fn
+  Open App.Path & "\" & txtFileName.Text For Output As #fn
     Print #fn, CStr(MagebombsLoaded)
     For i = 0 To (MagebombsLoaded - 1)
       Print #fn, Magebombs(i).LogFileName
@@ -1206,15 +1206,15 @@ Public Function LoadMagebombList() As Integer
   On Error GoTo justend
   #End If
   res = -1
-  Dim fso As scripting.FileSystemObject
-  Set fso = New scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   DeleteAllMagebombMemory
-  If (fso.FileExists(App.path & "\" & txtFileName.Text) = False) Then
+  If (fso.FileExists(App.Path & "\" & txtFileName.Text) = False) Then
     LoadMagebombList = -2
     Exit Function
   End If
   fn = FreeFile
-  Open App.path & "\" & txtFileName.Text For Input As #fn
+  Open App.Path & "\" & txtFileName.Text For Input As #fn
     Line Input #fn, strTmp
     numberToLoad = CLng(strTmp)
     For i = 1 To numberToLoad
@@ -1224,13 +1224,13 @@ Public Function LoadMagebombList() As Integer
       Line Input #fn, TheTarget
       Line Input #fn, strTmp
       TheTime = CLng(strTmp)
-      If (fso.FileExists(App.path & "\magebomb\" & TheLogName) = False) Then
+      If (fso.FileExists(App.Path & "\magebomb\" & TheLogName) = False) Then
         Close #fn
         LoadMagebombList = -3
         Exit Function
       Else
       fn2 = FreeFile
-      Open App.path & "\magebomb\" & TheLogName For Input As #fn2
+      Open App.Path & "\magebomb\" & TheLogName For Input As #fn2
         Line Input #fn2, AddingCharname
         Line Input #fn2, strTmp
         AddingVersion = CLng(strTmp)

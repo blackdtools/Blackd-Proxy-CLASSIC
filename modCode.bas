@@ -83,7 +83,7 @@ Public PLAYER_Z As Long
 
 Public RedSquare As Long
 
-
+Public conEventLog As String
 Public Const RETRYDELAY = 10000 ' in ms
 'Public Const TOOSLOWLOGINSERVER_MS = 500 ' MS
 Public Const MaxTimeWithoutServerPackets = 45000 'in ms
@@ -244,9 +244,22 @@ Public Const PROCESS_VM_WRITE = (&H20)
 Public Const PROCESS_VM_OPERATION = (&H8)
 Public Const PROCESS_QUERY_INFORMATION = (&H400)
 Public Const PROCESS_READ_WRITE_QUERY = PROCESS_VM_READ + PROCESS_VM_WRITE + PROCESS_VM_OPERATION + PROCESS_QUERY_INFORMATION
-'Public Const PROCESS_ALL_ACCESS As Long = &H1F0FFF
 
-'Public Const MAXBUFFER = 50000
+
+Public Type SYSTEMTIME
+wYear As Integer
+wMonth As Integer
+wDayOfWeek As Integer
+wDay As Integer
+wHour As Integer
+wMinute As Integer
+wSecond As Integer
+wMilliseconds As Integer
+End Type
+
+Public Declare Sub GetSystemTime Lib "kernel32" _
+(lpSystemTime As SYSTEMTIME)
+
 
 'for help fire
 Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
@@ -529,7 +542,7 @@ Public memLoginServer() As Long
 ' port numbers are stored as long in next positions:
 ' (values loaded at frmMain.load from file)
 Public MemPortLoginServer() As Long
-
+Public XTEAoption As Long
 Public LoginServerStartPointer As Long
 Public LoginServerStep As Long
 Public HostnamePointerOffset As Long
@@ -811,7 +824,7 @@ Public CurrBlackdServer As String
 Public CurrBlackdServer_folder As String
 'Public VarProtection4 As Long
 
-Public ValueOfUservar As scripting.Dictionary  ' A dictionary Uservar (string) -> name (string)
+Public ValueOfUservar As Scripting.Dictionary  ' A dictionary Uservar (string) -> name (string)
 Public lastUsedChannelID() As String
 'Public VarProtection5 As Long
 Public lastRecChannelID() As String
@@ -837,9 +850,9 @@ Public MustUnload As Boolean
 
 
 
-Public ProcessidIPrelations As scripting.Dictionary
-Public ProcessidAccountRelations As scripting.Dictionary
-Public IgnoredCreatures As scripting.Dictionary
+Public ProcessidIPrelations As Scripting.Dictionary
+Public ProcessidAccountRelations As Scripting.Dictionary
+Public IgnoredCreatures As Scripting.Dictionary
 Public ConnectionSignal() As Boolean
 Public TOOSLOWLOGINSERVER_MS As Long
 
@@ -1244,10 +1257,10 @@ Public Function TryAutoPath() As String
     Dim strAppdata As String
     Dim strProposal As String
     Dim strProp2 As String
-    Dim fs As scripting.FileSystemObject
+    Dim fs As Scripting.FileSystemObject
         
     If TibiaVersionLong >= 1100 Then
-        Set fs = New scripting.FileSystemObject
+        Set fs = New Scripting.FileSystemObject
         strAppdata = GetLocalApplicationDataFolder()
         strProposal = strAppdata & "\" & ParTibiaFolder & "\packages\Tibia\minimap"
      
@@ -1261,7 +1274,7 @@ Public Function TryAutoPath() As String
             Exit Function
         End If
     ElseIf TibiaVersionLong >= 800 Then
-        Set fs = New scripting.FileSystemObject
+        Set fs = New Scripting.FileSystemObject
         strAppdata = GetAppDataFolder()
          strProposal = strAppdata & "\" & ParTibiaFolder & "\Automap"
         strProp2 = strAppdata & "\" & ParTibiaFolder
@@ -5004,6 +5017,22 @@ Public Sub LogStatusOnFile(file_name As String)
 ignoreit:
   a = -1
 End Sub
+Public Function GetMyAppDataFolder() As String
+    On Error GoTo gotErr
+    Dim base As String
+    Dim fullPath As String
+    Dim fs As Scripting.FileSystemObject
+    base = GetAppDataFolder()
+    fullPath = base & "\Blackd Proxy"
+    Set fs = New Scripting.FileSystemObject
+    If fs.FolderExists(fullPath) = False Then
+       fs.CreateFolder (fullPath)
+    End If
+    GetMyAppDataFolder = fullPath
+    Exit Function
+gotErr:
+    GetMyAppDataFolder = App.Path
+End Function
 Public Sub LogOnFile(file_name As String, strtext As String)
   Dim fn As Integer
   Dim errheader As String
@@ -5029,19 +5058,24 @@ Public Sub LogOnFile(file_name As String, strtext As String)
   Else
     writeThis = strtext
   End If
-  If Len(file_name) > 4 Then
-    If Left$(file_name, 4) = "log_" Then
-      Open App.Path & "\mylogs\" & file_name For Append As #fn
-    Else
-      Open App.Path & "\" & file_name For Append As #fn
-    End If
+  If (file_name = "errors.txt") Then
+    Dim mySafeSolder As String
+    mySafeSolder = GetMyAppDataFolder()
+    Open mySafeSolder & "\" & file_name For Append As #fn
   Else
-  Open App.Path & "\" & file_name For Append As #fn
+    If Len(file_name) > 4 Then
+      If Left$(file_name, 4) = "log_" Then
+        Open App.Path & "\mylogs\" & file_name For Append As #fn
+      Else
+        Open App.Path & "\" & file_name For Append As #fn
+      End If
+    Else
+    Open App.Path & "\" & file_name For Append As #fn
+  End If
   End If
     Print #fn, writeThis
   Close #fn
   If file_name = "errors.txt" Then
-    'LogStatusOnFile "errors.txt"
     If thisShouldNotBeLoading = 1 Then
       'custom ng
       'frmMenu.Caption = "ERROR - Check errors.txt for details"
@@ -5066,7 +5100,13 @@ Public Sub OverwriteOnFile(file_name As String, strtext As String)
   Else
     writeThis = strtext
   End If
+  If (file_name = "errors.txt") Then
+    Dim mySafeSolder As String
+    mySafeSolder = GetMyAppDataFolder()
+    Open mySafeSolder & "\" & file_name For Append As #fn
+  Else
   Open App.Path & "\" & file_name For Output As #fn
+  End If
     Print #fn, writeThis
   Close #fn
   If file_name = "errors.txt" Then
@@ -10601,7 +10641,7 @@ openBP = -1
 End Function
 
 Public Function GetRandomLineOf(strFileName As String) As String
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
   Dim Filename As String
@@ -10616,7 +10656,7 @@ Public Function GetRandomLineOf(strFileName As String) As String
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   Filename = App.Path & "\randline\" & strFileName
   res = ""
   If fso.FileExists(Filename) = True Then
@@ -11862,7 +11902,7 @@ Public Function TibiaDatExists() As Boolean
     On Error GoTo gotErr
   Dim tibiadathere As String
   Dim fs As FileSystemObject
-  Set fs = New scripting.FileSystemObject
+  Set fs = New Scripting.FileSystemObject
 '  If configPath = "" Then
 '    tibiadathere = App.path & "\tibia.dat"
 '  Else
@@ -12280,11 +12320,39 @@ Function ExtractUrl(ByVal strUrl As String) As url
 End Function
 Public Sub openErrorsTXTfolder()
 On Error GoTo gotErr
-If (shouldOpenErrorsTXTfolder = True) Then
-shouldOpenErrorsTXTfolder = False
-Shell "explorer " & App.Path
-End If
+    If (shouldOpenErrorsTXTfolder = True) Then
+    shouldOpenErrorsTXTfolder = False
+    Shell "explorer " & GetMyAppDataFolder()
+    End If
 Exit Sub
 gotErr:
 
+End Sub
+Public Sub ResetConEventLogs()
+   conEventLog = "Connection events:"
+End Sub
+
+Public Function FillIntWithZeroes(ByVal inte As Integer, ByVal digits As Long) As String
+    FillIntWithZeroes = Right("0000" & CStr(inte), digits)
+End Function
+Public Function GetBetterTimestamp() As String
+    Dim sAns As String
+    Dim typTime As SYSTEMTIME
+    On Error Resume Next
+    GetSystemTime typTime
+    sAns = "[" & _
+    FillIntWithZeroes(typTime.wDay, 2) & "/" & _
+    FillIntWithZeroes(typTime.wMonth, 2) & "/" & _
+    FillIntWithZeroes(typTime.wYear, 4) & " " & _
+    FillIntWithZeroes(typTime.wHour, 2) & ":" & _
+    FillIntWithZeroes(typTime.wMinute, 2) & ":" & _
+    FillIntWithZeroes(typTime.wSecond, 2) & "." & _
+    FillIntWithZeroes(typTime.wMilliseconds, 3) & "]"
+    GetBetterTimestamp = sAns
+End Function
+Public Sub LogConEvent(ByRef strDebug As String)
+  Dim ts As String
+  ts = GetBetterTimestamp()
+  Debug.Print ts & " " & strDebug
+  conEventLog = conEventLog & vbCrLf & ts & " " & strDebug
 End Sub

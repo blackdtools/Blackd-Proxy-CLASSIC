@@ -601,7 +601,7 @@ Dim moveX As Long
 Dim moveY As Long
 
 
-If KeyB.key(88) > 0 And KeyB.key(54) > 0 Then   'teset show
+If KeyB.Key(88) > 0 And KeyB.Key(54) > 0 Then   'teset show
     
     If frmOld.chkOldMenu.Value = 0 Then
         If frmMenu.Visible = False Then
@@ -654,21 +654,21 @@ For idConnection = 1 To MAXCLIENTS
       
     'dash
       If (extrasOptions(idConnection).chkDash = True) Then
-        If KeyB.key(71) > 0 Then  ' NE
+        If KeyB.Key(71) > 0 Then  ' NE
             aRes = ExecuteInFocusedTibia("exiva > 6D")
-        ElseIf KeyB.key(73) > 0 Then  'ND
+        ElseIf KeyB.Key(73) > 0 Then  'ND
             aRes = ExecuteInFocusedTibia("exiva > 6A")
-        ElseIf KeyB.key(79) > 0 Then  'SE
+        ElseIf KeyB.Key(79) > 0 Then  'SE
             aRes = ExecuteInFocusedTibia("exiva > 6C")
-        ElseIf KeyB.key(81) > 0 Then  'SD
+        ElseIf KeyB.Key(81) > 0 Then  'SD
             aRes = ExecuteInFocusedTibia("exiva > 6B")
-        ElseIf KeyB.key(200) > 0 Then  'N
+        ElseIf KeyB.Key(200) > 0 Then  'N
             aRes = ExecuteInFocusedTibia("exiva > 65")
-        ElseIf KeyB.key(208) > 0 Then  'S
+        ElseIf KeyB.Key(208) > 0 Then  'S
             aRes = ExecuteInFocusedTibia("exiva > 67")
-        ElseIf KeyB.key(203) > 0 Then  'W
+        ElseIf KeyB.Key(203) > 0 Then  'W
             aRes = ExecuteInFocusedTibia("exiva > 68")
-        ElseIf KeyB.key(205) > 0 Then  'E
+        ElseIf KeyB.Key(205) > 0 Then  'E
             aRes = ExecuteInFocusedTibia("exiva > 66")
         End If
       End If
@@ -705,7 +705,7 @@ For idConnection = 1 To MAXCLIENTS
        If (healingCheatsOptions(idConnection).exaustEat >= 300) Then
          healingCheatsOptions(idConnection).exaustEat = 0
          resS = SearchFood(idConnection)
-         If (resS.foundcount > 0) Then
+         If (resS.foundCount > 0) Then
             aRes = EatFood(idConnection, resS.b1, resS.b2, resS.bpID, resS.slotID)
             DoEvents
          End If

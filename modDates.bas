@@ -64,7 +64,7 @@ Public Function ReadTrialFromFile() As TypeTrial
   On Error GoTo gotErr
   ' load memory adresses for login IPs
   fn = FreeFile
-  Open App.path & "\code.txt" For Input As #fn
+  Open App.Path & "\code.txt" For Input As #fn
     Line Input #fn, str
   Close #fn
   resT = ReadTrial(str)

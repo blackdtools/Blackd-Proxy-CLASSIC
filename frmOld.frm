@@ -385,7 +385,7 @@ Private Sub chkOldMenu_Click()
   If configPath = "" Then
     here = myMainConfigINIPath()
   Else
-    here = App.path & "\" & configPath & "\config.ini"
+    here = App.Path & "\" & configPath & "\config.ini"
   End If
   
   If chkOldMenu.Value = 1 Then

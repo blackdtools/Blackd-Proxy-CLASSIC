@@ -322,8 +322,8 @@ Private defX As Long
 Private defY As Long
 Private defZ As Long
 
-Public Sub SetDefaultMapPosition(x As Long, y As Long, z As Long)
-  defX = x
+Public Sub SetDefaultMapPosition(X As Long, y As Long, z As Long)
+  defX = X
   defY = y
   defZ = z
 End Sub
@@ -342,7 +342,7 @@ Public Sub SetCurrentCenter(str As String)
   Next i
   If ExistBigMapName(str) Then
     res = GetBigMapNameInfo(str)
-    SetDefaultMapPosition res.x, res.y, res.z
+    SetDefaultMapPosition res.X, res.y, res.z
     Exit Sub
   End If
   'else
@@ -457,7 +457,7 @@ Public Sub RedrawAllMarks()
   For i = 1 To MAXCLIENTS
     If (cmbCenter.List(li) = CharacterName(i)) And (GameConnected(i) = True) Then
       res = GetBigMapNameInfo(cmbCenter.List(li))
-      x3 = res.x
+      x3 = res.X
       y3 = res.y
       z3 = res.z
       x1 = myX(i)
@@ -476,14 +476,14 @@ Public Sub RedrawAllMarks()
   If ExistBigMapName(cmbCenter.List(li)) Then
     res = GetBigMapNameInfo(cmbCenter.List(li))
       If cmbCenter.List(li) = cmbCenter.Text Then
-        DrawXYZnMap res.x, res.y, res.z, vbYellow
+        DrawXYZnMap res.X, res.y, res.z, vbYellow
         If isC = True Then
           DrawLine x1, y1, z1, x2, y2, z2, vbYellow
         End If
       Else
-        DrawXYZnMap res.x, res.y, res.z, res.color
+        DrawXYZnMap res.X, res.y, res.z, res.Color
         If isC = True Then
-          DrawLine x1, y1, z1, x2, y2, z2, res.color
+          DrawLine x1, y1, z1, x2, y2, z2, res.Color
         End If
       End If
   End If
@@ -564,7 +564,7 @@ Private Sub Form_Resize()
     ToggleTopmost frmMapReader.hwnd, True
   End If
 End Sub
-Public Function AddMarkToBigMap(x As Long, y As Long, z As Long) As String
+Public Function AddMarkToBigMap(X As Long, y As Long, z As Long) As String
   Dim i As Long
   Dim markName As String
   i = 1
@@ -573,15 +573,15 @@ Public Function AddMarkToBigMap(x As Long, y As Long, z As Long) As String
   Wend
   markName = "#" & CStr(i)
   AddListItem markName
-  AddBigMapName markName, x, y, z, vbRed
+  AddBigMapName markName, X, y, z, vbRed
 
-  DrawXYZnMap x, y, z, vbRed
+  DrawXYZnMap X, y, z, vbRed
   AddMarkToBigMap = markName
 End Function
 
 Public Sub AddPlayerToBigMap(pname As String, rawPosition As String)
   Dim aRes As Long
-  Dim x As Long
+  Dim X As Long
   Dim y As Long
   Dim z As Long
   Dim xs As String
@@ -593,7 +593,7 @@ Public Sub AddPlayerToBigMap(pname As String, rawPosition As String)
   pos = 1
   toEnd = Len(rawPosition)
   xs = ParseString(rawPosition, pos, toEnd, ",")
-  x = CLng(xs)
+  X = CLng(xs)
   pos = pos + 1
   ys = ParseString(rawPosition, pos, toEnd, ",")
   y = CLng(ys)
@@ -601,13 +601,13 @@ Public Sub AddPlayerToBigMap(pname As String, rawPosition As String)
   zs = ParseString(rawPosition, pos, toEnd, ",")
   z = CLng(zs)
   AddListItem pname
-  AddBigMapName pname, x, y, z, vbBlue
+  AddBigMapName pname, X, y, z, vbBlue
   Exit Sub
 errIg:
   'ignore error
 End Sub
 
-Private Sub picMap_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub picMap_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
   Dim incX As Long
   Dim incY As Long
   Dim currposX As Long
@@ -636,7 +636,7 @@ Private Sub picMap_MouseUp(Button As Integer, Shift As Integer, x As Single, y A
     On Error GoTo gotError
   #End If
   If (LoadingAmap = False) Then
-    incX = (x \ 2) + MINX
+    incX = (X \ 2) + MINX
     incY = (y \ 2) + MINY
     If Button = 2 Then 'right click
         currMapX = currMapX + incX

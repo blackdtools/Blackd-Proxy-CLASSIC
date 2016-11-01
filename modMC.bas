@@ -139,8 +139,8 @@ Private Declare Function CreateProcess Lib "kernel32" _
 Public Function LaunchTibia(ByVal strTibiaPath, withMC As Boolean) As String
       Dim prev As String
       Dim loc1 As String
-      Dim fs As scripting.FileSystemObject
-      Set fs = New scripting.FileSystemObject
+      Dim fs As Scripting.FileSystemObject
+      Set fs = New Scripting.FileSystemObject
       If strTibiaPath = "" Then
         loc1 = ""
       Else
@@ -176,8 +176,8 @@ Public Function autoGetTibiaFolder(Optional ByVal ParTibiaFolder As String = "")
         End If
     End If
     tpath = ""
-    Dim fs As scripting.FileSystemObject
-    Set fs = New scripting.FileSystemObject
+    Dim fs As Scripting.FileSystemObject
+    Set fs = New Scripting.FileSystemObject
     If (TibiaVersionLong >= 1100) Then
        tpath = GetLocalApplicationDataFolder()
     Else
@@ -196,8 +196,8 @@ End Function
 Public Function autoGetMagebotFolder() As String
     On Error GoTo gotErr
     Dim tpath As String
-    Dim fs As scripting.FileSystemObject
-    Set fs = New scripting.FileSystemObject
+    Dim fs As Scripting.FileSystemObject
+    Set fs = New Scripting.FileSystemObject
     tpath = GetProgFolder()
     If Right$(tpath, 1) <> "\" Then
         tpath = tpath & "\"
@@ -222,10 +222,10 @@ Public Function autoGetFileContaining(strPath As String, strCriteria) As String
     Dim tpath As String
     Dim sName As String
     Dim lPos As Long
-    Dim fs As scripting.FileSystemObject
-    Dim fol As scripting.Folder
-    Dim fil As scripting.File
-    Set fs = New scripting.FileSystemObject
+    Dim fs As Scripting.FileSystemObject
+    Dim fol As Scripting.Folder
+    Dim fil As Scripting.File
+    Set fs = New Scripting.FileSystemObject
     Set fol = fs.GetFolder(strPath)
     For Each fil In fol.Files
         sName = fil.name

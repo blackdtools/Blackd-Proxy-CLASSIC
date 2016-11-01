@@ -59,19 +59,19 @@ Public cavebotOnGMpause() As Boolean
 Public cavebotOnPLAYERpause() As Boolean
 Public cavebotOnTrapGiveAlarm() As Boolean
 Public cavebotCurrentTargetPriority() As Long
-Public cavebotScript() As scripting.Dictionary
-Public cavebotMelees() As scripting.Dictionary
-Public cavebotAvoid() As scripting.Dictionary
-Public cavebotExorivis() As scripting.Dictionary
-Public cavebotHMMs() As scripting.Dictionary
-Public shotTypeDict() As scripting.Dictionary
-Public exoriTypeDict() As scripting.Dictionary
-Public cavebotGoodLoot() As scripting.Dictionary
-Public killPriorities() As scripting.Dictionary
-Public SpellKills_SpellName() As scripting.Dictionary
-Public SpellKills_Dist() As scripting.Dictionary
+Public cavebotScript() As Scripting.Dictionary
+Public cavebotMelees() As Scripting.Dictionary
+Public cavebotAvoid() As Scripting.Dictionary
+Public cavebotExorivis() As Scripting.Dictionary
+Public cavebotHMMs() As Scripting.Dictionary
+Public shotTypeDict() As Scripting.Dictionary
+Public exoriTypeDict() As Scripting.Dictionary
+Public cavebotGoodLoot() As Scripting.Dictionary
+Public killPriorities() As Scripting.Dictionary
+Public SpellKills_SpellName() As Scripting.Dictionary
+Public SpellKills_Dist() As Scripting.Dictionary
 
-Public DictSETUSEITEM() As scripting.Dictionary
+Public DictSETUSEITEM() As Scripting.Dictionary
 Public DictSETUSEITEM_used() As Boolean
 Public SETUSEITEM_lastX() As Long
 Public SETUSEITEM_lastY() As Long
@@ -121,7 +121,7 @@ Public DelayAttacks() As Long
 Public AvoidReAttacks() As Boolean
 Public CavebotHaveSpecials() As Boolean
 Public CavebotLastSpecialMove() As Long
-Public specialGMnames As scripting.Dictionary
+Public specialGMnames As Scripting.Dictionary
 ' MEMORY ADDRESSES
 
 Public adrXgo As Long ' goto this x
@@ -171,9 +171,9 @@ Public Sub updateExeLine(ByVal Sid As Long, ByVal newExeLine As Long, ByVal Rela
             Dim eLine As Long
             eLine = exeLine(Sid)
             If frmCavebot.lstScript.ListCount > eLine Then
-                #If FinalMode = 0 Then
-                Debug.Print "Executing line " & eLine
-                #End If
+'                #If FinalMode = 0 Then
+'                Debug.Print "Executing line " & eLine
+'                #End If
                 frmCavebot.lstScript.ListIndex = eLine
             Else
                 #If FinalMode = 0 Then
@@ -236,17 +236,17 @@ Public Function getSpellKill(idConnection As Integer, ByRef mobName As String) A
 End Function
 
 
-Public Sub SafeLoadSpecialGMnames(ByVal filename As String)
+Public Sub SafeLoadSpecialGMnames(ByVal Filename As String)
     On Error GoTo gotErr
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
     RemoveAllSpecialGMname
 
-    If fso.FileExists(filename) = True Then
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       While Not EOF(fn)
         Line Input #fn, strLine
         If strLine <> "" Then
@@ -267,7 +267,7 @@ Public Sub LoadSpecialGMnames()
   Dim strFile As String
   Dim strAll As String
   strFile = "specialgm\names.txt"
-  strMyPath = App.path
+  strMyPath = App.Path
   If Right$(strMyPath, 1) <> "\" Then
     strMyPath = strMyPath & "\"
   End If
@@ -2462,35 +2462,61 @@ Public Function RightNumberOfClicks(idConnection As Integer) As String
     RightNumberOfClicks = res
 End Function
 
-Public Sub WriteBlueSquare(ByVal idConnection As Integer, ByVal targetID As Long)
-    On Error GoTo gotErr
-    Dim currentAdr As Long
-    Dim pid As Long
-    pid = ProcessID(idConnection)
-    If pid = -1 Then
-        Debug.Print "Unable to do WriteBlueSquare (pid = -1)"
-        Exit Sub
-    End If
-    If (TibiaVersionLong >= 1100) Then
-        currentAdr = ReadCurrentAddress(pid, adrNewBlueSquare, -1, False)
-        If (currentAdr = -1) Then
-            Debug.Print "ERROR: adrNewBlueSquare=" & AddressPathToString(adrNewBlueSquare) & " = -1 !!"
-        Else
-            QMemory_Write4Bytes pid, currentAdr, targetID
-'          Debug.Print "WriteBlueSquare OK : " & targetID
-        End If
-    Else
-        Debug.Print "ERROR: WriteBlueSquare not intended for older versions of Tibia"
-    End If
-    Exit Sub
-gotErr:
-    Exit Sub
-End Sub
+'Public Sub WriteBlueSquare(ByVal idConnection As Integer, ByVal targetID As Long)
+'    On Error GoTo gotErr
+'    Dim currentAdr As Long
+'    Dim pid As Long
+'    pid = ProcessID(idConnection)
+'    If pid = -1 Then
+'        Debug.Print "Unable to do WriteBlueSquare (pid = -1)"
+'        Exit Sub
+'    End If
+'    If (TibiaVersionLong >= 1100) Then
+'        currentAdr = ReadCurrentAddress(pid, adrNewBlueSquare, -1, False)
+'        If (currentAdr = -1) Then
+'            Debug.Print "ERROR: adrNewBlueSquare=" & AddressPathToString(adrNewBlueSquare) & " = -1 !!"
+'        Else
+'            QMemory_Write4Bytes pid, currentAdr, targetID
+''          Debug.Print "WriteBlueSquare OK : " & targetID
+'        End If
+'    Else
+'        Debug.Print "ERROR: WriteBlueSquare not intended for older versions of Tibia"
+'    End If
+'    Exit Sub
+'gotErr:
+'    Exit Sub
+'End Sub
 
+Public Sub SetSquareColor(ByVal pid As Long, ByVal creatureID As Long, _
+ ByVal Alpha As Long, ByVal Red As Long, ByVal Green As Long, ByVal Blue As Long)
+    Dim creatureAdr As Long
+    Dim creatureInfoAdr As Long
+    Dim adrAlpha As Long
+    Dim adrRed As Long
+    Dim adrGreen As Long
+    Dim adrBlue As Long
+    creatureAdr = FindCollectionItemByKey(pid, adrBattlelist_CollectionStart, creatureID)
+    If Not (creatureAdr = -1) Then
+       'Debug.Print "key " & CStr(Hex(creatureID)) & " found at " & CStr(Hex(creatureAdr))
+       creatureInfoAdr = QMemory_Read4Bytes(pid, creatureAdr + &H14)
+       'Debug.Print "creatureInfoAdr=" & Hex(creatureInfoAdr)
+       adrAlpha = creatureInfoAdr + offSetSquare_ARGB_8bytes
+       'Debug.Print "adrAlpha=" & Hex(adrAlpha)
+       adrRed = adrAlpha + 2
+       adrGreen = adrAlpha + 4
+       adrBlue = adrAlpha + 6
+       QMemory_Write2Bytes pid, adrAlpha, Alpha
+       QMemory_Write2Bytes pid, adrRed, Red
+       QMemory_Write2Bytes pid, adrGreen, Green
+       QMemory_Write2Bytes pid, adrBlue, Blue
+    End If
+End Sub
 Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
     On Error GoTo gotErr
     Dim currentAdr As Long
     Dim pid As Long
+    Dim previousTargetID As Long
+    Const drawRedSquare As Boolean = True
     pid = ProcessID(idConnection)
     If pid = -1 Then
         Debug.Print "Unable to do WriteRedSquare (pid = -1)"
@@ -2498,11 +2524,24 @@ Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
     End If
     If (TibiaVersionLong >= 1100) Then
         currentAdr = ReadCurrentAddress(pid, adrNewRedSquare, -1, False)
+        previousTargetID = QMemory_Read4Bytes(pid, currentAdr)
         If (currentAdr = -1) Then
             Debug.Print "ERROR: adrNewRedSquare=" & AddressPathToString(adrNewRedSquare) & " = -1 !!"
         Else
             QMemory_Write4Bytes pid, currentAdr, targetID
-           ' Debug.Print "WriteRedSquare OK : " & targetID
+            If drawRedSquare Then ' Drawing the red square can take a lot of time until we make a proper FindCollectionItemByKey
+    
+                If Not (previousTargetID = 0) Then
+                    SetSquareColor pid, previousTargetID, 0, 65535, 65535, 65535 ' 100% transparent White
+                    If Not (targetID = 0) Then
+                      SetSquareColor pid, targetID, 65535, 65535, 0, 0 ' 0% transparent Red
+                    End If
+                Else
+                    If Not (targetID = 0) Then
+                      SetSquareColor pid, targetID, 65535, 65535, 0, 0 ' 0% transparent Red
+                    End If
+                End If
+            End If
         End If
     Else
         If RedSquare <> &H0 Then
@@ -2674,10 +2713,10 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
                     End If
                     If TibiaVersionLong >= 1100 Then
                         sCheat = "09 00 A1 " & SpaceID(targetID) & " " & SpaceID(targetID) ' 09 00 A1 CA C1 03 40 A1 CA C1 03
-                        Debug.Print sCheat
+                        'Debug.Print sCheat
                         ' GAMECLIENT1>( hex ) 09 00 A1 00 00 00 00 00 00 00 00
                         ' GAMECLIENT1>( hex ) 01 00 BE
-                        WriteBlueSquare idConnection, targetID
+                       ' WriteBlueSquare idConnection, targetID
                         WriteRedSquare idConnection, targetID
                         inRes = GetCheatPacket(cPacket, sCheat)
                         frmMain.UnifiedSendToServerGame idConnection, cPacket, True
@@ -7084,7 +7123,7 @@ Public Function PrintDictionary(idConnection As Integer) As Long
   aRes = SendLogSystemMessageToClient(idConnection, "Listing all creatures on memory:")
   DoEvents
   goodItems = NameOfID(idConnection).Keys
-  lim = NameOfID(idConnection).count - 1
+  lim = NameOfID(idConnection).Count - 1
   'find source
   foundAsource = False
   For i = 0 To lim
@@ -7540,10 +7579,10 @@ Public Sub ChaotizeXY(ByVal idConnection As Integer, ByRef Px As Long, ByRef Py 
   tries = 0
   If cavebotEnabled(idConnection) = True Then
     If CavebotChaoticMode(idConnection) = 1 Then
-       res.color = 1
+       res.Color = 1
        res.walkable = False
        ' randomize, but avoid no walkable points
-       While ((res.color <> &H0) And (res.walkable = False) And (tries < 4))
+       While ((res.Color <> &H0) And (res.walkable = False) And (tries < 4))
           X = Px + randomNumberBetween(-1, 1)
           y = Py + randomNumberBetween(-1, 1)
           tries = tries + 1

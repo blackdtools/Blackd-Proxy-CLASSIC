@@ -89,7 +89,7 @@ Private Const REALTIME_PRIORITY_CLASS = &H100
 Global Const HWND_TOPMOST = -1
 Global Const SWP_NOMOVE = 2
 Global Const SWP_NOSIZE = 1
-Global Const flags = SWP_NOMOVE Or SWP_NOSIZE
+Global Const Flags = SWP_NOMOVE Or SWP_NOSIZE
 
 Public Enum ProcessPriorities
     ppidle = IDLE_PRIORITY_CLASS

@@ -13,8 +13,8 @@ Public lastClient As Long
 Public lastValid(0 To 5) As String
 'tray icon
 
-Public OutfitOfName(0 To 5) As scripting.Dictionary
-Public OutfitOfChar(0 To 5) As scripting.Dictionary
+Public OutfitOfName(0 To 5) As Scripting.Dictionary
+Public OutfitOfChar(0 To 5) As Scripting.Dictionary
 
 Public GLOBAL_FRIENDSLOWLIMIT_HP As Long
 Public GLOBAL_MYSAFELIMIT_HP As Long
@@ -28,10 +28,10 @@ Public Type TypeMagebomb
   LogFileName As String
   IPstring As String
   PORTnumber As Long
-  ConnectionStatus As Long
+  connectionStatus As Long
   ConnectionTimeout As Long
   nextSendLogin As Long
-  key(15) As Byte
+  Key(15) As Byte
   loginPacket() As Byte
   attackPacket() As Byte
 End Type
@@ -48,7 +48,7 @@ Public SECONDCONNECTIONTIMEOUT_ms As Long
 Public DebugingMagebomb As Boolean
 Public MagebombStartTime As Long
 
-Public EnemyList As scripting.Dictionary
+Public EnemyList As Scripting.Dictionary
 
 
 
@@ -192,10 +192,10 @@ Public Sub LoadFile(thename As String)
   On Error GoTo gotErr
   #End If
   
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
+  Dim Filename As String
   Dim i As Long
   Dim seguir As Boolean
   Dim b1 As Byte
@@ -204,11 +204,11 @@ Public Sub LoadFile(thename As String)
   Dim b4 As Byte
   Dim b5 As Byte
   Dim b6 As Byte
-  Set fso = New scripting.FileSystemObject
-    filename = App.path & "\wargroups\" & Left$(thename, Len(thename) - 3) & "out"
-    If fso.FileExists(filename) = True Then
+  Set fso = New Scripting.FileSystemObject
+    Filename = App.Path & "\wargroups\" & Left$(thename, Len(thename) - 3) & "out"
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
         Line Input #fn, strLine
         b1 = CByte(CLng(strLine))
         If CLng(b1) < firstValidOutfit Then
@@ -284,17 +284,17 @@ Public Sub LoadEnemies()
   #If FinalMode = 1 Then
   On Error GoTo gotErr
   #End If
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
+  Dim Filename As String
   Dim res As Long
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
     RemoveAllEnemies
-    filename = App.path & "\wargroups\" & "enemies.txt"
-    If fso.FileExists(filename) = True Then
+    Filename = App.Path & "\wargroups\" & "enemies.txt"
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       While Not EOF(fn)
         Line Input #fn, strLine
         If strLine <> "" Then
@@ -314,16 +314,16 @@ Public Sub LoadWarbotFiles()
   #End If
   frmWarbot.lstGroups.Clear
   Dim found As Long
-  Dim filename As String
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
-  Set fs = New scripting.FileSystemObject
+  Dim Filename As String
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
+  Set fs = New Scripting.FileSystemObject
   found = 0
-  If (fs.FolderExists(App.path & "\wargroups") = False) Then
-    LogOnFile "errors.txt", "PLEASE UNZIP ALL: This path was not found: " & App.path & "\wargroups"
+  If (fs.FolderExists(App.Path & "\wargroups") = False) Then
+    LogOnFile "errors.txt", "PLEASE UNZIP ALL: This path was not found: " & App.Path & "\wargroups"
   Else
-    Set f = fs.GetFolder(App.path & "\wargroups")
+    Set f = fs.GetFolder(App.Path & "\wargroups")
     For Each f1 In f.Files
       If LCase(Right(f1.name, 3)) = "txt" Then
         LoadFile f1.name
@@ -333,8 +333,8 @@ Public Sub LoadWarbotFiles()
   End If
   If found > 0 Then
     frmWarbot.lstGroups.ListIndex = 0
-    filename = frmWarbot.lstGroups.List(0)
-    LoadGroupOutfit filename
+    Filename = frmWarbot.lstGroups.List(0)
+    LoadGroupOutfit Filename
   End If
   ReLoadAllCharOutfits
   LoadEnemies
@@ -451,13 +451,13 @@ Public Function CharIsListed(thenamepar As String) As Boolean
   End If
 End Function
 
-Public Sub SaveOutfit(filename As String, b0 As Byte, b1 As Byte, b2 As Byte, b3 As Byte, b4 As Byte, b5 As Byte)
+Public Sub SaveOutfit(Filename As String, b0 As Byte, b1 As Byte, b2 As Byte, b3 As Byte, b4 As Byte, b5 As Byte)
   Dim fn As Integer
   Dim strLine As String
   Dim i As Integer
   On Error GoTo justend
   fn = FreeFile
-  Open App.path & "\wargroups\" & filename For Output As #fn
+  Open App.Path & "\wargroups\" & Filename For Output As #fn
     Print #fn, CStr(CLng(b0))
     Print #fn, CStr(CLng(b1))
     Print #fn, CStr(CLng(b2))
@@ -465,13 +465,13 @@ Public Sub SaveOutfit(filename As String, b0 As Byte, b1 As Byte, b2 As Byte, b3
     Print #fn, CStr(CLng(b4))
     Print #fn, CStr(CLng(b5))
   Close #fn
-  filename = Left$(filename, Len(filename) - 3) & "txt"
-  AddNameOutfit 0, filename, b0
-  AddNameOutfit 1, filename, b1
-  AddNameOutfit 2, filename, b2
-  AddNameOutfit 3, filename, b3
-  AddNameOutfit 4, filename, b4
-  AddNameOutfit 5, filename, b5
+  Filename = Left$(Filename, Len(Filename) - 3) & "txt"
+  AddNameOutfit 0, Filename, b0
+  AddNameOutfit 1, Filename, b1
+  AddNameOutfit 2, Filename, b2
+  AddNameOutfit 3, Filename, b3
+  AddNameOutfit 4, Filename, b4
+  AddNameOutfit 5, Filename, b5
   Exit Sub
 justend:
   frmWarbot.Caption = "ERROR : Saveoutfit : " & Err.Description
@@ -480,11 +480,11 @@ End Sub
 Public Sub ReLoadAllCharOutfits()
   On Error GoTo gotErr
   Dim i As Long
-  Dim lasti As Long
-  Dim fso As scripting.FileSystemObject
+  Dim lastI As Long
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
+  Dim Filename As String
   Dim seguir As Boolean
   Dim b0 As Byte
   Dim b1 As Byte
@@ -494,8 +494,8 @@ Public Sub ReLoadAllCharOutfits()
   Dim b5 As Byte
   Dim groupFileName As String
   frmWarbot.lstAllNames.Clear
-  lasti = (frmWarbot.lstGroups.ListCount) - 1
-  For i = 0 To lasti
+  lastI = (frmWarbot.lstGroups.ListCount) - 1
+  For i = 0 To lastI
     groupFileName = frmWarbot.lstGroups.List(i)
     b0 = GetOutfitByteFromName(0, groupFileName)
     b1 = GetOutfitByteFromName(1, groupFileName)
@@ -503,10 +503,10 @@ Public Sub ReLoadAllCharOutfits()
     b3 = GetOutfitByteFromName(3, groupFileName)
     b4 = GetOutfitByteFromName(4, groupFileName)
     b5 = GetOutfitByteFromName(5, groupFileName)
-    Set fso = New scripting.FileSystemObject
-    filename = App.path & "\wargroups\" & groupFileName
+    Set fso = New Scripting.FileSystemObject
+    Filename = App.Path & "\wargroups\" & groupFileName
     fn = FreeFile
-    Open filename For Input As #fn
+    Open Filename For Input As #fn
     While Not EOF(fn)
     Line Input #fn, strLine
     If Len(strLine) > 0 Then
@@ -662,7 +662,7 @@ Public Function AutoHealFriend(idConnection As Integer, friendName As String, fr
       Exit Function
     End If
     fRes = SearchItem(idConnection, runeB1, runeB2)  'search thing
-    If fRes.foundcount = 0 Then
+    If fRes.foundCount = 0 Then
       AutoHealFriend = -1
       Exit Function
     End If
@@ -680,7 +680,7 @@ Public Function AutoHealFriend(idConnection As Integer, friendName As String, fr
     If castMode = 1 Then
       SpecialSource = False
       fRes = SearchItem(idConnection, runeB1, runeB2)  'search thing
-      If fRes.foundcount = 0 Then
+      If fRes.foundCount = 0 Then
         aRes = SendSystemMessageToClient(idConnection, "Open UHs or I won't autoheal friends!")
         DoEvents
         AutoHealFriend = -1
@@ -731,7 +731,7 @@ Public Sub RecordLoginOnFile(CharacterName As String, IPstring As String, _
    fn = FreeFile
  
    If CharacterName <> "" Then
-     loginfilename = App.path & "\magebomb\" & CharacterName & ".log"
+     loginfilename = App.Path & "\magebomb\" & CharacterName & ".log"
      Open loginfilename For Output As #fn
      Print #fn, CharacterName
      'Print #fn, FiveChrLon(tileID_SD)
@@ -741,22 +741,22 @@ Public Sub RecordLoginOnFile(CharacterName As String, IPstring As String, _
      If TibiaVersionLong <= 760 Then
        Print #fn, "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
      Else
-       Print #fn, GoodHex(packetKey(Index).key(0)) & " " & _
-        GoodHex(packetKey(Index).key(1)) & " " & _
-        GoodHex(packetKey(Index).key(2)) & " " & _
-        GoodHex(packetKey(Index).key(3)) & " " & _
-        GoodHex(packetKey(Index).key(4)) & " " & _
-        GoodHex(packetKey(Index).key(5)) & " " & _
-        GoodHex(packetKey(Index).key(6)) & " " & _
-        GoodHex(packetKey(Index).key(7)) & " " & _
-        GoodHex(packetKey(Index).key(8)) & " " & _
-        GoodHex(packetKey(Index).key(9)) & " " & _
-        GoodHex(packetKey(Index).key(10)) & " " & _
-        GoodHex(packetKey(Index).key(11)) & " " & _
-        GoodHex(packetKey(Index).key(12)) & " " & _
-        GoodHex(packetKey(Index).key(13)) & " " & _
-        GoodHex(packetKey(Index).key(14)) & " " & _
-        GoodHex(packetKey(Index).key(15))
+       Print #fn, GoodHex(packetKey(Index).Key(0)) & " " & _
+        GoodHex(packetKey(Index).Key(1)) & " " & _
+        GoodHex(packetKey(Index).Key(2)) & " " & _
+        GoodHex(packetKey(Index).Key(3)) & " " & _
+        GoodHex(packetKey(Index).Key(4)) & " " & _
+        GoodHex(packetKey(Index).Key(5)) & " " & _
+        GoodHex(packetKey(Index).Key(6)) & " " & _
+        GoodHex(packetKey(Index).Key(7)) & " " & _
+        GoodHex(packetKey(Index).Key(8)) & " " & _
+        GoodHex(packetKey(Index).Key(9)) & " " & _
+        GoodHex(packetKey(Index).Key(10)) & " " & _
+        GoodHex(packetKey(Index).Key(11)) & " " & _
+        GoodHex(packetKey(Index).Key(12)) & " " & _
+        GoodHex(packetKey(Index).Key(13)) & " " & _
+        GoodHex(packetKey(Index).Key(14)) & " " & _
+        GoodHex(packetKey(Index).Key(15))
      End If
      Print #fn, CStr(UBound(ReconnectionPacket(Index).packet))
      Print #fn, frmMain.showAsStr2(ReconnectionPacket(Index).packet, 2)
@@ -807,7 +807,7 @@ Public Sub AddToMagebombMemory(AddingLogFileName As String, AddingCharname As St
   Magebombs(MagebombsLoaded).PORTnumber = AddingPort
   Magebombs(MagebombsLoaded).RetryTime = AddingTime
   Magebombs(MagebombsLoaded).TargetToShot = AddingTarget
-  Magebombs(MagebombsLoaded).ConnectionStatus = 0
+  Magebombs(MagebombsLoaded).connectionStatus = 0
   Magebombs(MagebombsLoaded).ConnectionTimeout = 0
   Magebombs(MagebombsLoaded).nextSendLogin = 0
   strTmp = AddingRawKey
@@ -816,7 +816,7 @@ Public Sub AddToMagebombMemory(AddingLogFileName As String, AddingCharname As St
   inRes = GetCheatPacket(loginPacket, strTmp)
   ReDim Magebombs(MagebombsLoaded).loginPacket(AddingUBoundRawLoginPacket)
   For i = 0 To 15
-    Magebombs(MagebombsLoaded).key(i) = keyPacket(i)
+    Magebombs(MagebombsLoaded).Key(i) = keyPacket(i)
   Next i
   For i = 0 To AddingUBoundRawLoginPacket
     Magebombs(MagebombsLoaded).loginPacket(i) = loginPacket(i)
@@ -849,7 +849,7 @@ Public Function DeleteMagebombMemory(elementID As Long) As Long
       Magebombs(i).CharacterName = Magebombs(i + 1).CharacterName
       Magebombs(i).IPstring = Magebombs(i + 1).IPstring
       For j = 0 To 15
-        Magebombs(i).key(j) = Magebombs(i + 1).key(j)
+        Magebombs(i).Key(j) = Magebombs(i + 1).Key(j)
       Next j
       limN = UBound(Magebombs(i + 1).loginPacket)
       ReDim Magebombs(i).loginPacket(limN)
@@ -861,7 +861,7 @@ Public Function DeleteMagebombMemory(elementID As Long) As Long
       Magebombs(i).PORTnumber = Magebombs(i + 1).PORTnumber
       Magebombs(i).RetryTime = Magebombs(i + 1).RetryTime
       Magebombs(i).TargetToShot = Magebombs(i + 1).TargetToShot
-      Magebombs(i).ConnectionStatus = Magebombs(i + 1).ConnectionStatus
+      Magebombs(i).connectionStatus = Magebombs(i + 1).connectionStatus
       Magebombs(i).ConnectionTimeout = Magebombs(i + 1).ConnectionTimeout
     Next i
     MagebombsLoaded = MagebombsLoaded - 1
@@ -901,7 +901,7 @@ Public Function ExecuteMagebomb(idConnection As Integer, givenTarget As String) 
     If MagebombsLoaded > 0 Then
       mustRestart = False
       For i = 0 To limM
-        If Magebombs(i).ConnectionStatus = 0 Then
+        If Magebombs(i).connectionStatus = 0 Then
           mustRestart = True
         End If
       Next i
@@ -946,7 +946,7 @@ Public Function ExecuteMagebomb(idConnection As Integer, givenTarget As String) 
     ' all ok
     MagebombLeader = idConnection
     For i = 0 To limM
-      Magebombs(0).ConnectionStatus = 0
+      Magebombs(0).connectionStatus = 0
       If (i > frmMagebomb.clientLess.UBound) Then
          Load frmMagebomb.clientLess(i)
       End If
@@ -985,7 +985,7 @@ End Function
 
 Public Function BuildAttackPacket(magebombID As Long, defaultTarget As String) As Long
   Dim idConnection As Integer
-  Dim target As String
+  Dim Target As String
   Dim runeB1 As Byte
   Dim runeB2 As Byte
   Dim aRes As Long
@@ -1083,19 +1083,19 @@ Public Function BuildAttackPacket(magebombID As Long, defaultTarget As String) A
   End Select
   'SpecialSource = True
   If defaultTarget = "" Then
-    target = Magebombs(magebombID).TargetToShot
+    Target = Magebombs(magebombID).TargetToShot
   Else
-    target = defaultTarget
+    Target = defaultTarget
   End If
   If Magebombs(magebombID).LoginVersion <= 760 Then
     BuildAttackPacket = -2
     Exit Function
   End If
   ' search the creature
-  lTarget = LCase(target)
+  lTarget = LCase(Target)
   TheIDisFound = False
   idsOnMemory = NameOfID(idConnection).Keys
-    lim = NameOfID(idConnection).count - 1
+    lim = NameOfID(idConnection).Count - 1
   For i = 0 To lim
     currItem = CDbl(idsOnMemory(i))
     currName = LCase(NameOfID(idConnection).item(currItem))

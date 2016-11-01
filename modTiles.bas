@@ -8546,8 +8546,8 @@ Const expectedVersion As Long = 17223
   ' Debug.Print "Current .dat version=" & CurrentTibiaDatVERSION
 
   tibiadathere = tibiadathere & CurrentTibiaDatFILE
-  Dim fso As scripting.FileSystemObject
-  Set fso = New scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   If fso.FileExists(tibiadathere) = False Then
     LoadDatFileQ = -1
     Exit Function
@@ -9608,7 +9608,7 @@ Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As
       par_file = "tibia.dat"
       Exit Sub
   End If
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
   Dim Filename As String
@@ -9617,7 +9617,7 @@ Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As
   Dim mustContinueLoop As Boolean
   mustContinueLoop = True
   appearancesFound = False
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
     Filename = strFilePath & "catalog-content.json"
     If fso.FileExists(Filename) = True Then
       fn = FreeFile

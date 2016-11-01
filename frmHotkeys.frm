@@ -275,7 +275,7 @@ Private Sub cmdDeleteSel_Click()
   Dim firstrow As Long
   Dim lastrow As Long
   Dim firstI As Long
-  Dim lasti As Long
+  Dim lastI As Long
   Dim i As Long
   Dim difR As Long
   ReleasePressKey
@@ -297,8 +297,8 @@ Private Sub cmdDeleteSel_Click()
   ' lblDebug.Caption = "First = " & firstRow & " ; Last = " & lastRow
    firstI = firstrow - 1
    difR = lastrow - firstrow + 1
-   lasti = NumberOfHotkeys - difR - 1
-    For i = firstI To lasti
+   lastI = NumberOfHotkeys - difR - 1
+    For i = firstI To lastI
       If i + difR <= (NumberOfHotkeys - 1) Then
         Hotkeys(i).key1 = Hotkeys(i + difR).key1
         Hotkeys(i).key2 = Hotkeys(i + difR).key2
@@ -340,7 +340,7 @@ Public Function SaveHotkeys() As Integer
   #End If
   res = -1
   fn = FreeFile
-  Open App.path & "\" & "hotkeys.ini" For Output As #fn
+  Open App.Path & "\" & "hotkeys.ini" For Output As #fn
     Print #fn, CStr(NumberOfHotkeys)
     For i = 1 To NumberOfHotkeys
       strLine = "#" & HotkeyIDFixedLen(Hotkeys(i - 1).key1) & " + #" & _
@@ -384,7 +384,7 @@ Public Function LoadHotkeys() As Integer
   Dim comms As String
   On Error GoTo justend
   fn = FreeFile
-  Open App.path & "\hotkeys.ini" For Input As #fn
+  Open App.Path & "\hotkeys.ini" For Input As #fn
     Line Input #fn, strLine
     NumberOfHotkeys = CLng(strLine)
     If NumberOfHotkeys = 0 Then
@@ -638,7 +638,7 @@ Private Sub timerHotkeys_Timer()
   If (espectingHotkey = True) Then ' defining hotkeys
     aRes = 0
     For i = 1 To 255
-      If KeyB.key(i) > &H0 Then
+      If KeyB.Key(i) > &H0 Then
         aRes = i
       End If
     Next i
@@ -667,8 +667,8 @@ Private Sub timerHotkeys_Timer()
     End If
     For i = 0 To limhot
       activated = False
-      If (KeyB.key(Hotkeys(i).key1) > 0) Or (Hotkeys(i).key1 = 0) Then
-        If (KeyB.key(Hotkeys(i).key2) > 0) Or (Hotkeys(i).key2 = 0) Then
+      If (KeyB.Key(Hotkeys(i).key1) > 0) Or (Hotkeys(i).key1 = 0) Then
+        If (KeyB.Key(Hotkeys(i).key2) > 0) Or (Hotkeys(i).key2 = 0) Then
           If Not ((Hotkeys(i).key1 = 0) And (Hotkeys(i).key2 = 0)) Then
             activated = True
             If Hotkeys(i).usable = True Then

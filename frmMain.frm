@@ -507,7 +507,9 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 #Const FinalMode = 1
 #Const BufferDebug = 0
+
 Option Explicit
+
 
 Private Const OptCte4 = 1 'internal size of a byte ( 1 byte )
 Private Declare Sub RtlMoveMemory Lib "kernel32" ( _
@@ -853,15 +855,15 @@ Private Sub Form_Load()
   lastLoadLine = 600
   frmLoading.NotifyLoadProgress dblAmLoaded, "Creating the first activex dictionary"
 lastLoadLine = 601
-  Set GameServerDictionary = New scripting.Dictionary
-  Set GameServerDictionaryDOMAIN = New scripting.Dictionary
-  Set specialGMnames = New scripting.Dictionary
+  Set GameServerDictionary = New Scripting.Dictionary
+  Set GameServerDictionaryDOMAIN = New Scripting.Dictionary
+  Set specialGMnames = New Scripting.Dictionary
   lastLoadLine = 602
-  Set ValueOfUservar = New scripting.Dictionary
+  Set ValueOfUservar = New Scripting.Dictionary
   lastLoadLine = 603
-  Set ProcessidIPrelations = New scripting.Dictionary
-  Set ProcessidAccountRelations = New scripting.Dictionary
-  Set IgnoredCreatures = New scripting.Dictionary
+  Set ProcessidIPrelations = New Scripting.Dictionary
+  Set ProcessidAccountRelations = New Scripting.Dictionary
+  Set IgnoredCreatures = New Scripting.Dictionary
   lastLoadLine = 604
   
  dblAmLoaded = 65
@@ -1187,28 +1189,28 @@ lastLoadLine = 660
     frmLoading.NotifyLoadProgress dblAmLoaded, "Creating activex dictionaries"
     ' Init dictionary objects:
     lastLoadLine = 720
-    Set cavebotScript(i) = New scripting.Dictionary
-    Set cavebotMelees(i) = New scripting.Dictionary
-    Set cavebotAvoid(i) = New scripting.Dictionary
-    Set cavebotExorivis(i) = New scripting.Dictionary
-    Set cavebotHMMs(i) = New scripting.Dictionary
-    Set DictSETUSEITEM(i) = New scripting.Dictionary
-    Set shotTypeDict(i) = New scripting.Dictionary
-    Set exoriTypeDict(i) = New scripting.Dictionary
-    Set cavebotGoodLoot(i) = New scripting.Dictionary
-    Set killPriorities(i) = New scripting.Dictionary
-    Set SpellKills_SpellName(i) = New scripting.Dictionary
-    Set SpellKills_Dist(i) = New scripting.Dictionary
-    Set NameOfID(i) = New scripting.Dictionary
+    Set cavebotScript(i) = New Scripting.Dictionary
+    Set cavebotMelees(i) = New Scripting.Dictionary
+    Set cavebotAvoid(i) = New Scripting.Dictionary
+    Set cavebotExorivis(i) = New Scripting.Dictionary
+    Set cavebotHMMs(i) = New Scripting.Dictionary
+    Set DictSETUSEITEM(i) = New Scripting.Dictionary
+    Set shotTypeDict(i) = New Scripting.Dictionary
+    Set exoriTypeDict(i) = New Scripting.Dictionary
+    Set cavebotGoodLoot(i) = New Scripting.Dictionary
+    Set killPriorities(i) = New Scripting.Dictionary
+    Set SpellKills_SpellName(i) = New Scripting.Dictionary
+    Set SpellKills_Dist(i) = New Scripting.Dictionary
+    Set NameOfID(i) = New Scripting.Dictionary
 
-    Set HPOfID(i) = New scripting.Dictionary
-    Set DirectionOfID(i) = New scripting.Dictionary
-    Set BigMapNamesX = New scripting.Dictionary
-    Set BigMapNamesY = New scripting.Dictionary
-    Set BigMapNamesZ = New scripting.Dictionary
-    Set BigMapNamesC = New scripting.Dictionary
-    Set MapIDTranslator = New scripting.Dictionary
-    Set IgnoredCreatures(i) = New scripting.Dictionary
+    Set HPOfID(i) = New Scripting.Dictionary
+    Set DirectionOfID(i) = New Scripting.Dictionary
+    Set BigMapNamesX = New Scripting.Dictionary
+    Set BigMapNamesY = New Scripting.Dictionary
+    Set BigMapNamesZ = New Scripting.Dictionary
+    Set BigMapNamesC = New Scripting.Dictionary
+    Set MapIDTranslator = New Scripting.Dictionary
+    Set IgnoredCreatures(i) = New Scripting.Dictionary
     lastLoadLine = 730
     dblAmLoaded = 70
       frmLoading.NotifyLoadProgress dblAmLoaded, "Building the core"
@@ -1225,7 +1227,7 @@ lastLoadLine = 660
       Backpack(i, j).name = ""
     Next j
   Next i
-  Set EnemyList = New scripting.Dictionary
+  Set EnemyList = New Scripting.Dictionary
   lastLoadLine = 740
   ' blank lines to be writen in map matrix in a block while moving:
   For j = 0 To 10
@@ -3404,9 +3406,12 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
     strInfo = Left(strInfo, i)
     adrConnectionKey = ReadAddressPath(strInfo)
   Else
-    adrConnectionKey = ReadAddressPath("&H6FA1A0") ' oldest value
+    If TibiaVersionLong >= 1100 Then
+        adrConnectionKey = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1DC > 308 > 90 > C8") ' 11.01
+    Else
+        adrConnectionKey = ReadAddressPath("&H6FA1A0") ' oldest value
+    End If
   End If
-  
 
   ' Tibia 11 +
   strInfo = String$(255, 0)
@@ -3417,16 +3422,26 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   Else
     adrNewRedSquare = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1D8 > E4 > 1C")  ' 11.0
   End If
-
-  ' Tibia 11 +
-  strInfo = String$(255, 0)
-  i = getBlackdINI("MemoryAddresses", "adrNewBlueSquare", "", strInfo, Len(strInfo), here)
+  
+  strInfo = String$(10, 0)
+  i = getBlackdINI("MemoryAddresses", "offSetSquare_ARGB_8bytes", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrNewBlueSquare = ReadAddressPath(strInfo)
+    lonInfo = CLng(strInfo)
+    offSetSquare_ARGB_8bytes = lonInfo
   Else
-    adrNewBlueSquare = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1D8 > E4 > 14")  ' 11.0
+    offSetSquare_ARGB_8bytes = &H84 ' Tibia 11.00
   End If
+  
+'  ' Tibia 11 +
+'  strInfo = String$(255, 0)
+'  i = getBlackdINI("MemoryAddresses", "adrNewBlueSquare", "", strInfo, Len(strInfo), here)
+'  If i > 0 Then
+'    strInfo = Left(strInfo, i)
+'    adrNewBlueSquare = ReadAddressPath(strInfo)
+'  Else
+'    adrNewBlueSquare = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1D8 > E4 > 14")  ' 11.0
+'  End If
 
   ' Tibia ANY version
   strInfo = String$(255, 0)
@@ -3467,7 +3482,15 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   Else
     adrServerList_CollectionStart = ReadAddressPath("""Qt5Core.dll"" + 4555C8 > 8 > 168 > 54 > 18 > 2c") ' 11.0
   End If
-  
+ 
+  strInfo = String$(255, 0)
+  i = getBlackdINI("MemoryAddresses", " adrBattlelist_CollectionStart", "", strInfo, Len(strInfo), here)
+  If i > 0 Then
+    strInfo = Left(strInfo, i)
+     adrBattlelist_CollectionStart = ReadAddressPath(strInfo)
+  Else
+     adrBattlelist_CollectionStart = ReadAddressPath("""Qt5Core.dll"" + 4555C8 > 8 > 1D8 > E4 > 8") ' 11.0
+  End If
   
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrSelectedCharName_afterCharList", "", strInfo, Len(strInfo), here)
@@ -6852,9 +6875,14 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
   Dim res As Long
   Dim tmpPORT As Long
   Dim strToDomain As String
+  Dim tmpStr As String
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
+  
+  If cteDebugConEvents = True Then
+     LogConEvent "SckClientGame_ConnectionRequest(" & CStr(Index) & "," & CStr(requestID) & ")"
+  End If
   useID = 0
   For i = 1 To MAXCLIENTS
     If GameConnected(i) = False Then
@@ -6894,10 +6922,16 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
       'now gameserver must send something first
       tmpID = CInt(useID)
       ProcessID(tmpID) = GetProcessIdByAdrConnected()
-      Debug.Print "Connection request at mc slot " & CStr(tmpID) & " from PID = " & ProcessID(tmpID)
+      If cteDebugConEvents = True Then
+        LogConEvent "Connection request at mc slot " & CStr(tmpID) & " from PID = " & ProcessID(tmpID)
+      End If
       'ProcessID(tmpID) = GetProcessIdByManualDebug()
       If ProcessID(tmpID) = -1 Then
-        txtPackets.Text = txtPackets.Text & vbCrLf & "#critical error 4 on connection " & tmpID & " , closing it#"
+        tmpStr = "#critical error 4 on connection " & tmpID & " , closing it#"
+        txtPackets.Text = txtPackets.Text & vbCrLf & tmpStr
+        If cteDebugConEvents = True Then
+          LogConEvent tmpStr
+        End If
         sckClientGame(tmpID).Close
         sckServerGame(tmpID).Close
         GameConnected(tmpID) = False
@@ -6905,7 +6939,11 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
         Exit Sub
       End If
       If ProcessID(tmpID) = -2 Then
-        txtPackets.Text = txtPackets.Text & vbCrLf & "#cant stablish connection " & tmpID & " because there are several clients at login screen, aborting connection#"
+        tmpStr = "#critical error 4 on connection " & tmpID & " , closing it#"
+        txtPackets.Text = txtPackets.Text & vbCrLf & tmpStr
+        If cteDebugConEvents = True Then
+          LogConEvent tmpStr
+        End If
         sckClientGame(tmpID).Close
         sckServerGame(tmpID).Close
         GameConnected(tmpID) = False
@@ -6925,7 +6963,11 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
         ' set selName
         BuildCharListForTibiaQ tmpID, selName, listPos
         If listPos = -1 Then ' unexpected packet
-          txtPackets.Text = txtPackets.Text & vbCrLf & "#critical error 1 on connection " & tmpID & " , closing it#"
+          tmpStr = "#critical error 1 on connection " & tmpID & " , closing it#"
+          txtPackets.Text = txtPackets.Text & vbCrLf & tmpStr
+          If cteDebugConEvents = True Then
+            LogConEvent tmpStr
+          End If
           sckClientGame(tmpID).Close
           sckServerGame(tmpID).Close
           GameConnected(tmpID) = False
@@ -6986,6 +7028,9 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
       '     MustCheckFirstClientPacket(tmpID) = False
       MustCheckFirstClientPacket(tmpID) = True
       NeedToIgnoreFirstGamePacket(tmpID) = True
+      If cteDebugConEvents = True Then
+         LogConEvent "M = True ; N = True"
+      End If
       If TrueServer2.Value = True Then
         txtPackets.Text = txtPackets.Text & vbCrLf & "# the client ID " & tmpID & " selected the character " & _
          selName & " - forwarding connection to " & _
@@ -7024,6 +7069,9 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
           tmpPORT = CLng(CharacterList2(tmpID).item(listPos).serverPort)
           sckServerGame(tmpID).RemotePort = tmpPORT
           sckServerGame(tmpID).Connect
+          If cteDebugConEvents = True Then
+            LogConEvent "Connecting to " & CharacterList2(tmpID).item(listPos).ServerName & " = " & CharacterList2(tmpID).item(listPos).serverDOMAIN & ":" & CharacterList2(tmpID).item(listPos).serverPort
+          End If
         Else ' old method
           txtPackets.Text = txtPackets.Text & vbCrLf & "#the client ID " & tmpID & " selected the character " & _
            CharacterList2(tmpID).item(listPos).CharacterName & " - forwarding connection to " & _
@@ -7120,6 +7168,9 @@ Private Sub HandleSckClientGame_Data(ByRef Index As Integer, ByRef MyCodingIsLaz
               ReDim packet(UBound(realRawPacket))
               RtlMoveMemory packet(0), realRawPacket(0), UBound(realRawPacket) + 1
               MustCheckFirstClientPacket(Index) = True
+              If cteDebugConEvents = True Then
+                LogConEvent "M = True. Starting workaround for rare error"
+              End If
               GoTo workAroundForRareError
             Else
               GiveCrackdDllErrorMessage pres, SPpacket, packetKey(Index).Key, UBound(SPpacket), UBound(packetKey(Index).Key), 1
@@ -7258,6 +7309,9 @@ workAroundForRareError:
     
     
      MustCheckFirstClientPacket(Index) = False
+     If cteDebugConEvents = True Then
+        LogConEvent "M = False"
+     End If
      If TibiaVersionLong <= 840 Then
      If TrueServer2.Value = True Then
        
@@ -8452,9 +8506,37 @@ nextLoop:
     
   ElseIf (NeedToIgnoreFirstGamePacket(idConnection) = True) Then
     NeedToIgnoreFirstGamePacket(idConnection) = False
+    If cteDebugConEvents = True Then
+         LogConEvent "N = False"
+    End If
+   
+    
     ReDim packet(withHeaderL)
     RtlMoveMemory packet(0), ConnectionBuffer(idConnection).packet(withHeaderS), (OptCte4 * nBytes)
-    
+    If cteDebugConEvents = True Then
+         LogConEvent "Initial packet from gameserver: " & frmMain.showAsStr2(packet, 0)
+    End If
+    If TibiaVersionLong >= 1099 Then
+        If (UBound(packet) > 8) Then
+            If packet(8) = &H1F Then
+              If cteDebugConEvents = True Then
+                LogConEvent "OK: Good initial packet"
+              End If
+            Else
+              If cteDebugConEvents = True Then
+                LogConEvent "WARNING: Unexpected initial packet format. Trying experimental solution"
+                LogConEvent "N = True"
+              End If
+              NeedToIgnoreFirstGamePacket(idConnection) = True
+            End If
+        Else
+           If cteDebugConEvents = True Then
+              LogConEvent "WARNING: Too short packet!! Ubound = " & CStr(UBound(packet))
+              LogConEvent "N = True"
+           End If
+           NeedToIgnoreFirstGamePacket(idConnection) = True
+        End If
+    End If
     #If BufferDebug Then
     LogOnFile "bufferLog.txt", "(" & CStr(idConnection) & ") EXTRACTING 1 COMPLETE PACKET (FIRST):"
     LogOnFile "bufferLog.txt", showAsStr2(packet, 0)
@@ -9046,9 +9128,9 @@ Private Function GetWITHTIBIADATtrivial() As String
 End Function
 Private Function GetWITHTIBIADAT() As String
     'On Error GoTo goterr
-    Dim fso As New scripting.FileSystemObject
-    Dim fol As scripting.Folder
-    Dim fil As scripting.File
+    Dim fso As New Scripting.FileSystemObject
+    Dim fol As Scripting.Folder
+    Dim fil As Scripting.File
     Dim thename As String
     Dim usethisfolder As String
     Dim res As String
@@ -9070,7 +9152,7 @@ Private Function GetWITHTIBIADAT() As String
        End If
        usethisfolder = usethisfolder & "packages\Tibia\assets\"
     End If
-    Set fso = New scripting.FileSystemObject
+    Set fso = New Scripting.FileSystemObject
     If fso.FolderExists(usethisfolder) = False Then
         MsgBox "The Tibia folder you selected does not exist:" & vbCrLf & _
         usethisfolder & vbCrLf & _

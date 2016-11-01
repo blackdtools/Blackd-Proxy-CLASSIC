@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "41.1" ' Proxy version ' string version
-Public Const myNumericVersion = 41100 ' numeric version
+Public Const ProxyVersion = "41.5" ' Proxy version ' string version
+Public Const myNumericVersion = 41500 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -233,11 +233,11 @@ Public cavebotIDselected As Integer
 
 Public Matrix() As TypeStackTileInfo ' THE MAP MATRIX , it will have 5 dimensions!
 
-Public NameOfID() As scripting.Dictionary  ' A dictionary ID (double) -> name (string)
+Public NameOfID() As Scripting.Dictionary  ' A dictionary ID (double) -> name (string)
 
-Public HPOfID() As scripting.Dictionary ' A dictionary ID (double) -> HP% (byte)
+Public HPOfID() As Scripting.Dictionary ' A dictionary ID (double) -> HP% (byte)
 
-Public DirectionOfID() As scripting.Dictionary ' A dictionary ID (double) -> direction (byte)
+Public DirectionOfID() As Scripting.Dictionary ' A dictionary ID (double) -> direction (byte)
 
 
 

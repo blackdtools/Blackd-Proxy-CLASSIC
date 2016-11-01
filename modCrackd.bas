@@ -48,16 +48,19 @@ Public loginPacketKey() As TypeTibiaKey
 Public gotFirstLoginPacket() As Boolean
 Public UseCrackd As Boolean
 Public adrConnectionKey As AddressPath
+
 Public adrSelectedCharIndex As AddressPath
 Public adrSelectedItem_height As AddressPath
 Public adrSelectedCharName As AddressPath
 Public adrServerList_CollectionStart As AddressPath
+Public adrBattlelist_CollectionStart As AddressPath
 
 Public adrSelectedCharName_afterCharList As AddressPath
 Public adrSelectedServerURL_afterCharList As AddressPath
 Public adrSelectedServerPORT_afterCharList As AddressPath
 Public adrSelectedServerNAME_afterCharList As AddressPath
 
+Public offSetSquare_ARGB_8bytes As Long
 Public adrNewRedSquare As AddressPath
 Public adrNewBlueSquare As AddressPath
 
@@ -67,8 +70,8 @@ Public adrCharListPtrEND As Long
 Public debugStrangeFail As String
 Public MAXCHARACTERLEN As Long
 Public manualDebugOrder As Long
-Public GameServerDictionary As scripting.Dictionary  ' A dictionary server (string) -> IP (string)
-Public GameServerDictionaryDOMAIN As scripting.Dictionary
+Public GameServerDictionary As Scripting.Dictionary  ' A dictionary server (string) -> IP (string)
+Public GameServerDictionaryDOMAIN As Scripting.Dictionary
 
 Public Sub JustReadPID(idConnection As Integer)
  ' should be only used at login stage, in tibia 7.63+
@@ -128,21 +131,48 @@ gotErr:
   readLoginTibiaKeyAtPID = -1
 End Function
 
-Public Function readTibiaKeyAtPID(idConnection As Integer, ProcessID As Long) As Long
+Public Function readTibiaKeyAtPID(ByVal idConnection As Integer, ByVal ProcessID As Long) As Long
     Dim abyte As Byte
     Dim i As Integer
     Dim startAdr As Long
+    Dim allzeroes As Boolean
+    Dim t As Integer
+    Dim errorMsg As String
     startAdr = ReadCurrentAddress(ProcessID, adrConnectionKey, -1, False)
     If (startAdr = -1) Then
+        errorMsg = "Failed to obtain XTEA key!"
+        Debug.Print errorMsg
+        If cteDebugConEvents = True Then
+          errorMsg = errorMsg & vbCrLf & conEventLog
+        End If
+        LogOnFile "errors.txt", errorMsg
         readTibiaKeyAtPID = -1
         Exit Function
     End If
+    allzeroes = True
     For i = 0 To 15
         abyte = Memory_ReadByte(startAdr + i, ProcessID)
         packetKey(idConnection).Key(i) = abyte
+        If Not (abyte = &H0) Then
+            allzeroes = False
+        End If
     Next i
-    Debug.Print "Obtained XTEA key: " & frmMain.showAsStr(packetKey(idConnection).Key, True)
-    readTibiaKeyAtPID = 0
+    If (allzeroes) Then
+        errorMsg = "Failed to obtain XTEA key! (address value is zero)"
+        Debug.Print errorMsg
+        If cteDebugConEvents = True Then
+          errorMsg = errorMsg & vbCrLf & conEventLog
+        End If
+        LogOnFile "errors.txt", errorMsg
+        readTibiaKeyAtPID = -1
+    Else
+        If cteDebugConEvents = True Then
+           LogConEvent "Obtained XTEA key : " & frmMain.showAsStr(packetKey(idConnection).Key, True)
+           OverwriteOnFile "connEventsLog.txt", conEventLog
+           ResetConEventLogs
+        End If
+        readTibiaKeyAtPID = 0
+    End If
 End Function
 
 Public Function CompareLastPacket(ByVal pid As Long, ByRef packet() As Byte) As Boolean

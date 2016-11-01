@@ -196,8 +196,8 @@ Private Sub cmdSearchItems_Click()
   s2 = FromHexToDec(Mid(txtTileID.Text, 5, 1))
   b2 = (s1 * 16) + s2
   res = SearchItem(mapIDselected, b1, b2)
-  If res.foundcount > 0 Then
-    lblResult.Caption = "Found " & CStr(res.foundcount) & " items. Last at : bp " & _
+  If res.foundCount > 0 Then
+    lblResult.Caption = "Found " & CStr(res.foundCount) & " items. Last at : bp " & _
      CStr(CLng(res.bpID)) & " , slot " & CStr(CLng(res.slotID))
   Else
     lblResult.Caption = "None found"

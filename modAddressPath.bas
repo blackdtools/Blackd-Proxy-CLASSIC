@@ -94,7 +94,7 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
             Else
                 ' New format since Tibia 11
                 If (moduleDictionary Is Nothing) Then
-                    Set moduleDictionary = New scripting.Dictionary
+                    Set moduleDictionary = New Scripting.Dictionary
                 End If
                 reqKey = adrPath.baseModule & CStr(pid)
                 If moduleDictionary.Exists(reqKey) Then

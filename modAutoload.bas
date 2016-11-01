@@ -2,7 +2,7 @@ Attribute VB_Name = "modAutoload"
 #Const FinalMode = 1
 Option Explicit
 Private Const CteAutoloadSubfolder As String = "autoload"
-Public SettingsOfChar As scripting.Dictionary  ' A dictionary Char Name (string) -> Settings (string)
+Public SettingsOfChar As Scripting.Dictionary  ' A dictionary Char Name (string) -> Settings (string)
 Private AutoloadUsable As Boolean
 Private AutoloadPath As String
 
@@ -323,7 +323,7 @@ Private Sub LoadThisCharSetting(idConnection As Integer, strVar As String, strVa
     Case "CustomCondEvents_thing1"
         Aux_LastLoadedCond(idConnection).thing1 = strValue
     Case "CustomCondEvents_operator"
-        Aux_LastLoadedCond(idConnection).operator = strValue
+        Aux_LastLoadedCond(idConnection).Operator = strValue
     Case "CustomCondEvents_thing2"
         Aux_LastLoadedCond(idConnection).thing2 = strValue
     Case "CustomCondEvents_delay"
@@ -337,7 +337,7 @@ Private Sub LoadThisCharSetting(idConnection As Integer, strVar As String, strVa
     Case "CustomCondEvents_ADD"
         aRes = frmCondEvents.AddCondEvent(idConnection, _
          Aux_LastLoadedCond(idConnection).thing1, _
-         Aux_LastLoadedCond(idConnection).operator, _
+         Aux_LastLoadedCond(idConnection).Operator, _
          Aux_LastLoadedCond(idConnection).thing2, _
          Aux_LastLoadedCond(idConnection).delay, _
          Aux_LastLoadedCond(idConnection).lock, _
@@ -517,7 +517,7 @@ Public Sub SaveCharSettings(idConnection As Integer)
         DoEvents
         Exit Sub
     End If
-    myPath = App.path
+    myPath = App.Path
     If (Right$(myPath, 1) <> "\") And (Right$(myPath, 1) <> "/") Then
       myPath = myPath & "\" & CteAutoloadSubfolder & "\" & CharacterName(idConnection) & ".txt"
     Else
@@ -705,7 +705,7 @@ Public Sub SaveCharSettings(idConnection As Integer)
         strSettings = strSettings & "BEGIN_CustomCondEvents=1" & vbCrLf
         For i = 1 To CustomCondEvents(condEventsIDselected).Number
             strSettings = strSettings & "CustomCondEvents_thing1=" & CustomCondEvents(condEventsIDselected).ev(i).thing1 & vbCrLf
-            strSettings = strSettings & "CustomCondEvents_operator=" & CustomCondEvents(condEventsIDselected).ev(i).operator & vbCrLf
+            strSettings = strSettings & "CustomCondEvents_operator=" & CustomCondEvents(condEventsIDselected).ev(i).Operator & vbCrLf
             strSettings = strSettings & "CustomCondEvents_thing2=" & CustomCondEvents(condEventsIDselected).ev(i).thing2 & vbCrLf
             strSettings = strSettings & "CustomCondEvents_delay=" & CustomCondEvents(condEventsIDselected).ev(i).delay & vbCrLf
             strSettings = strSettings & "CustomCondEvents_lock=" & CustomCondEvents(condEventsIDselected).ev(i).lock & vbCrLf
@@ -788,17 +788,17 @@ Public Sub PreloadAllCharSettingsFromHardDisk()
   Dim strFileName As String
   Dim myPath As String
   Dim fn As Integer
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
   Dim currentSettingPath As String
   Dim currentSettingThing As String
   Dim currentCharName As String
   Dim strLine As String
   AutoloadUsable = True
-  Set SettingsOfChar = New scripting.Dictionary
+  Set SettingsOfChar = New Scripting.Dictionary
 
-  myPath = App.path
+  myPath = App.Path
   If (Right$(myPath, 1) <> "\") And (Right$(myPath, 1) <> "/") Then
     myPath = myPath & "\" & CteAutoloadSubfolder & "\"
   Else
@@ -806,7 +806,7 @@ Public Sub PreloadAllCharSettingsFromHardDisk()
   End If
   AutoloadPath = myPath
   
-  Set fs = New scripting.FileSystemObject
+  Set fs = New Scripting.FileSystemObject
   If fs.FolderExists(myPath) = False Then
     fs.CreateFolder (myPath)
     DoEvents

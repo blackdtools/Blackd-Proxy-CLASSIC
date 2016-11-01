@@ -41,12 +41,12 @@ Public currMapX As Long
 Public currMapY As Long
 Public currMapZ As Long
 
-Public BigMapNamesX As scripting.Dictionary
-Public BigMapNamesY As scripting.Dictionary
-Public BigMapNamesZ As scripting.Dictionary
-Public BigMapNamesC As scripting.Dictionary
+Public BigMapNamesX As Scripting.Dictionary
+Public BigMapNamesY As Scripting.Dictionary
+Public BigMapNamesZ As Scripting.Dictionary
+Public BigMapNamesC As Scripting.Dictionary
 
-Public MapIDTranslator As scripting.Dictionary
+Public MapIDTranslator As Scripting.Dictionary
 Public TheVeryBigMap() As Byte
 
 Public TibiaPath As String
@@ -540,9 +540,9 @@ Public Function ReadHardiskMapsQ() As Long
   Dim Ammount As Long
   Dim readed As Long
   Dim progr As Double
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
   Dim fn As Integer
   Dim mapFile As String
   Dim strID As String
@@ -566,7 +566,7 @@ Public Function ReadHardiskMapsQ() As Long
   RemoveAllMapTranslation
   Ammount = 0
   readed = 0
-  Set fs = New scripting.FileSystemObject
+  Set fs = New Scripting.FileSystemObject
   If fs.FolderExists(TibiaPath) = False Then
     ReadHardiskMapsQ = -1
     Exit Function
@@ -637,9 +637,9 @@ Public Function ReadHardiskMaps() As Long
   Dim Ammount As Long
   Dim readed As Long
   Dim progr As Double
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
   Dim fn As Integer
   Dim mapFile As String
   Dim strID As String
@@ -650,7 +650,7 @@ Public Function ReadHardiskMaps() As Long
   RemoveAllMapTranslation
   Ammount = 0
   readed = 0
-  Set fs = New scripting.FileSystemObject
+  Set fs = New Scripting.FileSystemObject
   If fs.FolderExists(TibiaPath) = False Then
     ReadHardiskMaps = -1
     Exit Function

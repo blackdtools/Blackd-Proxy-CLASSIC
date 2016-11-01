@@ -1375,7 +1375,7 @@ Private Sub timerTrainer_Timer()
               End If
               res1 = SearchItemDestinationForLoot(idConnection, Matrix(-1 + (slotID \ 3), -1 + (slotID Mod 3), myZ(idConnection), idConnection).s(sfoundhere).t1, _
                Matrix(-1 + (slotID \ 3), -1 + (slotID Mod 3), myZ(idConnection), idConnection).s(sfoundhere).t2, &HFF)
-              If res1.foundcount > 0 Then
+              If res1.foundCount > 0 Then
               sCheat = "78 " & GoodHex(LowByteOfLong(xpos)) & " " & GoodHex(HighByteOfLong(xpos)) & " " & _
                GoodHex(LowByteOfLong(ypos)) & " " & GoodHex(HighByteOfLong(ypos)) & " " & _
                GoodHex(CByte(myZ(idConnection))) & " " & _

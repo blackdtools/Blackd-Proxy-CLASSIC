@@ -1160,6 +1160,20 @@ End Sub
 
 
 
+'Private Sub cmdTest_Click()
+'    Dim itemAdr As Long
+'    Dim keyToFind As Long
+'    Dim tibia_pids() As Long
+'    Dim totalPids As Long
+'    keyToFind = CLng(Text1.Text)
+'    totalPids = GetTibiaPIDs(tibiamainname, tibiaclassname, tibia_pids)
+'    If (totalPids > 0) Then
+'
+'        itemAdr = FindCollectionItemByKey(tibia_pids(0), adrServerList_CollectionStart, keyToFind)
+'        Debug.Print "key " & CStr(keyToFind) & " found at " & CStr(Hex(itemAdr))
+'    End If
+'End Sub
+
 Private Sub cmdTrainer_Click()
   frmTrainer.WindowState = vbNormal
   frmTrainer.Show

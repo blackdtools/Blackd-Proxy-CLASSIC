@@ -2098,10 +2098,10 @@ Private Sub cmdLoadScript_Click()
   #If FinalMode Then
     On Error GoTo gotFerr
   #End If
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
+  Dim Filename As String
   Dim i As Long
 
   Dim sp As Boolean
@@ -2109,15 +2109,15 @@ Private Sub cmdLoadScript_Click()
     On Error GoTo gotErr
   #End If
   lblWarning.Caption = ""
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   If cavebotIDselected > 0 Then
     cavebotScript(cavebotIDselected).RemoveAll
     cavebotLenght(cavebotIDselected) = 0
-    filename = App.path & "\cavebot\" & txtFile.Text
-    If fso.FileExists(filename) = True Then
+    Filename = App.Path & "\cavebot\" & txtFile.Text
+    If fso.FileExists(Filename) = True Then
     
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       i = 0
       sp = False
       If EOF(fn) Then
@@ -2234,7 +2234,7 @@ Private Sub cmdSaveScript_Click()
   If cavebotIDselected > 0 Then
     limI = cavebotLenght(cavebotIDselected) - 1
     fn = FreeFile
-    Open App.path & "\cavebot\" & txtFile.Text For Output As #fn
+    Open App.Path & "\cavebot\" & txtFile.Text For Output As #fn
     For i = 0 To limI
       Print #fn, GetStringFromIDLine(cavebotIDselected, i)
     Next i
@@ -2416,11 +2416,11 @@ Public Sub ReloadFiles()
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
-  Set fs = New scripting.FileSystemObject
-  Set f = fs.GetFolder(App.path & "\cavebot")
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
+  Set fs = New Scripting.FileSystemObject
+  Set f = fs.GetFolder(App.Path & "\cavebot")
   txtFile.Clear
   For Each f1 In f.Files
     If LCase(Right(f1.name, 3)) = "txt" Then

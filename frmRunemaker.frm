@@ -958,16 +958,16 @@ Private Sub cmdDebug_Click()
 End Sub
 
 Private Sub cmdLoad_Click()
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
-  Dim filename As String
-  Set fso = New scripting.FileSystemObject
+  Dim Filename As String
+  Set fso = New Scripting.FileSystemObject
     lstFriends.Clear
-    filename = App.path & "\" & txtFile.Text
-    If fso.FileExists(filename) = True Then
+    Filename = App.Path & "\" & txtFile.Text
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       While Not EOF(fn)
         Line Input #fn, strLine
         If strLine <> "" Then
@@ -992,7 +992,7 @@ Private Sub cmdSave_Click()
   Dim i As Long
     limI = lstFriends.ListCount - 1
     fn = FreeFile
-    Open App.path & "\" & txtFile.Text For Output As #fn
+    Open App.Path & "\" & txtFile.Text For Output As #fn
     For i = 0 To limI
       Print #fn, lstFriends.List(i)
     Next i
@@ -1108,7 +1108,7 @@ Private Sub TimerMaker_Timer()
                ' We are allowed to eat.
                ' Lets search food...
                 resS = SearchFood(idConnection)
-                If (resS.foundcount > 0) Then
+                If (resS.foundCount > 0) Then
                   ' Food found, eat it now
                   aRes = EatFood(idConnection, resS.b1, resS.b2, resS.bpID, resS.slotID)
                   DoEvents
@@ -1136,7 +1136,7 @@ Private Sub TimerMaker_Timer()
         resS = SearchItem(idConnection, LowByteOfLong(tileID_Blank), HighByteOfLong(tileID_Blank))
         cond1 = ((mySlot(idConnection, SLOT_LEFTHAND).t1 = blank1) And (mySlot(idConnection, SLOT_LEFTHAND).t2 = blank2)) Or _
           ((mySlot(idConnection, SLOT_RIGHTHAND).t1 = blank1) And (mySlot(idConnection, SLOT_RIGHTHAND).t2 = blank2))
-        If (resS.foundcount = 0) Then
+        If (resS.foundCount = 0) Then
           tmpcond = True
         Else
           tmpcond = False
@@ -1185,7 +1185,7 @@ Private Sub TimerMaker_Timer()
           resS = SearchItem(idConnection, LowByteOfLong(tileID_Blank), HighByteOfLong(tileID_Blank))
           cond1 = ((mySlot(idConnection, SLOT_LEFTHAND).t1 = blank1) And (mySlot(idConnection, SLOT_LEFTHAND).t2 = blank2)) Or _
             ((mySlot(idConnection, SLOT_RIGHTHAND).t1 = blank1) And (mySlot(idConnection, SLOT_RIGHTHAND).t2 = blank2))
-          If (resS.foundcount = 0) Then
+          If (resS.foundCount = 0) Then
             tmpcond = True
           Else
             tmpcond = False

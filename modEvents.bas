@@ -6,14 +6,14 @@ Public Const MAXSCHEDULED = 20
 Public Const DELAYBETWEENAUTOMSG_ms = 2000
 Public Type TypeEvent
   id As Integer
-  flags As String
+  Flags As String
   trigger As String
   action As String
 End Type
 
 Public Type TypeCondEvent
   thing1 As String
-  operator As String
+  Operator As String
   thing2 As String
   delay As String
   lock As String
@@ -133,12 +133,12 @@ Public Sub ProcessEventMsg(idConnection As Integer, thetype As Byte)
   For i = 1 To nEvents
     evType = CustomEvents(idConnection).ev(i).id
     If evType = 0 Then 'contains ...
-      If Mid(CustomEvents(idConnection).ev(i).flags, lotype, 1) = 1 Then
-        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).flags, 19, 1) = "1")) Then
+      If Mid(CustomEvents(idConnection).ev(i).Flags, lotype, 1) = 1 Then
+        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).Flags, 19, 1) = "1")) Then
           partR = LCase(parseVars(idConnection, CustomEvents(idConnection).ev(i).trigger))
           If InStr(partL, partR) > 0 Then 'triggered
             executeThis = parseVars(idConnection, CustomEvents(idConnection).ev(i).action)
-            strTmp = Right$(CustomEvents(idConnection).ev(i).flags, Len(CustomEvents(idConnection).ev(i).flags) - 20)
+            strTmp = Right$(CustomEvents(idConnection).ev(i).Flags, Len(CustomEvents(idConnection).ev(i).Flags) - 20)
             mustdelay = CLng(strTmp)
             If mustdelay = 0 Then
               intRes = ExecuteInTibia(executeThis, idConnection, False)
@@ -150,12 +150,12 @@ Public Sub ProcessEventMsg(idConnection As Integer, thetype As Byte)
         End If
       End If
     ElseIf evType = 1 Then 'exact
-      If Mid(CustomEvents(idConnection).ev(i).flags, lotype, 1) = 1 Then
-        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).flags, 19, 1) = "1")) Then
+      If Mid(CustomEvents(idConnection).ev(i).Flags, lotype, 1) = 1 Then
+        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).Flags, 19, 1) = "1")) Then
           partR = LCase(parseVars(idConnection, CustomEvents(idConnection).ev(i).trigger))
           If partL = partR Then 'triggered
             executeThis = parseVars(idConnection, CustomEvents(idConnection).ev(i).action)
-            strTmp = Right$(CustomEvents(idConnection).ev(i).flags, Len(CustomEvents(idConnection).ev(i).flags) - 20)
+            strTmp = Right$(CustomEvents(idConnection).ev(i).Flags, Len(CustomEvents(idConnection).ev(i).Flags) - 20)
             mustdelay = CLng(strTmp)
             If mustdelay = 0 Then
               intRes = ExecuteInTibia(executeThis, idConnection, False)
@@ -167,12 +167,12 @@ Public Sub ProcessEventMsg(idConnection As Integer, thetype As Byte)
         End If
       End If
     ElseIf evType = 2 Then 'Like regex
-      If Mid(CustomEvents(idConnection).ev(i).flags, lotype, 1) = 1 Then
-        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).flags, 19, 1) = "1")) Then
+      If Mid(CustomEvents(idConnection).ev(i).Flags, lotype, 1) = 1 Then
+        If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).Flags, 19, 1) = "1")) Then
           partR = LCase(parseVars(idConnection, CustomEvents(idConnection).ev(i).trigger))
           If partL Like partR Then 'triggered
             executeThis = parseVars(idConnection, CustomEvents(idConnection).ev(i).action)
-            strTmp = Right$(CustomEvents(idConnection).ev(i).flags, Len(CustomEvents(idConnection).ev(i).flags) - 20)
+            strTmp = Right$(CustomEvents(idConnection).ev(i).Flags, Len(CustomEvents(idConnection).ev(i).Flags) - 20)
             mustdelay = CLng(strTmp)
             If mustdelay = 0 Then
               intRes = ExecuteInTibia(executeThis, idConnection, False)

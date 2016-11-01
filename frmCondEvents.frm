@@ -440,7 +440,7 @@ Public Sub UpdateValues()
     For i = 1 To numofEv
       With gridEvents
       .TextMatrix(i, 0) = CustomCondEvents(condEventsIDselected).ev(i).thing1
-      .TextMatrix(i, 1) = CustomCondEvents(condEventsIDselected).ev(i).operator
+      .TextMatrix(i, 1) = CustomCondEvents(condEventsIDselected).ev(i).Operator
       .TextMatrix(i, 2) = CustomCondEvents(condEventsIDselected).ev(i).thing2
       .TextMatrix(i, 3) = CustomCondEvents(condEventsIDselected).ev(i).delay
       .TextMatrix(i, 4) = CustomCondEvents(condEventsIDselected).ev(i).lock
@@ -520,7 +520,7 @@ Private Sub cmdDeleteSel_Click()
   Dim firstrow As Long
   Dim lastrow As Long
   Dim firstI As Long
-  Dim lasti As Long
+  Dim lastI As Long
   Dim i As Long
   Dim difR As Long
   Dim numofEv As Long
@@ -546,15 +546,15 @@ Private Sub cmdDeleteSel_Click()
   Else
   ' lblDebug.Caption = "First = " & firstRow & " ; Last = " & lastRow
    firstI = firstrow
-   lasti = lastrow
-   difR = lasti - firstI + 1
+   lastI = lastrow
+   difR = lastI - firstI + 1
    For i = firstI To numofEv
      If i + difR <= MAXCONDS Then
        CustomCondEvents(condEventsIDselected).ev(i).action = CustomCondEvents(condEventsIDselected).ev(i + difR).action
        CustomCondEvents(condEventsIDselected).ev(i).delay = CustomCondEvents(condEventsIDselected).ev(i + difR).delay
        CustomCondEvents(condEventsIDselected).ev(i).keep = CustomCondEvents(condEventsIDselected).ev(i + difR).keep
        CustomCondEvents(condEventsIDselected).ev(i).lock = CustomCondEvents(condEventsIDselected).ev(i + difR).lock
-       CustomCondEvents(condEventsIDselected).ev(i).operator = CustomCondEvents(condEventsIDselected).ev(i + difR).operator
+       CustomCondEvents(condEventsIDselected).ev(i).Operator = CustomCondEvents(condEventsIDselected).ev(i + difR).Operator
        CustomCondEvents(condEventsIDselected).ev(i).thing1 = CustomCondEvents(condEventsIDselected).ev(i + difR).thing1
        CustomCondEvents(condEventsIDselected).ev(i).thing2 = CustomCondEvents(condEventsIDselected).ev(i + difR).thing2
        CustomCondEvents(condEventsIDselected).ev(i).nextunlock = CustomCondEvents(condEventsIDselected).ev(i + difR).nextunlock
@@ -571,10 +571,10 @@ gotErr:
 End Sub
 
 Private Sub cmdLoadEv_Click()
-  Dim fso As scripting.FileSystemObject
+  Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine(1 To 7) As String
-  Dim filename As String
+  Dim Filename As String
   Dim p As Long
   Dim seguir As Boolean
   Dim completed As Boolean
@@ -583,14 +583,14 @@ Private Sub cmdLoadEv_Click()
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-  Set fso = New scripting.FileSystemObject
+  Set fso = New Scripting.FileSystemObject
   If condEventsIDselected > 0 Then
     lblInfo.Caption = "Load OK"
     DeleteAllCondEvents condEventsIDselected
-    filename = App.path & "\conds\" & txtFile.Text
-    If fso.FileExists(filename) = True Then
+    Filename = App.Path & "\conds\" & txtFile.Text
+    If fso.FileExists(Filename) = True Then
       fn = FreeFile
-      Open filename For Input As #fn
+      Open Filename For Input As #fn
       While Not EOF(fn)
         completed = True
         For p = 1 To 7
@@ -620,7 +620,7 @@ Private Sub cmdModify_Click()
     vrow = gridEvents.Row
     If vrow > 0 Then
       CustomCondEvents(condEventsIDselected).ev(vrow).thing1 = txtThing1.Text
-      CustomCondEvents(condEventsIDselected).ev(vrow).operator = cmbOperator.Text
+      CustomCondEvents(condEventsIDselected).ev(vrow).Operator = cmbOperator.Text
       CustomCondEvents(condEventsIDselected).ev(vrow).thing2 = txtThing2.Text
       If chkKeep.Value = 1 Then
         CustomCondEvents(condEventsIDselected).ev(vrow).keep = "1"
@@ -656,10 +656,10 @@ Private Sub cmdSaveEv_Click()
   Dim i As Long
   If condEventsIDselected > 0 Then
     fn = FreeFile
-    Open App.path & "\conds\" & txtFile.Text For Output As #fn
+    Open App.Path & "\conds\" & txtFile.Text For Output As #fn
     For i = 1 To CustomCondEvents(condEventsIDselected).Number
       Print #fn, CustomCondEvents(condEventsIDselected).ev(i).thing1
-      Print #fn, CustomCondEvents(condEventsIDselected).ev(i).operator
+      Print #fn, CustomCondEvents(condEventsIDselected).ev(i).Operator
       Print #fn, CustomCondEvents(condEventsIDselected).ev(i).thing2
       Print #fn, CustomCondEvents(condEventsIDselected).ev(i).delay
       Print #fn, CustomCondEvents(condEventsIDselected).ev(i).lock
@@ -748,7 +748,7 @@ Public Sub ProcessClientConditions(idConnection As Integer, condid As Long)
   a = 0
   part1 = parseVars(idConnection, CustomCondEvents(idConnection).ev(condid).thing1)
   part2 = parseVars(idConnection, CustomCondEvents(idConnection).ev(condid).thing2)
-  op = parseVars(idConnection, CustomCondEvents(idConnection).ev(condid).operator)
+  op = parseVars(idConnection, CustomCondEvents(idConnection).ev(condid).Operator)
   Select Case op
     Case "#number=#"
       If safeDouble(part1) = safeDouble(part2) Then
@@ -820,7 +820,7 @@ Private Sub gridEvents_Click()
     vrow = gridEvents.Row
     If vrow > 0 Then
       txtThing1.Text = CustomCondEvents(condEventsIDselected).ev(vrow).thing1
-      cmbOperator.Text = CustomCondEvents(condEventsIDselected).ev(vrow).operator
+      cmbOperator.Text = CustomCondEvents(condEventsIDselected).ev(vrow).Operator
       txtThing2.Text = CustomCondEvents(condEventsIDselected).ev(vrow).thing2
       If CustomCondEvents(condEventsIDselected).ev(vrow).keep = "1" Then
         chkKeep.Value = 1
@@ -873,11 +873,11 @@ Public Sub ReloadFiles()
   On Error GoTo gotErr
   #End If
   Dim strPath As String
-  Dim fs As scripting.FileSystemObject
-  Dim f As scripting.Folder
-  Dim f1 As scripting.File
-  Set fs = New scripting.FileSystemObject
-  strPath = App.path & "\conds"
+  Dim fs As Scripting.FileSystemObject
+  Dim f As Scripting.Folder
+  Dim f1 As Scripting.File
+  Set fs = New Scripting.FileSystemObject
+  strPath = App.Path & "\conds"
   Set f = fs.GetFolder(strPath)
   txtFile.Clear
   For Each f1 In f.Files
@@ -916,7 +916,7 @@ Public Function AddCondEvent(idConnection As Integer, t1 As String, op As String
   curr = (CustomCondEvents(idConnection).Number) + 1
   CustomCondEvents(idConnection).Number = curr
   CustomCondEvents(idConnection).ev(curr).thing1 = t1
-  CustomCondEvents(idConnection).ev(curr).operator = op
+  CustomCondEvents(idConnection).ev(curr).Operator = op
   CustomCondEvents(idConnection).ev(curr).thing2 = t2
   CustomCondEvents(idConnection).ev(curr).delay = de
   CustomCondEvents(idConnection).ev(curr).lock = lo
