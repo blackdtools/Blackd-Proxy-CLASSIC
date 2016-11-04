@@ -401,7 +401,7 @@ Private Sub chkExiva1_Click()
 
 If lock_chkExiva1 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva1.Value = 1 Then
+  If chkExiva1.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva1 = True
   Else
     persistentOptions(persistentIDselected).chkExiva1 = False
@@ -415,7 +415,7 @@ Private Sub chkExiva2_Click()
 
 If lock_chkExiva2 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva2.Value = 1 Then
+  If chkExiva2.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva2 = True
   Else
     persistentOptions(persistentIDselected).chkExiva2 = False
@@ -429,7 +429,7 @@ Private Sub chkExiva3_Click()
 
 If lock_chkExiva3 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva3.Value = 1 Then
+  If chkExiva3.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva3 = True
   Else
     persistentOptions(persistentIDselected).chkExiva3 = False
@@ -443,7 +443,7 @@ Private Sub chkExiva4_Click()
 
 If lock_chkExiva4 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva4.Value = 1 Then
+  If chkExiva4.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva4 = True
   Else
     persistentOptions(persistentIDselected).chkExiva4 = False
@@ -457,7 +457,7 @@ Private Sub chkExiva5_Click()
 
 If lock_chkExiva5 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva5.Value = 1 Then
+  If chkExiva5.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva5 = True
   Else
     persistentOptions(persistentIDselected).chkExiva5 = False
@@ -471,7 +471,7 @@ Private Sub chkExiva6_Click()
 
 If lock_chkExiva6 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva6.Value = 1 Then
+  If chkExiva6.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva6 = True
   Else
     persistentOptions(persistentIDselected).chkExiva6 = False
@@ -485,7 +485,7 @@ Private Sub chkExiva7_Click()
 
 If lock_chkExiva7 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva7.Value = 1 Then
+  If chkExiva7.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva7 = True
   Else
     persistentOptions(persistentIDselected).chkExiva7 = False
@@ -499,7 +499,7 @@ Private Sub chkExiva8_Click()
 
 If lock_chkExiva8 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva8.Value = 1 Then
+  If chkExiva8.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva8 = True
   Else
     persistentOptions(persistentIDselected).chkExiva8 = False
@@ -513,7 +513,7 @@ Private Sub chkExiva9_Click()
 
 If lock_chkExiva9 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva9.Value = 1 Then
+  If chkExiva9.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva9 = True
   Else
     persistentOptions(persistentIDselected).chkExiva9 = False
@@ -527,7 +527,7 @@ Private Sub chkExiva10_Click()
 
 If lock_chkExiva10 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva10.Value = 1 Then
+  If chkExiva10.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva10 = True
   Else
     persistentOptions(persistentIDselected).chkExiva10 = False
@@ -541,7 +541,7 @@ Private Sub chkExiva11_Click()
 
 If lock_chkExiva11 = False Then
 If persistentIDselected > 0 Then
-  If chkExiva11.Value = 1 Then
+  If chkExiva11.value = 1 Then
     persistentOptions(persistentIDselected).chkExiva11 = True
   Else
     persistentOptions(persistentIDselected).chkExiva11 = False
@@ -641,59 +641,59 @@ Public Sub UpdateValues()
 
 If persistentIDselected = 0 Then
     If persistentOptions_chkExiva1_default = True Then
-      chkExiva1.Value = 1
+      chkExiva1.value = 1
     Else
-      chkExiva1.Value = 0
+      chkExiva1.value = 0
     End If
     If persistentOptions_chkExiva2_default = True Then
-      chkExiva2.Value = 1
+      chkExiva2.value = 1
     Else
-      chkExiva2.Value = 0
+      chkExiva2.value = 0
     End If
     If persistentOptions_chkExiva3_default = True Then
-      chkExiva3.Value = 1
+      chkExiva3.value = 1
     Else
-      chkExiva3.Value = 0
+      chkExiva3.value = 0
     End If
     If persistentOptions_chkExiva4_default = True Then
-      chkExiva4.Value = 1
+      chkExiva4.value = 1
     Else
-      chkExiva4.Value = 0
+      chkExiva4.value = 0
     End If
     If persistentOptions_chkExiva5_default = True Then
-      chkExiva5.Value = 1
+      chkExiva5.value = 1
     Else
-      chkExiva5.Value = 0
+      chkExiva5.value = 0
     End If
     If persistentOptions_chkExiva6_default = True Then
-      chkExiva6.Value = 1
+      chkExiva6.value = 1
     Else
-      chkExiva6.Value = 0
+      chkExiva6.value = 0
     End If
     If persistentOptions_chkExiva7_default = True Then
-      chkExiva7.Value = 1
+      chkExiva7.value = 1
     Else
-      chkExiva7.Value = 0
+      chkExiva7.value = 0
     End If
     If persistentOptions_chkExiva8_default = True Then
-      chkExiva8.Value = 1
+      chkExiva8.value = 1
     Else
-      chkExiva8.Value = 0
+      chkExiva8.value = 0
     End If
     If persistentOptions_chkExiva9_default = True Then
-      chkExiva9.Value = 1
+      chkExiva9.value = 1
     Else
-      chkExiva9.Value = 0
+      chkExiva9.value = 0
     End If
     If persistentOptions_chkExiva10_default = True Then
-      chkExiva10.Value = 1
+      chkExiva10.value = 1
     Else
-      chkExiva10.Value = 0
+      chkExiva10.value = 0
     End If
     If persistentOptions_chkExiva11_default = True Then
-      chkExiva11.Value = 1
+      chkExiva11.value = 1
     Else
-      chkExiva11.Value = 0
+      chkExiva11.value = 0
     End If
     txtHk1.Text = persistentOptions_txtHk1_default
     txtHk2.Text = persistentOptions_txtHk2_default
@@ -719,59 +719,59 @@ If persistentIDselected = 0 Then
     txtExiva11.Text = persistentOptions_txtExiva11_default
 Else
     If persistentOptions(persistentIDselected).chkExiva1 = True Then
-      chkExiva1.Value = 1
+      chkExiva1.value = 1
     Else
-      chkExiva1.Value = 0
+      chkExiva1.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva2 = True Then
-      chkExiva2.Value = 1
+      chkExiva2.value = 1
     Else
-      chkExiva2.Value = 0
+      chkExiva2.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva3 = True Then
-      chkExiva3.Value = 1
+      chkExiva3.value = 1
     Else
-      chkExiva3.Value = 0
+      chkExiva3.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva4 = True Then
-      chkExiva4.Value = 1
+      chkExiva4.value = 1
     Else
-      chkExiva4.Value = 0
+      chkExiva4.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva5 = True Then
-      chkExiva5.Value = 1
+      chkExiva5.value = 1
     Else
-      chkExiva5.Value = 0
+      chkExiva5.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva6 = True Then
-      chkExiva6.Value = 1
+      chkExiva6.value = 1
     Else
-      chkExiva6.Value = 0
+      chkExiva6.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva7 = True Then
-      chkExiva7.Value = 1
+      chkExiva7.value = 1
     Else
-      chkExiva7.Value = 0
+      chkExiva7.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva8 = True Then
-      chkExiva8.Value = 1
+      chkExiva8.value = 1
     Else
-      chkExiva8.Value = 0
+      chkExiva8.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva9 = True Then
-      chkExiva9.Value = 1
+      chkExiva9.value = 1
     Else
-      chkExiva9.Value = 0
+      chkExiva9.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva10 = True Then
-      chkExiva10.Value = 1
+      chkExiva10.value = 1
     Else
-      chkExiva10.Value = 0
+      chkExiva10.value = 0
     End If
     If persistentOptions(persistentIDselected).chkExiva11 = True Then
-      chkExiva11.Value = 1
+      chkExiva11.value = 1
     Else
-      chkExiva11.Value = 0
+      chkExiva11.value = 0
     End If
     txtHk1.Text = persistentOptions(persistentIDselected).txtHk1
     txtHk2.Text = persistentOptions(persistentIDselected).txtHk2

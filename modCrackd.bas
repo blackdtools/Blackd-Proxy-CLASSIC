@@ -60,6 +60,18 @@ Public adrSelectedServerURL_afterCharList As AddressPath
 Public adrSelectedServerPORT_afterCharList As AddressPath
 Public adrSelectedServerNAME_afterCharList As AddressPath
 
+
+Public adrGameRect_Width_Double As AddressPath
+Public adrMiniMapRect_Y_Double As AddressPath
+Public adrMiniMapRect_Width_Double As AddressPath
+Public adrMiniMapRect_Height_Double As AddressPath
+Public adrMiniMapDisplay_MinX As AddressPath
+Public adrMiniMapDisplay_MinY As AddressPath
+Public adrMiniMapDisplay_Z As AddressPath
+Public adrMiniMapDisplay_SizeX As AddressPath
+Public adrMiniMapDisplay_SizeY As AddressPath
+Public adrMiniMapDisplay_Zoom_PointSize1_Float As AddressPath
+
 Public offSetSquare_ARGB_8bytes As Long
 Public adrNewRedSquare As AddressPath
 Public adrNewBlueSquare As AddressPath

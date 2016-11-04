@@ -261,7 +261,7 @@ Private Sub txtCommand_KeyPress(KeyAscii As Integer)
                 CurrCommand = 0
             End If
             If stealthIDselected > 0 Then
-                If chkAvoidChat.Value = 1 Then
+                If chkAvoidChat.value = 1 Then
                     iRes = ExecuteInTibia(strCommand, stealthIDselected, True, True)
                 Else
                     iRes = ExecuteInTibia(strCommand, stealthIDselected, True)

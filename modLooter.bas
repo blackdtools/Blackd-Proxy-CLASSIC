@@ -37,7 +37,7 @@ Public Function ResetLooter(ByVal idConnection As Integer)
     Next
     NextLootStart(idConnection) = 0
     MAXTIMEINLOOTQUEUE(idConnection) = 60000
-    If frmMain.TrueServer1.Value = True Then
+    If frmMain.TrueServer1.value = True Then
       MINDELAYTOLOOT(idConnection) = 0 ' was changed to 0 in 16.5
     Else
       MINDELAYTOLOOT(idConnection) = 1000 ' ot servers require 1second wait

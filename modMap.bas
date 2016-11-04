@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "41.5" ' Proxy version ' string version
-Public Const myNumericVersion = 41500 ' numeric version
+Public Const ProxyVersion = "41.6" ' Proxy version ' string version
+Public Const myNumericVersion = 41600 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -390,7 +390,7 @@ Public Sub CheckIfGM(idConnection As Integer, ByRef str As String, zpos As Long,
                 aRes = SendLogSystemMessageToClient(idConnection, "GM detected ( " & GMname(idConnection) & " ). Some cheats are now disabled. Closing in " & secL & " seconds. Cancel with Exiva cancel")
             End If
             DoEvents
-            If frmRunemaker.ChkDangerSound.Value = 1 Then
+            If frmRunemaker.ChkDangerSound.value = 1 Then
                 ChangePlayTheDangerSound True
             End If
         End If
@@ -1221,9 +1221,9 @@ Public Sub ShowPositionChange(Index As Integer)
       End If
     End If
     'update map
-    If frmHardcoreCheats.chkAutoUpdateMap.Value = True Then
+    If frmHardcoreCheats.chkAutoUpdateMap.value = True Then
       If mapIDselected = Index Then
-        If frmHardcoreCheats.chkLockOnMyFloor.Value = 1 Then
+        If frmHardcoreCheats.chkLockOnMyFloor.value = 1 Then
           mapFloorSelected = myZ(Index)
         End If
         frmTrueMap.SetButtonColours
@@ -1305,7 +1305,7 @@ Public Function GetTheMobileInfo(idConnection As Integer, ByRef packet() As Byte
   If outfitType = &H0 Then ' thing outfit
     If (packet(resF.pos + 1) = &H0) And (packet(resF.pos + 2) = &H0) Then
       'unhide invis beings
-      If (resF.newID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.Value = 1) Then
+      If (resF.newID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
         packet(resF.pos + 1) = LowByteOfLong(tileID_Oracle)
         packet(resF.pos + 2) = HighByteOfLong(tileID_Oracle)
       End If
@@ -1644,16 +1644,7 @@ Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z
   End If
   newItemPriority = DatTiles(tileID).stackPriority
   i = 0
-    If TibiaVersionLong >= 870 Then
-        Do
-          i = i + 1
-          tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
-          currentPosPriority = DatTiles(tempTileID).stackPriority
-          If i = 10 Then
-            Exit Do
-          End If
-        Loop Until (newItemPriority > currentPosPriority) ' strictly > since tibia 8.7
-    Else
+    If TibiaVersionLong < 870 Then
         Do
           i = i + 1
           tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
@@ -1662,7 +1653,27 @@ Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z
             Exit Do
           End If
         Loop Until (newItemPriority >= currentPosPriority)
-  End If
+    ElseIf TibiaVersionLong < 1099 Then
+        Do
+          i = i + 1
+          tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
+          currentPosPriority = DatTiles(tempTileID).stackPriority
+          If i = 10 Then
+            Exit Do
+          End If
+        Loop Until (newItemPriority > currentPosPriority) ' strict >
+    Else ' Tibia 10.99+
+        Do
+          i = i + 1
+          tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
+          currentPosPriority = DatTiles(tempTileID).stackPriority
+          If i = 10 Then
+            Exit Do
+          End If
+        Loop Until (newItemPriority >= currentPosPriority)
+    End If
+
+  'Debug.Print "adding item to pos " & CStr(i) & " Priority new = " & newItemPriority & " current priority = " & CStr(currentPosPriority)
   For j = 10 To i Step -1
     Matrix(y, X, z, idConnection).s(j).t1 = Matrix(y, X, z, idConnection).s(j - 1).t1
     Matrix(y, X, z, idConnection).s(j).t2 = Matrix(y, X, z, idConnection).s(j - 1).t2
@@ -2209,7 +2220,7 @@ Public Function ReadSinglePositionOld(idConnection As Integer, nx As Long, ny As
       End If
       stackpos = stackpos + 1
       ' an optional autologout if danger feature ...
-      If frmHardcoreCheats.chkLogoutIfDanger.Value = 1 And sentFirstPacket(idConnection) = False Then
+      If frmHardcoreCheats.chkLogoutIfDanger.value = 1 And sentFirstPacket(idConnection) = False Then
         If resF.newID <> myID(idConnection) Then
           ' proxy will tell the reason (names) of the logout in this case
           If LogoutReason(idConnection) = "" Then
@@ -2270,7 +2281,7 @@ Public Function ReadSinglePositionOld(idConnection As Integer, nx As Long, ny As
       
       If outfit = 0 Then
         If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-          If (nameofgivenID <> CharacterName(idConnection)) And (frmHardcoreCheats.chkReveal.Value = 1) Then
+          If (nameofgivenID <> CharacterName(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
             packet(pos + 9) = LowByteOfLong(tileID_Oracle)
             packet(pos + 10) = HighByteOfLong(tileID_Oracle)
           End If
@@ -2475,7 +2486,7 @@ Public Function ReadSinglePosition(idConnection As Integer, nx As Long, _
           
           'stackpos = stackpos + 1
           ' an optional autologout if danger feature ...
-          If frmHardcoreCheats.chkLogoutIfDanger.Value = 1 And sentFirstPacket(idConnection) = False Then
+          If frmHardcoreCheats.chkLogoutIfDanger.value = 1 And sentFirstPacket(idConnection) = False Then
             If resF.newID <> myID(idConnection) Then
               ' proxy will tell the reason (names) of the logout in this case
               If LogoutReason(idConnection) = "" Then
@@ -2541,7 +2552,7 @@ Public Function ReadSinglePosition(idConnection As Integer, nx As Long, _
           
           If outfit = 0 Then
             If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-              If (nameofgivenID <> CharacterName(idConnection)) And (frmHardcoreCheats.chkReveal.Value = 1) Then
+              If (nameofgivenID <> CharacterName(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
                 packet(pos + 9) = LowByteOfLong(tileID_Oracle)
                 packet(pos + 10) = HighByteOfLong(tileID_Oracle)
               End If
@@ -2955,7 +2966,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       pos = ReadMap(idConnection, packet, pos)
       If sentFirstPacket(idConnection) = False Then
         myres.firstMapDone = True
-        If frmHardcoreCheats.chkLockOnMyFloor.Value = 1 Then
+        If frmHardcoreCheats.chkLockOnMyFloor.value = 1 Then
           mapFloorSelected = myZ(mapIDselected)
         End If
       End If
@@ -3107,7 +3118,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         
         If templ1 = 0 Then
           If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-            If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.Value = 1) Then
+            If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
               packet(pos + 9) = LowByteOfLong(tileID_Oracle)
               packet(pos + 10) = HighByteOfLong(tileID_Oracle)
             End If
@@ -3168,6 +3179,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         'End If
         gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, &H61, &H0, &H0, resF.newID)
       Case Else
+        'Debug.Print "adding thing to stack"
         If TibiaVersionLong >= 990 Then
             If DatTiles(tileID).haveExtraByte = True Then
               If DatTiles(tileID).haveExtraByte2 = True Then
@@ -3299,7 +3311,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         End If
         If templ1 = 0 Then
           If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-            If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.Value = 1) Then
+            If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
               packet(pos + 9) = LowByteOfLong(tileID_Oracle)
               packet(pos + 10) = HighByteOfLong(tileID_Oracle)
             End If
@@ -3440,6 +3452,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       If gotCorpsePop = False Then
         gotCorpsePop = True ' for ot servers
       End If
+      'Debug.Print "removing item from STACK POS " & CStr(matrixP.s)
       fRes = RemoveThingFromStack(idConnection, matrixP.X, matrixP.y, matrixP.z, matrixP.s)
       If fRes = -1 Then
         showDebug = True
@@ -4091,7 +4104,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       pos = pos + 6
     Case &H8D
       ' Light update
-      If (frmHardcoreCheats.chkLight.Value = 1) Then
+      If (frmHardcoreCheats.chkLight.value = 1) Then
         ' keep cheat light - NEW since 25.8
         tmpStr = GoodHex(packet(pos + 1)) & GoodHex(packet(pos + 2)) & GoodHex(packet(pos + 3)) & GoodHex(packet(pos + 4))
         If (tmpStr = IDstring(idConnection)) Then
@@ -4124,7 +4137,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       
       ' now skip enough bytes for the outfit
       If (outfitType = 0) Then ' thing outfit
-        If (packet(pos + 1) = &H0) And (packet(pos + 2) = &H0) And (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.Value = 1) Then
+        If (packet(pos + 1) = &H0) And (packet(pos + 2) = &H0) And (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
           nameofgivenID = GetNameFromID(idConnection, tempID)
           packet(pos + 1) = LowByteOfLong(tileID_Oracle)
           packet(pos + 2) = HighByteOfLong(tileID_Oracle)
@@ -4331,7 +4344,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         lonN = GetTheLong(packet(pos + 21), packet(pos + 22)) ' PLAYER_LEVEL
         If lonN > myLevel(idConnection) Then
           If sentWelcome(idConnection) = True Then
-            If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+            If frmHardcoreCheats.chkAutoGratz.value = 1 Then
               SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
               DoEvents
             End If
@@ -4377,7 +4390,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         lonN = GetTheLong(packet(pos + 21), packet(pos + 22)) ' PLAYER_LEVEL
         If lonN > myLevel(idConnection) Then
           If sentWelcome(idConnection) = True Then
-            If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+            If frmHardcoreCheats.chkAutoGratz.value = 1 Then
               SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
               DoEvents
             End If
@@ -4457,7 +4470,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         lonN = GetTheLong(packet(pos + 21), packet(pos + 22)) ' PLAYER_LEVEL
         If lonN > myLevel(idConnection) Then
           If sentWelcome(idConnection) = True Then
-            If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+            If frmHardcoreCheats.chkAutoGratz.value = 1 Then
               SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
               DoEvents
             End If
@@ -4514,7 +4527,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         lonN = GetTheLong(packet(pos + 17), packet(pos + 18)) ' level
         If lonN > myLevel(idConnection) Then
           If sentWelcome(idConnection) = True Then
-            If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+            If frmHardcoreCheats.chkAutoGratz.value = 1 Then
               SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
               DoEvents
             End If
@@ -4555,7 +4568,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           lonN = GetTheLong(packet(pos + 13), packet(pos + 14))
           If lonN > myLevel(idConnection) Then
             If sentWelcome(idConnection) = True Then
-              If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+              If frmHardcoreCheats.chkAutoGratz.value = 1 Then
                 SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
                 DoEvents
               End If
@@ -4607,7 +4620,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
        
       If CLng(packet(pos + 11)) > myLevel(idConnection) Then
         If sentWelcome(idConnection) = True Then
-          If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+          If frmHardcoreCheats.chkAutoGratz.value = 1 Then
             SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
             DoEvents
           End If
@@ -4653,7 +4666,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       
       If CLng(packet(pos + 11)) > myLevel(idConnection) Then
         If sentWelcome(idConnection) = True Then
-          If frmHardcoreCheats.chkAutoGratz.Value = 1 Then
+          If frmHardcoreCheats.chkAutoGratz.value = 1 Then
             SendLogSystemMessageToClient idConnection, "BlackdProxy: Gratz!"
             DoEvents
           End If
@@ -4892,7 +4905,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -4920,7 +4933,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -4948,7 +4961,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -4990,7 +5003,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5012,7 +5025,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5034,7 +5047,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5056,7 +5069,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5078,7 +5091,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5100,7 +5113,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5127,7 +5140,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = msg
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5140,7 +5153,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
             End If
           End If
         
-          If (frmHardcoreCheats.chkAcceptSDorder.Value = 1) And _
+          If (frmHardcoreCheats.chkAcceptSDorder.value = 1) And _
            (sentWelcome(idConnection) = True) And _
            (GotPacketWarning(idConnection) = False) Then
           lonO = Len(frmHardcoreCheats.txtOrder)
@@ -5156,61 +5169,61 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
               Select Case frmHardcoreCheats.cmbOrderType.ListIndex
               Case 0
                 aRes = SendAimbot(rightpart, idConnection, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 1
                 aRes = SendAimbot(rightpart, idConnection, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 2
                 aRes = SendAimbot(rightpart, idConnection, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 3
                 aRes = SendAimbot(rightpart, idConnection, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "04"
                   enLight idConnection
                 End If
               Case 4
                 aRes = SendAimbot(rightpart, idConnection, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "04"
                   enLight idConnection
                 End If
               Case 5
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 6
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 7
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 8
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "04"
                   enLight idConnection
                 End If
               Case 9
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "04"
                   enLight idConnection
                 End If
@@ -5219,19 +5232,19 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                 
               Case 11 'type B
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_fireball), HighByteOfLong(tileID_fireball))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 12 'type C
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_stalagmite), HighByteOfLong(tileID_stalagmite))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
               Case 13 'type D
                 aRes = SendMobAimbot(rightpart, idConnection, LowByteOfLong(tileID_icicle), HighByteOfLong(tileID_icicle))
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -5262,7 +5275,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5306,7 +5319,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection), True
           End If
         End If
@@ -5323,7 +5336,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection), True
           End If
         End If
@@ -5339,7 +5352,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection), True
           End If
         End If
@@ -5356,7 +5369,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5376,7 +5389,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5439,7 +5452,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5458,7 +5471,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -5476,7 +5489,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           var_lastsender(idConnection) = nameofgivenID
           var_lastmsg(idConnection) = tmpStr
           ProcessEventMsg idConnection, subType
-          If (frmHardcoreCheats.chkGmMessagesPauseAll.Value = 1) Then
+          If (frmHardcoreCheats.chkGmMessagesPauseAll.value = 1) Then
             CheckIfGM idConnection, nameofgivenID, myZ(idConnection)
           End If
         End If
@@ -6957,7 +6970,7 @@ Public Function LearnFromServer(ByRef packet() As Byte, idConnection As Integer)
         End If
       End If
  
-      If frmHardcoreCheats.chkLogoutIfDanger.Value = 1 And GotTrialLock = False Then
+      If frmHardcoreCheats.chkLogoutIfDanger.value = 1 And GotTrialLock = False Then
         If LogoutReason(idConnection) <> "" Then
           res = 3 'ignore packet
           aRes = GiveServerError("Logged out because found : " & LogoutReason(idConnection) & " in your screen", idConnection)
@@ -6976,7 +6989,7 @@ Public Function LearnFromServer(ByRef packet() As Byte, idConnection As Integer)
 
         If ReconnectionStage(idConnection) > 0 Then
             frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Reconnection of " & CharacterName(idConnection) & " completed!"
-            If frmEvents.chkReconnectionAlarm.Value = 1 Then
+            If frmEvents.chkReconnectionAlarm.value = 1 Then
               ChangePlayTheDangerSound True
             End If
             aRes = GiveGMmessage(idConnection, "Your client had to be reconnected", "Warning")
@@ -7047,7 +7060,7 @@ Public Function LearnFromServer(ByRef packet() As Byte, idConnection As Integer)
             ' nothing
         Else ' apply global settings
             If (percent < GLOBAL_RUNEHEAL_HP) And _
-             (frmHardcoreCheats.chkAutoHeal.Value = 1) And _
+             (frmHardcoreCheats.chkAutoHeal.value = 1) And _
              (sentFirstPacket(idConnection) = True) Then
               If ((CheatsPaused(idConnection) = False) Or (AllowUHpaused(idConnection) = True)) Then
                 AddSpamOrder idConnection, 1 'add auto UH
@@ -7057,8 +7070,8 @@ Public Function LearnFromServer(ByRef packet() As Byte, idConnection As Integer)
               RemoveSpamOrder idConnection, 1 'remove  auto UH
               UHRetryCount(idConnection) = 0
             End If
-            If (percent < frmHardcoreCheats.scrollHP2.Value) And _
-             (frmHardcoreCheats.chkAutoVita.Value = 1) And _
+            If (percent < frmHardcoreCheats.scrollHP2.value) And _
+             (frmHardcoreCheats.chkAutoVita.value = 1) And _
              (sentFirstPacket(idConnection) = True) Then
               If CheatsPaused(idConnection) = False Then
                 If (myMana(idConnection) >= CLng(frmHardcoreCheats.txtExuraVitaMana.Text)) Then
@@ -7072,7 +7085,7 @@ Public Function LearnFromServer(ByRef packet() As Byte, idConnection As Integer)
       End If
       ' LOGOUT-RUNEMAKER
       If (AfterLoginLogoutReason(idConnection) <> "") Then 'And (CheatsPaused(idConnection) = False) Then
-        If frmRunemaker.ChkDangerSound.Value = 1 Then
+        If frmRunemaker.ChkDangerSound.value = 1 Then
           ChangePlayTheDangerSound True
         End If
         If DangerGM(idConnection) = True Then
@@ -7123,7 +7136,7 @@ Public Function PotentialDanger(idConnection As Integer) As Boolean
   Dim s As Integer
   Dim tileID As Integer
   Dim nameofgivenID As String
-  If frmCavebot.chkLootProtection.Value = 1 Then
+  If frmCavebot.chkLootProtection.value = 1 Then
         PotentialDanger = False
         Exit Function
   End If

@@ -588,25 +588,25 @@ End Sub
 
 
 Private Sub AutoHealOption1_Click()
-  If AutoHealOption1.Value = True Then
+  If AutoHealOption1.value = True Then
     GLOBAL_AUTOFRIENDHEAL_MODE = 1
   End If
 End Sub
 
 Private Sub AutoHealOption2_Click()
-  If AutoHealOption2.Value = True Then
+  If AutoHealOption2.value = True Then
     GLOBAL_AUTOFRIENDHEAL_MODE = 2
   End If
 End Sub
 
 Private Sub AutoHealOption3_Click()
-  If AutoHealOption3.Value = True Then
+  If AutoHealOption3.value = True Then
     GLOBAL_AUTOFRIENDHEAL_MODE = 3
   End If
 End Sub
 
 Public Sub chkAutoHealFriendEnabled_Click()
-If chkAutoHealFriendEnabled.Value = 1 Then
+If chkAutoHealFriendEnabled.value = 1 Then
   frmWarbot.timerFriendHealer.enabled = True
 Else
   frmWarbot.timerFriendHealer.enabled = False
@@ -866,11 +866,11 @@ End Sub
 
 
 Private Sub scrollFriendsHP_Change()
-  ChangeGLOBAL_FRIENDSLOWLIMIT_HP scrollFriendsHP.Value
+  ChangeGLOBAL_FRIENDSLOWLIMIT_HP scrollFriendsHP.value
 End Sub
 
 Private Sub scrollSafeToHealHP_Change()
-  ChangeGLOBAL_MYSAFELIMIT_HP scrollSafeToHealHP.Value
+  ChangeGLOBAL_MYSAFELIMIT_HP scrollSafeToHealHP.value
 End Sub
 
 

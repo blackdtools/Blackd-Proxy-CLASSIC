@@ -5,7 +5,7 @@ Option Explicit
 Public Const MAXSCHEDULED = 20
 Public Const DELAYBETWEENAUTOMSG_ms = 2000
 Public Type TypeEvent
-  id As Integer
+  Id As Integer
   Flags As String
   trigger As String
   action As String
@@ -71,10 +71,10 @@ End Sub
 Public Sub ChangePlayTheDangerSound(newValue As Boolean)
   Dim aRes As Long
   If ((newValue = True) And (PlayTheDangerSound = False)) Then
-    If ((frmRunemaker.chkOnDangerSS.Value = 1) And (frmRunemaker.timerSS.enabled = False)) Then
+    If ((frmRunemaker.chkOnDangerSS.value = 1) And (frmRunemaker.timerSS.enabled = False)) Then
         frmRunemaker.timerSS.enabled = True
     End If
-    If frmEvents.chkTelephoneAlarm.Value = 1 Then
+    If frmEvents.chkTelephoneAlarm.value = 1 Then
       TelephoneCall ""
     End If
   End If
@@ -131,7 +131,7 @@ Public Sub ProcessEventMsg(idConnection As Integer, thetype As Byte)
   partL = LCase(var_lastmsg(idConnection))
   lotype = CLng(thetype) + 1
   For i = 1 To nEvents
-    evType = CustomEvents(idConnection).ev(i).id
+    evType = CustomEvents(idConnection).ev(i).Id
     If evType = 0 Then 'contains ...
       If Mid(CustomEvents(idConnection).ev(i).Flags, lotype, 1) = 1 Then
         If ((CheatsPaused(idConnection) = False) Or (Mid$(CustomEvents(idConnection).ev(i).Flags, 19, 1) = "1")) Then

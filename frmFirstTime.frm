@@ -733,7 +733,7 @@ Private Sub Form_Unload(Cancel As Integer)
         OVERWRITE_OT_IP = ""
         OVERWRITE_OT_PORT = 7171
     End If
-    If (Me.chkShowAgain.Value = 1) Then
+    If (Me.chkShowAgain.value = 1) Then
         OVERWRITE_SHOWAGAIN = True
     Else
         OVERWRITE_SHOWAGAIN = False

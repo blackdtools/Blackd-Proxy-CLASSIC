@@ -30,6 +30,10 @@ Public Const CTE_GAME_CONNECTED As Integer = 3
 '***********************
 '* Win32 Constants . . .
 '***********************
+Private Type POINTAPI 'Type to hold coordinates
+    x As Long
+    y As Long
+End Type
 
 Private Const TH32CS_SNAPMODULE As Long = &H8
 Private Type MODULEENTRY32W
@@ -207,7 +211,7 @@ End Type
 
 
 Public Type TibiaServerEntry
-    id As Long
+    Id As Long
     name As String
     url As String
     port As Long
@@ -219,7 +223,7 @@ Public Type TibiaServerEntry
 End Type
 
 Public Type TibiaCharListEntry
-    id As Long
+    Id As Long
     name As String
     server As String
     entry_address As Long
@@ -229,7 +233,9 @@ End Type
 
 
 'Private Declare Function VirtualProtectEx Lib "Kernel32" (ByVal hProcess As Long, ByRef lpAddress As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
-
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" _
+    (ByVal hwnd As Long, ByVal wMsg As Long, _
+    ByVal wParam As Long, ByVal lParam As Long) As Long
 
 Private Declare Function GetClassName Lib "user32" _
    Alias "GetClassNameA" _
@@ -253,7 +259,9 @@ Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     ByRef Destination As Any, _
     ByRef Source As Any, _
     ByVal Length As Long)
-    
+
+Public Declare Sub GetCursorPos Lib "user32" (lpPoint As POINTAPI)
+
 Private Declare Function GetParent Lib "user32" (ByVal hwnd As Long) As Long
 Private Declare Function CreateToolhelp32Snapshot Lib "kernel32" (ByVal dwFlags As Long, ByVal th32ProcessID As Long) As Long
 Private Declare Function Module32FirstW Lib "kernel32" (ByVal hSnapshot As Long, ByRef uModule As Any) As Long
@@ -273,12 +281,13 @@ Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As L
 
 
 Public moduleDictionary As Scripting.Dictionary
+Public mainTibiaHandle As Scripting.Dictionary
 Public objWMIService As Object
 
 
 Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long, ByRef Rbuff() As Byte) As Long
     Dim usize As Long
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     Dim readtotal As Long
     On Error GoTo gotErr
     readtotal = 0
@@ -286,9 +295,9 @@ Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long
     If (usize < 1) Then
         Exit Function
     End If
-    TibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
-    ReadProcessMemory TibiaHandle, finalAddress, Rbuff(0), usize, readtotal
-    CloseHandle (TibiaHandle)
+    tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
+    ReadProcessMemory tibiaHandle, finalAddress, Rbuff(0), usize, readtotal
+    CloseHandle (tibiaHandle)
     If (readtotal = 0) Then
         QMemory_ReadNBytes = -1
     Else
@@ -342,24 +351,24 @@ Public Function QMemory_ReadString(ByVal pid As Long, ByVal address As Long, Opt
 End Function
 
 Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Long, ByRef newValue() As Byte) As Long
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     Dim res As Long
     Dim lpNumberOfBytesWritten As Long
     Dim usize As Long
     lpNumberOfBytesWritten = 0
     On Error GoTo gotErr
     usize = UBound(newValue) + 1
-    TibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
-    If TibiaHandle = -1 Then
+    tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
+    If tibiaHandle = -1 Then
         QMemory_WriteNBytes = -1
         Exit Function
     End If
-    res = WriteProcessMemory(TibiaHandle, finalAddress, newValue(0), usize, lpNumberOfBytesWritten)
+    res = WriteProcessMemory(tibiaHandle, finalAddress, newValue(0), usize, lpNumberOfBytesWritten)
     If (res = 1) Then
-        CloseHandle (TibiaHandle)
+        CloseHandle (tibiaHandle)
         QMemory_WriteNBytes = 0
     Else
-        CloseHandle (TibiaHandle)
+        CloseHandle (tibiaHandle)
         QMemory_WriteNBytes = -1
     End If
     Exit Function
@@ -368,7 +377,7 @@ gotErr:
 End Function
 
 Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Long, newValue As Long) As Long
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     Dim res As Long
     Dim lpNumberOfBytesWritten As Long
     Dim Rbuff(1) As Byte
@@ -376,13 +385,13 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     On Error GoTo gotErr
     Rbuff(0) = LowByteOfLong(newValue)
     Rbuff(1) = HighByteOfLong(newValue)
-    TibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
-    res = WriteProcessMemory(TibiaHandle, finalAddress, Rbuff(0), 2, lpNumberOfBytesWritten)
+    tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
+    res = WriteProcessMemory(tibiaHandle, finalAddress, Rbuff(0), 2, lpNumberOfBytesWritten)
     If (res = 1) Then
-        CloseHandle (TibiaHandle)
+        CloseHandle (tibiaHandle)
         QMemory_Write2Bytes = 0
     Else
-        CloseHandle (TibiaHandle)
+        CloseHandle (tibiaHandle)
         QMemory_Write2Bytes = -1
     End If
     Exit Function
@@ -477,11 +486,11 @@ End Function
     
 Public Function QMemory_Read4Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim res As Long
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     On Error GoTo gotErr
-    TibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
-    ReadProcessMemory TibiaHandle, finalAddress, res, 4, 0
-    CloseHandle (TibiaHandle)
+    tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
+    ReadProcessMemory tibiaHandle, finalAddress, res, 4, 0
+    CloseHandle (tibiaHandle)
     QMemory_Read4Bytes = res
     Exit Function
 gotErr:
@@ -490,11 +499,11 @@ End Function
 
 Public Function QMemory_Read2Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim Rbuff(1) As Byte
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     On Error GoTo gotErr
-    TibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
-    ReadProcessMemory TibiaHandle, finalAddress, Rbuff(0), 2, 0
-    CloseHandle (TibiaHandle)
+    tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
+    ReadProcessMemory tibiaHandle, finalAddress, Rbuff(0), 2, 0
+    CloseHandle (tibiaHandle)
     QMemory_Read2Bytes = GetTheLong(Rbuff(0), Rbuff(1))
     Exit Function
 gotErr:
@@ -503,11 +512,11 @@ End Function
 
 Public Function QMemory_Read1Byte(ByVal pid As Long, ByVal finalAddress As Long) As Byte
     Dim Rbuff As Byte
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     On Error GoTo gotErr
-    TibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
-    ReadProcessMemory TibiaHandle, finalAddress, Rbuff, 1, 0
-    CloseHandle (TibiaHandle)
+    tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
+    ReadProcessMemory tibiaHandle, finalAddress, Rbuff, 1, 0
+    CloseHandle (tibiaHandle)
     QMemory_Read1Byte = Rbuff
     Exit Function
 gotErr:
@@ -515,18 +524,18 @@ gotErr:
 End Function
     
 Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Long, ByVal newValue As Long) As Long
-    Dim TibiaHandle As Long
+    Dim tibiaHandle As Long
     Dim res As Long
     Dim lpNumberOfBytesWritten As Long
     lpNumberOfBytesWritten = 0
     On Error GoTo gotErr
-    TibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
-    res = WriteProcessMemory(TibiaHandle, finalAddress, newValue, 4, lpNumberOfBytesWritten)
+    tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
+    res = WriteProcessMemory(tibiaHandle, finalAddress, newValue, 4, lpNumberOfBytesWritten)
     If (res = 1) Then
-        CloseHandle (TibiaHandle)
+        CloseHandle (tibiaHandle)
         QMemory_Write4Bytes = 0
     Else
-        CloseHandle (TibiaHandle)
+        CloseHandle (tibiaHandle)
         QMemory_Write4Bytes = -1
     End If
     Exit Function
@@ -668,7 +677,8 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
         mainWindowHandle = Get_MainWindowHandle_from_ProcessID_and_class(currentPID, expectedClass, False)
         If (Not (mainWindowHandle = 0)) Then
             'count = count + 1
-           ' Debug.Print "Found Tibia PID: " & CStr(currentPID)
+            'Debug.Print "Found Tibia PID: " & CStr(currentPID) & " main handle = " & CStr(mainWindowHandle)
+            mainTibiaHandle(currentPID) = mainWindowHandle
             lModuleSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, currentPID)
             uModule.dwSize = LenB(uModule)
             If lModuleSnapshot > 0 Then
@@ -725,9 +735,9 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Dim res As String
     Dim i As Long
     On Error GoTo gotErr
-    res = "Array ="
     isize = UBound(arr)
-    For i = 0 To isize
+    res = GoodHex(arr(0))
+    For i = 1 To isize
         res = res & " " & GoodHex(arr(i))
     Next i
     arrayToString = res
@@ -745,15 +755,15 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
                                      Optional ByRef maxValidKeyID As Long = -1, _
                                      Optional ByVal addBaseAddress As Boolean = False)
     On Error GoTo gotErr
-        Dim id As Long
+        Dim Id As Long
         Dim auxRes As Long
-        id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
+        Id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
         If (maxValidKeyID > -1) Then
-            If (id > maxValidKeyID) Then
+            If (Id > maxValidKeyID) Then
                 Exit Sub
             End If
         End If
-        If (dict.Exists(id) = False) Then
+        If (dict.Exists(Id) = False) Then
             Dim tmp() As Byte
             If (addBaseAddress) Then
                 ReDim tmp(4 + bytesPerElement - 1)
@@ -767,7 +777,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
             If (addBaseAddress) Then
                 CopyMemory tmp(bytesPerElement), adrCurrentItem, 4
             End If
-            dict(id) = tmp
+            dict(Id) = tmp
             ' Debug.Print ("Key #" & CStr(id) & " found at " & Hex(adrCurrentItem))
         End If
         If (currentDepth < maxDepth) Then
@@ -836,13 +846,13 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
                                      ByVal currentDepth As Long, _
                                      ByRef maxDepth As Long, ByRef adrRoot As Long) As Long
     On Error GoTo gotErr
-        Dim id As Long
+        Dim Id As Long
         Dim c0, c1, c2 As Long
         Dim Count As Long
         Count = 1
-        id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
-        If (dict.Exists(id) = False) Then
-            dict(id) = adrCurrentItem
+        Id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
+        If (dict.Exists(Id) = False) Then
+            dict(Id) = adrCurrentItem
             If (currentDepth < maxDepth) Then
                   Dim p0, p1, p2 As Long
                   p0 = QMemory_Read4Bytes(pid, adrCurrentItem)
@@ -1175,7 +1185,7 @@ Public Function ReadTibia11CharList(ByVal pid As Long, ByRef res() As TibiaCharL
     ReDim res(resSize - 1)
     lastI = resSize - 1
     For i = 0 To resSize - 1
-        tmpElement.id = i
+        tmpElement.Id = i
         tmpElement.entry_address = BitConverter_ToInt32(tmp, 4 * i)
         ReDim resStruct(tamStruct - 1)
         QMemory_ReadNBytes pid, tmpElement.entry_address, resStruct
@@ -1301,7 +1311,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     For Each item In tmpRes
         Key = item
         val = tmpRes(Key)
-        tmpElement.id = Key
+        tmpElement.Id = Key
         'tmpElement.rawbytes = val
         tmpElement.name_adr = BitConverter_ToInt32(val, &H18)
         tmpElement.url_adr = BitConverter_ToInt32(val, &H1C)
@@ -1310,7 +1320,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
         tmpElement.port = BitConverter_ToInt32(val, &H20)
         tmpElement.this_register_adr = BitConverter_ToInt32(val, cte_bytesPerRegister)  ' trick (we left base address in last 4 bytes)
         tmpElement.port_adr = tmpElement.this_register_adr + &H20
-        res(tmpElement.id) = tmpElement
+        res(tmpElement.Id) = tmpElement
         i = i + 1
     Next
     ReadTibia11ServerList = 0
@@ -1452,4 +1462,217 @@ Public Sub BuildCharListForTibiaQ(ByVal idConnection As Integer, ByRef selName A
     If cteDebugConEvents = True Then
         LogConEvent "Selected char position = " & CStr(listPos)
     End If
+End Sub
+
+
+
+Public Function MAKELPARAM(ByVal wLow As Long, ByVal wHigh As Long) As Long
+
+        MAKELPARAM = LoWord(wLow) Or (&H10000 * LoWord(wHigh))
+
+End Function
+
+
+Public Function LoWord(ByVal lDWord As Long) As Long
+
+        If lDWord And &H8000& Then
+
+            LoWord = lDWord Or &HFFFF0000
+
+        Else
+
+            LoWord = lDWord And &HFFFF&
+
+        End If
+
+End Function
+
+Public Sub SendClickToTibia11(ByRef pid As Long, ByVal x As Long, ByVal y As Long)
+    Dim coordinates As Long
+    Dim tibiaHandle As Long
+    Dim res As Long
+    Dim currentPosition As POINTAPI
+    GetCursorPos currentPosition
+    coordinates = MAKELPARAM(x, y)
+    If mainTibiaHandle.Exists(pid) Then ' retrieve directly from our dictionary
+        tibiaHandle = mainTibiaHandle(pid)
+    Else
+        tibiaHandle = Get_MainWindowHandle_from_ProcessID_and_class(pid, tibiaclassname) ' slow procedure
+    End If
+    If tibiaHandle = -1 Then
+        Debug.Print "Unable to get the main handle from pid " & CStr(pid)
+        Exit Sub
+    End If
+    res = SendMessage(tibiaHandle, WM_MOUSEMOVE, 0&, coordinates)
+    res = SendMessage(tibiaHandle, WM_LBUTTONDOWN, 1&, coordinates)
+    res = SendMessage(tibiaHandle, WM_MOUSEMOVE, 1&, coordinates)
+    res = SendMessage(tibiaHandle, WM_LBUTTONUP, 0&, coordinates)
+    coordinates = MAKELPARAM(currentPosition.x, currentPosition.y)
+    res = SendMessage(tibiaHandle, WM_LBUTTONUP, 0&, coordinates)
+End Sub
+
+Public Sub SafeMemoryMoveXYZ_Tibia11(ByRef idConnection As Integer, Px As Long, Py As Long, Pz As Long)
+    Const maxError As Long = 10 ' allows clicking even if it slightly moved (for high level fast chars)
+    Dim currentMinimapMinX As Long
+    Dim currentMinimapMinY As Long
+    Dim currentMinimapPixelsX As Long
+    Dim currentMinimapPixelsY As Long
+    Dim currentMinimapZ As Long
+    Dim currentPointSize As Single
+    Dim corner_posx As Long
+    Dim corner_posy As Long
+    Dim safecheck_width As Long
+    Dim safecheck_height As Long
+    Dim pid As Long
+    Dim retryCount As Long
+    Dim retryCount2 As Long
+    Dim clickDone As Boolean
+    Dim prevSize As Single
+    Dim halfX As Long
+    Dim halfY As Long
+    Dim goodCheck As Boolean
+    Dim goalRawX As Long
+    Dim goalRawY As Long
+    Dim clickX As Long
+    Dim clickY As Long
+    Dim precisionDifX As Long
+    Dim precisionDifY As Long
+    pid = ProcessID(idConnection)
+    safecheck_width = ReadCurrentAddressDOUBLE(pid, adrMiniMapRect_Width_Double, -1)
+    safecheck_height = ReadCurrentAddressDOUBLE(pid, adrMiniMapRect_Height_Double, -1)
+    If Not (safecheck_width = 172) Then
+        Debug.Print "Unexpected Minimap width"
+        Exit Sub
+    End If
+    If Not (safecheck_height = 113) Then
+        Debug.Print "Unexpected Minimap width"
+        Exit Sub
+    End If
+    corner_posx = ReadCurrentAddressDOUBLE(pid, adrGameRect_Width_Double, -1)
+    corner_posy = ReadCurrentAddressDOUBLE(pid, adrMiniMapRect_Y_Double, -1)
+    
+    retryCount = 0
+    Do
+        currentPointSize = ReadCurrentAddressFLOAT(pid, adrMiniMapDisplay_Zoom_PointSize1_Float, -1)
+        If (currentPointSize = -1) Then
+            Debug.Print "Minimap address bug!"
+            Exit Sub
+        End If
+        If currentPointSize < 1 Then
+            Debug.Print "requires Zoom +"
+            prevSize = currentPointSize
+            SendClickToTibia11 pid, corner_posx + 135, corner_posy + 80
+            retryCount2 = 0
+            Do
+                DoEvents
+                wait 10
+                retryCount2 = retryCount2 + 1
+                If (retryCount2 > 10) Then
+                    Debug.Print "Minimap zoom+ click failed!"
+                    Exit Sub
+                End If
+                currentPointSize = ReadCurrentAddressFLOAT(pid, adrMiniMapDisplay_Zoom_PointSize1_Float, -1)
+            Loop Until Not (currentPointSize = prevSize)
+        ElseIf currentPointSize > 1 Then
+            Debug.Print "requires Zoom -"
+            prevSize = currentPointSize
+            SendClickToTibia11 pid, corner_posx + 135, corner_posy + 60
+            retryCount2 = 0
+            Do
+                DoEvents
+                wait 10
+                retryCount2 = retryCount2 + 1
+                If (retryCount2 > 10) Then
+                    Debug.Print "Minimap zoom- click failed!"
+                    Exit Sub
+                End If
+                currentPointSize = ReadCurrentAddressFLOAT(pid, adrMiniMapDisplay_Zoom_PointSize1_Float, -1)
+            Loop Until Not (currentPointSize = prevSize)
+        End If
+        retryCount = retryCount + 1
+        If retryCount > 5 Then
+            Debug.Print "Unexpected problem with minimap zoom"
+            Exit Sub
+        End If
+    Loop Until currentPointSize = 1
+    'Debug.Print "Now Zoom level is OK"
+    clickDone = False
+    retryCount = 0
+    Do
+        currentMinimapZ = ReadCurrentAddress(pid, adrMiniMapDisplay_Z, -1, True)
+        If (currentMinimapZ = -1) Then
+            Debug.Print "Minimap address bug!"
+            Exit Sub
+        End If
+        If Not (currentMinimapZ = myZ(idConnection)) Then
+            If (clickDone = False) Then
+                Debug.Print "Requires centre..."
+                SendClickToTibia11 pid, corner_posx + 150, corner_posy + 100
+                clickDone = True
+            End If
+            DoEvents
+            wait 10
+        End If
+        retryCount = retryCount + 1
+        If retryCount > 10 Then
+            Debug.Print "Minimap centre click failed!"
+            Exit Sub
+        End If
+        If Not (currentMinimapZ = myZ(idConnection)) Then
+            currentMinimapZ = ReadCurrentAddress(pid, adrMiniMapDisplay_Z, -1, True)
+        End If
+    Loop Until (currentMinimapZ = myZ(idConnection))
+   ' Debug.Print "Now minimap Z is OK"
+ 
+    clickDone = False
+    retryCount = 0
+    Do
+        currentMinimapMinX = ReadCurrentAddress(pid, adrMiniMapDisplay_MinX, -1, True)
+        currentMinimapMinY = ReadCurrentAddress(pid, adrMiniMapDisplay_MinY, -1, True)
+        currentMinimapPixelsX = ReadCurrentAddress(pid, adrMiniMapDisplay_SizeX, -1, True)
+        currentMinimapPixelsY = ReadCurrentAddress(pid, adrMiniMapDisplay_SizeY, -1, True)
+        halfX = (currentMinimapPixelsX - 1) / 2
+        halfY = (currentMinimapPixelsY - 1) / 2
+        precisionDifX = myX(idConnection) - currentMinimapMinX - halfX
+        precisionDifY = myY(idConnection) - currentMinimapMinY - halfY
+        goodCheck = (Math.Abs(precisionDifX) < maxError) And (Math.Abs(precisionDifY) < maxError)
+        If goodCheck = False Then
+            If (clickDone = False) Then
+                Debug.Print "Requires centre..."
+                SendClickToTibia11 pid, corner_posx + 150, corner_posy + 100
+                clickDone = True
+            End If
+            DoEvents
+            wait 10
+        End If
+        retryCount = retryCount + 1
+        If retryCount > 10 Then
+            Debug.Print "Minimap centre click failed!"
+            Exit Sub
+        End If
+        If goodCheck = False Then
+            currentMinimapMinX = ReadCurrentAddress(pid, adrMiniMapDisplay_MinX, -1, True)
+            currentMinimapMinY = ReadCurrentAddress(pid, adrMiniMapDisplay_MinY, -1, True)
+            currentMinimapPixelsX = ReadCurrentAddress(pid, adrMiniMapDisplay_SizeX, -1, True)
+            currentMinimapPixelsY = ReadCurrentAddress(pid, adrMiniMapDisplay_SizeY, -1, True)
+            halfX = (currentMinimapPixelsX - 1) / 2
+            halfY = (currentMinimapPixelsY - 1) / 2
+            precisionDifX = myX(idConnection) - currentMinimapMinX - halfX
+            precisionDifY = myY(idConnection) - currentMinimapMinY - halfY
+            goodCheck = (Math.Abs(precisionDifX) < maxError) And (Math.Abs(precisionDifY) < maxError)
+        End If
+    Loop Until goodCheck
+    If Not ((precisionDifX = 0) And (precisionDifY = 0)) Then
+        'Debug.Print "Map was slightly moved: " & CStr(precisionDifX) & "," & CStr(precisionDifY)
+    End If
+    goalRawX = Px - myX(idConnection) + halfX + precisionDifX
+    goalRawY = Py - myY(idConnection) + halfY + precisionDifY
+    If (goalRawX > (currentMinimapPixelsX - 1)) Or (goalRawY > (currentMinimapPixelsY - 1)) Then
+        Debug.Print "SafeMemoryMoveXYZ_Tibia11 FAIL: Required position is out of bounds"
+        Exit Sub
+    End If
+    clickX = corner_posx + 9 + goalRawX
+    clickY = corner_posy + 6 + goalRawY
+    SendClickToTibia11 pid, clickX, clickY
+    'Debug.Print "done click at " & CStr(clickX) & "," & CStr(clickY)
 End Sub

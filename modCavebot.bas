@@ -827,7 +827,7 @@ End Sub
 
 Public Function MyBattleListPosition(Sid) As Long
   Dim c1 As Long
-  Dim id As Double
+  Dim Id As Double
   Dim res As Long
   #If FinalMode Then
   On Error GoTo gotErr
@@ -839,8 +839,8 @@ Public Function MyBattleListPosition(Sid) As Long
   End If
   res = -1
   For c1 = 0 To LAST_BATTLELISTPOS
-    id = CDbl(Memory_ReadLong(adrNChar + (CharDist * c1), ProcessID(Sid)))
-    If myID(Sid) = id Then
+    Id = CDbl(Memory_ReadLong(adrNChar + (CharDist * c1), ProcessID(Sid)))
+    If myID(Sid) = Id Then
       res = c1
       Exit For
     End If
@@ -1020,7 +1020,7 @@ Case 11
   ' Trap alarm
   strDebug = strDebug & " > 11 : Trap alarm - Trying a reposition"
   If cavebotOnTrapGiveAlarm(Sid) = True Then
-    If frmRunemaker.ChkDangerSound.Value = 1 Then
+    If frmRunemaker.ChkDangerSound.value = 1 Then
       If PlayTheDangerSound = False Then
         aRes = GiveGMmessage(Sid, "WARNING : YOU ARE TRAPPED !", "BlackdProxy")
         DoEvents
@@ -1139,7 +1139,7 @@ Case 16
 Case 17
   ' Trap alarm
   strDebug = strDebug & " > 17 : Trap alarm - No shovel"
-  If frmRunemaker.ChkDangerSound.Value = 1 Then
+  If frmRunemaker.ChkDangerSound.value = 1 Then
     If PlayTheDangerSound = False Then
       aRes = GiveGMmessage(Sid, "WARNING : YOU ARE TRAPPED ! (No shovel)", "BlackdProxy")
       DoEvents
@@ -1160,7 +1160,7 @@ Case 18
 Case 19
   ' Trap alarm
   strDebug = strDebug & " > 19 : Trap alarm - No rope"
-  If frmRunemaker.ChkDangerSound.Value = 1 Then
+  If frmRunemaker.ChkDangerSound.value = 1 Then
     If PlayTheDangerSound = False Then
       aRes = GiveGMmessage(Sid, "WARNING : YOU ARE TRAPPED ! (No rope)", "BlackdProxy")
       DoEvents
@@ -1558,6 +1558,11 @@ Public Sub ProcessScriptLine(Sid As Integer)
   #End If
   fastM = False
   mytime = GetTickCount()
+  If (lastLootOrder(Sid) + 300 > mytime) Then
+    ' avoid moves when it is about to loot
+   ' Debug.Print "About to loot. Cavebot must wait."
+    Exit Sub
+  End If
   
         If DoingNewLoot(Sid) = True Then
             If mytime > DoingNewLootMAXGTC(Sid) Then
@@ -2531,7 +2536,7 @@ Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
             QMemory_Write4Bytes pid, currentAdr, targetID
             If drawRedSquare Then ' Drawing the red square can take a lot of time until we make a proper FindCollectionItemByKey
     
-                If Not (previousTargetID = 0) Then
+                If Not (previousTargetID = 0) And (previousTargetID <> targetID) Then
                     SetSquareColor pid, previousTargetID, 0, 65535, 65535, 65535 ' 100% transparent White
                     If Not (targetID = 0) Then
                       SetSquareColor pid, targetID, 65535, 65535, 0, 0 ' 0% transparent Red
@@ -3145,7 +3150,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
            End If
         End If
         If (xt = X + 1) And (yt = y) And (mydir = 1) Then
-            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.Value Then
+            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
                     aRes = CastSpell(idConnection, spellToUse)
@@ -3160,7 +3165,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
             End If
         End If
         If (xt = X - 1) And (yt = y) And (mydir = 3) Then
-            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.Value Then
+            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
                     aRes = CastSpell(idConnection, spellToUse)
@@ -3175,7 +3180,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
             End If
         End If
         If (xt = X) And (yt = y + 1) And (mydir = 2) Then
-            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.Value Then
+            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
                     aRes = CastSpell(idConnection, spellToUse)
@@ -3190,7 +3195,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
             End If
         End If
         If (xt = X) And (yt = y - 1) And (mydir = 0) Then
-            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.Value Then
+            If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
                     aRes = CastSpell(idConnection, spellToUse)
@@ -3486,7 +3491,7 @@ Public Function ProcessAttacks(idConnection As Integer) As Long
   mapLoaded = False
   z = myZ(idConnection)
   
-  If frmCavebot.Option1.Value = True Then
+  If frmCavebot.Option1.value = True Then
     MAX_LOCKWAIT = 100000
     cond2 = True
   Else
@@ -3745,21 +3750,22 @@ foundOne:
     End If
   End If
   
-  ' new in 9.14
-  If adrNumberOfAttackClicks = &H0 Then ' new since blackd proxy 24.0
-    If AvoidReAttacks(idConnection) = True Then
-      If lastAttackedID(idConnection) <> 0 Then
-        If lastAttackedID(idConnection) = bestID Then
-          If publicDebugMode = True Then
-            aRes = SendLogSystemMessageToClient(idConnection, "Retry melee attack: canceled")
-            DoEvents
+  If TibiaVersionLong < 1100 Then
+    ' new in 9.14
+    If adrNumberOfAttackClicks = &H0 Then ' new since blackd proxy 24.0
+      If AvoidReAttacks(idConnection) = True Then
+        If lastAttackedID(idConnection) <> 0 Then
+          If lastAttackedID(idConnection) = bestID Then
+            If publicDebugMode = True Then
+              aRes = SendLogSystemMessageToClient(idConnection, "Retry melee attack: canceled")
+              DoEvents
+            End If
+            bestMelee = False
           End If
-          bestMelee = False
         End If
       End If
     End If
   End If
-  
   nameofgivenID = ""
   lastAttackedID(idConnection) = bestID
   If bestID > 0 Then
@@ -3767,7 +3773,7 @@ foundOne:
   End If
   If bestHMM = True Then
     runetoUseAsHmm = getShotType(idConnection, nameofgivenID)
-    If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.Value Then
+    If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
         aRes = CavebotRuneAttack(idConnection, bestID, LowByteOfLong(runetoUseAsHmm), HighByteOfLong(runetoUseAsHmm))
     End If
   End If
@@ -3825,7 +3831,7 @@ Public Sub ProcessFindDown(idConnection As Integer, X As Integer, y As Integer, 
   pMatrix.walkable(X, y) = pMatrix.walkable(X, y) Or pMatrix.walkable(X + 1, y + 1) Or pMatrix.walkable(X, y + 1) _
    Or pMatrix.walkable(X + 1, y) Or pMatrix.walkable(X - 1, y - 1) Or pMatrix.walkable(X, y - 1) _
    Or pMatrix.walkable(X - 1, y) Or pMatrix.walkable(X - 1, y + 1) Or pMatrix.walkable(X + 1, y - 1)
-  If pMatrix.walkable(X, y) = True And fResult.id = 0 Then
+  If pMatrix.walkable(X, y) = True And fResult.Id = 0 Then
     For s = 0 To 10
       tileID = GetTheLong(Matrix(y, X, myZ(idConnection), idConnection).s(s).t1, Matrix(y, X, myZ(idConnection), idConnection).s(s).t2)
       tmpID = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
@@ -4279,7 +4285,7 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
     Next yt
   Next xt
   pMatrix.walkable(0, 0) = True
-  fResult.id = 0
+  fResult.Id = 0
   fResult.tileID = 0
   fResult.melee = False
   fResult.hmm = False
@@ -4689,7 +4695,7 @@ Public Sub ProcessFindUp(idConnection As Integer, X As Integer, y As Integer, By
   pMatrix.walkable(X, y) = pMatrix.walkable(X, y) Or pMatrix.walkable(X + 1, y + 1) Or pMatrix.walkable(X, y + 1) _
    Or pMatrix.walkable(X + 1, y) Or pMatrix.walkable(X - 1, y - 1) Or pMatrix.walkable(X, y - 1) _
    Or pMatrix.walkable(X - 1, y) Or pMatrix.walkable(X - 1, y + 1) Or pMatrix.walkable(X + 1, y - 1)
-  If pMatrix.walkable(X, y) = True And fResult.id = 0 Then
+  If pMatrix.walkable(X, y) = True And fResult.Id = 0 Then
     For s = 0 To 10
       tileID = GetTheLong(Matrix(y, X, myZ(idConnection), idConnection).s(s).t1, Matrix(y, X, myZ(idConnection), idConnection).s(s).t2)
       tmpID = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
@@ -4776,7 +4782,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
     Next yt
   Next xt
   pMatrix.walkable(0, 0) = True
-  fResult.id = 0
+  fResult.Id = 0
   fResult.tileID = 0
   fResult.melee = False
   fResult.hmm = False
@@ -5213,7 +5219,7 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
     stackS = ts
     tileSTR = FiveChrLon(tileID)
   
-    If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
+    If (frmHardcoreCheats.chkTotalWaste.value = True) Then 'And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
         GoTo justdoit
     End If
     If mySlot(idConnection, SLOT_AMMUNITION).t1 = b1 And _
@@ -5234,7 +5240,7 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
        SafeCastCheatString "UseItemHere2", idConnection, sCheat
     Else
 justdoit:
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
           ' NEW
          sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
 
@@ -5346,7 +5352,7 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
             Next ts
         End If
     End If
-    If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
+    If (frmHardcoreCheats.chkTotalWaste.value = True) Then 'And (TibiaVersionLong >= 773) And (shouldBeVisible = False)) Then
         GoTo justdoit
     End If
     If mySlot(idConnection, SLOT_AMMUNITION).t1 = b1 And _
@@ -5364,7 +5370,7 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
       SafeCastCheatString "PerformUseMyItem2", idConnection, sCheat
     Else
 justdoit:
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then ' And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
           ' NEW
          sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
 
@@ -5406,6 +5412,7 @@ Public Function LootGoodItems(idConnection As Integer) As Long
   Dim subPos As Byte
   Dim foodTileID As Long
   Dim foodPos As Byte
+  Dim addDelay As Long
   Dim j As Long
   subContTileID = 0
   foodTileID = 0
@@ -5454,7 +5461,13 @@ Public Function LootGoodItems(idConnection As Integer) As Long
              " " & GoodHex(amount)
              'Debug.Print "LOOTING PACKET = " & sCheat
              
-            SafeCastCheatString "LootGoodItems1", idConnection, sCheat
+            If (TibiaVersionLong >= 1099) Then
+                addDelay = 20
+            Else
+                addDelay = 0
+            End If
+          
+            SafeCastCheatString "LootGoodItems1", idConnection, sCheat, addDelay
             LootGoodItems = 0
             Exit Function
           Else
@@ -5500,6 +5513,7 @@ Public Function OpenCorpse(idConnection As Integer) As Long
   Dim tileID As Long
   Dim xdif As Long
   Dim ydif As Long
+  Dim s As Byte
   'aRes = SendLogSystemMessageToClient(idConnection, "Detected new corpse at " & _
    myLastCorpseX(idConnection) & " , " & myLastCorpseY(idConnection) & " , " & _
    myLastCorpseZ(idConnection) & " , " & myLastCorpseS(idConnection) & " : " & _
@@ -5521,6 +5535,17 @@ Public Function OpenCorpse(idConnection As Integer) As Long
   End If
   If Not (bpID = &HFF) Then
     requestLootBp(idConnection) = bpID
+    If (TibiaVersionLong >= 1099) Then
+        ' recheck Tibia corpse S and tileID !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       For s = 1 To 10
+         tileID = GetTheLong(Matrix(ydif, xdif, myZ(idConnection), idConnection).s(s).t1, Matrix(ydif, xdif, myZ(idConnection), idConnection).s(s).t2)
+         If DatTiles(tileID).iscontainer = True Then
+           myLastCorpseS(idConnection) = s
+           myLastCorpseTileID(idConnection) = tileID
+           Exit For
+         End If
+       Next s
+    End If
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Looting corpse at :" & _
        CStr(myLastCorpseX(idConnection)) & "," & CStr(myLastCorpseY(idConnection)) & "," & CStr(myLastCorpseZ(idConnection)) & _
@@ -5540,14 +5565,20 @@ Public Function OpenCorpse(idConnection As Integer) As Long
             End If
         Next sPos
         sCheat = "0A 00 82 " & FiveChrLon(myLastCorpseX(idConnection)) & " " & _
-        FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & _
+        FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & " " & _
         FiveChrLon(tileID) & " " & GoodHex(CByte(topStack)) & " " & GoodHex(bpID) & " "
     Else
         sCheat = "0A 00 82 " & FiveChrLon(myLastCorpseX(idConnection)) & " " & _
-        FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & _
+        FiveChrLon(myLastCorpseY(idConnection)) & " " & GoodHex(CByte(myLastCorpseZ(idConnection))) & " " & _
         FiveChrLon(myLastCorpseTileID(idConnection)) & " " & GoodHex(CByte(myLastCorpseS(idConnection))) & " " & GoodHex(bpID) & " "
     End If
+    If TibiaVersionLong >= 1099 Then
+        'Debug.Print "waiting and opening: " & sCheat
+        wait 30
+    End If
     GetCheatPacket cPacket, sCheat
+    lastLootOrder(idConnection) = GetTickCount()
+
     frmMain.UnifiedSendToServerGame idConnection, cPacket, True
     DoEvents
     ' give 5 seconds max to loot
@@ -6059,7 +6090,7 @@ continue:
       DoEvents
     End If
     sCheat = FiveChrLon(lOrders + 2) & " 64 " & GoodHex(CByte(lOrders)) & sCheat
-    Debug.Print sCheat
+    'Debug.Print sCheat
     inRes = GetCheatPacket(cPacket, sCheat)
     frmMain.UnifiedSendToServerGame idConnection, cPacket, True
     
@@ -7552,8 +7583,7 @@ Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal X As Long, ByV
     Memory_WriteByte adrZgo, b1, pid
     Memory_WriteByte adrGo + (myBpos * CharDist), 1, pid
   Else
-    ' TODO: read new battle list
-    Debug.Print "SafeMemoryMoveXYZ not ready for Tibia 11+"
+    SafeMemoryMoveXYZ_Tibia11 idConnection, X, y, z
   End If
 End Sub
 

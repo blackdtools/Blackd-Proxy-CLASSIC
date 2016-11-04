@@ -965,7 +965,7 @@ Next i
 
 End Sub
 
-Private Sub writeBytes(idConnection As Integer, address As Long, Value As Long, byteS As Integer)
+Private Sub writeBytes(idConnection As Integer, address As Long, value As Long, byteS As Integer)
 'Get Process Handle
 Dim ProcessHandle As Long
 GetProcessIDs idConnection
@@ -973,11 +973,11 @@ ProcessHandle = ProcessID(idConnection)
 'write to memory
 If byteS = 1 Then
   'Debug.Print "Writting 1 byte [" & CStr(ProcessHandle) & "] at address & " & CStr(Address) & " :" & CStr(Value)
-  Memory_WriteByte address, CByte(Value), ProcessHandle
+  Memory_WriteByte address, CByte(value), ProcessHandle
 Else
   'Debug.Print "Writting 2 byte [" & CStr(ProcessHandle) & "] at address & " & CStr(Address) & " :" & CStr(Value)
-  Memory_WriteByte address, LowByteOfLong(Value), ProcessHandle
-  Memory_WriteByte address + 1, HighByteOfLong(Value), ProcessHandle
+  Memory_WriteByte address, LowByteOfLong(value), ProcessHandle
+  Memory_WriteByte address + 1, HighByteOfLong(value), ProcessHandle
 End If
 End Sub
 
@@ -1194,8 +1194,8 @@ Public Sub ChangeGLOBAL_RUNEHEAL_HP(newValue As Long)
   oldVal = GLOBAL_RUNEHEAL_HP
   frmHardcoreCheats.lblHPvalue.Caption = CStr(newValue) & " %"
   GLOBAL_RUNEHEAL_HP = newValue
-  If frmHardcoreCheats.scrollHP.Value <> newValue Then
-    frmHardcoreCheats.scrollHP.Value = newValue
+  If frmHardcoreCheats.scrollHP.value <> newValue Then
+    frmHardcoreCheats.scrollHP.value = newValue
   End If
   If oldVal <> GLOBAL_RUNEHEAL_HP Then
   For i = 1 To MAXCLIENTS
@@ -1539,7 +1539,7 @@ Public Function PacketIPchange(ByRef packet() As Byte) As Integer
   #End If
   'OverwriteOnFile "test.txt", frmMain.showAsStr2(packet, 0)
   res = -1 'error
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 1
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -2501,7 +2501,7 @@ Public Function PacketIPchange6(ByRef packet() As Byte, ByVal idConnection As In
    ' GoTo returnTheResult 'this is not a list of character packet
   'End If
   
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 0
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -2692,7 +2692,7 @@ Public Function PacketIPchange5(ByRef packet() As Byte, ByVal idConnection As In
   strangeNewThingLen = GetTheLong(packet(adder + 3), packet(adder + 4))
 
 
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 0
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -3021,7 +3021,7 @@ Public Function PacketIPchange5b(ByRef packet() As Byte, ByVal idConnection As I
   adder = bstart - 2
 
 
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 0
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -3361,7 +3361,7 @@ Public Function PacketIPchange4(ByRef packet() As Byte, ByVal idConnection As In
     adder = bstart - 2
   'End If
   Debug.Print "Receiving packet from login server..."
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 1
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -3654,7 +3654,7 @@ Public Function PacketIPchange3(ByRef packet() As Byte, ByVal idConnection As In
     adder = bstart - 2
   'End If
   'Debug.Print "got a char packet"
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 1
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -3785,7 +3785,7 @@ Public Function PacketIPchange2(ByRef packet() As Byte, ByVal idConnection As In
     adder = bstart - 2
   'End If
   'Debug.Print "got a char packet"
-  If frmMain.chckAlter.Value = 0 Then
+  If frmMain.chckAlter.value = 0 Then
     res = 1
     GoTo returnTheResult 'proxy user don't want to change this packet
   End If
@@ -3969,7 +3969,7 @@ endF:
   ConvToAscii = res
 End Function
 
-Public Sub SafeCastCheatStringSPACES(ByRef strFunction As String, ByVal idConnection As Integer, ByVal strinput As String)
+Public Sub SafeCastCheatStringSPACES(ByRef strFunction As String, ByVal idConnection As Integer, ByVal strinput As String, Optional ByVal withDelay As Long = 0)
     Dim res As Integer
     Dim conv As Byte
     Dim strByte As String
@@ -4016,7 +4016,9 @@ Public Sub SafeCastCheatStringSPACES(ByRef strFunction As String, ByVal idConnec
     packet(0) = LowByteOfLong(ub)
     packet(1) = HighByteOfLong(ub)
    ' Debug.Print "Function " & strFunction & " >> " & frmMain.showAsStr(packet, True)
-    
+    If (withDelay > 0) Then
+        wait withDelay
+    End If
     frmMain.UnifiedSendToServerGame idConnection, packet, True
     DoEvents
 endF:
@@ -4024,7 +4026,7 @@ endF:
 
 End Sub
 
-Public Sub SafeCastCheatString(ByRef strFunction As String, ByVal idConnection As Integer, ByVal strinput As String)
+Public Sub SafeCastCheatString(ByRef strFunction As String, ByVal idConnection As Integer, ByVal strinput As String, Optional ByVal withDelay As Long = 0)
     Dim res As Integer
     Dim conv As Byte
     Dim strByte As String
@@ -4127,7 +4129,7 @@ Public Sub SafeCastCheatString(ByRef strFunction As String, ByVal idConnection A
           #If FinalMode = 0 Then
           Debug.Print "Caught spaces at " & strFunction
           #End If
-          SafeCastCheatStringSPACES strFunction, idConnection, strinput
+          SafeCastCheatStringSPACES strFunction, idConnection, strinput, withDelay
           Exit Sub
         Case Else
           valid2 = 16
@@ -4143,7 +4145,9 @@ Public Sub SafeCastCheatString(ByRef strFunction As String, ByVal idConnection A
     packet(0) = LowByteOfLong(ub)
     packet(1) = HighByteOfLong(ub)
     'Debug.Print "Function " & strFunction & " >> " & frmMain.showAsStr(packet, True)
-    
+    If (withDelay > 0) Then
+        wait withDelay
+    End If
     frmMain.UnifiedSendToServerGame idConnection, packet, True
     DoEvents
     Exit Sub
@@ -4506,7 +4510,7 @@ Public Function SendMessageToClient(idConnection As Integer, strSend As String, 
   On Error GoTo errclose
   #End If
   
-  If frmStealth.chkStealthMessages.Value = 1 Then
+  If frmStealth.chkStealthMessages.value = 1 Then
     stealthLog(idConnection) = stealthLog(idConnection) & vbCrLf & TibiaTimestamp() & strFrom & " [" & CStr(fakemessagesLevel) & "]: " & Replace(strSend, vbLf, vbCrLf)
     If idConnection = stealthIDselected Then
         frmStealth.UpdateValues
@@ -4619,7 +4623,7 @@ Public Function SendSystemMessageToClient(idConnection As Integer, strSend As St
     Exit Function
   End If
   
-  If frmStealth.chkStealthMessages.Value = 1 Then
+  If frmStealth.chkStealthMessages.value = 1 Then
     stealthLog(idConnection) = stealthLog(idConnection) & vbCrLf & TibiaTimestamp() & "(sysmessage) " & Replace(strSend, vbLf, vbCrLf)
     If idConnection = stealthIDselected Then
         frmStealth.UpdateValues
@@ -4711,7 +4715,7 @@ Public Function SendCustomSystemMessageToClient(idConnection As Integer, strSend
     Exit Function
   End If
   
-  If frmStealth.chkStealthMessages.Value = 1 Then
+  If frmStealth.chkStealthMessages.value = 1 Then
     stealthLog(idConnection) = stealthLog(idConnection) & vbCrLf & TibiaTimestamp() & Replace(strSend, vbLf, vbCrLf)
     If idConnection = stealthIDselected Then
         frmStealth.UpdateValues
@@ -4805,7 +4809,7 @@ Public Function SendLogSystemMessageToClient(idConnection As Integer, strSend As
     Exit Function
   End If
   
-  If frmStealth.chkStealthMessages.Value = 1 Then
+  If frmStealth.chkStealthMessages.value = 1 Then
     stealthLog(idConnection) = stealthLog(idConnection) & vbCrLf & TibiaTimestamp() & Replace(strSend, vbLf, vbCrLf)
     If idConnection = stealthIDselected Then
         frmStealth.UpdateValues
@@ -4898,7 +4902,7 @@ Public Function GiveGMmessage(idConnection As Integer, strSend As String, strFro
     GiveGMmessage = -1
     Exit Function
   End If
-  If frmStealth.chkStealthMessages.Value = 1 Then
+  If frmStealth.chkStealthMessages.value = 1 Then
     stealthLog(idConnection) = stealthLog(idConnection) & vbCrLf & TibiaTimestamp() & "(**RED MSG!***) " & strFrom & " [" & CStr(fakemessagesLevel) & "]: " & Replace(strSend, vbLf, vbCrLf)
     If idConnection = stealthIDselected Then
         frmStealth.UpdateValues
@@ -4954,7 +4958,7 @@ Public Function GiveGMmessage(idConnection As Integer, strSend As String, strFro
     pos = pos + 1
   End If
   'cheatpacket(pos) = &H9
-  ' !!!!!!!!!!! tests 10.36
+  ' ! tests 10.36
 
   cheatpacket(pos) = oldmessage_H9
   'cheatpacket(pos) = &HC
@@ -5006,11 +5010,11 @@ Public Sub LogStatusOnFile(file_name As String)
     Print #fn, writeThis
     writeThis = "Usecrackd=" & BooleanAsStr(UseCrackd)
     Print #fn, writeThis
-    writeThis = "Option1=" & BooleanAsStr(frmMain.TrueServer1.Value)
+    writeThis = "Option1=" & BooleanAsStr(frmMain.TrueServer1.value)
     Print #fn, writeThis
-    writeThis = "Option2=" & BooleanAsStr(frmMain.TrueServer2.Value)
+    writeThis = "Option2=" & BooleanAsStr(frmMain.TrueServer2.value)
     Print #fn, writeThis
-    writeThis = "Option3=" & BooleanAsStr(frmMain.TrueServer3.Value)
+    writeThis = "Option3=" & BooleanAsStr(frmMain.TrueServer3.value)
     Print #fn, writeThis
   Close #fn
   Exit Sub
@@ -5045,7 +5049,7 @@ Public Sub LogOnFile(file_name As String, strtext As String)
     openErrorsTXTfolder
     errheader = "[" & Format(Date, "dd/mm/yyyy") & " " & Format(Time, "hh:mm:ss") & " using version " & ProxyVersion & " , with config.ini v" & CStr(TibiaVersionLong) & " ] "
     If TibiaVersionLong < highestTibiaVersionLong Then
-        If frmMain.TrueServer3.Value = True Then
+        If frmMain.TrueServer3.value = True Then
            errheader = errheader & "[Playing OTserver>> " & frmMain.ForwardGameTo.Text & ":" & frmMain.txtServerLoginP.Text & "] "
         Else
            errheader = errheader & "[Trying to play real server with old config] "
@@ -5204,7 +5208,7 @@ Public Function UseIH(idConnection As Integer) As Long
   res = 0
   GoTo forcefordebug
   If myMagLevel(idConnection) < 1 Then 'can't use IH
-       If (frmHardcoreCheats.chkRuneAlarm.Value = 1) Then
+       If (frmHardcoreCheats.chkRuneAlarm.value = 1) Then
          If PlayTheDangerSound = False Then
            ChangePlayTheDangerSound True
            aRes = GiveGMmessage(idConnection, "Warning: You are low hp!", "BlackdProxy")
@@ -5217,7 +5221,7 @@ Public Function UseIH(idConnection As Integer) As Long
 forcefordebug:
    fRes = SearchItem(idConnection, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))  'search IH
    
-If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
  
@@ -5245,7 +5249,7 @@ End If
             End If
           Else ' NEW
 justdoit:
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773)) Then
               ' 0d 00 84 ...
               sCheat = "0D 00 84 FF FF 00 00 00 " & GoodHex(LowByteOfLong(tileID_IH)) & _
                " " & GoodHex(HighByteOfLong(tileID_IH)) & " 00 " & _
@@ -5259,7 +5263,7 @@ justdoit:
           End If
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
         If fRes.foundCount = 0 Then
@@ -5301,7 +5305,7 @@ Public Function UseFastIH(idConnection As Integer) As Long
     Exit Function
   End If
   
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
    Else
     SpecialSource = False
@@ -5339,7 +5343,7 @@ Public Function UseFastIH(idConnection As Integer) As Long
   res = 0
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
         If fRes.foundCount = 0 Then
@@ -5380,7 +5384,7 @@ Public Function UseUH(idConnection As Integer) As Long
     Exit Function
   End If
 fRes = SearchItem(idConnection, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))  'search UH
-If (frmHardcoreCheats.chkTotalWaste.Value = True) Then ' And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.value = True) Then ' And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
 
@@ -5407,7 +5411,7 @@ End If
             End If
           Else
 justdoit:
-            If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773)) Then
+            If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then ' And (TibiaVersionLong >= 773)) Then
                sCheat = "84 FF FF 00 00 00 " & GoodHex(LowByteOfLong(tileID_UH)) & _
                 " " & GoodHex(HighByteOfLong(tileID_UH)) & " 00 " & _
                 SpaceID(myID(idConnection))
@@ -5420,7 +5424,7 @@ justdoit:
           End If
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
         If fRes.foundCount = 0 Then
@@ -5460,7 +5464,7 @@ Public Function UseFastUH(idConnection As Integer) As Long
     UseFastUH = UseFastIH(idConnection)
     Exit Function
   End If
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then ' And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
    Else
     SpecialSource = False
@@ -5500,7 +5504,7 @@ End If
   res = 0
 
 lastcheck:
-    If (frmHardcoreCheats.chkRuneAlarm.Value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
+    If (frmHardcoreCheats.chkRuneAlarm.value = 1) And (CInt(frmHardcoreCheats.txtAlarmUHs.Text) > fRes.foundCount) Then
       If PlayTheDangerSound = False Then
         ChangePlayTheDangerSound True
         If fRes.foundCount = 0 Then
@@ -5544,7 +5548,7 @@ Public Function CatchFish(idConnection As Integer) As Long
   On Error GoTo errclose
   #End If
   ' en la version 772 se podia ya usar la caña desde cualquier lado???
-If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'Or (TibiaVersionLong >= 773)) Then
+If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'Or (TibiaVersionLong >= 773)) Then
 GoTo justdoit
 End If
   If mySlot(idConnection, SLOT_AMMUNITION).t1 = LowByteOfLong(tileID_FishingRod) And _
@@ -5593,7 +5597,7 @@ justdoit:
       ' 11 00 83 FF FF 0A 00 00 5D 0D 00 39 7D BD 7D 07 59 02 00
       aRes = SendSystemMessageToClient(idConnection, CStr(fishCount) & " fish left in your screen. Fishing number " & CStr(fishThis))
       DoEvents
-If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
+If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773)) Then
       sCheat = "11 00 83 FF FF 00 00 00 " & FiveChrLon(tileID_FishingRod) & " 00 " & GetHexStrFromPosition(fishX, fishY, fishz) & " " & tileSTR & " 00"
  
 Else
@@ -6401,7 +6405,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "FD"
           enLight idConnection
         End If
@@ -6410,7 +6414,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "FD"
           enLight idConnection
         End If
@@ -6419,7 +6423,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "FD"
           enLight idConnection
         End If
@@ -6428,7 +6432,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "04"
           enLight idConnection
         End If
@@ -6437,7 +6441,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "04"
           enLight idConnection
         End If
@@ -6446,7 +6450,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "FD"
           enLight idConnection
         End If
@@ -6455,7 +6459,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
           DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "FD"
           enLight idConnection
         End If
@@ -6464,7 +6468,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "FD"
           enLight idConnection
         End If
@@ -6473,7 +6477,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "04"
           enLight idConnection
         End If
@@ -6482,7 +6486,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         rightpart = Right(msg, Len(lMsg) - 7)
         aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
         DoEvents
-        If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+        If frmHardcoreCheats.chkColorEffects.value = 1 Then
           nextLight(idConnection) = "04"
           enLight idConnection
         End If
@@ -6505,7 +6509,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6517,7 +6521,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6529,7 +6533,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6541,7 +6545,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6553,7 +6557,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6565,7 +6569,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_SD), HighByteOfLong(tileID_SD))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6577,7 +6581,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_HMM), HighByteOfLong(tileID_HMM))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6589,7 +6593,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_Explosion), HighByteOfLong(tileID_Explosion))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6601,7 +6605,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_IH), HighByteOfLong(tileID_IH))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6613,7 +6617,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_UH), HighByteOfLong(tileID_UH))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6633,7 +6637,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_fireball), HighByteOfLong(tileID_fireball))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6645,7 +6649,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_stalagmite), HighByteOfLong(tileID_stalagmite))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6657,7 +6661,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
               If GameConnected(mcid) = True And GotPacketWarning(mcid) = False And sentFirstPacket(mcid) = True Then
                 aRes = SendMobAimbot(parseVars(idConnection, rightpart), mcid, LowByteOfLong(tileID_icicle), HighByteOfLong(tileID_icicle))
                 DoEvents
-                If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+                If frmHardcoreCheats.chkColorEffects.value = 1 Then
                   nextLight(idConnection) = "FD"
                   enLight idConnection
                 End If
@@ -6685,7 +6689,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             res = 1
             aRes = SendMobAimbot("", idConnection, LowByteOfLong(tileID_fireball), HighByteOfLong(tileID_fireball))
             DoEvents
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               nextLight(idConnection) = "FD"
               enLight idConnection
             End If
@@ -6693,7 +6697,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             res = 1
             aRes = SendMobAimbot("", idConnection, LowByteOfLong(tileID_stalagmite), HighByteOfLong(tileID_stalagmite))
             DoEvents
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               nextLight(idConnection) = "04"
               enLight idConnection
             End If
@@ -6701,7 +6705,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             res = 1
             aRes = SendMobAimbot("", idConnection, LowByteOfLong(tileID_icicle), HighByteOfLong(tileID_icicle))
             DoEvents
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               nextLight(idConnection) = "04"
               enLight idConnection
             End If
@@ -6748,7 +6752,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
           If aRes = 0 Then
             DoEvents
           End If
-          If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+          If frmHardcoreCheats.chkColorEffects.value = 1 Then
             nextLight(idConnection) = "04"
             enLight idConnection
           End If
@@ -6758,7 +6762,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
           If aRes = 0 Then
           DoEvents
           End If
-          If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+          If frmHardcoreCheats.chkColorEffects.value = 1 Then
             nextLight(idConnection) = "04"
             enLight idConnection
           End If
@@ -6766,7 +6770,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
           res = 1
           aRes = UseFluid(idConnection, byteMana)
           DoEvents
-          If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+          If frmHardcoreCheats.chkColorEffects.value = 1 Then
             nextLight(idConnection) = "04"
             enLight idConnection
           End If
@@ -6781,7 +6785,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
         ElseIf rightpart = "testsound" Then
           res = 1
           ChangePlayTheDangerSound True
-          frmRunemaker.ChkDangerSound.Value = 1
+          frmRunemaker.ChkDangerSound.value = 1
           aRes = SendLogSystemMessageToClient(idConnection, "Testing the sound. Danger alarm activated. Deactivate with exiva cancel")
           DoEvents
         ElseIf rightpart = "testding" Then
@@ -6924,7 +6928,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             aRes = RevealAll(idConnection)
             DoEvents
           End If
-          If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+          If frmHardcoreCheats.chkColorEffects.value = 1 Then
             nextLight(idConnection) = "1F"
             enLight idConnection
           End If
@@ -7011,7 +7015,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             rightpart = Right(rightpart, Len(rightpart) - 2)
             aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_fireball), HighByteOfLong(tileID_fireball))
             DoEvents
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               nextLight(idConnection) = "FD"
               enLight idConnection
             End If
@@ -7020,7 +7024,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             rightpart = Right(rightpart, Len(rightpart) - 2)
             aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_stalagmite), HighByteOfLong(tileID_stalagmite))
             DoEvents
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               nextLight(idConnection) = "FD"
               enLight idConnection
             End If
@@ -7029,7 +7033,7 @@ Public Function EvalClientMessage(ByVal idConnection As Integer, ByRef packet() 
             rightpart = Right(rightpart, Len(rightpart) - 2)
             aRes = SendMobAimbot(parseVars(idConnection, rightpart), idConnection, LowByteOfLong(tileID_icicle), HighByteOfLong(tileID_icicle))
             DoEvents
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               nextLight(idConnection) = "FD"
               enLight idConnection
             End If
@@ -7314,8 +7318,8 @@ Public Function ApplyHardcoreCheats(ByRef packet() As Byte, ByVal idConnection A
       End If
     Case &H96
       If lastB > 8 Then ' command
-        If (frmHardcoreCheats.chkApplyCheats.Value = 1) Then
-            If ((frmStealth.chkStealthCommands.Value = 0) Or (forceEval = True)) Then
+        If (frmHardcoreCheats.chkApplyCheats.value = 1) Then
+            If ((frmStealth.chkStealthCommands.value = 0) Or (forceEval = True)) Then
                 res = EvalClientMessage(idConnection, packet, 2)
             Else
                 res = 0
@@ -7327,7 +7331,7 @@ Public Function ApplyHardcoreCheats(ByRef packet() As Byte, ByVal idConnection A
     Case &H79
     ' 04 00 79 C4 1E 00
     ' new since tibia 8.21+
-      If frmCheats.chkInspectTileID.Value = 1 Then ' identify
+      If frmCheats.chkInspectTileID.value = 1 Then ' identify
         'add tile info by tell
         aRes = SendLogSystemMessageToClient(idConnection, "You see tile ID " & _
          GoodHex(packet(3)) & " " & GoodHex(packet(4)) & "  with info " & GetTileInfoString(packet(3), packet(4)))
@@ -7335,7 +7339,7 @@ Public Function ApplyHardcoreCheats(ByRef packet() As Byte, ByVal idConnection A
         DoEvents
       End If
     Case &H8C
-      If frmCheats.chkInspectTileID.Value = 1 Then ' identify
+      If frmCheats.chkInspectTileID.value = 1 Then ' identify
         'add tile info by tell
         aRes = SendLogSystemMessageToClient(idConnection, "You see tile ID " & _
          GoodHex(packet(8)) & " " & GoodHex(packet(9)) & "  with info " & GetTileInfoString(packet(8), packet(9)))
@@ -7456,7 +7460,7 @@ Public Function SendAimbot(Target As String, idConnection As Integer, runeB1 As 
     isDamageRune = False
   End Select
   If (isDamageRune = True) Then
-    If frmHardcoreCheats.chkProtectedShots.Value = 1 Then
+    If frmHardcoreCheats.chkProtectedShots.value = 1 Then
       percent = 100 * ((myHP(idConnection) / myMaxHP(idConnection)))
       If (percent < GLOBAL_RUNEHEAL_HP) Then
         aRes = SendLogSystemMessageToClient(idConnection, "BlackdProxy: Your shot have been blocked for safety (low hp)")
@@ -7471,7 +7475,7 @@ Public Function SendAimbot(Target As String, idConnection As Integer, runeB1 As 
   Dim lLastTargetName As String
   lLastTargetName = LCase(currTargetName(idConnection)) 'currTargetName=name of last target, even if there is no target atm..
   SpecialSource = False
-  If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
+  If (frmHardcoreCheats.chkTotalWaste.value = True) Then 'And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
   End If
  ' aRes = SendMessageToClient(idConnection, "Casting on " & target & " ;)", "GM BlackdProxy")
@@ -7639,7 +7643,7 @@ Public Function SendMobAimbot(Target As String, idConnection As Integer, runeB1 
     isDamageRune = False
   End Select
   If (isDamageRune = True) Then
-    If frmHardcoreCheats.chkProtectedShots.Value = 1 Then
+    If frmHardcoreCheats.chkProtectedShots.value = 1 Then
       percent = 100 * ((myHP(idConnection) / myMaxHP(idConnection)))
       If (percent < GLOBAL_RUNEHEAL_HP) Then
         aRes = SendLogSystemMessageToClient(idConnection, "BlackdProxy: Your shot have been blocked for safety (low hp)")
@@ -7652,7 +7656,7 @@ Public Function SendMobAimbot(Target As String, idConnection As Integer, runeB1 
   
  ' aRes = SendMessageToClient(idConnection, "Casting on " & target & " ;)", "GM BlackdProxy")
   ' search the rune
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773)) Then
     SpecialSource = True
    Else
     SpecialSource = False
@@ -10023,7 +10027,7 @@ Public Function ExecuteInTibia(spellString As String, idConnection As Integer, c
   #If FinalMode Then
   On Error GoTo errclose
   #End If
-  If frmHardcoreCheats.chkApplyCheats.Value = 0 Then
+  If frmHardcoreCheats.chkApplyCheats.value = 0 Then
     ExecuteInTibia = 0
     Exit Function ' fixed since 13.3
   End If
@@ -10334,7 +10338,7 @@ Public Function UseFluid(idConnection As Integer, byteFluid As Byte) As Long
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
   If TibiaVersionLong >= 970 Then
@@ -10363,7 +10367,7 @@ End If
     End If
   Else
 justdoit:
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then ' And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then ' And (TibiaVersionLong >= 773)) Then
          myS = FirstPersonStackPos(idConnection)
          If myS < &HFF Then
         ' NEW
@@ -10412,7 +10416,7 @@ Public Function UsePotion(idConnection As Integer, tileID_potion As Long) As Lon
   #If FinalMode Then
   On Error GoTo gotErr
   #End If
-If (frmHardcoreCheats.chkTotalWaste.Value = True) Then 'And (TibiaVersionLong >= 773)) Then
+If (frmHardcoreCheats.chkTotalWaste.value = True) Then 'And (TibiaVersionLong >= 773)) Then
   GoTo justdoit
 End If
   If TibiaVersionLong >= 970 Then
@@ -10440,7 +10444,7 @@ End If
     End If
   Else
 justdoit:
-      If ((frmHardcoreCheats.chkEnhancedCheats.Value = True) Or (frmHardcoreCheats.chkTotalWaste.Value = True)) Then 'And (TibiaVersionLong >= 773)) Then
+      If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773)) Then
          myS = FirstPersonStackPos(idConnection)
          If myS < &HFF Then
         ' NEW

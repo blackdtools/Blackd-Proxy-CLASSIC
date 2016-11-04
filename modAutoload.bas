@@ -545,7 +545,7 @@ Public Sub SaveCharSettings(idConnection As Integer)
             strSettings = strSettings & "LastCavebotFile=" & frmCavebot.txtFile.Text & vbCrLf
         End If
     End If
-    If frmCavebot.chkEnabled.Value = 1 Then
+    If frmCavebot.chkEnabled.value = 1 Then
     'custom ng avoid save turn on cavebot
         strSettings = strSettings & "CavebotEnabled=1" & vbCrLf
     Else

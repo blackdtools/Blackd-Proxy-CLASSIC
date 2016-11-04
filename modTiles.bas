@@ -8426,13 +8426,62 @@ Optional ByVal markPosition2 As Long = -1)
     pos = pos + positions
 End Function
 
+Public Sub getProtobufBytesFrom4BYTESNUMBER(ByRef arr() As Byte, ByVal Number As Long)
+    Const cte1 As Long = 128
+    Const cte2 As Long = 16384 ' 128 * 128
+    Const cte3 As Long = 2097152 ' 128 * 128 * 128
+    Const cte4 As Long = 268435456 ' 128 * 128 * 128 * 128
+    If Number < cte1 Then
+        ReDim arr(0)
+        arr(0) = CByte(Number)
+    ElseIf Number < cte2 Then
+        ReDim arr(1)
+        arr(1) = CByte(Number \ cte1)
+        Number = Number - (arr(1) * cte1)
+        arr(0) = CByte(cte1 + Number)
+    ElseIf Number < cte3 Then
+        ReDim arr(2)
+        arr(2) = CByte(Number \ cte2)
+        Number = Number - (arr(2) * cte2)
+        arr(1) = CByte(cte1 + (Number \ cte1))
+        Number = Number - ((arr(1) - cte1) * cte1)
+        arr(0) = CByte(cte1 + Number)
+    ElseIf Number < cte4 Then
+        ReDim arr(3)
+        arr(3) = CByte(Number \ cte3)
+        Number = Number - (arr(3) * cte3)
+        arr(2) = CByte(cte1 + (Number \ cte2))
+        Number = Number - ((arr(2) - cte1) * cte2)
+        arr(1) = CByte(cte1 + (Number \ cte1))
+        Number = Number - ((arr(1) - cte1) * cte1)
+        arr(0) = CByte(cte1 + Number)
+    Else
+        ReDim arr(4)
+        arr(4) = CByte(Number \ cte4)
+        Number = Number - (arr(4) * cte4)
+        arr(3) = CByte(cte1 + (Number \ cte3))
+        Number = Number - ((arr(3) - cte1) * cte3)
+        arr(2) = CByte(cte1 + (Number \ cte2))
+        Number = Number - ((arr(2) - cte1) * cte2)
+        arr(1) = CByte(cte1 + (Number \ cte1))
+        Number = Number - ((arr(1) - cte1) * cte1)
+        arr(0) = CByte(cte1 + Number)
+    End If
+    Debug.Print arrayToString(arr)
+End Sub
 
-Private Function readSmartNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef positionsRead As Long) As Long
+Public Sub testGetProto(ByVal Number As Long)
+    Dim arr() As Byte
+    getProtobufBytesFrom4BYTESNUMBER arr, Number
+End Sub
+
+Public Function readProtobufNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef positionsRead As Long) As Long
      Dim num As Long
      Dim b1 As Byte
      Dim b2 As Byte
      Dim b3 As Byte
      Dim b4 As Byte
+     Dim b5 As Byte
      On Error GoTo gotErr
      b1 = arr(pos)
      num = CLng(b1)
@@ -8441,36 +8490,35 @@ Private Function readSmartNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef p
         num = CLng(b1)
      Else
         b2 = arr(pos + 1)
-        num = num + (128 * CLng(b2)) - 128
+        num = num + (128 * (CLng(b2) - 1))
         If (b2 < &H80) Then
             positionsRead = 2
         Else
             b3 = arr(pos + 2)
-            num = num + (16384 * CLng(b3)) - 16384 ' 16384 = 128*128
+            num = num + (16384 * (CLng(b3) - 1)) ' 16384 = 128*128
             If (b3 < &H80) Then
                 positionsRead = 3
             Else
                 b4 = arr(pos + 3)
+                num = num + (2097152 * (CLng(b4) - 1)) ' 2097152 = 16384*128
                 If (b4 < &H80) Then
-                    num = num + (2097152 * CLng(b4)) - 2097152 ' 2097152 = 16384*128
                     positionsRead = 4
                 Else
-                    ' We should not see that big numbers in our .dat file
+                    b5 = arr(pos + 4)
+                    num = num + (268435456 * (CLng(b5) - 1)) ' 268435456 = 2097152*128
                     positionsRead = 5
-                    readSmartNumber = -1
-                    Exit Function
                 End If
             End If
         End If
      End If
-     readSmartNumber = num
+     readProtobufNumber = num
      Exit Function
 gotErr:
-     readSmartNumber = -2
+     readProtobufNumber = -2
 End Function
 
-' Example: testSmartNumber ("80 80 01")
-Public Sub testSmartNumber(ByVal str As String)
+' Example: testProtobufNumber ("80 80 01")
+Public Sub testProtobufNumber(ByVal str As String)
     Dim arr() As String
     Dim arrb() As Byte
     Dim res As Long
@@ -8484,7 +8532,7 @@ Public Sub testSmartNumber(ByVal str As String)
     For i = 0 To UBound(arr)
         arrb(i) = CByte(CLng("&H" & arr(i)))
     Next i
-    res = readSmartNumber(arrb, 0, positions)
+    res = readProtobufNumber(arrb, 0, positions)
     Debug.Print str & " = " & CStr(res) & " (used " & CStr(positions) & " positions)"
 End Sub
 
@@ -8713,29 +8761,29 @@ Const expectedVersion As Long = 17223
     atGraphicPart = True
     graphicPart_start = pos
 
-    totalBytesHere = readSmartNumber(byteArray, pos + 1, positionsRead)
+    totalBytesHere = readProtobufNumber(byteArray, pos + 1, positionsRead)
     properties_end = pos + positionsRead + totalBytesHere
     pos = pos + 2 + positionsRead
-    currentTile = readSmartNumber(byteArray, pos, positionsRead)
+    currentTile = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    graphicPart_size = readSmartNumber(byteArray, pos, positionsRead)
+    graphicPart_size = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    lPrev1 = readSmartNumber(byteArray, pos, positionsRead)
+    lPrev1 = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    lPrev2 = readSmartNumber(byteArray, pos, positionsRead)
+    lPrev2 = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    graphicPart2_size = readSmartNumber(byteArray, pos, positionsRead)
+    graphicPart2_size = readProtobufNumber(byteArray, pos, positionsRead)
         
     properties_start = pos + positionsRead + graphicPart2_size
     graphicPart_end = properties_start - 1
     pos = pos + 1 + positionsRead
-    lXdiv = readSmartNumber(byteArray, pos, positionsRead)
+    lXdiv = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    lYdiv = readSmartNumber(byteArray, pos, positionsRead)
+    lYdiv = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    lAnimcount = readSmartNumber(byteArray, pos, positionsRead)
+    lAnimcount = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
-    lNew = readSmartNumber(byteArray, pos, positionsRead)
+    lNew = readProtobufNumber(byteArray, pos, positionsRead)
     expectedBytes = 10 + (lXdiv * lYdiv * lAnimcount * 4)
  
 '    If (currentTile = 134) Then
@@ -8780,7 +8828,7 @@ Const expectedVersion As Long = 17223
     movePos pos, graphicPart_end - graphicPart_start + 1, True
     
     ' Skip properties block header (It only contains number of bytes of real properties)
-    properties_size_without_header = readSmartNumber(byteArray, pos, positionsRead)
+    properties_size_without_header = readProtobufNumber(byteArray, pos, positionsRead)
     properties_header_size = 1 + positionsRead
     movePos pos, properties_header_size
     
@@ -8798,7 +8846,7 @@ Const expectedVersion As Long = 17223
             ' 0A 03 08 A0 01
                 DatTiles(currentTile).groundtile = True
                 movePos pos, 3, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
                 DatTiles(currentTile).speed = lonNumber
                 If lonNumber = 0 Then
@@ -8809,14 +8857,14 @@ Const expectedVersion As Long = 17223
             ' 10 01
                 DatTiles(currentTile).moreAlwaysOnTop = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H18
             ' OLD <02> "always on top"
             ' 18 01
                 DatTiles(currentTile).alwaysOnTop = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H20
             ' OLD <03> "can walk through" (open doors, arces ...)
@@ -8824,14 +8872,14 @@ Const expectedVersion As Long = 17223
                 DatTiles(currentTile).canWalkThrough = True
                 DatTiles(currentTile).alwaysOnTop = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H28
             ' OLD <04> "is container"
             ' 28 01
               
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 If DatTiles(currentTile).haveName = False Then
                   DatTiles(currentTile).iscontainer = True
                 End If
@@ -8842,7 +8890,7 @@ Const expectedVersion As Long = 17223
             ' 30 32
             ' 30 8C 01
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 If lonNumber = 1 Then
                     DatTiles(currentTile).stackable = True
                 End If
@@ -8851,63 +8899,63 @@ Const expectedVersion As Long = 17223
             ' OLD <FE> --- unknown meaning
             ' 38 01
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H40
             ' OLD <06> "is usable"
             ' 40 01
                 DatTiles(currentTile).useable = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H48
             ' OLD <07> "is drinkable"
             ' 48 01
                 DatTiles(currentTile).usable2 = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H52
             ' OLD <08> "writtable"
             ' 52 03 08 C8 01
                 DatTiles(currentTile).RWInfo = 3
                 movePos pos, 3, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H5A
             ' OLD <09> "read only"
             ' 5A 03 08 80 08
                 DatTiles(currentTile).RWInfo = 1
                 movePos pos, 3, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H60
             ' OLD <0B> "multitype"
             ' 60 01
                 DatTiles(currentTile).multitype = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H68
             ' OLD <0C> "is blocking"
             ' 68 01
                 DatTiles(currentTile).blocking = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H70
             ' OLD <0D> "not moveable" CONFIRMED
             ' 70 01
                 DatTiles(currentTile).notMoveable = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H78
             ' OLD <0E> "block missiles"
             ' 78 01
                 DatTiles(currentTile).blockingProjectile = True
                 movePos pos, 1, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H80
             ' OLD <0F> AND <1F>
@@ -8924,7 +8972,7 @@ Const expectedVersion As Long = 17223
                     Debug.Print "!!!!!"
                 End Select
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H88
             ' old <10> AND <20>
@@ -8932,7 +8980,7 @@ Const expectedVersion As Long = 17223
             ' 88 02 01 = OLD <20>
                 optbyte2 = byteArray(pos + 1)
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 Select Case optbyte2
                 Case &H1
                      ' OLD <10> "pickupable"
@@ -8947,45 +8995,45 @@ Const expectedVersion As Long = 17223
             ' OLD <11> "can see what is under (ladder holes, stairs holes etc)"
             ' 90 01 01
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H92
             ' OLD <21> "body restriction"
             ' 92 02 02 08 01
                 movePos pos, 4, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H98
             ' old <0A> "fluid container"
             ' 98 01 01
                 DatTiles(currentTile).fluidcontainer = True
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &H9A
             ' OLD <23> --- unknown meaning
             ' 9A 02 02 08 04
                 movePos pos, 4, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HA0
             ' OLD <12> "action is possible"
             ' A0 01 01
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HA2
             ' OLD <22> "have name"
             ' A2 02 14 08 09 10 66 18 66 22 0C 77 68 69 74 65 20 66 6C 6F 77 65 72
             ' A2 02 19 08 09 10 80 01 18 80 01 22 0F 73 69 67 6E 65 64 20 63 6F 6E 74 72 61 63 74
                 movePos pos, 6, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
                 movePos pos, 1
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
                 movePos pos, 1
-                tmpSize = readSmartNumber(byteArray, pos, positionsRead)
+                tmpSize = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
                 tmpName = ""
                 For tmpI = pos To pos + tmpSize - 1
@@ -9001,19 +9049,19 @@ Const expectedVersion As Long = 17223
             ' OLD <25> --- unknown meaning
             ' A8 02 01
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HAA
             ' OLD <14> --- unknown meaning
             ' AA 01 02 08 02
                 movePos pos, 4, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HB0
             ' OLD <15> --- unknown meaning
             ' B0 01 01
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HBA
             ' OLD <16> "makes light"
@@ -9021,20 +9069,20 @@ Const expectedVersion As Long = 17223
             ' BA 01 05 08 02 10 CE 01
             ' BA 01 04 08 04 10 23
                 movePos pos, 6, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HC0
             ' old <17> --- unknown meaning
             ' C0 01 01
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HC8
             ' OLD <18> "stairs to lower floor"
             ' C8 01 01
                 DatTiles(currentTile).floorChangeDOWN = True
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HDA
             ' OLD <1A> "block pickupable"
@@ -9050,19 +9098,19 @@ Const expectedVersion As Long = 17223
             ' E0 01 01
                 DatTiles(currentTile).canDecay = False
                 movePos pos, 2, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HF2
             ' OLD <1D> "color for minimap drawing"
             ' F2 01 03 08 81 01
                 movePos pos, 4, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 movePos pos, positionsRead
             Case &HFA
             ' OLD <1E> "special item"
             ' FA 01 03 08 CE 08
                 movePos pos, 4, , 0
-                lonNumber = readSmartNumber(byteArray, pos, positionsRead)
+                lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
                 optbyte2 = LowByteOfLong(lonNumber)
                 '86 -> openable holes, 77-> can be used to go down, 76 can be used to go up, 82 -> stairs up, 79 switch,...
                 Select Case optbyte2

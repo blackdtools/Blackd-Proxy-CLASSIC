@@ -601,45 +601,45 @@ Private Sub cmdAdd_Click()
         lblMsg.Caption = "Select/type a character first!"
         lblMsg.ForeColor = &HFFFF&
     Else
-        bHP = CByte(scrollHP.Value)
-        bMANA = CByte(scrollMANA.Value)
-        If HPopt1.Value = True Then
+        bHP = CByte(scrollHP.value)
+        bMANA = CByte(scrollMANA.value)
+        If HPopt1.value = True Then
             strHPact = "no action"
-        ElseIf HPopt2.Value = True Then
+        ElseIf HPopt2.value = True Then
             strHPact = "IH"
-        ElseIf HPopt3.Value = True Then
+        ElseIf HPopt3.value = True Then
             strHPact = "UH"
-        ElseIf HPopt4.Value = True Then
+        ElseIf HPopt4.value = True Then
             strHPact = "life fluid"
-        ElseIf HPopt5.Value = True Then
+        ElseIf HPopt5.value = True Then
             strHPact = "health potion"
-        ElseIf HPopt6.Value = True Then
+        ElseIf HPopt6.value = True Then
             strHPact = "strong health potion"
-        ElseIf HPopt7.Value = True Then
+        ElseIf HPopt7.value = True Then
             strHPact = "great health potion"
-        ElseIf HPopt9.Value = True Then
+        ElseIf HPopt9.value = True Then
             strHPact = "ultimate health potion"
-        ElseIf HPopt10.Value = True Then
+        ElseIf HPopt10.value = True Then
             strHPact = "great spirit potion"
-        ElseIf HPopt11.Value = True Then
+        ElseIf HPopt11.value = True Then
             strHPact = "small health potion"
-        ElseIf HPopt8.Value = True Then
+        ElseIf HPopt8.value = True Then
             strHPact = hpTEXT.Text
         End If
         
-        If MANAopt1.Value = True Then
+        If MANAopt1.value = True Then
             strMANAact = "no action"
-        ElseIf MANAopt2.Value = True Then
+        ElseIf MANAopt2.value = True Then
             strMANAact = "mana fluid"
-        ElseIf MANAopt3.Value = True Then
+        ElseIf MANAopt3.value = True Then
             strMANAact = "mana potion"
-        ElseIf MANAopt4.Value = True Then
+        ElseIf MANAopt4.value = True Then
             strMANAact = "strong mana potion"
-        ElseIf MANAopt5.Value = True Then
+        ElseIf MANAopt5.value = True Then
             strMANAact = "great mana potion"
-        ElseIf MANAopt7.Value = True Then
+        ElseIf MANAopt7.value = True Then
             strMANAact = "great spirit potion"
-        ElseIf MANAopt6.Value = True Then
+        ElseIf MANAopt6.value = True Then
             strMANAact = manaTEXT.Text
         End If
         
@@ -730,45 +730,45 @@ Private Sub cmdSaveOnMemory_Click()
         lblMsg.Caption = "Select/type a character first!"
         lblMsg.ForeColor = &HFFFF&
     Else
-        bHP = CByte(scrollHP.Value)
-        bMANA = CByte(scrollMANA.Value)
-        If HPopt1.Value = True Then
+        bHP = CByte(scrollHP.value)
+        bMANA = CByte(scrollMANA.value)
+        If HPopt1.value = True Then
             strHPact = "no action"
-        ElseIf HPopt2.Value = True Then
+        ElseIf HPopt2.value = True Then
             strHPact = "IH"
-        ElseIf HPopt3.Value = True Then
+        ElseIf HPopt3.value = True Then
             strHPact = "UH"
-        ElseIf HPopt4.Value = True Then
+        ElseIf HPopt4.value = True Then
             strHPact = "life fluid"
-        ElseIf HPopt5.Value = True Then
+        ElseIf HPopt5.value = True Then
             strHPact = "health potion"
-        ElseIf HPopt6.Value = True Then
+        ElseIf HPopt6.value = True Then
             strHPact = "strong health potion"
-        ElseIf HPopt7.Value = True Then
+        ElseIf HPopt7.value = True Then
             strHPact = "great health potion"
-        ElseIf HPopt9.Value = True Then
+        ElseIf HPopt9.value = True Then
             strHPact = "ultimate health potion"
-        ElseIf HPopt10.Value = True Then
+        ElseIf HPopt10.value = True Then
             strHPact = "great spirit potion"
-        ElseIf HPopt11.Value = True Then
+        ElseIf HPopt11.value = True Then
             strHPact = "small health potion"
-        ElseIf HPopt8.Value = True Then
+        ElseIf HPopt8.value = True Then
             strHPact = hpTEXT.Text
         End If
         
-        If MANAopt1.Value = True Then
+        If MANAopt1.value = True Then
             strMANAact = "no action"
-        ElseIf MANAopt2.Value = True Then
+        ElseIf MANAopt2.value = True Then
             strMANAact = "mana fluid"
-        ElseIf MANAopt3.Value = True Then
+        ElseIf MANAopt3.value = True Then
             strMANAact = "mana potion"
-        ElseIf MANAopt4.Value = True Then
+        ElseIf MANAopt4.value = True Then
             strMANAact = "strong mana potion"
-        ElseIf MANAopt5.Value = True Then
+        ElseIf MANAopt5.value = True Then
             strMANAact = "great mana potion"
-        ElseIf MANAopt7.Value = True Then
+        ElseIf MANAopt7.value = True Then
             strMANAact = "great spirit potion"
-        ElseIf MANAopt6.Value = True Then
+        ElseIf MANAopt6.value = True Then
             strMANAact = manaTEXT.Text
         End If
         
@@ -875,11 +875,11 @@ End Sub
 
 
 Private Sub scrollHP_Change()
-    lblHPvalue.Caption = scrollHP.Value & " %"
+    lblHPvalue.Caption = scrollHP.value & " %"
 End Sub
 
 Private Sub scrollMANA_Change()
-    lblMANAvalue.Caption = scrollMANA.Value & " %"
+    lblMANAvalue.Caption = scrollMANA.value & " %"
 End Sub
 
 Public Sub LoadHPmanaChars()

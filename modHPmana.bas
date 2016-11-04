@@ -15,7 +15,7 @@ Public Type TypeHPmanaConfig
 End Type
 
 Public HPmanaConfig() As TypeHPmanaConfig
-
+Public lastLootOrder() As Long
 Public LastHealTime() As Long
 Public LastCavebotTime() As Long
 Public HPmanaRECAST As Long

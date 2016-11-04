@@ -103,7 +103,7 @@ Private Sub chkSDcombo_Click()
 
 If lock_chkSDcombo = False Then
 If aimbotIDselected > 0 Then
-  If chkSDcombo.Value = 1 Then
+  If chkSDcombo.value = 1 Then
     aimbotOptions(aimbotIDselected).chkSDcombo = True
   Else
     aimbotOptions(aimbotIDselected).chkSDcombo = False
@@ -117,7 +117,7 @@ Private Sub chkUEcombo_Click()
 
 If lock_chkUEcombo = False Then
 If aimbotIDselected > 0 Then
-  If chkUEcombo.Value = 1 Then
+  If chkUEcombo.value = 1 Then
     aimbotOptions(aimbotIDselected).chkUEcombo = True
   Else
     aimbotOptions(aimbotIDselected).chkUEcombo = False
@@ -239,27 +239,27 @@ Dim idConnection As Integer
 
 If aimbotIDselected <= 0 Then
     If aimbotOptions_chkSDcombo_default = True Then
-      chkSDcombo.Value = 1
+      chkSDcombo.value = 1
     Else
-      chkSDcombo.Value = 0
+      chkSDcombo.value = 0
     End If
     If aimbotOptions_chkUEcombo_default = True Then
-      chkUEcombo.Value = 1
+      chkUEcombo.value = 1
     Else
-      chkUEcombo.Value = 0
+      chkUEcombo.value = 0
     End If
 frmAimbot.txtLeader.Text = aimbotOptions_txtLeader_default
 frmAimbot.txtCombo.Text = aimbotOptions_txtCombo_default
  Else
     If aimbotOptions(aimbotIDselected).chkSDcombo = True Then
-      chkSDcombo.Value = 1
+      chkSDcombo.value = 1
     Else
-      chkSDcombo.Value = 0
+      chkSDcombo.value = 0
     End If
     If aimbotOptions(aimbotIDselected).chkUEcombo = True Then
-      chkUEcombo.Value = 1
+      chkUEcombo.value = 1
     Else
-      chkUEcombo.Value = 0
+      chkUEcombo.value = 0
     End If
 frmAimbot.txtLeader.Text = aimbotOptions(aimbotIDselected).txtLeader
 frmAimbot.txtCombo.Text = aimbotOptions(aimbotIDselected).txtCombo

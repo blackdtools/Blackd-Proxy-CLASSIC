@@ -496,7 +496,7 @@ End Sub
 
 Private Sub cmdAddEvent_Click()
   Dim aRes As Long
-  aRes = AddCondEvent(CInt(condEventsIDselected), txtThing1.Text, cmbOperator.Text, txtThing2.Text, txtDelay.Text, txtLock.Text, CStr(chkKeep.Value), txtAction.Text)
+  aRes = AddCondEvent(CInt(condEventsIDselected), txtThing1.Text, cmbOperator.Text, txtThing2.Text, txtDelay.Text, txtLock.Text, CStr(chkKeep.value), txtAction.Text)
   If aRes = 0 Then
     UpdateValues
     lblInfo.Caption = "New cond added OK"
@@ -622,7 +622,7 @@ Private Sub cmdModify_Click()
       CustomCondEvents(condEventsIDselected).ev(vrow).thing1 = txtThing1.Text
       CustomCondEvents(condEventsIDselected).ev(vrow).Operator = cmbOperator.Text
       CustomCondEvents(condEventsIDselected).ev(vrow).thing2 = txtThing2.Text
-      If chkKeep.Value = 1 Then
+      If chkKeep.value = 1 Then
         CustomCondEvents(condEventsIDselected).ev(vrow).keep = "1"
       Else
         CustomCondEvents(condEventsIDselected).ev(vrow).keep = "0"
@@ -823,9 +823,9 @@ Private Sub gridEvents_Click()
       cmbOperator.Text = CustomCondEvents(condEventsIDselected).ev(vrow).Operator
       txtThing2.Text = CustomCondEvents(condEventsIDselected).ev(vrow).thing2
       If CustomCondEvents(condEventsIDselected).ev(vrow).keep = "1" Then
-        chkKeep.Value = 1
+        chkKeep.value = 1
       Else
-        chkKeep.Value = 0
+        chkKeep.value = 0
       End If
       txtAction.Text = CustomCondEvents(condEventsIDselected).ev(vrow).action
       txtDelay.Text = CustomCondEvents(condEventsIDselected).ev(vrow).delay

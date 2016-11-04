@@ -653,12 +653,12 @@ Private Sub timerHotkeys_Timer()
       espectingHotkey = False
     End If
   Else ' playing
-    If chkHotkeysActivated.Value = 0 Then
+    If chkHotkeysActivated.value = 0 Then
       Exit Sub
     End If
     gt = GetTickCount()
     limhot = NumberOfHotkeys - 1
-    If (chkRepeat.Value = 1) Then
+    If (chkRepeat.value = 1) Then
       If (gt > reenableHotkeyTime) Then 'reactivate all hotbuttons
         For i = 0 To limhot
           Hotkeys(i).usable = True

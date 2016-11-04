@@ -1148,11 +1148,11 @@ Private Sub cmdStopAlarmNG_Click()
     'custom ng
     'DangerPK(idConnection) = False
     'extrasOptions(extrasIDselected).chkPM = False
-    frmRunemaker.chkCloseSound.Value = 0
-    frmHardcoreCheats.chkRuneAlarm.Value = 0
-    frmRunemaker.ChkDangerSound.Value = 0
-    frmEvents.chkReconnectionAlarm.Value = 0
-    frmCavebot.chkChangePkHeal.Value = 0
+    frmRunemaker.chkCloseSound.value = 0
+    frmHardcoreCheats.chkRuneAlarm.value = 0
+    frmRunemaker.ChkDangerSound.value = 0
+    frmEvents.chkReconnectionAlarm.value = 0
+    frmCavebot.chkChangePkHeal.value = 0
     
   Next mcid
   ChangePlayTheDangerSound False
@@ -1233,20 +1233,22 @@ Private Sub cmdWarbotNG_Click()
   SetWindowPos frmWarbot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
+
+
 'Private Sub Command1_Click()
-'  Dim tibiaclient As Long
-'  Dim res As Long
-'  tibiaclient = 0
-'  Do
-'        tibiaclient = FindWindowEx(0, tibiaclient, tibiaclassname, vbNullString)
-'        If tibiaclient = 0 Then
-'            Exit Do
-'        Else
-'            res = ReadCurrentAddress(tibiaclient, adrSelectedCharIndex, -1, True)
-'            MsgBox ("SEL CHAR=" & CStr(res))
-'        End If
-'  Loop
+'    Dim tibia_pids() As Long
+'    Dim totalPids As Long
+'    totalPids = GetTibiaPIDs(tibiamainname, tibiaclassname, tibia_pids)
+'    LastNumTibiaClients = totalPids
+'    If totalPids = 0 Then
+'        ' Debug.Print "Tibia 11 clients not found (0)"
+'        Exit Sub
+'    End If
+'    'SendClickToTibia11 tibia_pids(0), 200, 200
+'    SafeMemoryMoveXYZ_Tibia11 1, myX(1) + 1, myY(1) + 1, myZ(1)
 'End Sub
+
+
 
 Private Sub Form_Load()
   Dim pok As Boolean
@@ -1437,10 +1439,10 @@ With frmRunemaker
 .txtAddFriend.enabled = False
 .cmdAddFriend.enabled = False
 .cmdRemoveFriend.enabled = False
-.ChkDangerSound.Value = 0
+.ChkDangerSound.value = 0
 .ChkDangerSound.enabled = False
-.chkCloseSound.Value = 0
-.chkOnDangerSS.Value = 0
+.chkCloseSound.value = 0
+.chkOnDangerSS.value = 0
 .chkCloseSound.enabled = False
 .cmdStopAlarm.enabled = False
 .cmdApply.enabled = False
@@ -1451,32 +1453,32 @@ frmMenu.cmdRunemaker.enabled = False
 #If BlockRunemaker Then
 With frmCavebot
 .chkEnabled.enabled = False
-.chkChangePkHeal.Value = 0
+.chkChangePkHeal.value = 0
 .chkChangePkHeal.enabled = False
 End With
 frmMenu.cmdCavebot.enabled = False
 #End If
 #If BlockTools Then
-frmCheats.chkInspectTileID.Value = 0
+frmCheats.chkInspectTileID.value = 0
 frmCheats.chkInspectTileID.enabled = False
 #End If
-save1 = frmHardcoreCheats.chkAcceptSDorder.Value
+save1 = frmHardcoreCheats.chkAcceptSDorder.value
 #If BlockAllCheats Then
 With frmHardcoreCheats
 .txtRemoteLeader.Text = LimitedLeader
-.chkLogoutIfDanger.Value = 0
+.chkLogoutIfDanger.value = 0
 .chkLogoutIfDanger.enabled = False
-.chkReveal.Value = 0
+.chkReveal.value = 0
 .chkReveal.enabled = False
-.chkLight.Value = 0
+.chkLight.value = 0
 .chkLight.enabled = False
-.chkAutoHeal.Value = 0
+.chkAutoHeal.value = 0
 .chkAutoHeal.enabled = False
-.chkAutoVita.Value = 0
+.chkAutoVita.value = 0
 .chkAutoVita.enabled = False
-.chkAcceptSDorder.Value = 0
+.chkAcceptSDorder.value = 0
 .chkAcceptSDorder.enabled = False
-.chkColorEffects.Value = 0
+.chkColorEffects.value = 0
 .chkColorEffects.enabled = False
 .cmdOpenTrueRadar.enabled = False
 .cmdUpdateMap.enabled = False
@@ -1532,7 +1534,7 @@ With frmHardcoreCheats
 .ActionNothing.Visible = False
 .ActionPath.Visible = False
 .Frame1.Visible = False
-.chkRuneAlarm.Value = 0
+.chkRuneAlarm.value = 0
 .chkRuneAlarm.enabled = False
 .chkRuneAlarm.Visible = False
 .txtAlarmUHs.Text = -1
@@ -1545,7 +1547,7 @@ frmMenu.cmdHardcoreCheats.enabled = False
 With frmHardcoreCheats
 .Caption = "Cheats (limited to accept remote orders)"
 .lblLeader.Caption = "Only accept order from this leader (locked in this version) :"
-.chkAcceptSDorder.Value = save1
+.chkAcceptSDorder.value = save1
 .chkAcceptSDorder.enabled = True
 .txtRemoteLeader.enabled = False
 .chkAcceptSDorder.Visible = True

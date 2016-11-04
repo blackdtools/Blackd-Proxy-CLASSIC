@@ -554,49 +554,49 @@ Option Explicit
 Public Sub UpdateValues()
   If runemakerIDselected = 0 Then
     If RuneMakerOptions_activated_default = True Then
-      chkActivate.Value = 1
+      chkActivate.value = 1
     Else
-      chkActivate.Value = 0
+      chkActivate.value = 0
     End If
     If RuneMakerOptions_autoEat_default = True Then
-      chkFood.Value = 1
+      chkFood.value = 1
     Else
-      chkFood.Value = 0
+      chkFood.value = 0
     End If
     If RuneMakerOptions_ManaFluid_default = True Then
-      chkManaFluid.Value = 1
+      chkManaFluid.value = 1
     Else
-      chkManaFluid.Value = 0
+      chkManaFluid.value = 0
     End If
     If RuneMakerOptions_autoLogoutAnyFloor_default = True Then
-      chkLogoutDangerAny.Value = 1
+      chkLogoutDangerAny.value = 1
     Else
-      chkLogoutDangerAny.Value = 0
+      chkLogoutDangerAny.value = 0
     End If
     If RuneMakerOptions_autoLogoutCurrentFloor_default = True Then
-      chkLogoutDangerCurrent.Value = 1
+      chkLogoutDangerCurrent.value = 1
     Else
-      chkLogoutDangerCurrent.Value = 0
+      chkLogoutDangerCurrent.value = 0
     End If
     If RuneMakerOptions_autoLogoutOutOfRunes_default = True Then
-      chkLogoutOutRunes.Value = 1
+      chkLogoutOutRunes.value = 1
     Else
-      chkLogoutOutRunes.Value = 0
+      chkLogoutOutRunes.value = 0
     End If
     If RuneMakerOptions_autoWaste_default = True Then
-      chkWaste.Value = 1
+      chkWaste.value = 1
     Else
-      chkWaste.Value = 0
+      chkWaste.value = 0
     End If
     If RuneMakerOptions_msgSound_default = True Then
-      chkmsgSound.Value = 1
+      chkmsgSound.value = 1
     Else
-      chkmsgSound.Value = 0
+      chkmsgSound.value = 0
     End If
     If RuneMakerOptions_msgSound2_default = True Then
-      chkmsgSound2.Value = 1
+      chkmsgSound2.value = 1
     Else
-      chkmsgSound2.Value = 0
+      chkmsgSound2.value = 0
     End If
     txtAction1.Text = RuneMakerOptions_firstActionText_default
     txtManaAction1.Text = CStr(RuneMakerOptions_firstActionMana_default)
@@ -606,49 +606,49 @@ Public Sub UpdateValues()
     txtSoulAction2.Text = CStr(RuneMakerOptions_secondActionSoulpoints_default)
   Else
     If RuneMakerOptions(runemakerIDselected).activated = True Then
-      chkActivate.Value = 1
+      chkActivate.value = 1
     Else
-      chkActivate.Value = 0
+      chkActivate.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).autoEat = True Then
-      chkFood.Value = 1
+      chkFood.value = 1
     Else
-      chkFood.Value = 0
+      chkFood.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).ManaFluid = True Then
-      chkManaFluid.Value = 1
+      chkManaFluid.value = 1
     Else
-      chkManaFluid.Value = 0
+      chkManaFluid.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).autoLogoutAnyFloor = True Then
-      chkLogoutDangerAny.Value = 1
+      chkLogoutDangerAny.value = 1
     Else
-      chkLogoutDangerAny.Value = 0
+      chkLogoutDangerAny.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).autoLogoutCurrentFloor = True Then
-      chkLogoutDangerCurrent.Value = 1
+      chkLogoutDangerCurrent.value = 1
     Else
-      chkLogoutDangerCurrent.Value = 0
+      chkLogoutDangerCurrent.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).autoLogoutOutOfRunes = True Then
-      chkLogoutOutRunes.Value = 1
+      chkLogoutOutRunes.value = 1
     Else
-      chkLogoutOutRunes.Value = 0
+      chkLogoutOutRunes.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).autoWaste = True Then
-      chkWaste.Value = 1
+      chkWaste.value = 1
     Else
-      chkWaste.Value = 0
+      chkWaste.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).msgSound = True Then
-      chkmsgSound.Value = 1
+      chkmsgSound.value = 1
     Else
-      chkmsgSound.Value = 0
+      chkmsgSound.value = 0
     End If
     If RuneMakerOptions(runemakerIDselected).msgSound2 = True Then
-      chkmsgSound2.Value = 1
+      chkmsgSound2.value = 1
     Else
-      chkmsgSound2.Value = 0
+      chkmsgSound2.value = 0
     End If
     txtAction1.Text = RuneMakerOptions(runemakerIDselected).firstActionText
     txtManaAction1.Text = CStr(RuneMakerOptions(runemakerIDselected).firstActionMana)
@@ -663,53 +663,53 @@ Public Sub SetChk(typeChk As String, v As Integer)
   Select Case typeChk
   Case "chkActivate"
     lock_chkActivate = True
-    chkActivate.Value = v
+    chkActivate.value = v
     lock_chkActivate = False
     
   Case "chkFood"
     lock_chkFood = True
-    chkFood.Value = v
+    chkFood.value = v
     lock_chkFood = False
     
   Case "chkManaFluid"
     lock_chkManaFluid = True
-    chkManaFluid.Value = v
+    chkManaFluid.value = v
     lock_chkManaFluid = False
     
   Case "chkLogoutDangerAny"
     lock_chkLogoutDangerAny = True
-    chkLogoutDangerAny.Value = v
+    chkLogoutDangerAny.value = v
     lock_chkLogoutDangerAny = False
     
   Case "chkLogoutDangerCurrent"
     lock_chkLogoutDangerCurrent = True
-    chkLogoutDangerCurrent.Value = v
+    chkLogoutDangerCurrent.value = v
     lock_chkLogoutDangerCurrent = False
     
   Case "chkLogoutOutRunes"
     lock_chkLogoutOutRunes = True
-    chkLogoutOutRunes.Value = v
+    chkLogoutOutRunes.value = v
     lock_chkLogoutOutRunes = False
     
   Case "chkWaste"
     lock_chkWaste = True
-    chkWaste.Value = v
+    chkWaste.value = v
     lock_chkWaste = False
     
   Case "chkmsgSound"
     lock_chkmsgSound = True
-    chkmsgSound.Value = v
+    chkmsgSound.value = v
     lock_chkmsgSound = False
   
   Case "chkmsgSound2"
     lock_chkmsgSound2 = True
-    chkmsgSound2.Value = v
+    chkmsgSound2.value = v
     lock_chkmsgSound2 = False
   End Select
 End Sub
 
-Public Sub DisableAll(id As Integer)
-  If id = CInt(runemakerIDselected) Then
+Public Sub DisableAll(Id As Integer)
+  If Id = CInt(runemakerIDselected) Then
     SetChk "chkActivate", 0
     SetChk "chkFood", 0
     SetChk "chkManaFluid", 0
@@ -720,15 +720,15 @@ Public Sub DisableAll(id As Integer)
     SetChk "chkmsgSound", 0
     SetChk "chkmsgSound2", 0
   End If
-  RuneMakerOptions(id).activated = False
-  RuneMakerOptions(id).autoEat = False
-  RuneMakerOptions(id).ManaFluid = False
-  RuneMakerOptions(id).autoLogoutAnyFloor = False
-  RuneMakerOptions(id).autoLogoutCurrentFloor = False
-  RuneMakerOptions(id).autoLogoutOutOfRunes = False
-  RuneMakerOptions(id).autoWaste = False
-  RuneMakerOptions(id).msgSound = False
-  RuneMakerOptions(id).msgSound2 = False
+  RuneMakerOptions(Id).activated = False
+  RuneMakerOptions(Id).autoEat = False
+  RuneMakerOptions(Id).ManaFluid = False
+  RuneMakerOptions(Id).autoLogoutAnyFloor = False
+  RuneMakerOptions(Id).autoLogoutCurrentFloor = False
+  RuneMakerOptions(Id).autoLogoutOutOfRunes = False
+  RuneMakerOptions(Id).autoWaste = False
+  RuneMakerOptions(Id).msgSound = False
+  RuneMakerOptions(Id).msgSound2 = False
 End Sub
 Private Sub chkActivate_Click()
 Dim tileID As Long
@@ -738,7 +738,7 @@ On Error GoTo gotErr
 #End If
 If lock_chkActivate = False Then
 If runemakerIDselected > 0 Then
-  If chkActivate.Value = 1 Then
+  If chkActivate.value = 1 Then
     RuneMakerOptions(runemakerIDselected).activated = True
     If TibiaVersionLong >= 872 Then
       savedItem(runemakerIDselected).t1 = mySlot(runemakerIDselected, SLOT_RIGHTHAND).t1
@@ -752,7 +752,7 @@ If runemakerIDselected > 0 Then
       aRes = SendLogSystemMessageToClient(CInt(runemakerIDselected), "Runemaker started.")
       DoEvents
     Else
-    If UseRightHand.Value = True Then
+    If UseRightHand.value = True Then
       savedItem(runemakerIDselected).t1 = mySlot(runemakerIDselected, SLOT_RIGHTHAND).t1
       savedItem(runemakerIDselected).t2 = mySlot(runemakerIDselected, SLOT_RIGHTHAND).t2
       tileID = GetTheLong(savedItem(runemakerIDselected).t1, savedItem(runemakerIDselected).t2)
@@ -793,7 +793,7 @@ End Sub
 Private Sub chkFood_Click()
 If lock_chkFood = False Then
 If runemakerIDselected > 0 Then
-  If chkFood.Value = 1 Then
+  If chkFood.value = 1 Then
     RuneMakerOptions(runemakerIDselected).autoEat = True
   Else
     RuneMakerOptions(runemakerIDselected).autoEat = False
@@ -805,7 +805,7 @@ End Sub
 Private Sub chkLogoutDangerAny_Click()
 If lock_chkLogoutDangerAny = False Then
 If runemakerIDselected > 0 Then
-  If chkLogoutDangerAny.Value = 1 Then
+  If chkLogoutDangerAny.value = 1 Then
     RuneMakerOptions(runemakerIDselected).autoLogoutAnyFloor = True
     SetChk "chkLogoutDangerCurrent", 0
     RuneMakerOptions(runemakerIDselected).autoLogoutCurrentFloor = False
@@ -819,7 +819,7 @@ End Sub
 Private Sub chkLogoutDangerCurrent_Click()
 If lock_chkLogoutDangerCurrent = False Then
 If runemakerIDselected > 0 Then
-  If chkLogoutDangerCurrent.Value = 1 Then
+  If chkLogoutDangerCurrent.value = 1 Then
     RuneMakerOptions(runemakerIDselected).autoLogoutCurrentFloor = True
     SetChk "chkLogoutDangerAny", 0
     RuneMakerOptions(runemakerIDselected).autoLogoutAnyFloor = False
@@ -833,7 +833,7 @@ End Sub
 Private Sub chkLogoutOutRunes_Click()
 If lock_chkLogoutOutRunes = False Then
 If runemakerIDselected > 0 Then
-  If chkLogoutOutRunes.Value = 1 Then
+  If chkLogoutOutRunes.value = 1 Then
     RuneMakerOptions(runemakerIDselected).autoLogoutOutOfRunes = True
     SetChk "chkWaste", 0
     RuneMakerOptions(runemakerIDselected).autoWaste = False
@@ -847,7 +847,7 @@ End Sub
 Private Sub chkManaFluid_Click()
 If lock_chkManaFluid = False Then
 If runemakerIDselected > 0 Then
-  If chkManaFluid.Value = 1 Then
+  If chkManaFluid.value = 1 Then
     RuneMakerOptions(runemakerIDselected).ManaFluid = True
   Else
     RuneMakerOptions(runemakerIDselected).ManaFluid = False
@@ -860,7 +860,7 @@ End Sub
 Private Sub chkmsgSound2_Click()
 If lock_chkmsgSound2 = False Then
 If runemakerIDselected > 0 Then
-  If chkmsgSound2.Value = 1 Then
+  If chkmsgSound2.value = 1 Then
     DangerPlayer(runemakerIDselected) = False
     RuneMakerOptions(runemakerIDselected).msgSound2 = True
   Else
@@ -874,7 +874,7 @@ End Sub
 Private Sub chkWaste_Click()
 If lock_chkWaste = False Then
 If runemakerIDselected > 0 Then
-  If chkWaste.Value = 1 Then
+  If chkWaste.value = 1 Then
     RuneMakerOptions(runemakerIDselected).autoWaste = True
     SetChk "chkLogoutOutRunes", 0
     RuneMakerOptions(runemakerIDselected).autoLogoutOutOfRunes = False
@@ -889,7 +889,7 @@ End Sub
 Private Sub chkmsgSound_Click()
 If lock_chkmsgSound = False Then
 If runemakerIDselected > 0 Then
-  If chkmsgSound.Value = 1 Then
+  If chkmsgSound.value = 1 Then
     RuneMakerOptions(runemakerIDselected).msgSound = True
   Else
     RuneMakerOptions(runemakerIDselected).msgSound = False
@@ -1193,10 +1193,10 @@ Private Sub TimerMaker_Timer()
           cond2 = (tmpcond = True) And (cond1 = False)
           cond3 = mySoulpoints(idConnection) < RuneMakerOptions(idConnection).secondActionSoulpoints
           
-          cond4 = (UseRightHand.Value = True) And _
+          cond4 = (UseRightHand.value = True) And _
              (Not ((mySlot(idConnection, SLOT_RIGHTHAND).t1 = savedItem(idConnection).t1) And (mySlot(idConnection, SLOT_RIGHTHAND).t2 = savedItem(idConnection).t2)))
             
-          cond5 = (UseLeftHand.Value = True) And _
+          cond5 = (UseLeftHand.value = True) And _
              (Not ((mySlot(idConnection, SLOT_LEFTHAND).t1 = savedItem(idConnection).t1) And (mySlot(idConnection, SLOT_LEFTHAND).t2 = savedItem(idConnection).t2)))
                 
           If (cond2 Or cond3) And (Not (cond4 Or cond5)) Then
@@ -1228,7 +1228,7 @@ Private Sub TimerMaker_Timer()
             End If
             If gtc >= runemakerMana1(idConnection) Then
           
-            If UseRightHand.Value = True Then
+            If UseRightHand.value = True Then
              ' right hand
             If myMana(idConnection) >= RuneMakerOptions(idConnection).secondActionMana Then
               If mySlot(idConnection, SLOT_RIGHTHAND).t1 = blank1 And mySlot(idConnection, SLOT_RIGHTHAND).t2 = blank2 Then

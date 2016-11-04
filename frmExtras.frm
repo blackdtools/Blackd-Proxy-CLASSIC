@@ -314,7 +314,7 @@ Private Sub chkAFK_Click()
 
 If lock_chkAFK = False Then
 If extrasIDselected > 0 Then
-  If chkAFK.Value = 1 Then
+  If chkAFK.value = 1 Then
     extrasOptions(extrasIDselected).chkAFK = True
   Else
     extrasOptions(extrasIDselected).chkAFK = False
@@ -328,7 +328,7 @@ Private Sub chkautogHur_Click()
 
 If lock_chkautogHur = False Then
 If extrasIDselected > 0 Then
-  If chkautogHur.Value = 1 Then
+  If chkautogHur.value = 1 Then
     extrasOptions(extrasIDselected).chkautogHur = True
   Else
     extrasOptions(extrasIDselected).chkautogHur = False
@@ -342,7 +342,7 @@ Private Sub chkautoHur_Click()
 
 If lock_chkautoHur = False Then
 If extrasIDselected > 0 Then
-  If chkautoHur.Value = 1 Then
+  If chkautoHur.value = 1 Then
     extrasOptions(extrasIDselected).chkautoHur = True
   Else
     extrasOptions(extrasIDselected).chkautoHur = False
@@ -356,7 +356,7 @@ Private Sub chkautoUtamo_Click()
 
 If lock_chkautoUtamo = False Then
 If extrasIDselected > 0 Then
-  If chkautoUtamo.Value = 1 Then
+  If chkautoUtamo.value = 1 Then
     extrasOptions(extrasIDselected).chkautoUtamo = True
   Else
     extrasOptions(extrasIDselected).chkautoUtamo = False
@@ -369,7 +369,7 @@ End Sub
 
 Private Sub chkautoxray_Click()
 
-chkautoxray.Value = 2
+chkautoxray.value = 2
 
 End Sub
 
@@ -377,7 +377,7 @@ Private Sub chkDanger_Click()
 
 If lock_chkDanger = False Then
 If extrasIDselected > 0 Then
-  If chkDanger.Value = 1 Then
+  If chkDanger.value = 1 Then
     extrasOptions(extrasIDselected).chkDanger = True
   Else
     extrasOptions(extrasIDselected).chkDanger = False
@@ -391,7 +391,7 @@ Private Sub chkDash_Click()
 
 If lock_chkDash = False Then
 If extrasIDselected > 0 Then
-  If chkDash.Value = 1 Then
+  If chkDash.value = 1 Then
     extrasOptions(extrasIDselected).chkDash = True
   Else
     extrasOptions(extrasIDselected).chkDash = False
@@ -405,7 +405,7 @@ Private Sub chkEat_Click()
 
 If lock_chkEat = False Then
 If extrasIDselected > 0 Then
-  If chkEat.Value = 1 Then
+  If chkEat.value = 1 Then
     extrasOptions(extrasIDselected).chkEat = True
   Else
     extrasOptions(extrasIDselected).chkEat = False
@@ -419,7 +419,7 @@ Private Sub chkGold_Click()
 
 If lock_chkGold = False Then
 If extrasIDselected > 0 Then
-  If chkGold.Value = 1 Then
+  If chkGold.value = 1 Then
     extrasOptions(extrasIDselected).chkGold = True
   Else
     extrasOptions(extrasIDselected).chkGold = False
@@ -433,7 +433,7 @@ Private Sub chkHouse_Click()
 
 If lock_chkHouse = False Then
 If extrasIDselected > 0 Then
-  If chkHouse.Value = 1 Then
+  If chkHouse.value = 1 Then
     healingCheatsOptions(extrasIDselected).HouseX = myX(extrasIDselected)
     healingCheatsOptions(extrasIDselected).HouseY = myY(extrasIDselected)
     extrasOptions(extrasIDselected).chkHouse = True
@@ -449,7 +449,7 @@ Private Sub chkMana_Click()
 
 If lock_chkMana = False Then
 If extrasIDselected > 0 Then
-  If chkMana.Value = 1 Then
+  If chkMana.value = 1 Then
     extrasOptions(extrasIDselected).chkMana = True
   Else
     extrasOptions(extrasIDselected).chkMana = False
@@ -463,7 +463,7 @@ Private Sub chkMW_Click()
 
 If lock_chkMW = False Then
 If extrasIDselected > 0 Then
-  If chkMW.Value = 1 Then
+  If chkMW.value = 1 Then
     extrasOptions(extrasIDselected).chkMW = True
   Else
     extrasOptions(extrasIDselected).chkMW = False
@@ -477,7 +477,7 @@ Private Sub chkPlat_Click()
 
 If lock_chkPlat = False Then
 If extrasIDselected > 0 Then
-  If chkPlat.Value = 1 Then
+  If chkPlat.value = 1 Then
     extrasOptions(extrasIDselected).chkPlat = True
   Else
     extrasOptions(extrasIDselected).chkPlat = False
@@ -491,7 +491,7 @@ Private Sub chkPM_Click()
 
 If lock_chkPM = False Then
 If extrasIDselected > 0 Then
-  If chkPM.Value = 1 Then
+  If chkPM.value = 1 Then
     extrasOptions(extrasIDselected).chkPM = True
   Else
     extrasOptions(extrasIDselected).chkPM = False
@@ -503,7 +503,7 @@ End Sub
 
 Private Sub chkReuse_Click()
 
-chkReuse.Value = 2
+chkReuse.value = 2
 
 End Sub
 
@@ -511,7 +511,7 @@ Private Sub chkSSA_Click()
 
 If lock_chkSSA = False Then
 If extrasIDselected > 0 Then
-  If chkSSA.Value = 1 Then
+  If chkSSA.value = 1 Then
     extrasOptions(extrasIDselected).chkSSA = True
   Else
     extrasOptions(extrasIDselected).chkSSA = False
@@ -525,7 +525,7 @@ Private Sub chkTitle_Click()
 
 If lock_chkTitle = False Then
 If extrasIDselected > 0 Then
-  If chkTitle.Value = 1 Then
+  If chkTitle.value = 1 Then
     extrasOptions(extrasIDselected).chkTitle = True
   Else
     extrasOptions(extrasIDselected).chkTitle = False
@@ -603,7 +603,7 @@ Dim moveY As Long
 
 If KeyB.Key(88) > 0 And KeyB.Key(54) > 0 Then   'teset show
     
-    If frmOld.chkOldMenu.Value = 0 Then
+    If frmOld.chkOldMenu.value = 0 Then
         If frmMenu.Visible = False Then
            frmMenu.Show
            SetWindowPos frmMenu.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
@@ -633,7 +633,7 @@ For idConnection = 1 To MAXCLIENTS
       End If
       
     'cavebot danger alarm
-      If (DangerPK(idConnection) = True) And (chkDanger.Value = 1) Then
+      If (DangerPK(idConnection) = True) And (chkDanger.value = 1) Then
             DirectX_PlaySound 3 'play sound DANGER
       End If
       
@@ -797,79 +797,79 @@ Dim idConnection As Integer
 
 If extrasIDselected <= 0 Then
     If extrasOptions_chkMana_default = True Then
-      chkMana.Value = 1
+      chkMana.value = 1
     Else
-      chkMana.Value = 0
+      chkMana.value = 0
     End If
     If extrasOptions_chkDanger_default = True Then
-      chkDanger.Value = 1
+      chkDanger.value = 1
     Else
-      chkDanger.Value = 0
+      chkDanger.value = 0
     End If
     If extrasOptions_chkPM_default = True Then
-      chkPM.Value = 1
+      chkPM.value = 1
     Else
-      chkPM.Value = 0
+      chkPM.value = 0
     End If
     If extrasOptions_chkEat_default = True Then
-      chkEat.Value = 1
+      chkEat.value = 1
     Else
-      chkEat.Value = 0
+      chkEat.value = 0
     End If
     If extrasOptions_chkautoUtamo_default = True Then
-      chkautoUtamo.Value = 1
+      chkautoUtamo.value = 1
     Else
-      chkautoUtamo.Value = 0
+      chkautoUtamo.value = 0
     End If
     If extrasOptions_chkautoHur_default = True Then
-      chkautoHur.Value = 1
+      chkautoHur.value = 1
     Else
-      chkautoHur.Value = 0
+      chkautoHur.value = 0
     End If
     If extrasOptions_chkautogHur_default = True Then
-      chkautogHur.Value = 1
+      chkautogHur.value = 1
     Else
-      chkautogHur.Value = 0
+      chkautogHur.value = 0
     End If
     If extrasOptions_chkAFK_default = True Then
-      chkAFK.Value = 1
+      chkAFK.value = 1
     Else
-      chkAFK.Value = 0
+      chkAFK.value = 0
     End If
     If extrasOptions_chkGold_default = True Then
-      chkGold.Value = 1
+      chkGold.value = 1
     Else
-      chkGold.Value = 0
+      chkGold.value = 0
     End If
     If extrasOptions_chkPlat_default = True Then
-      chkPlat.Value = 1
+      chkPlat.value = 1
     Else
-      chkPlat.Value = 0
+      chkPlat.value = 0
     End If
     If extrasOptions_chkDash_default = True Then
-      chkDash.Value = 1
+      chkDash.value = 1
     Else
-      chkDash.Value = 0
+      chkDash.value = 0
     End If
     If extrasOptions_chkMW_default = True Then
-      chkMW.Value = 1
+      chkMW.value = 1
     Else
-      chkMW.Value = 0
+      chkMW.value = 0
     End If
     If extrasOptions_chkSSA_default = True Then
-      chkSSA.Value = 1
+      chkSSA.value = 1
     Else
-      chkSSA.Value = 0
+      chkSSA.value = 0
     End If
     If extrasOptions_chkHouse_default = True Then
-      chkHouse.Value = 1
+      chkHouse.value = 1
     Else
-      chkHouse.Value = 0
+      chkHouse.value = 0
     End If
     If extrasOptions_chkTitle_default = True Then
-      chkTitle.Value = 1
+      chkTitle.value = 1
     Else
-      chkTitle.Value = 0
+      chkTitle.value = 0
     End If
 frmExtras.txtSpell.Text = extrasOptions_txtSpell_default
 frmExtras.txtMana.Text = extrasOptions_txtMana_default
@@ -877,79 +877,79 @@ frmExtras.txtSSA.Text = extrasOptions_txtSSA_default
 frmExtras.cmbHouse.Text = extrasOptions_cmbHouse_default
  Else
     If extrasOptions(extrasIDselected).chkMana = True Then
-      chkMana.Value = 1
+      chkMana.value = 1
     Else
-      chkMana.Value = 0
+      chkMana.value = 0
     End If
     If extrasOptions(extrasIDselected).chkDanger = True Then
-      chkDanger.Value = 1
+      chkDanger.value = 1
     Else
-      chkDanger.Value = 0
+      chkDanger.value = 0
     End If
     If extrasOptions(extrasIDselected).chkPM = True Then
-      chkPM.Value = 1
+      chkPM.value = 1
     Else
-      chkPM.Value = 0
+      chkPM.value = 0
     End If
     If extrasOptions(extrasIDselected).chkEat = True Then
-      chkEat.Value = 1
+      chkEat.value = 1
     Else
-      chkEat.Value = 0
+      chkEat.value = 0
     End If
     If extrasOptions(extrasIDselected).chkautoUtamo = True Then
-      chkautoUtamo.Value = 1
+      chkautoUtamo.value = 1
     Else
-      chkautoUtamo.Value = 0
+      chkautoUtamo.value = 0
     End If
     If extrasOptions(extrasIDselected).chkautoHur = True Then
-      chkautoHur.Value = 1
+      chkautoHur.value = 1
     Else
-      chkautoHur.Value = 0
+      chkautoHur.value = 0
     End If
     If extrasOptions(extrasIDselected).chkautogHur = True Then
-      chkautogHur.Value = 1
+      chkautogHur.value = 1
     Else
-      chkautogHur.Value = 0
+      chkautogHur.value = 0
     End If
     If extrasOptions(extrasIDselected).chkAFK = True Then
-      chkAFK.Value = 1
+      chkAFK.value = 1
     Else
-      chkAFK.Value = 0
+      chkAFK.value = 0
     End If
     If extrasOptions(extrasIDselected).chkGold = True Then
-      chkGold.Value = 1
+      chkGold.value = 1
     Else
-      chkGold.Value = 0
+      chkGold.value = 0
     End If
     If extrasOptions(extrasIDselected).chkPlat = True Then
-      chkPlat.Value = 1
+      chkPlat.value = 1
     Else
-      chkPlat.Value = 0
+      chkPlat.value = 0
     End If
     If extrasOptions(extrasIDselected).chkDash = True Then
-      chkDash.Value = 1
+      chkDash.value = 1
     Else
-      chkDash.Value = 0
+      chkDash.value = 0
     End If
     If extrasOptions(extrasIDselected).chkMW = True Then
-      chkMW.Value = 1
+      chkMW.value = 1
     Else
-      chkMW.Value = 0
+      chkMW.value = 0
     End If
     If extrasOptions(extrasIDselected).chkSSA = True Then
-      chkSSA.Value = 1
+      chkSSA.value = 1
     Else
-      chkSSA.Value = 0
+      chkSSA.value = 0
     End If
     If extrasOptions(extrasIDselected).chkHouse = True Then
-      chkHouse.Value = 1
+      chkHouse.value = 1
     Else
-      chkHouse.Value = 0
+      chkHouse.value = 0
     End If
     If extrasOptions(extrasIDselected).chkTitle = True Then
-      chkTitle.Value = 1
+      chkTitle.value = 1
     Else
-      chkTitle.Value = 0
+      chkTitle.value = 0
     End If
 frmExtras.txtSpell.Text = extrasOptions(extrasIDselected).txtSpell
 frmExtras.txtMana.Text = extrasOptions(extrasIDselected).txtMana

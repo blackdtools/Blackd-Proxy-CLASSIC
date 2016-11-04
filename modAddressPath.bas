@@ -65,6 +65,42 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
         Exit Function
 
     End Function
+    
+    Public Function ReadCurrentAddressFLOAT(ByVal pid As Long, ByRef adrPath As AddressPath, Optional ByVal desiredErrorValue As Single = -1) As Single
+        On Error GoTo gotErr
+        Dim rawval As Long
+        Dim valLong As Long
+        Dim valSingle As Single
+        rawval = ReadCurrentAddress(pid, adrPath, -1, True)
+        If (rawval = -1) Then
+            ReadCurrentAddressFLOAT = desiredErrorValue
+            Exit Function
+        End If
+        valSingle = Long2Float(rawval)
+        ReadCurrentAddressFLOAT = valSingle
+        Exit Function
+gotErr:
+        ReadCurrentAddressFLOAT = desiredErrorValue
+    End Function
+    
+    Public Function ReadCurrentAddressDOUBLE(ByVal pid As Long, ByRef adrPath As AddressPath, Optional ByVal desiredErrorValue As Long = -1) As Long
+        On Error GoTo gotErr
+        Dim adr As Long
+        Dim val8bytes As Double
+        Dim valRounded As Long
+        adr = ReadCurrentAddress(pid, adrPath, -1, False)
+        If (adr = -1) Then
+            ReadCurrentAddressDOUBLE = desiredErrorValue
+            Exit Function
+        End If
+        val8bytes = QMemory_ReadDouble(pid, adr)
+        valRounded = Math.Round(val8bytes)
+        ReadCurrentAddressDOUBLE = valRounded
+        Exit Function
+gotErr:
+        ReadCurrentAddressDOUBLE = desiredErrorValue
+    End Function
+    
     Public Function ReadCurrentAddress(ByVal pid As Long, ByRef adrPath As AddressPath, Optional ByVal desiredErrorValue As Long = -1, Optional ByVal readFinalValue As Boolean = True) As Long
        Dim res As Long
         Dim realBase As Long

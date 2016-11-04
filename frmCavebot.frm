@@ -1568,22 +1568,22 @@ Public Sub UpdateValues()
   Dim limLines As Long
   lstScript.Clear
   If cavebotIDselected = 0 Then
-     If chkEnabled.Value = 1 Then
+     If chkEnabled.value = 1 Then
        avoidC = True
-       chkEnabled.Value = 0
+       chkEnabled.value = 0
        avoidC = False
      End If
   Else
      If cavebotEnabled(cavebotIDselected) = True Then
-       If chkEnabled.Value = 0 Then
+       If chkEnabled.value = 0 Then
          avoidC = True
-         chkEnabled.Value = 1
+         chkEnabled.value = 1
          avoidC = False
        End If
      Else
-       If chkEnabled.Value = 1 Then
+       If chkEnabled.value = 1 Then
          avoidC = True
-         chkEnabled.Value = 0
+         chkEnabled.value = 0
          avoidC = False
        End If
      End If
@@ -1715,15 +1715,15 @@ Public Sub TurnCavebotState(idConnection As Integer, thisValue As Boolean)
     End If
     If (idConnection = cavebotIDselected) Then
       If (shouldValue = True) Then
-        If (chkEnabled.Value <> 1) Then
+        If (chkEnabled.value <> 1) Then
           avoidC = True
-          chkEnabled.Value = 1
+          chkEnabled.value = 1
           avoidC = False
         End If
       Else
-        If (chkEnabled.Value <> 0) Then
+        If (chkEnabled.value <> 0) Then
           avoidC = True
-          chkEnabled.Value = 0
+          chkEnabled.value = 0
           avoidC = False
         End If
       End If
@@ -1885,7 +1885,7 @@ End Sub
 Private Sub chkEnabled_Click()
   Dim beforeClickV As Boolean
   If (avoidC = False) Then
-    If chkEnabled.Value = 1 Then
+    If chkEnabled.value = 1 Then
       TurnCavebotState cavebotIDselected, True
     Else
       TurnCavebotState cavebotIDselected, False
@@ -2523,11 +2523,11 @@ End Sub
 
 
 Public Sub scrollExorivis_Change()
-  lblExorivisValue.Caption = CStr(scrollExorivis.Value) & " %"
+  lblExorivisValue.Caption = CStr(scrollExorivis.value) & " %"
 End Sub
 
 Public Sub scrollPkHeal_Change()
-  lblPKhealValue.Caption = CStr(scrollPkHeal.Value) & " %"
+  lblPKhealValue.Caption = CStr(scrollPkHeal.value) & " %"
 End Sub
 
 Private Sub TimerScript_Timer()

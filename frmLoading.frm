@@ -494,7 +494,7 @@ Private Sub Timer1_Timer()
   If LoadWasCompleted = True Then
     Timer1.enabled = False
     'custom ng startup
-    If frmOld.chkOldMenu.Value = 0 Then
+    If frmOld.chkOldMenu.value = 0 Then
         frmMenu.Show
     Else
         frmOld.Show

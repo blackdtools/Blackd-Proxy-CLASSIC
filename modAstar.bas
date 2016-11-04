@@ -36,7 +36,7 @@ Public RequiredMoveBuffer() As String
 Public ReadyBuffer() As Boolean
 
 Public Type TypePathResult
-  id As Double
+  Id As Double
   tileID As Long
   melee As Boolean
   hmm As Boolean

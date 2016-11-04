@@ -465,7 +465,7 @@ Private Sub cmdSendHex_Click()
   #If FinalMode Then
   On Error GoTo errclose
   #End If
-  If chkAutoHead.Value = 1 Then
+  If chkAutoHead.value = 1 Then
     withsafe = True
   Else
     withsafe = False
@@ -481,7 +481,7 @@ Private Sub cmdSendHex_Click()
   EnableBoardButtons
   If CanceledBoard = False Then
   If GameConnected(CInt(txtSendHexID.Text)) = True Then
-    If Option1.Value = True Then
+    If Option1.value = True Then
       ' send the packet to client
       aRes = sendString(CInt(txtSendHexID.Text), frmBigText.txtBoard.Text, False, withsafe)
     Else

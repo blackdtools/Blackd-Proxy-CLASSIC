@@ -513,7 +513,7 @@ Private Sub timerBroadcast_Timer()
         timerBroadcast.enabled = False
         Exit Sub
     End If
-    If chkMC.Value = 1 Then
+    If chkMC.value = 1 Then
         currentBID = nextValidBID()
         broadcastIDselected = currentBID
         Me.cmbCharacter.ListIndex = broadcastIDselected

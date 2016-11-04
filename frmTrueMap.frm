@@ -746,9 +746,9 @@ Private Sub Form_Resize()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-  frmHardcoreCheats.chkManualUpdate.Value = True
-  frmHardcoreCheats.chkUpdateMs.Value = False
-  frmHardcoreCheats.chkAutoUpdateMap.Value = False
+  frmHardcoreCheats.chkManualUpdate.value = True
+  frmHardcoreCheats.chkUpdateMs.value = False
+  frmHardcoreCheats.chkAutoUpdateMap.value = False
   frmHardcoreCheats.timerAutoUpdater.enabled = False
   Me.Hide
   If BlockUnload = 0 Then
@@ -760,7 +760,7 @@ End Sub
 Private Sub gridMap_Click()
   Dim i As Long
   Dim name As String
-  Dim id As Double
+  Dim Id As Double
   Dim sCheat As String
   Dim partTwo As String
   Dim numI As Byte
@@ -781,7 +781,7 @@ Private Sub gridMap_Click()
       End If
     End If
     
-  If frmHardcoreCheats.ActionInspect.Value = True Then
+  If frmHardcoreCheats.ActionInspect.value = True Then
     ' update info
     If gridMap.TextMatrix(gridMap.Row, gridMap.Col) <> "" Then
       txtSelected.Text = gridMap.TextMatrix(gridMap.Row, gridMap.Col)
@@ -794,18 +794,18 @@ Private Sub gridMap_Click()
        GoodHex(Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).t2) & " " & _
        GoodHex(Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).t3)
       
-      id = Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).dblID
-      If id > 0 Then
-        name = GetNameFromID(mapIDselected, id)
+      Id = Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).dblID
+      If Id > 0 Then
+        name = GetNameFromID(mapIDselected, Id)
         frmHardcoreCheats.lblArraySelected.Caption = frmHardcoreCheats.lblArraySelected.Caption & ":" & name & _
-        " (" & SpaceID(id) & ") ; "
+        " (" & SpaceID(Id) & ") ; "
       Else
         frmHardcoreCheats.lblArraySelected.Caption = frmHardcoreCheats.lblArraySelected.Caption & " ; "
       End If
     Next i
     aRes = GameInspect(mapIDselected, -8 + gridMap.Col, -6 + gridMap.Row, mapFloorSelected)
     End If
-  ElseIf frmHardcoreCheats.ActionMove.Value = True Then
+  ElseIf frmHardcoreCheats.ActionMove.value = True Then
     If gridMap.TextMatrix(gridMap.Row, gridMap.Col) <> "" Then
       txtSelected.Text = gridMap.TextMatrix(gridMap.Row, gridMap.Col)
     End If
@@ -819,16 +819,16 @@ Private Sub gridMap_Click()
     numI = 0
     For i = 0 To 10
       name = ""
-      id = Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).dblID
+      Id = Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).dblID
       frmHardcoreCheats.lblArraySelected.Caption = frmHardcoreCheats.lblArraySelected.Caption & _
        GoodHex(Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).t1) & " " & _
        GoodHex(Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).t2) & " " & _
        GoodHex(Matrix(-6 + gridMap.Row, -8 + gridMap.Col, mapFloorSelected, mapIDselected).s(i).t3)
 
-      If id > 0 Then
-        name = GetNameFromID(mapIDselected, id)
+      If Id > 0 Then
+        name = GetNameFromID(mapIDselected, Id)
         frmHardcoreCheats.lblArraySelected.Caption = frmHardcoreCheats.lblArraySelected.Caption & ":" & name & _
-        " (" & SpaceID(id) & ") ; "
+        " (" & SpaceID(Id) & ") ; "
       Else
         frmHardcoreCheats.lblArraySelected.Caption = frmHardcoreCheats.lblArraySelected.Caption & " ; "
       End If
@@ -858,7 +858,7 @@ Private Sub gridMap_Click()
     frmMain.UnifiedSendToClientGame mapIDselected, cPacket
     End If
     End If
-  ElseIf frmHardcoreCheats.ActionPath.Value = True Then
+  ElseIf frmHardcoreCheats.ActionPath.value = True Then
     If mapIDselected > 0 Then
       If (GameConnected(mapIDselected) = True) And (GotPacketWarning(mapIDselected) = False) Then
         aRes = FindBestPath(mapIDselected, -8 + gridMap.Col, -6 + gridMap.Row, True)

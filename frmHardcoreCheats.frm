@@ -774,12 +774,12 @@ Option Explicit
 
 Public Sub chkApplyCheats_Click()
   Dim i As Integer
-  If chkApplyCheats.Value = 0 Then
-    chkRuneAlarm.Value = 0
+  If chkApplyCheats.value = 0 Then
+    chkRuneAlarm.value = 0
     chkRuneAlarm.enabled = False
-    chkLogoutIfDanger.Value = 0
-    chkReveal.Value = 0
-    chkLight.Value = 0
+    chkLogoutIfDanger.value = 0
+    chkReveal.value = 0
+    chkLight.value = 0
     frmTrueMap.Hide
     frmBackpacks.Hide
     scrollLight.enabled = False
@@ -789,9 +789,9 @@ Public Sub chkApplyCheats_Click()
     cmdOpenTrueRadar.enabled = False
     lblLightValue.enabled = False
     chkApplyCheats.enabled = False
-    chkManualUpdate.Value = True
-    chkUpdateMs.Value = False
-    chkAutoUpdateMap.Value = False
+    chkManualUpdate.value = True
+    chkUpdateMs.value = False
+    chkAutoUpdateMap.value = False
     chkManualUpdate.enabled = False
     chkUpdateMs.enabled = False
     chkAutoUpdateMap.enabled = False
@@ -810,22 +810,22 @@ Public Sub chkApplyCheats_Click()
     cmdOpenBackpacks.enabled = False
     scrollHP.enabled = False
     chkAutoHeal.enabled = False
-    chkAutoHeal.Value = 0
+    chkAutoHeal.value = 0
     cmdReset.enabled = True
     lblHPvalue.enabled = False
     txtCommands.enabled = False
     txtOrder.enabled = False
     lblOrder2.enabled = False
-    chkAcceptSDorder.Value = 0
+    chkAcceptSDorder.value = 0
     chkAcceptSDorder.enabled = False
     cmbOrderType.enabled = False
     lblRead.enabled = False
     lblOn.enabled = False
     chkAutoVita.enabled = False
-    chkAutoVita.Value = 0
+    chkAutoVita.value = 0
     scrollHP2.enabled = False
     lblHPvalue2.enabled = False
-    chkColorEffects.Value = 0
+    chkColorEffects.value = 0
     chkColorEffects.enabled = False
     lblLeader.enabled = False
     txtRemoteLeader.enabled = False
@@ -840,7 +840,7 @@ End Sub
 
 Private Sub chkAutoHeal_Click()
   Dim i As Integer
-  If chkAutoHeal.Value = 0 Then
+  If chkAutoHeal.value = 0 Then
     For i = 1 To MAXCLIENTS
       RemoveSpamOrder i, 1 'remove  auto UH
     Next i
@@ -853,13 +853,13 @@ End Sub
 
 Private Sub chkEnhancedCheats_Click()
 
-frmHealing.chkClassic.Value = False
-frmHealing.chkTotalWaste.Value = False
+frmHealing.chkClassic.value = False
+frmHealing.chkTotalWaste.value = False
 
 End Sub
 
 Private Sub chkLockOnMyFloor_Click()
-  If chkLockOnMyFloor.Value = 1 And cmbCharacter.ListIndex = mapIDselected And mapIDselected > 0 Then
+  If chkLockOnMyFloor.value = 1 And cmbCharacter.ListIndex = mapIDselected And mapIDselected > 0 Then
     If mapFloorSelected <> myZ(mapIDselected) Then
       mapFloorSelected = myZ(mapIDselected)
       frmTrueMap.DrawFloor
@@ -872,7 +872,7 @@ Private Sub chkManualUpdate_Click()
 End Sub
 
 Public Sub chkOnTop_Click()
-  If chkOnTop.Value = 1 Then
+  If chkOnTop.value = 1 Then
     ToggleTopmost frmTrueMap.hwnd, True
     ToggleTopmost frmMapReader.hwnd, True
     MapWantedOnTop = True
@@ -962,10 +962,10 @@ Private Sub cmdOpenTrueRadar_Click()
 End Sub
 
 Private Sub cmdReset_Click()
-  chkApplyCheats.Value = 1
-  chkReveal.Value = 1
-  chkLight.Value = 1
-  chkAutoHeal.Value = 0
+  chkApplyCheats.value = 1
+  chkReveal.value = 1
+  chkLight.value = 1
+  chkAutoHeal.value = 0
   'custom ng error compile
   'frmMenu.Form_Unload False
   End
@@ -1045,30 +1045,30 @@ gotErr:
 End Sub
 
 Public Sub scrollHP_Change()
-  ChangeGLOBAL_RUNEHEAL_HP scrollHP.Value
+  ChangeGLOBAL_RUNEHEAL_HP scrollHP.value
 End Sub
 
 Public Sub scrollHP2_Change()
-  lblHPvalue2.Caption = CStr(scrollHP2.Value) & " %"
+  lblHPvalue2.Caption = CStr(scrollHP2.value) & " %"
 End Sub
 
 Public Sub scrollLight_Change()
- lblLightValue.Caption = CStr(Round((scrollLight.Value / 15) * 100)) & " %"
-  LightIntesityHex = GoodHex(CByte(scrollLight.Value))
+ lblLightValue.Caption = CStr(Round((scrollLight.value / 15) * 100)) & " %"
+  LightIntesityHex = GoodHex(CByte(scrollLight.value))
 End Sub
 
 Private Sub timerAutoUpdater_Timer()
  If mapIDselected > 0 Then
     If TrialVersion = True Then
       If sentWelcome(mapIDselected) = True And GotPacketWarning(mapIDselected) = False Then
-        If chkLockOnMyFloor.Value = 1 Then
+        If chkLockOnMyFloor.value = 1 Then
           mapFloorSelected = myZ(mapIDselected)
         End If
         frmTrueMap.SetButtonColours
         frmTrueMap.DrawFloor
       End If
     Else
-      If chkLockOnMyFloor.Value = 1 Then
+      If chkLockOnMyFloor.value = 1 Then
         mapFloorSelected = myZ(mapIDselected)
       End If
       frmTrueMap.SetButtonColours
@@ -1173,9 +1173,9 @@ Private Sub timerLight_Timer()
   If (TrialVersion = False) And (trialSafety4 <> 4) Then
     End
   End If
-  If chkApplyCheats.Value = 1 Then
+  If chkApplyCheats.value = 1 Then
   
-  If (Me.chkCaptionExp.Value = 1) Then
+  If (Me.chkCaptionExp.value = 1) Then
     UpdateTibiaTitles
   End If
   
@@ -1216,7 +1216,7 @@ Private Sub timerLight_Timer()
     End If
       ' ALIVE? (45seconds without packet is not good)
     If (lastPing(i) < (GetTickCount() - MaxTimeWithoutServerPackets)) Then
-      If frmHardcoreCheats.chkAutorelog.Value = 1 Then
+      If frmHardcoreCheats.chkAutorelog.value = 1 Then
         aRes = GiveGMmessage(i, "ISP - server down detected (too much time without receiving anything from server)", "Blackdproxy")
         DoEvents
         lastPing(i) = GetTickCount() + 3600000
@@ -1225,7 +1225,7 @@ Private Sub timerLight_Timer()
         aRes = GiveGMmessage(i, "ISP - server down detected (too much time without receiving anything from server)", "Blackdproxy")
         DoEvents
         lastPing(i) = GetTickCount()
-        If frmRunemaker.chkCloseSound.Value = 1 Then
+        If frmRunemaker.chkCloseSound.value = 1 Then
           frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "(Giving alarm because server or ISP went probably down)"
           ChangePlayTheDangerSound True
         End If
@@ -1262,8 +1262,8 @@ Private Sub timerLight_Timer()
       End If
       If DangerPK(i) = True Then
           If PlayTheDangerSound = False Then
-            If frmCavebot.chkChangePkHeal.Value = 1 Then
-              ChangeGLOBAL_RUNEHEAL_HP frmCavebot.scrollPkHeal.Value
+            If frmCavebot.chkChangePkHeal.value = 1 Then
+              ChangeGLOBAL_RUNEHEAL_HP frmCavebot.scrollPkHeal.value
               aRes = GiveGMmessage(i, "WARNING : YOU ARE UNDER PK ATTACK ! (" & DangerPKname(i) & ") Auto heal have been auto increased to " & frmCavebot.lblPKhealValue.Caption, "BlackdProxy")
               DoEvents
             Else
@@ -1276,7 +1276,7 @@ Private Sub timerLight_Timer()
           ChangePlayTheDangerSound True
       End If
     End If
-      If (chkLight.Value = 1) Then
+      If (chkLight.value = 1) Then
         If IDstring(i) <> "" Then
           If frmMain.sckClientGame(i).State = sckConnected Then
             If PlayTheDangerSound = True Then
@@ -1302,24 +1302,24 @@ Private Sub timerLight_Timer()
   
   If PlayMsgSound = True Then
     PlayMsgSound = False
-    If frmRunemaker.ChkDangerSound.Value = 1 Then
+    If frmRunemaker.ChkDangerSound.value = 1 Then
         DirectX_PlaySound 3 ' play ding.wav
     End If
-    If ((frmRunemaker.chkOnDangerSS.Value = 1) And (frmRunemaker.timerSS.enabled = False)) Then
+    If ((frmRunemaker.chkOnDangerSS.value = 1) And (frmRunemaker.timerSS.enabled = False)) Then
         frmRunemaker.timerSS.enabled = True
     End If
   End If
   If PlayMsgSound2 = True Then
     PlayMsgSound2 = False
-    If frmRunemaker.ChkDangerSound.Value = 1 Then
+    If frmRunemaker.ChkDangerSound.value = 1 Then
         DirectX_PlaySound 1 ' play player.wav
     End If
-    If ((frmRunemaker.chkOnDangerSS.Value = 1) And (frmRunemaker.timerSS.enabled = False)) Then
+    If ((frmRunemaker.chkOnDangerSS.value = 1) And (frmRunemaker.timerSS.enabled = False)) Then
         frmRunemaker.timerSS.enabled = True
     End If
   End If
   If (PlayTheDangerSound = True) Then ' And (frmRunemaker.ChkDangerSound.Value = 1) Then
-    If frmRunemaker.ChkDangerSound.Value = 1 Then
+    If frmRunemaker.ChkDangerSound.value = 1 Then
         DirectX_PlaySound 2 ' play danger.wav
     End If
   End If
@@ -1336,7 +1336,7 @@ endT:
     PlayMsgSound2 = False
     DirectX_PlaySound 1 ' play player.wav
   End If
-  If (PlayTheDangerSound = True) And (frmRunemaker.ChkDangerSound.Value = 1) Then
+  If (PlayTheDangerSound = True) And (frmRunemaker.ChkDangerSound.value = 1) Then
     DirectX_PlaySound 2 ' play danger.wav
   End If
 severeE:
@@ -1365,7 +1365,7 @@ Private Sub timerSpam_Timer()
           resA = UseFastUH(i)
           If resA = 0 Then
             cancelAllMove(i) = GetTickCount() + 500
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               If Not (nextLight(i) = "04") Then
                 nextLight(i) = "04"
                enLight i
@@ -1383,7 +1383,7 @@ Private Sub timerSpam_Timer()
             End If
           ElseIf (PlayTheDangerSound = False) Then
             'give msg !
-            If chkClassic.Value = False Then
+            If chkClassic.value = False Then
                 resA = GiveGMmessage(i, "Autohealer is unable to heal you. Maybe no UHs left!", "Warning")
                 ChangePlayTheDangerSound True
                 DoEvents
@@ -1392,7 +1392,7 @@ Private Sub timerSpam_Timer()
           'heal
           resA = UseUH(i)
           If resA = 0 Then
-            If frmHardcoreCheats.chkColorEffects.Value = 1 Then
+            If frmHardcoreCheats.chkColorEffects.value = 1 Then
               If Not (nextLight(i) = "04") Then
                 nextLight(i) = "04"
                 enLight i

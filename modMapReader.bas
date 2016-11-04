@@ -562,7 +562,6 @@ Public Function ReadHardiskMapsQ() As Long
   Dim part4 As String
   Dim nameParts() As String
   Dim loadedOK As Long
-  ' TODO : complete parser Tibia 11 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   RemoveAllMapTranslation
   Ammount = 0
   readed = 0

@@ -617,7 +617,7 @@ End Sub
 
 
 Private Sub Check1_Click()
-  If Check1.Value = 1 Then
+  If Check1.value = 1 Then
     cmbMyPriority.enabled = False
     cmbTibiaPriority.enabled = False
     cmdApplyPriorities.enabled = False
@@ -842,8 +842,8 @@ End Sub
 
 Private Sub cmdSet0_Click()
 Dim clientpid As Long
-If frmHardcoreCheats.chkCaptionExp.Value = 1 Then
-frmHardcoreCheats.chkCaptionExp.Value = 0
+If frmHardcoreCheats.chkCaptionExp.value = 1 Then
+frmHardcoreCheats.chkCaptionExp.value = 0
 End If
 clientpid = getSelectedPID()
 If clientpid <> 0 Then

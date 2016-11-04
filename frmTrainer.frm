@@ -1016,8 +1016,8 @@ Public Sub UpdateValues()
   If goodValues = True Then
     txtPickupID.Text = GoodHex(TrainerOptions(trainerIDselected).spearID_b1) & _
      " " & GoodHex(TrainerOptions(trainerIDselected).spearID_b2)
-    If OptionDest(TrainerOptions(trainerIDselected).spearDest).Value = False Then
-      OptionDest(TrainerOptions(trainerIDselected).spearDest).Value = True
+    If OptionDest(TrainerOptions(trainerIDselected).spearDest).value = False Then
+      OptionDest(TrainerOptions(trainerIDselected).spearDest).value = True
     End If
     txtMaxPickUp.Text = CStr(TrainerOptions(trainerIDselected).maxitems)
     For i = 0 To 8
@@ -1030,7 +1030,7 @@ Public Sub UpdateValues()
       End If
     Next i
     For i = 1 To 10
-      If chkSlotRefill(i).Value <> TrainerOptions(trainerIDselected).PlayerSlots(i).cheked Then
+      If chkSlotRefill(i).value <> TrainerOptions(trainerIDselected).PlayerSlots(i).cheked Then
         chkSlotRefill(i) = TrainerOptions(trainerIDselected).PlayerSlots(i).cheked
       End If
       strTmp = GoodHex(TrainerOptions(trainerIDselected).PlayerSlots(i).itemID_b1) & _
@@ -1038,17 +1038,17 @@ Public Sub UpdateValues()
       txtSlotRefill(i).Text = strTmp
       txtSlotAmmount(i).Text = CStr(TrainerOptions(trainerIDselected).PlayerSlots(i).xvalue)
     Next i
-    If chkStopLowHp.Value <> TrainerOptions(trainerIDselected).misc_stoplowhp Then
-      chkStopLowHp.Value = TrainerOptions(trainerIDselected).misc_stoplowhp
+    If chkStopLowHp.value <> TrainerOptions(trainerIDselected).misc_stoplowhp Then
+      chkStopLowHp.value = TrainerOptions(trainerIDselected).misc_stoplowhp
     End If
-    If chkDance14min.Value <> TrainerOptions(trainerIDselected).misc_dance_14min Then
-      chkDance14min.Value = TrainerOptions(trainerIDselected).misc_dance_14min
+    If chkDance14min.value <> TrainerOptions(trainerIDselected).misc_dance_14min Then
+      chkDance14min.value = TrainerOptions(trainerIDselected).misc_dance_14min
     End If
-    If chkAvoidID.Value <> TrainerOptions(trainerIDselected).misc_avoidID Then
-      chkAvoidID.Value = TrainerOptions(trainerIDselected).misc_avoidID
+    If chkAvoidID.value <> TrainerOptions(trainerIDselected).misc_avoidID Then
+      chkAvoidID.value = TrainerOptions(trainerIDselected).misc_avoidID
     End If
-    If chkEnableTrainer.Value <> TrainerOptions(trainerIDselected).enabled Then
-      chkEnableTrainer.Value = TrainerOptions(trainerIDselected).enabled
+    If chkEnableTrainer.value <> TrainerOptions(trainerIDselected).enabled Then
+      chkEnableTrainer.value = TrainerOptions(trainerIDselected).enabled
     End If
     
     
@@ -1058,8 +1058,8 @@ Public Sub UpdateValues()
     txtMinAllowedHP.Text = CStr(TrainerOptions(trainerIDselected).stoplowhpHP)
   Else 'defaults
     txtPickupID.Text = "CD 0C"
-    If OptionDest(0).Value = False Then
-      OptionDest(0).Value = True
+    If OptionDest(0).value = False Then
+      OptionDest(0).value = True
     End If
     txtMaxPickUp.Text = "4"
     For i = 0 To 8
@@ -1067,23 +1067,23 @@ Public Sub UpdateValues()
       cmdNoPickup(i).Visible = True
     Next i
     For i = 1 To 10
-      If chkSlotRefill(i).Value <> 0 Then
-        chkSlotRefill(i).Value = 0
+      If chkSlotRefill(i).value <> 0 Then
+        chkSlotRefill(i).value = 0
       End If
       txtSlotRefill(i).Text = "CD 0C"
       txtSlotAmmount(i).Text = "1"
     Next i
-    If chkStopLowHp.Value <> 0 Then
-      chkStopLowHp.Value = 0
+    If chkStopLowHp.value <> 0 Then
+      chkStopLowHp.value = 0
     End If
-    If chkDance14min.Value <> 0 Then
-      chkDance14min.Value = 0
+    If chkDance14min.value <> 0 Then
+      chkDance14min.value = 0
     End If
-    If chkAvoidID.Value <> 0 Then
-      chkAvoidID.Value = 0
+    If chkAvoidID.value <> 0 Then
+      chkAvoidID.value = 0
     End If
-    If chkEnableTrainer.Value <> 0 Then
-      chkEnableTrainer.Value = 0
+    If chkEnableTrainer.value <> 0 Then
+      chkEnableTrainer.value = 0
     End If
     txtExceptionID.Text = "0"
     txtMinAllowedHP.Text = "50"
@@ -1117,25 +1117,25 @@ End Sub
 
 Private Sub chkAvoidID_Click()
   If (trainerIDselected > 0) Then
-    TrainerOptions(trainerIDselected).misc_avoidID = chkAvoidID.Value
+    TrainerOptions(trainerIDselected).misc_avoidID = chkAvoidID.value
   End If
 End Sub
 
 Private Sub chkDance14min_Click()
   If (trainerIDselected > 0) Then
-    TrainerOptions(trainerIDselected).misc_dance_14min = chkDance14min.Value
+    TrainerOptions(trainerIDselected).misc_dance_14min = chkDance14min.value
   End If
 End Sub
 
 Private Sub chkEnableTrainer_Click()
   If (trainerIDselected > 0) Then
-    TrainerOptions(trainerIDselected).enabled = chkEnableTrainer.Value
+    TrainerOptions(trainerIDselected).enabled = chkEnableTrainer.value
   End If
 End Sub
 
 Private Sub chkSlotRefill_Click(Index As Integer)
   Dim thenewvalue As Long
-  thenewvalue = chkSlotRefill(Index).Value
+  thenewvalue = chkSlotRefill(Index).value
   If ((trainerIDselected > 0) And (Index > 0)) Then
     TrainerOptions(trainerIDselected).PlayerSlots(Index).cheked = thenewvalue
   End If
@@ -1143,7 +1143,7 @@ End Sub
 
 Private Sub chkStopLowHp_Click()
   If (trainerIDselected > 0) Then
-    TrainerOptions(trainerIDselected).misc_stoplowhp = chkStopLowHp.Value
+    TrainerOptions(trainerIDselected).misc_stoplowhp = chkStopLowHp.value
   End If
 End Sub
 
@@ -1228,7 +1228,7 @@ End Sub
 
 
 Private Sub OptionDest_Click(Index As Integer)
-  If ((trainerIDselected > 0) And (Index > 0) And OptionDest(Index).Value = True) Then
+  If ((trainerIDselected > 0) And (Index > 0) And OptionDest(Index).value = True) Then
     TrainerOptions(trainerIDselected).spearDest = Index
   End If
 End Sub
@@ -1254,7 +1254,7 @@ Private Sub timerTrainer_Timer()
   Dim carring As Long
   Dim wanted As Long
   Dim blockingItem As Byte
-  If frmHardcoreCheats.chkApplyCheats.Value = 0 Then
+  If frmHardcoreCheats.chkApplyCheats.value = 0 Then
     Exit Sub ' fixed since 10.3
   End If
   Me.timerTrainer.Interval = randomNumberBetween(TrainerTimer1, TrainerTimer2)

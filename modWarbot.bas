@@ -537,8 +537,8 @@ Public Sub ChangeGLOBAL_FRIENDSLOWLIMIT_HP(newValue As Long)
   oldVal = GLOBAL_FRIENDSLOWLIMIT_HP
   frmWarbot.label_scrollFriendsHP.Caption = CStr(newValue) & " %"
   GLOBAL_FRIENDSLOWLIMIT_HP = newValue
-  If frmWarbot.scrollFriendsHP.Value <> newValue Then
-    frmWarbot.scrollFriendsHP.Value = newValue
+  If frmWarbot.scrollFriendsHP.value <> newValue Then
+    frmWarbot.scrollFriendsHP.value = newValue
   End If
 End Sub
 
@@ -549,8 +549,8 @@ Public Sub ChangeGLOBAL_MYSAFELIMIT_HP(newValue As Long)
   oldVal = GLOBAL_MYSAFELIMIT_HP
   frmWarbot.label_scrollSafeToHealHP.Caption = CStr(newValue) & " %"
   GLOBAL_MYSAFELIMIT_HP = newValue
-  If frmWarbot.scrollSafeToHealHP.Value <> newValue Then
-    frmWarbot.scrollSafeToHealHP.Value = newValue
+  If frmWarbot.scrollSafeToHealHP.value <> newValue Then
+    frmWarbot.scrollSafeToHealHP.value = newValue
   End If
 End Sub
 

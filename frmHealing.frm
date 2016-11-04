@@ -1058,13 +1058,13 @@ Option Explicit
 
 Private Sub chkClassic_Click()
 
-frmHardcoreCheats.chkClassic.Value = True
+frmHardcoreCheats.chkClassic.value = True
 
 End Sub
 
 Private Sub chkTotalWaste_Click()
 
-frmHardcoreCheats.chkTotalWaste.Value = True
+frmHardcoreCheats.chkTotalWaste.value = True
 
 End Sub
 

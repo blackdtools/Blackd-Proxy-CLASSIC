@@ -691,7 +691,7 @@ Public Sub ProcessArmageddon()
           DoEvents
         Else
           errline = 80
-          If frmMagebomb.chkResend.Value = 1 Then
+          If frmMagebomb.chkResend.value = 1 Then
             errline = 81
             If Magebombs(i).nextSendLogin < gtc Then
                 errline = 82
@@ -885,7 +885,7 @@ End Sub
 
 
 Private Sub chkRecordLogins_Click()
-If chkRecordLogins.Value = 1 Then
+If chkRecordLogins.value = 1 Then
   RecordLogin = True
 Else
   RecordLogin = False
