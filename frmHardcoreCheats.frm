@@ -873,12 +873,12 @@ End Sub
 
 Public Sub chkOnTop_Click()
   If chkOnTop.value = 1 Then
-    ToggleTopmost frmTrueMap.hwnd, True
-    ToggleTopmost frmMapReader.hwnd, True
+    ToggleTopmost frmTrueMap.hWnd, True
+    ToggleTopmost frmMapReader.hWnd, True
     MapWantedOnTop = True
   Else
-    ToggleTopmost frmTrueMap.hwnd, False
-    ToggleTopmost frmMapReader.hwnd, False
+    ToggleTopmost frmTrueMap.hWnd, False
+    ToggleTopmost frmMapReader.hWnd, False
     MapWantedOnTop = False
   End If
 End Sub
@@ -1035,11 +1035,11 @@ End Sub
 
 Private Sub pushID_Change()
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   PUSHDELAYTIMES = CLng(pushID.Text)
   Exit Sub
-gotErr:
+goterr:
   PUSHDELAYTIMES = 9
   pushID.Text = 9
 End Sub
@@ -1116,7 +1116,7 @@ CurrTicks = GetTickCount()
            'AA 00 00 00 00 00 00  20 00 24 1A 82 D3 7B 07 06 00 4D 75 6E 63 68 2E 6B 19 82 D3 7B 07 01 F9 0D FF 04
            ' building custom packet:
            'AA 00 00 00 00 00 00 20 00 24 $numbertohex2:{$myx$}$ $numbertohex2:{$myy$}$ $numbertohex1:{$myz$}$ $hex-tibiastr:the quick brown fox$
-           modCode.sendString i, "AA 00 00 00 00 00 00 20 00 24 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " " & Hexarize2(CStr(SecondsLeft)), False, True
+           modCode.sendString i, "AA 00 00 00 00 00 00 20 00 24 " & FiveChrLon(XYZCountdowns(i, ii).x) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " " & Hexarize2(CStr(SecondsLeft)), False, True
             Else
            'This protocol is confirmed for: 760->860
            'Todo: check newer versions.
@@ -1126,7 +1126,7 @@ CurrTicks = GetTickCount()
 ' Dim str As String
  ' str = "84 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft))
 'Debug.Print str
-         modCode.sendString i, "84 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft)), False, True
+         modCode.sendString i, "84 " & FiveChrLon(XYZCountdowns(i, ii).x) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft)), False, True
           End If
 
 
@@ -1137,12 +1137,12 @@ CurrTicks = GetTickCount()
 
 End Sub
 
-Public Function AddXYZCounter(idConnection As Integer, X As Long, y As Long, z As Long, Seconds As Long) As Boolean
+Public Function AddXYZCounter(idConnection As Integer, x As Long, y As Long, z As Long, Seconds As Long) As Boolean
 Dim Timestamp As Long
 Dim i As Long
 Dim pos As TypeMatrixPosition
 Dim res As Boolean
-  pos.X = X
+  pos.x = x
   pos.y = y
   pos.z = z
   Timestamp = (GetTickCount() / 1000) + Seconds
@@ -1422,13 +1422,13 @@ End Sub
 
 Private Function GetOneTitle(idConnection As Integer) As String
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   'UpdateExpVars idConnection
   var_lf(idConnection) = ". "
   GetOneTitle = parseVars(idConnection, tibiaTittleFormat.Text)
   Exit Function
-gotErr:
+goterr:
   GetOneTitle = "Tibia"
 End Function
 
@@ -1436,7 +1436,7 @@ Private Sub UpdateTibiaTitles()
   Dim i As Integer
   Dim Message As String
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If frmStealth.chkStealthExp = 1 Then
     If stealthIDselected <> 0 Then
@@ -1456,7 +1456,7 @@ Private Sub UpdateTibiaTitles()
     End If
   Next i
   End If
-gotErr:
+goterr:
   ' just end...
 End Sub
 

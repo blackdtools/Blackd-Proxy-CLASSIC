@@ -1,10 +1,1 @@
-Line 2: Could not create reference: '{F247AF03-2671-4421-A87A-846ED80CD2A9}#1.0#0'.
-Line 666: Class JwldButn2b.JeweledButton of control cmdApply was not a loaded control class.
-Line 672: The property name _ExtentX in cmdApply is invalid.
-Line 673: The property name _ExtentY in cmdApply is invalid.
-Line 674: The property name Caption in cmdApply is invalid.
-Line 675: The property name PictureSize in cmdApply is invalid.
-Line 676: The property name OriginalPicSizeW in cmdApply is invalid.
-Line 677: The property name OriginalPicSizeH in cmdApply is invalid.
-Line 688: The property name BorderColor_Hover in cmdApply is invalid.
-Line 689: The property name BorderColor_Inner in cmdApply is invalid.
+Línea 674: no se puede cargar el control cmdApply.

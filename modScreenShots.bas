@@ -32,16 +32,16 @@ Private Declare Sub keybd_event Lib "user32" _
         
 Private Declare Function GetDesktopWindow Lib "user32" () As Long
 
-Private Declare Function GetWindowRect Lib "user32" (ByVal hwnd As Long, lpRect As RECT) As Long
-Private Declare Function GetWindowDC Lib "user32" (ByVal hwnd As Long) As Long
+Private Declare Function GetWindowRect Lib "user32" (ByVal hWnd As Long, lpRect As RECT) As Long
+Private Declare Function GetWindowDC Lib "user32" (ByVal hWnd As Long) As Long
 Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDC As Long) As Long
 Private Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
 Private Declare Function DeleteDC Lib "gdi32" (ByVal hDC As Long) As Long
 Private Declare Function SelectObject Lib "gdi32" (ByVal hDC As Long, ByVal hObject As Long) As Long
 Private Declare Function BitBlt Lib "gdi32" (ByVal hdcDest As Long, ByVal XDest As Long, ByVal YDest As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hdcSrc As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
-Private Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hDC As Long) As Long
+Private Declare Function ReleaseDC Lib "user32" (ByVal hWnd As Long, ByVal hDC As Long) As Long
 Private Declare Function OleCreatePictureIndirect Lib "olepro32" (PicDesc As PicBmp, RefIID As Guid, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
-Private Declare Function BringWindowToTop Lib "user32" (ByVal hwnd As Long) As Long
+Private Declare Function BringWindowToTop Lib "user32" (ByVal hWnd As Long) As Long
         
         
 Public Function GetWindowScreenshot(WndHandle As Long, SavePath As String, Optional BringFront As Integer = 1) As String
@@ -125,14 +125,14 @@ End Function
         
 Public Sub GetScreenshot(ByRef frmS As Form, pictureName As String)
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim strCompleteName As String
   Dim sRes As String
-  Dim hwnd As Long
+  Dim hWnd As Long
   strCompleteName = App.Path & "\" & pictureName
-  hwnd = GetDesktopWindow()
-  sRes = GetWindowScreenshot(hwnd, strCompleteName, 0)
+  hWnd = GetDesktopWindow()
+  sRes = GetWindowScreenshot(hWnd, strCompleteName, 0)
   If sRes <> "" Then
     LogOnFile "errors.txt", sRes
   End If
@@ -175,7 +175,7 @@ Public Sub GetScreenshot(ByRef frmS As Form, pictureName As String)
   'SavePicture frmS.picScreen.Image, strCompleteName
   frmS.Hide
   Exit Sub
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Got error " & CStr(Err.Number) & " : " & Err.Description & " . This error happened while trying to save log at " & strCompleteName
 End Sub
 

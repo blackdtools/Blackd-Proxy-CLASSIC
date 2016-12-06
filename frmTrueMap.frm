@@ -741,7 +741,7 @@ End Sub
 
 Private Sub Form_Resize()
   If (MapWantedOnTop = True) And (frmTrueMap.WindowState <> vbMinimized) Then
-    ToggleTopmost frmTrueMap.hwnd, True
+    ToggleTopmost frmTrueMap.hWnd, True
   End If
 End Sub
 
@@ -752,7 +752,7 @@ Private Sub Form_Unload(Cancel As Integer)
   frmHardcoreCheats.timerAutoUpdater.enabled = False
   Me.Hide
   If BlockUnload = 0 Then
-    ToggleTopmost frmTrueMap.hwnd, False
+    ToggleTopmost frmTrueMap.hWnd, False
   End If
   Cancel = BlockUnload
 End Sub

@@ -234,62 +234,64 @@ End Type
 
 'Private Declare Function VirtualProtectEx Lib "Kernel32" (ByVal hProcess As Long, ByRef lpAddress As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
 Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" _
-    (ByVal hwnd As Long, ByVal wMsg As Long, _
+    (ByVal hWnd As Long, ByVal wMsg As Long, _
     ByVal wParam As Long, ByVal lParam As Long) As Long
 
 Private Declare Function GetClassName Lib "user32" _
    Alias "GetClassNameA" _
-   (ByVal hwnd As Long, _
+   (ByVal hWnd As Long, _
    ByVal lpClassName As String, _
    ByVal nMaxCount As Long) As Long
    
 Private Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" _
-(ByVal hwnd As Long, ByVal wIndx As Long) As Long
+(ByVal hWnd As Long, ByVal wIndx As Long) As Long
 
 Private Declare Function GetWindowTextLength Lib "user32" Alias "GetWindowTextLengthA" _
- (ByVal hwnd As Long) As Long
+ (ByVal hWnd As Long) As Long
  
 Private Declare Function GetWindowText Lib "user32" Alias "GetWindowTextA" _
- (ByVal hwnd As Long, ByVal lpString As String, ByVal cch As Long) As Long
+ (ByVal hWnd As Long, ByVal lpString As String, ByVal cch As Long) As Long
  
 Private Declare Function EnumWindows Lib "user32" _
  (ByVal lpEnumFunc As Long, ByVal lParam As Long) As Boolean
 
-Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
+Private Declare Sub CopyMemory Lib "Kernel32" Alias "RtlMoveMemory" ( _
     ByRef Destination As Any, _
     ByRef Source As Any, _
     ByVal Length As Long)
 
 Public Declare Sub GetCursorPos Lib "user32" (lpPoint As POINTAPI)
 
-Private Declare Function GetParent Lib "user32" (ByVal hwnd As Long) As Long
-Private Declare Function CreateToolhelp32Snapshot Lib "kernel32" (ByVal dwFlags As Long, ByVal th32ProcessID As Long) As Long
-Private Declare Function Module32FirstW Lib "kernel32" (ByVal hSnapshot As Long, ByRef uModule As Any) As Long
-Private Declare Function Module32NextW Lib "kernel32" (ByVal hSnapshot As Long, ByRef uModule As Any) As Long
+Private Declare Function GetParent Lib "user32" (ByVal hWnd As Long) As Long
+Private Declare Function CreateToolhelp32Snapshot Lib "Kernel32" (ByVal dwFlags As Long, ByVal th32ProcessID As Long) As Long
+Private Declare Function Module32FirstW Lib "Kernel32" (ByVal hSnapshot As Long, ByRef uModule As Any) As Long
+Private Declare Function Module32NextW Lib "Kernel32" (ByVal hSnapshot As Long, ByRef uModule As Any) As Long
 
-Private Declare Function WriteProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByRef lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
-Private Declare Function ReadProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByRef lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
+Private Declare Function WriteProcessMemory Lib "Kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByRef lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
+Private Declare Function ReadProcessMemory Lib "Kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByRef lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
 
-Private Declare Function VirtualQueryEx& Lib "kernel32" (ByVal hProcess As Long, lpAddress As Any, lpBuffer As MEMORY_BASIC_INFORMATION, ByVal dwLength As Long)
+Private Declare Function VirtualQueryEx& Lib "Kernel32" (ByVal hProcess As Long, lpAddress As Any, lpBuffer As MEMORY_BASIC_INFORMATION, ByVal dwLength As Long)
 
-Private Declare Sub GetSystemInfo Lib "kernel32" (lpSystemInfo As SYSTEM_INFO)
+Private Declare Sub GetSystemInfo Lib "Kernel32" (lpSystemInfo As SYSTEM_INFO)
    
-Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Long, ByRef lpdwProcessId As Long) As Long
+Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As Long, ByRef lpdwProcessId As Long) As Long
 
-Private Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
-Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
+Private Declare Function OpenProcess Lib "Kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
+Private Declare Function CloseHandle Lib "Kernel32" (ByVal hObject As Long) As Long
 
 
 Public moduleDictionary As Scripting.Dictionary
 Public mainTibiaHandle As Scripting.Dictionary
 Public objWMIService As Object
 
+Public MAXDATTILESpath As String
+Public subTibiaVersionLong As Long
 
 Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long, ByRef Rbuff() As Byte) As Long
     Dim usize As Long
     Dim tibiaHandle As Long
     Dim readtotal As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     readtotal = 0
     usize = UBound(Rbuff) + 1
     If (usize < 1) Then
@@ -304,7 +306,7 @@ Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long
         QMemory_ReadNBytes = 0
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_ReadNBytes = -1
     Debug.Print ("Error at QMemory_ReadNBytes:" & Err.Description)
 End Function
@@ -356,7 +358,7 @@ Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim lpNumberOfBytesWritten As Long
     Dim usize As Long
     lpNumberOfBytesWritten = 0
-    On Error GoTo gotErr
+    On Error GoTo goterr
     usize = UBound(newValue) + 1
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
     If tibiaHandle = -1 Then
@@ -372,7 +374,7 @@ Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_WriteNBytes = -1
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_WriteNBytes = -1
 End Function
 
@@ -382,7 +384,7 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim lpNumberOfBytesWritten As Long
     Dim Rbuff(1) As Byte
     lpNumberOfBytesWritten = 0
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Rbuff(0) = LowByteOfLong(newValue)
     Rbuff(1) = HighByteOfLong(newValue)
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
@@ -395,7 +397,7 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_Write2Bytes = -1
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_Write2Bytes = -1
 End Function
 
@@ -438,7 +440,7 @@ Public Function ModifyQString(ByVal pid As Long, ByVal address As Long, ByRef ne
         Dim res As Long
         Dim allbytes() As Byte
         Dim i As Long
-        On Error GoTo gotErr
+        On Error GoTo goterr
         new_size = Len(newText)
         msg_offset = QMemory_Read4Bytes(pid, address + 12)
         msg_maxsize = QMemory_Read4Bytes(pid, address + 8)
@@ -461,7 +463,7 @@ Public Function ModifyQString(ByVal pid As Long, ByVal address As Long, ByRef ne
         End If
         ModifyQString = res
         Exit Function
-gotErr:
+goterr:
         ModifyQString = -1
     End Function
     
@@ -479,7 +481,7 @@ Public Function QMemory_ReadDouble(ByVal pid As Long, ByVal finalAddress As Long
     CopyMemory d, Rbuff(0), LenB(d)
     QMemory_ReadDouble = d
     Exit Function
-gotErr:
+goterr:
     QMemory_ReadDouble = -1
 End Function
 
@@ -487,39 +489,39 @@ End Function
 Public Function QMemory_Read4Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim res As Long
     Dim tibiaHandle As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, res, 4, 0
     CloseHandle (tibiaHandle)
     QMemory_Read4Bytes = res
     Exit Function
-gotErr:
+goterr:
     QMemory_Read4Bytes = -1
 End Function
 
 Public Function QMemory_Read2Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim Rbuff(1) As Byte
     Dim tibiaHandle As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, Rbuff(0), 2, 0
     CloseHandle (tibiaHandle)
     QMemory_Read2Bytes = GetTheLong(Rbuff(0), Rbuff(1))
     Exit Function
-gotErr:
+goterr:
     QMemory_Read2Bytes = -1
 End Function
 
 Public Function QMemory_Read1Byte(ByVal pid As Long, ByVal finalAddress As Long) As Byte
     Dim Rbuff As Byte
     Dim tibiaHandle As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, Rbuff, 1, 0
     CloseHandle (tibiaHandle)
     QMemory_Read1Byte = Rbuff
     Exit Function
-gotErr:
+goterr:
     QMemory_Read1Byte = &HFF
 End Function
     
@@ -528,7 +530,7 @@ Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim res As Long
     Dim lpNumberOfBytesWritten As Long
     lpNumberOfBytesWritten = 0
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
     res = WriteProcessMemory(tibiaHandle, finalAddress, newValue, 4, lpNumberOfBytesWritten)
     If (res = 1) Then
@@ -539,7 +541,7 @@ Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_Write4Bytes = -1
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_Write4Bytes = -1
 End Function
 
@@ -547,18 +549,18 @@ End Function
 
 
 
-Private Function EnumWindowsProc(ByVal hwnd As Long, ByVal lParam As Long) As Boolean
+Private Function EnumWindowsProc(ByVal hWnd As Long, ByVal lParam As Long) As Boolean
  Dim Title As String
  Dim r As Long
  
- r = GetWindowTextLength(hwnd)
+ r = GetWindowTextLength(hWnd)
  Title = Space(r)
- GetWindowText hwnd, Title, r + 1
+ GetWindowText hWnd, Title, r + 1
  
  'Add to type array
  ColCounter = ColCounter + 1
  ReDim Preserve HandleTextCollection(ColCounter)
- HandleTextCollection(ColCounter).Window_Handle = hwnd
+ HandleTextCollection(ColCounter).Window_Handle = hWnd
  HandleTextCollection(ColCounter).Window_Title = Title
  
  EnumWindowsProc = True
@@ -580,14 +582,14 @@ End Sub
     End Function
     
 Public Function CheckIfEnumDone()
- On Error GoTo gotErr
+ On Error GoTo goterr
  If (HandleTextCollection(0).Window_Handle = &H0) Then
  CheckIfEnumDone = True
  Else
  CheckIfEnumDone = True
  End If
  Exit Function
-gotErr:
+goterr:
  CheckIfEnumDone = False
 End Function
 
@@ -637,13 +639,13 @@ Public Function Get_MainWindowHandle_from_ProcessID_and_class(ByVal AppPID As Lo
 End Function
 
 
-Private Function GetWindowClass(ByVal hwnd As Long) As String
+Private Function GetWindowClass(ByVal hWnd As Long) As String
   Dim sClass As String
-  If hwnd = 0 Then
+  If hWnd = 0 Then
     GetWindowClass = ""
   Else
     sClass = Space$(256)
-    GetClassName hwnd, sClass, 255
+    GetClassName hWnd, sClass, 255
     GetWindowClass = Left$(sClass, InStr(sClass, vbNullChar) - 1)
   End If
 End Function
@@ -657,7 +659,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     Dim mainWindowHandle As Long
     Dim currentPID As Long
     Dim i As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim items As Object
     Dim item As Object
     'Dim count As Long
@@ -696,7 +698,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     Next
    ' Debug.Print "Total clients found = " & count
     Exit Sub
-gotErr:
+goterr:
     Debug.Print ("Error: Unexpected error - " & Err.Description)
 End Sub
 
@@ -706,7 +708,7 @@ Public Function GetTibiaPIDs(ByRef expectedName As String, ByRef expectedClass A
 ByRef CurrentTibiaPids() As Long) As Long
     Dim ubproc As Long
     Dim i As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim items As Object
     Dim item As Object
     Dim last As Long
@@ -724,7 +726,7 @@ ByRef CurrentTibiaPids() As Long) As Long
     GetTibiaPIDs = last + 1
     'Debug.Print "Total clients found = " & (last + 1)
     Exit Function
-gotErr:
+goterr:
     Debug.Print ("Error: Unexpected error - " & Err.Description)
      CurrentTibiaPids(0) = -1
     GetTibiaPIDs = 0
@@ -734,7 +736,7 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Dim isize As Long
     Dim res As String
     Dim i As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     isize = UBound(arr)
     res = GoodHex(arr(0))
     For i = 1 To isize
@@ -742,7 +744,7 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Next i
     arrayToString = res
     Exit Function
-gotErr:
+goterr:
     arrayToString = ""
 End Function
 
@@ -754,7 +756,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
                                      ByRef maxDepth As Long, ByRef bytesPerElement As Long, _
                                      Optional ByRef maxValidKeyID As Long = -1, _
                                      Optional ByVal addBaseAddress As Boolean = False)
-    On Error GoTo gotErr
+    On Error GoTo goterr
         Dim Id As Long
         Dim auxRes As Long
         Id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
@@ -796,7 +798,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
             End If
         End If
         Exit Sub
-gotErr:
+goterr:
         Debug.Print ("Something failed: " + Err.Description)
 
 End Sub
@@ -845,7 +847,7 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
                                      ByRef dict As Scripting.Dictionary, _
                                      ByVal currentDepth As Long, _
                                      ByRef maxDepth As Long, ByRef adrRoot As Long) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
         Dim Id As Long
         Dim c0, c1, c2 As Long
         Dim Count As Long
@@ -874,7 +876,7 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
         End If
         fillCollectionDictionaryMIN = Count
         Exit Function
-gotErr:
+goterr:
         fillCollectionDictionaryMIN = 0
         Debug.Print ("Something failed: " + Err.Description)
 End Function
@@ -1255,7 +1257,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Dim firstChar As String
     Dim currentPort As Long
     Const cte_bytesPerRegister As Long = &H24
-    On Error GoTo gotErr
+    On Error GoTo goterr
     If stopIfPort = -1 Then
         ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, , , , True
     Else
@@ -1325,7 +1327,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Next
     ReadTibia11ServerList = 0
     Exit Function
-gotErr:
+goterr:
     ReadTibia11ServerList = -1
 End Function
 

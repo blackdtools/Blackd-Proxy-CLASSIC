@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "41.6" ' Proxy version ' string version
-Public Const myNumericVersion = 41600 ' numeric version
+Public Const ProxyVersion = "41.8" ' Proxy version ' string version
+Public Const myNumericVersion = 41800 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -102,7 +102,7 @@ Public Type TypeSpecialRes
 End Type
 Public Type TypeMatrixPosition ' 1 stack position of any square of map , might not be valid
   valid As Boolean ' is valid?
-  X As Long
+  x As Long
   y As Long
   z As Long
   s As Long ' stack
@@ -143,7 +143,7 @@ Public Type TypeStackTileInfo '1 entire square of map info
   s(0 To 10) As TypeTileInfo
 End Type
 ' API for fast moves of memory in blocks
-Private Declare Sub RtlMoveMemory Lib "kernel32" ( _
+Private Declare Sub RtlMoveMemory Lib "Kernel32" ( _
     lpDest As Any, _
     lpSource As Any, _
     ByVal ByValcbCopy As Long)
@@ -1575,14 +1575,14 @@ badbug:
 End Function
 
 
-Public Function GetMatrixPosition(idConnection As Integer, X As Long, y As Long, z As Long, s As Long) As TypeMatrixPosition
+Public Function GetMatrixPosition(idConnection As Integer, x As Long, y As Long, z As Long, s As Long) As TypeMatrixPosition
   ' get relative positions to our matrix
   Dim res As TypeMatrixPosition
-  res.X = X - myX(idConnection) + z - myZ(idConnection)
+  res.x = x - myX(idConnection) + z - myZ(idConnection)
   res.y = y - myY(idConnection) + z - myZ(idConnection)
   res.z = z
   res.s = s
-  If (res.X >= -8) And (res.X <= 9) And (res.y >= -6) And (res.y <= 7) _
+  If (res.x >= -8) And (res.x <= 9) And (res.y >= -6) And (res.y <= 7) _
    And (res.z >= 0) And (res.z <= 15) And (res.s >= 0) And (res.s <= 10) Then
     ' valid matrix position
     res.valid = True
@@ -1592,7 +1592,7 @@ Public Function GetMatrixPosition(idConnection As Integer, X As Long, y As Long,
   GetMatrixPosition = res
 End Function
 
-Public Function RemoveThingFromStack(idConnection As Integer, X As Long, y As Long, z As Long, s As Long) As Long
+Public Function RemoveThingFromStack(idConnection As Integer, x As Long, y As Long, z As Long, s As Long) As Long
   ' remove something from stack
   Dim i As Long
   Dim res As Long
@@ -1601,28 +1601,28 @@ Public Function RemoveThingFromStack(idConnection As Integer, X As Long, y As Lo
   On Error GoTo gotError
   #End If
   res = -1
-  If ((X > 9) Or (X < -8) Or (y > 7) Or (y < -6) Or (z < 0) Or (z > 15)) Then
+  If ((x > 9) Or (x < -8) Or (y > 7) Or (y < -6) Or (z < 0) Or (z > 15)) Then
     RemoveThingFromStack = res
     Exit Function
   End If
 
   For i = s To 9
-    Matrix(y, X, z, idConnection).s(i).t1 = Matrix(y, X, z, idConnection).s(i + 1).t1
-    Matrix(y, X, z, idConnection).s(i).t2 = Matrix(y, X, z, idConnection).s(i + 1).t2
-    Matrix(y, X, z, idConnection).s(i).t3 = Matrix(y, X, z, idConnection).s(i + 1).t3
-    Matrix(y, X, z, idConnection).s(i).t4 = Matrix(y, X, z, idConnection).s(i + 1).t4
-    Matrix(y, X, z, idConnection).s(i).dblID = Matrix(y, X, z, idConnection).s(i + 1).dblID
+    Matrix(y, x, z, idConnection).s(i).t1 = Matrix(y, x, z, idConnection).s(i + 1).t1
+    Matrix(y, x, z, idConnection).s(i).t2 = Matrix(y, x, z, idConnection).s(i + 1).t2
+    Matrix(y, x, z, idConnection).s(i).t3 = Matrix(y, x, z, idConnection).s(i + 1).t3
+    Matrix(y, x, z, idConnection).s(i).t4 = Matrix(y, x, z, idConnection).s(i + 1).t4
+    Matrix(y, x, z, idConnection).s(i).dblID = Matrix(y, x, z, idConnection).s(i + 1).dblID
   Next i
-  Matrix(y, X, z, idConnection).s(10).t1 = &H0
-  Matrix(y, X, z, idConnection).s(10).t2 = &H0
-  Matrix(y, X, z, idConnection).s(10).t3 = &H0
-  Matrix(y, X, z, idConnection).s(10).t4 = &H0
-  Matrix(y, X, z, idConnection).s(10).dblID = 0
+  Matrix(y, x, z, idConnection).s(10).t1 = &H0
+  Matrix(y, x, z, idConnection).s(10).t2 = &H0
+  Matrix(y, x, z, idConnection).s(10).t3 = &H0
+  Matrix(y, x, z, idConnection).s(10).t4 = &H0
+  Matrix(y, x, z, idConnection).s(10).dblID = 0
   res = 0
 gotError:
   RemoveThingFromStack = res
 End Function
-Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z As Long, _
+Public Function AddThingToStack(idConnection As Integer, x As Long, y As Long, z As Long, _
  t1 As Byte, t2 As Byte, t3 As Byte, dblID As Double, Optional t4 As Byte = &H0) As Long
   ' this add anything to the stack
   ' + will return stackPos that received
@@ -1647,7 +1647,7 @@ Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z
     If TibiaVersionLong < 870 Then
         Do
           i = i + 1
-          tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
+          tempTileID = GetTheLong(Matrix(y, x, z, idConnection).s(i).t1, Matrix(y, x, z, idConnection).s(i).t2)
           currentPosPriority = DatTiles(tempTileID).stackPriority
           If i = 10 Then
             Exit Do
@@ -1656,7 +1656,7 @@ Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z
     ElseIf TibiaVersionLong < 1099 Then
         Do
           i = i + 1
-          tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
+          tempTileID = GetTheLong(Matrix(y, x, z, idConnection).s(i).t1, Matrix(y, x, z, idConnection).s(i).t2)
           currentPosPriority = DatTiles(tempTileID).stackPriority
           If i = 10 Then
             Exit Do
@@ -1665,7 +1665,7 @@ Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z
     Else ' Tibia 10.99+
         Do
           i = i + 1
-          tempTileID = GetTheLong(Matrix(y, X, z, idConnection).s(i).t1, Matrix(y, X, z, idConnection).s(i).t2)
+          tempTileID = GetTheLong(Matrix(y, x, z, idConnection).s(i).t1, Matrix(y, x, z, idConnection).s(i).t2)
           currentPosPriority = DatTiles(tempTileID).stackPriority
           If i = 10 Then
             Exit Do
@@ -1675,23 +1675,23 @@ Public Function AddThingToStack(idConnection As Integer, X As Long, y As Long, z
 
   'Debug.Print "adding item to pos " & CStr(i) & " Priority new = " & newItemPriority & " current priority = " & CStr(currentPosPriority)
   For j = 10 To i Step -1
-    Matrix(y, X, z, idConnection).s(j).t1 = Matrix(y, X, z, idConnection).s(j - 1).t1
-    Matrix(y, X, z, idConnection).s(j).t2 = Matrix(y, X, z, idConnection).s(j - 1).t2
-    Matrix(y, X, z, idConnection).s(j).t3 = Matrix(y, X, z, idConnection).s(j - 1).t3
-    Matrix(y, X, z, idConnection).s(j).t4 = Matrix(y, X, z, idConnection).s(j - 1).t4
-    Matrix(y, X, z, idConnection).s(j).dblID = Matrix(y, X, z, idConnection).s(j - 1).dblID
+    Matrix(y, x, z, idConnection).s(j).t1 = Matrix(y, x, z, idConnection).s(j - 1).t1
+    Matrix(y, x, z, idConnection).s(j).t2 = Matrix(y, x, z, idConnection).s(j - 1).t2
+    Matrix(y, x, z, idConnection).s(j).t3 = Matrix(y, x, z, idConnection).s(j - 1).t3
+    Matrix(y, x, z, idConnection).s(j).t4 = Matrix(y, x, z, idConnection).s(j - 1).t4
+    Matrix(y, x, z, idConnection).s(j).dblID = Matrix(y, x, z, idConnection).s(j - 1).dblID
   Next j
-  Matrix(y, X, z, idConnection).s(i).t1 = t1
-  Matrix(y, X, z, idConnection).s(i).t2 = t2
-  Matrix(y, X, z, idConnection).s(i).t3 = t3
-  Matrix(y, X, z, idConnection).s(i).t4 = t4
-  Matrix(y, X, z, idConnection).s(i).dblID = dblID
+  Matrix(y, x, z, idConnection).s(i).t1 = t1
+  Matrix(y, x, z, idConnection).s(i).t2 = t2
+  Matrix(y, x, z, idConnection).s(i).t3 = t3
+  Matrix(y, x, z, idConnection).s(i).t4 = t4
+  Matrix(y, x, z, idConnection).s(i).dblID = dblID
   ' MODIFIED at for 8.4 TO FIX STACK OF PERSONS BUG
-  Matrix(y, X, z, idConnection).s(10).t1 = &H0
-  Matrix(y, X, z, idConnection).s(10).t2 = &H0
-  Matrix(y, X, z, idConnection).s(10).t3 = &H0
-  Matrix(y, X, z, idConnection).s(10).t4 = &H0
-  Matrix(y, X, z, idConnection).s(10).dblID = 0
+  Matrix(y, x, z, idConnection).s(10).t1 = &H0
+  Matrix(y, x, z, idConnection).s(10).t2 = &H0
+  Matrix(y, x, z, idConnection).s(10).t3 = &H0
+  Matrix(y, x, z, idConnection).s(10).t4 = &H0
+  Matrix(y, x, z, idConnection).s(10).dblID = 0
   res = CLng(i)
 gotError:
   AddThingToStack = res
@@ -1702,7 +1702,7 @@ Public Sub EvalMyMove(idConnection As Integer, increaseX As Long, increaseY As L
   ' move true map
   ' a side of the map will be a blank line for some mseconds
   ' until the updated info fills it
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -1768,23 +1768,23 @@ Public Sub EvalMyMove(idConnection As Integer, increaseX As Long, increaseY As L
   End If
   If increaseY = 1 Then
     For z = 0 To 15
-      For X = -8 To 9
-        RtlMoveMemory Matrix(-6, X, z, idConnection), Matrix(-5, X, z, idConnection), OptCte2
-      Next X
+      For x = -8 To 9
+        RtlMoveMemory Matrix(-6, x, z, idConnection), Matrix(-5, x, z, idConnection), OptCte2
+      Next x
       ' draw black line
-      For X = -8 To 9
-        RtlMoveMemory Matrix(7, X, z, idConnection), tmpStack, OptCte3
-      Next X
+      For x = -8 To 9
+        RtlMoveMemory Matrix(7, x, z, idConnection), tmpStack, OptCte3
+      Next x
     Next z
   ElseIf increaseY = -1 Then
     For z = 0 To 15
-      For X = -8 To 9
-        RtlMoveMemory Matrix(-5, X, z, idConnection), Matrix(-6, X, z, idConnection), OptCte2
-      Next X
+      For x = -8 To 9
+        RtlMoveMemory Matrix(-5, x, z, idConnection), Matrix(-6, x, z, idConnection), OptCte2
+      Next x
       ' draw black line
-      For X = -8 To 9
-        RtlMoveMemory Matrix(-6, X, z, idConnection), tmpStack, OptCte3
-      Next X
+      For x = -8 To 9
+        RtlMoveMemory Matrix(-6, x, z, idConnection), tmpStack, OptCte3
+      Next x
     Next z
   End If
   
@@ -2888,7 +2888,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       CheatsPaused(idConnection) = True
       IDstring(idConnection) = GoodHex(packet(pos + 1)) & GoodHex(packet(pos + 2)) & GoodHex(packet(pos + 3)) & GoodHex(packet(pos + 4))
       myID(idConnection) = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
-      
+
       If TibiaVersionLong >= 1080 Then
       ' tibia 10.80+
       ' 17 FA D5 7B 02 32 00 03 0F 15 0D 80 03 A9 FC 03 80 03 7E D5 B6 7F 00 01 01 24 00 68 74 74 70 3A 2F 2F 73 74 61 74 69 63 2E 74 69 62 69 61 2E 63 6F 6D 2F 69 6D 61 67 65 73 2F 73 74 6F 72 65 19 00 0A
@@ -3007,12 +3007,12 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       pos = pos + 6
       If packet(pos + 1) = &HFF Then 'first we could have a skipper (&H01 &HFF)
         pos = pos + 2
-        Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(0).t1 = 0
-        Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(0).t2 = 0
-        Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(0).t3 = 0
-        Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(0).dblID = 0
+        Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(0).t1 = 0
+        Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(0).t2 = 0
+        Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(0).t3 = 0
+        Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(0).dblID = 0
       Else 'else we have info about map position
-         resT = ReadSinglePosition(idConnection, matrixP.X, matrixP.y, matrixP.z, packet, pos)
+         resT = ReadSinglePosition(idConnection, matrixP.x, matrixP.y, matrixP.z, packet, pos)
          If resT = -1 Then
            GoTo fatalError
          Else
@@ -3074,7 +3074,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
             End If
           End If
         End If
-        gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, &H61, &H0, &H0, tempID)
+        gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, &H61, &H0, &H0, tempID)
         pos = pos + 7
         'Debug.Print "direction7=" & GoodHex(packet(pos - 1)) & " " & GoodHex(packet(pos - 2)) & " " & GoodHex(packet(pos - 3)) & " " & GoodHex(packet(pos - 4)) & " " & GoodHex(packet(pos - 5))
         AddID_Direction idConnection, tempID, packet(pos - 1) 'update direction
@@ -3105,7 +3105,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
             End If
           End If
         End If
-        gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, &H61, &H0, &H0, tempID)
+        gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, &H61, &H0, &H0, tempID)
         
         ' outfit ...
         If TibiaVersionLong <= 760 Then
@@ -3177,37 +3177,37 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         'If TibiaVersionLong >= 870 Then
         '    pos = pos + 2 ' 2 strange bytes 00 01
         'End If
-        gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, &H61, &H0, &H0, resF.newID)
+        gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, &H61, &H0, &H0, resF.newID)
       Case Else
         'Debug.Print "adding thing to stack"
         If TibiaVersionLong >= 990 Then
             If DatTiles(tileID).haveExtraByte = True Then
               If DatTiles(tileID).haveExtraByte2 = True Then
-                gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), packet(pos + 3), &H0, packet(pos + 4))
+                gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), packet(pos + 3), &H0, packet(pos + 4))
                 pos = pos + 5
               Else
-                gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), packet(pos + 3), &H0)
+                gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), packet(pos + 3), &H0)
                 pos = pos + 4
               End If
             Else
               
               If DatTiles(tileID).haveExtraByte2 = True Then
-                gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), &H0, &H0, packet(pos + 3))
+                gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), &H0, &H0, packet(pos + 3))
                 pos = pos + 4
               Else
-                gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), &H0, &H0)
+                gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), &H0, &H0)
                 pos = pos + 3
               End If
             End If
         Else
             If DatTiles(tileID).haveExtraByte = True Then
-              gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), packet(pos + 2), 0)
+              gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), packet(pos + 2), 0)
               pos = pos + 3
               If DatTiles(tileID).haveExtraByte2 = True Then
                 pos = pos + 1 ' skip new strange byte 00
               End If
             Else
-              gotStackP = AddThingToStack(idConnection, matrixP.X, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), &H0, 0)
+              gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, packet(pos), packet(pos + 1), &H0, 0)
               pos = pos + 2
               If DatTiles(tileID).haveExtraByte2 = True Then
                 pos = pos + 1 ' skip new strange byte 00
@@ -3252,7 +3252,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                         End If
                       End If
                       If GotKillOrderTargetID(idConnection) <> 0 Then
-                        If (Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = GotKillOrderTargetID(idConnection)) Then
+                        If (Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = GotKillOrderTargetID(idConnection)) Then
                           GotKillOrder(idConnection) = False
                           aRes = GiveGMmessage(idConnection, ">> " & GotKillOrderTargetName(idConnection) & " <<", "Target is DEAD")
                           DoEvents
@@ -3283,11 +3283,11 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         ' update a stack position
         tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
         If matrixP.valid = True Then
-          Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = &H61
-          Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = &H0
-          Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
-          Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t4 = &H0
-          Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = tempID
+          Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = &H61
+          Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = &H0
+          Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
+          Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t4 = &H0
+          Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = tempID
         End If
         pos = pos + 7
         'Debug.Print "direction2=" & GoodHex(packet(pos - 1)) & " " & GoodHex(packet(pos - 2)) & " " & GoodHex(packet(pos - 3)) & " " & GoodHex(packet(pos - 4)) & " " & GoodHex(packet(pos - 5))
@@ -3340,40 +3340,40 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
             If (DatTiles(tileID).haveExtraByte = True) Then
               If (DatTiles(tileID).haveExtraByte2 = True) Then
                 If matrixP.valid = True Then
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = packet(pos + 3)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t4 = packet(pos + 4)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = 0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = packet(pos + 3)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t4 = packet(pos + 4)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = 0
                 End If
                 pos = pos + 5
               Else
                 If matrixP.valid = True Then
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = packet(pos + 3)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t4 = &H0
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = 0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = packet(pos + 3)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t4 = &H0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = 0
                 End If
                 pos = pos + 4
               End If
             Else
               If (DatTiles(tileID).haveExtraByte2 = True) Then
                 If matrixP.valid = True Then
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t4 = packet(pos + 3)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = 0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t4 = packet(pos + 3)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = 0
                 End If
                 pos = pos + 4
               Else
                 If matrixP.valid = True Then
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t4 = &H0
-                  Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = 0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t4 = &H0
+                  Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = 0
                 End If
                 pos = pos + 3
               End If
@@ -3383,18 +3383,18 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         
             If DatTiles(tileID).haveExtraByte Then
               If matrixP.valid = True Then
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = packet(pos + 2)
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = 0
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = packet(pos + 2)
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = 0
               End If
               pos = pos + 3
             Else
               If matrixP.valid = True Then
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
-                Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = 0
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1 = packet(pos)
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2 = packet(pos + 1)
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3 = &H0
+                Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = 0
               End If
               pos = pos + 2
             End If
@@ -3437,7 +3437,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
                 End If
             End If
             If GotKillOrderTargetID(idConnection) <> 0 Then
-                If (Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID = GotKillOrderTargetID(idConnection)) Then
+                If (Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID = GotKillOrderTargetID(idConnection)) Then
                   GotKillOrder(idConnection) = False
                   aRes = GiveGMmessage(idConnection, ">> " & GotKillOrderTargetName(idConnection) & " <<", "Target is DEAD")
                   DoEvents
@@ -3453,11 +3453,11 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         gotCorpsePop = True ' for ot servers
       End If
       'Debug.Print "removing item from STACK POS " & CStr(matrixP.s)
-      fRes = RemoveThingFromStack(idConnection, matrixP.X, matrixP.y, matrixP.z, matrixP.s)
+      fRes = RemoveThingFromStack(idConnection, matrixP.x, matrixP.y, matrixP.z, matrixP.s)
       If fRes = -1 Then
         showDebug = True
         debugReasons = debugReasons & vbCrLf & " [ FAIL to remove mobile from " & _
-         matrixP.X & "," & matrixP.y & "," & matrixP.z & "," & matrixP.s & " ] "
+         matrixP.x & "," & matrixP.y & "," & matrixP.z & "," & matrixP.s & " ] "
       End If
       pos = pos + 7
       gotMapUpdate = True
@@ -3469,11 +3469,11 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       initS = CLng(packet(pos + 6))
       matrixP = GetMatrixPosition(idConnection, initX, initY, initZ, initS)
       If matrixP.valid = True Then
-        tempb1 = Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t1
-        tempb2 = Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t2
-        tempb3 = Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t3
-        tempb4 = Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).t4
-        tempID = Matrix(matrixP.y, matrixP.X, matrixP.z, idConnection).s(matrixP.s).dblID
+        tempb1 = Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t1
+        tempb2 = Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t2
+        tempb3 = Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t3
+        tempb4 = Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).t4
+        tempID = Matrix(matrixP.y, matrixP.x, matrixP.z, idConnection).s(matrixP.s).dblID
       ElseIf ((packet(pos + 1) = &HFF) And (packet(pos + 2) = &HFF)) Then ' id from nowhere ' blackd 19.4
         tempb1 = &H61
         tempb2 = &H0
@@ -3505,11 +3505,11 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       End If
       matrixP2 = GetMatrixPosition(idConnection, destX, destY, destZ, 1)
       If matrixP.valid = True Then
-        fRes = RemoveThingFromStack(idConnection, matrixP.X, matrixP.y, matrixP.z, matrixP.s)
+        fRes = RemoveThingFromStack(idConnection, matrixP.x, matrixP.y, matrixP.z, matrixP.s)
         If fRes = -1 Then
           'it was out of matrix so ignore and give error
           debugReasons = debugReasons & vbCrLf & " [ ERROR at RemoveThingFromStack while trying to move from " & _
-           matrixP.X & "," & matrixP.y & "," & matrixP.z & "," & matrixP.s & " ] "
+           matrixP.x & "," & matrixP.y & "," & matrixP.z & "," & matrixP.s & " ] "
           myres.fail = True
           showDebug = True
         End If
@@ -3534,7 +3534,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       End If
       ' insert part
       If matrixP2.valid = True Then
-         gotStackP = AddThingToStack(idConnection, matrixP2.X, matrixP2.y, matrixP2.z, tempb1, tempb2, tempb3, tempID, tempb4)
+         gotStackP = AddThingToStack(idConnection, matrixP2.x, matrixP2.y, matrixP2.z, tempb1, tempb2, tempb3, tempID, tempb4)
       Else
         ' should not happen
       End If
@@ -4311,7 +4311,10 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' 10.38 9F 00 64 6E 80 4E 01 01 00 0A
       ' 10.55 9F 00 A0 49 26 4A 00 00 00
       ' unknown,  since Tibia 9.5
-      If TibiaVersionLong < 1038 Then
+      If (TibiaVersionLong >= 1102) Or ((TibiaVersionLong = 1099) And (subTibiaVersionLong > 0)) Then
+        lonN = GetTheLong(packet(pos + 8), packet(pos + 9))
+        pos = pos + 10 + lonN
+      ElseIf TibiaVersionLong < 1038 Then
         lonN = GetTheLong(packet(pos + 3), packet(pos + 4))
         pos = pos + 5 + lonN
       Else
@@ -6361,6 +6364,81 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' new trade system - close trade
       pos = pos + 1
       doingTrade2(idConnection) = False
+    Case &HE6 ' Prey Menu - Tibia 11.02 +
+      ' E6 00 00 00
+  
+      pos = pos + 4
+    Case &HE7 ' Prey Menu - Tibia 11.02 +
+      ' E7 00 20 1C
+
+      pos = pos + 4
+    Case &HE8 ' Prey Menu - Tibia 11.02 +
+    
+      ' E8 00 02 0D 00 64 77 61 72 66 20 73 6F 6C 64 69 65 72
+      ' 47 00 00 00 00 00 00
+      ' 02 22 00 08 20 1C 00 00
+      
+      
+      
+      ' E8 00 04 02 22 00 08 09
+      ' 0B 00 77 69 6E 74 65 72 20 77 6F 6C 66
+      ' 34 00 00 00 00 00 00
+      ' 0D 00 64 65 6D 6F 6E 20 6F 75 74 63 61 73 74
+      ' 4E 02 00 00 00 00 00
+      ' 07 00 73 70 65 63 74 72 65
+      ' EB 00 00 00 00 00 00
+      ' 0D 00 76 61 6D 70 69 72 65 20 62 72 69 64 65
+      ' 38 01 00 00 00 00 00
+      ' 10 00 70 69 72 61 74 65 20 62 75 63 63 61 6E 65 65 72
+      ' 61 00 00 00 00 00 00
+      ' 14 00 62 61 72 62 61 72 69 61 6E 20 62 72 75 74 65 74 61 6D 65 72
+      ' 08 01 4E 61 5F 79 00
+      ' 06 00 77 79 76 65 72 6E
+      ' EF 00 00 00 00 00 00
+      ' 0D 00 67 6C 6F 6F 74 68 20 62 61 6E 64 69 74
+      ' 81 00 73 50 72 72 00
+      ' 0D 00 6F 72 63 20 62 65 72 73 65 72 6B 65 72
+      ' 08 00 00 00 00 00 00
+      ' B0 04
+
+
+
+      lonN = CLng(packet(pos + 2))
+      If lonN = 0 Then
+        pos = pos + 6
+      ElseIf lonN = 3 Then
+        itemCount = CLng(packet(pos + 3))
+        pos = pos + 4
+        For templ1 = 1 To itemCount
+          templ2 = GetTheLong(packet(pos), packet(pos + 1))
+          pos = pos + 2 + templ2 + 7
+        Next templ1
+        pos = pos + 2
+      ElseIf lonN = 2 Then
+        pos = pos + 3
+        templ2 = GetTheLong(packet(pos), packet(pos + 1))
+        pos = pos + 2 + templ2 + 7 + 8
+      ElseIf lonN = 4 Then
+        itemCount = CLng(packet(pos + 7))
+        pos = pos + 8
+        For templ1 = 1 To itemCount
+          templ2 = GetTheLong(packet(pos), packet(pos + 1))
+          pos = pos + 2 + templ2 + 7
+        Next templ1
+        pos = pos + 2
+      Else
+        pos = pos + 10000
+      End If
+      
+   
+
+    Case &HE9 ' Prey Menu - Tibia 11.02 +
+     ' E9 90 01 00 00
+      pos = pos + 5
+    Case &HEE ' Prey Menu - Tibia 11.02 +
+     ' EE 0A 00 00 00 00 00 00 00 00
+     ' EE 00 50 00 00 00 00 00 00 00
+     pos = pos + 10
     Case &HF2
       ' Tibia 8.7 +
       ' report statement result?
@@ -6632,7 +6710,11 @@ pos = pos + 4 + (15 * templ2)
       End If
     Case &HFB
       ' tibia premium services shop (categories)
-      pos = pos + 10
+      If (packet(pos + 1) = &H0) Then
+         pos = pos + 2
+      Else
+         pos = pos + 10
+      End If
       templ2 = GetTheLong(packet(pos), packet(pos + 1))
       pos = pos + 2
       For templ1 = 1 To templ2
@@ -6683,6 +6765,7 @@ pos = pos + 4 + (15 * templ2)
              Debug.Print "UNKNOWN> " & mobName
            #End If
       Next templ1
+    
     Case &HFC
        ' Tibia premium services shop (items)
        ' Parser updated for Tibia 10.92
@@ -7130,7 +7213,7 @@ End Function
 Public Function PotentialDanger(idConnection As Integer) As Boolean
   ' decides if there is potential danger in looting
   ' (if any player is near)
-  Dim X As Integer
+  Dim x As Integer
   Dim y As Integer
   Dim z As Integer
   Dim s As Integer
@@ -7141,12 +7224,12 @@ Public Function PotentialDanger(idConnection As Integer) As Boolean
         Exit Function
   End If
   z = myZ(idConnection)
-  For X = -5 To 6
+  For x = -5 To 6
     For y = -4 To 5
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 97 Then
-           nameofgivenID = GetNameFromID(idConnection, Matrix(y, X, z, idConnection).s(s).dblID)
+           nameofgivenID = GetNameFromID(idConnection, Matrix(y, x, z, idConnection).s(s).dblID)
             If (isMelee(idConnection, nameofgivenID) = False) And (isHmm(idConnection, nameofgivenID) = False) And (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
               If nameofgivenID <> CharacterName(idConnection) Then
                 PotentialDanger = True
@@ -7158,26 +7241,26 @@ Public Function PotentialDanger(idConnection As Integer) As Boolean
           End If
         Next s
     Next y
-  Next X
+  Next x
   PotentialDanger = False
 End Function
 
 Public Function PlayerOnScreen(idConnection As Integer) As String
   ' decides if there is potential danger in looting
   ' (if any player is near)
-  Dim X As Integer
+  Dim x As Integer
   Dim y As Integer
   Dim z As Integer
   Dim s As Integer
   Dim tileID As Integer
   Dim nameofgivenID As String
   z = myZ(idConnection)
-  For X = -8 To 9
+  For x = -8 To 9
     For y = -6 To 7
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 97 Then
-           nameofgivenID = GetNameFromID(idConnection, Matrix(y, X, z, idConnection).s(s).dblID)
+           nameofgivenID = GetNameFromID(idConnection, Matrix(y, x, z, idConnection).s(s).dblID)
             If (isMelee(idConnection, nameofgivenID) = False) And (isHmm(idConnection, nameofgivenID) = False) And (frmRunemaker.IsFriend(LCase(nameofgivenID)) = False) Then
               If (nameofgivenID <> CharacterName(idConnection)) And (nameofgivenID <> "") Then
                 PlayerOnScreen = nameofgivenID
@@ -7189,14 +7272,14 @@ Public Function PlayerOnScreen(idConnection As Integer) As String
           End If
         Next s
     Next y
-  Next X
+  Next x
   PlayerOnScreen = ""
 End Function
 
 Public Function PlayerOnScreen2(idConnection As Integer) As TypeSpecialRes
   ' decides if there is potential danger in looting
   ' (if any player is near)
-  Dim X As Integer
+  Dim x As Integer
   Dim y As Integer
   Dim z As Integer
   Dim s As Integer
@@ -7211,16 +7294,16 @@ Public Function PlayerOnScreen2(idConnection As Integer) As TypeSpecialRes
   res.bestHMM = False
   res.bestMelee = False
   z = myZ(idConnection)
-  For X = -6 To 7
+  For x = -6 To 7
     For y = -5 To 6
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 97 Then
-           theID = Matrix(y, X, z, idConnection).s(s).dblID
+           theID = Matrix(y, x, z, idConnection).s(s).dblID
            nameofgivenID = GetNameFromID(idConnection, theID)
            If theID = SelfDefenseID(idConnection) Then
              res.bln = True
-             res.bestX = X
+             res.bestX = x
              res.bestY = y
              If isMelee(idConnection, nameofgivenID) = True Then
                res.bestMelee = True
@@ -7239,7 +7322,7 @@ Public Function PlayerOnScreen2(idConnection As Integer) As TypeSpecialRes
           End If
         Next s
     Next y
-  Next X
+  Next x
   PlayerOnScreen2 = res
 End Function
 

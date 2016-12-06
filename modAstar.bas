@@ -43,7 +43,7 @@ Public Type TypePathResult
   requireShovel As Boolean
   requireRightClick As Boolean
   requireRope As Boolean
-  X As Long
+  x As Long
   y As Long
 End Type
 
@@ -56,7 +56,7 @@ Public Type TypeAstarMatrix
 End Type
 
 Public Type TypeListItem
-  X As Long
+  x As Long
   y As Long
   currF As Long ' current F value (F=G+H)
   currG As Long ' current G value
@@ -65,29 +65,29 @@ End Type
 Public Function ManhattanDistance(x1 As Long, y1 As Long, x2 As Long, y2 As Long) As Long
   ManhattanDistance = (Abs((x1 - x2)) + Abs((y1 - y2)))
 End Function
-Public Function PositionInAstarList(aList() As TypeListItem, X As Long, y As Long) As Long
+Public Function PositionInAstarList(aList() As TypeListItem, x As Long, y As Long) As Long
 Dim res As Long
 Dim i As Long
 res = 0
 For i = 1 To UBound(aList)
-  If (aList(i).X = X) And (aList(i).y = y) Then
+  If (aList(i).x = x) And (aList(i).y = y) Then
     res = i
     Exit For
   End If
 Next i
 PositionInAstarList = res
 End Function
-Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() As TypeListItem, ByRef closedList() As TypeListItem, ByRef m As TypeAstarMatrix, goalX As Long, goalY As Long)
+Public Sub ExtendOpenList(x As Long, y As Long, currG As Long, ByRef openList() As TypeListItem, ByRef closedList() As TypeListItem, ByRef m As TypeAstarMatrix, goalX As Long, goalY As Long)
   Dim newX As Long
   Dim newY As Long
   Dim i As Long
   Dim f As Long
   Dim g As Long
   Dim h As Long
-  If (X >= 10) Or (X <= -9) Or (y <= -7) Or (y >= 8) Then
+  If (x >= 10) Or (x <= -9) Or (y <= -7) Or (y >= 8) Then
     Exit Sub
   End If
-  newX = X - 1
+  newX = x - 1
   newY = y - 1
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -96,7 +96,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveNorthLeft
   End If
-  newX = X
+  newX = x
   newY = y - 1
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -105,7 +105,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveNorth
   End If
-  newX = X + 1
+  newX = x + 1
   newY = y - 1
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -114,7 +114,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveNorthRight
   End If
-  newX = X + 1
+  newX = x + 1
   newY = y
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -123,7 +123,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveRight
   End If
-  newX = X + 1
+  newX = x + 1
   newY = y + 1
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -132,7 +132,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveSouthRight
   End If
-  newX = X
+  newX = x
   newY = y + 1
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -141,7 +141,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveSouth
   End If
-  newX = X - 1
+  newX = x - 1
   newY = y + 1
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -150,7 +150,7 @@ Public Sub ExtendOpenList(X As Long, y As Long, currG As Long, ByRef openList() 
       f = g + h
       AddAstarItem openList, newX, newY, f, g, MoveSouthLeft
   End If
-  newX = X - 1
+  newX = x - 1
   newY = y
   If (m.cost(newX, newY) < CostBlock) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
@@ -163,7 +163,7 @@ End Sub
 
 
 
-Public Sub AddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As Long, g As Long, mfrom As Byte)
+Public Sub AddAstarItem(aList() As TypeListItem, x As Long, y As Long, f As Long, g As Long, mfrom As Byte)
   Dim nb As Long
   Dim found As Boolean
   Dim shouldChange As Boolean
@@ -172,7 +172,7 @@ Public Sub AddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As Long
   Dim i As Long
   found = False
 
-  tmp = PositionInAstarList(aList, X, y)
+  tmp = PositionInAstarList(aList, x, y)
   If tmp = 0 Then
     found = False
   Else
@@ -187,7 +187,7 @@ Public Sub AddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As Long
     aList(shouldChangeI).currF = f
     aList(shouldChangeI).currG = g
     aList(shouldChangeI).movingFrom = mfrom
-    aList(shouldChangeI).X = X
+    aList(shouldChangeI).x = x
     aList(shouldChangeI).y = y
   End If
   If found = False Then
@@ -198,13 +198,13 @@ Public Sub AddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As Long
     aList(nb).currF = f
     aList(nb).currG = g
     aList(nb).movingFrom = mfrom
-    aList(nb).X = X
+    aList(nb).x = x
     aList(nb).y = y
     ' update number of items on the list
-    aList(0).X = nb
+    aList(0).x = nb
   End If
 End Sub
-Public Sub JustAddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As Long, g As Long, mfrom As Byte)
+Public Sub JustAddAstarItem(aList() As TypeListItem, x As Long, y As Long, f As Long, g As Long, mfrom As Byte)
   Dim nb As Long
   Dim found As Boolean
   Dim shouldChange As Boolean
@@ -212,7 +212,7 @@ Public Sub JustAddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As 
   Dim tmp As Long
   Dim i As Long
   found = False
-  tmp = PositionInAstarList(aList, X, y)
+  tmp = PositionInAstarList(aList, x, y)
   If tmp = 0 Then
     found = False
   Else
@@ -227,10 +227,10 @@ Public Sub JustAddAstarItem(aList() As TypeListItem, X As Long, y As Long, f As 
     aList(nb).currF = f
     aList(nb).currG = g
     aList(nb).movingFrom = mfrom
-    aList(nb).X = X
+    aList(nb).x = x
     aList(nb).y = y
     ' update number of items on the list
-    aList(0).X = nb
+    aList(0).x = nb
   End If
 End Sub
 
@@ -238,7 +238,7 @@ End Sub
 
 
 
-Public Sub DeleteAstarItem(aList() As TypeListItem, X As Long, y As Long)
+Public Sub DeleteAstarItem(aList() As TypeListItem, x As Long, y As Long)
   Dim found As Boolean
   Dim foundpos As Long
   Dim i As Long
@@ -246,7 +246,7 @@ Public Sub DeleteAstarItem(aList() As TypeListItem, X As Long, y As Long)
   found = False
   nb = UBound(aList)
   For i = 1 To nb
-    If aList(i).X = X And aList(i).y = y Then
+    If aList(i).x = x And aList(i).y = y Then
       'found in list
       found = True
       foundpos = i
@@ -261,18 +261,18 @@ Public Sub DeleteAstarItem(aList() As TypeListItem, X As Long, y As Long)
       aList(i).currF = aList(i + 1).currF
       aList(i).currG = aList(i + 1).currG
       aList(i).movingFrom = aList(i + 1).movingFrom
-      aList(i).X = aList(i + 1).X
+      aList(i).x = aList(i + 1).x
       aList(i).y = aList(i + 1).y
     Next i
     ' shrink list (last item is lost)
     ReDim Preserve aList(nb)
     ' update number of items on the list
-    aList(0).X = nb
+    aList(0).x = nb
   End If
 End Sub
 Public Sub InitAstarList(ByRef aList() As TypeListItem)
   ReDim aList(0)
-  aList(0).X = 0
+  aList(0).x = 0
 End Sub
 Public Function Astar(x1 As Long, y1 As Long, goalX As Long, goalY As Long, ByRef m As TypeAstarMatrix) As String
   Dim openList() As TypeListItem
@@ -326,7 +326,7 @@ Public Function Astar(x1 As Long, y1 As Long, goalX As Long, goalY As Long, ByRe
     res = "X" '  -> no path found , end
     exitf = True
   Else
-    tmpX = openList(bestI).X
+    tmpX = openList(bestI).x
     tmpY = openList(bestI).y
     tmpF = openList(bestI).currF
     tmpG = openList(bestI).currG
@@ -417,7 +417,7 @@ Public Function AstarGiveBestGoal(x1 As Long, y1 As Long, goalX As Long, goalY A
   Dim tmpStr As String
   Dim bestH As Long
   Dim tmpH As Long
-  res.X = 0
+  res.x = 0
   res.y = 0
   ' step 0. trivial check. start point = goal point?
   If x1 = goalX And y1 = goalY Then
@@ -446,17 +446,17 @@ Public Function AstarGiveBestGoal(x1 As Long, y1 As Long, goalX As Long, goalY A
     bestH = 1000000
     tmpH = 0
     bestI = 0
-    res.X = 0
+    res.x = 0
     res.y = 0
     For i = 1 To UBound(closedList)
-    tmpH = ManhattanDistance(closedList(i).X, closedList(i).y, goalX, goalY)
+    tmpH = ManhattanDistance(closedList(i).x, closedList(i).y, goalX, goalY)
     If tmpH < bestH Then
        bestH = tmpH
        bestI = i
     End If
     Next i
     If bestI <> 0 Then
-      res.X = closedList(bestI).X
+      res.x = closedList(bestI).x
       res.y = closedList(bestI).y
     End If
     exitf = True
@@ -464,7 +464,7 @@ Public Function AstarGiveBestGoal(x1 As Long, y1 As Long, goalX As Long, goalY A
 
     Exit Function
   Else
-    tmpX = openList(bestI).X
+    tmpX = openList(bestI).x
     tmpY = openList(bestI).y
     tmpF = openList(bestI).currF
     tmpG = openList(bestI).currG
@@ -477,7 +477,7 @@ Public Function AstarGiveBestGoal(x1 As Long, y1 As Long, goalX As Long, goalY A
   gFound = PositionInAstarList(closedList, goalX, goalY) ' step 4. loop to 3 until goal found in closed list
   If gFound > 0 Then
     ' goal found!
-    res.X = goalX
+    res.x = goalX
     res.y = goalY
     exitf = True
   End If
@@ -580,7 +580,7 @@ continueIt:
       ReadyBuffer(idConnection) = True
       Exit Sub
   Else
-    tmpX = openList(bestI).X
+    tmpX = openList(bestI).x
     tmpY = openList(bestI).y
     tmpF = openList(bestI).currF
     tmpG = openList(bestI).currG
@@ -714,7 +714,7 @@ Public Sub OptimizeBuffer(idConnection As Integer)
 End Sub
 
 
-Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList() As TypeListItem, _
+Public Sub ExtendOpenListBig(x As Long, y As Long, currG As Long, ByRef openList() As TypeListItem, _
  ByRef closedList() As TypeListItem, goalX As Long, goalY As Long, z As Long, debMode As Boolean)
   Dim newX As Long
   Dim newY As Long
@@ -723,9 +723,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
   Dim g As Long
   Dim h As Long
   Dim res As Boolean
-  newX = X - 1
+  newX = x - 1
   newY = y - 1
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1 + ExtraCostDiagonal
@@ -736,9 +736,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveNorthLeft
   End If
-  newX = X
+  newX = x
   newY = y - 1
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1
@@ -749,9 +749,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveNorth
   End If
-  newX = X + 1
+  newX = x + 1
   newY = y - 1
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1 + ExtraCostDiagonal
@@ -762,9 +762,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveNorthRight
   End If
-  newX = X + 1
+  newX = x + 1
   newY = y
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1
@@ -775,9 +775,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveRight
   End If
-  newX = X + 1
+  newX = x + 1
   newY = y + 1
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1 + ExtraCostDiagonal
@@ -788,9 +788,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveSouthRight
   End If
-  newX = X
+  newX = x
   newY = y + 1
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1
@@ -801,9 +801,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveSouth
   End If
-  newX = X - 1
+  newX = x - 1
   newY = y + 1
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1 + ExtraCostDiagonal
@@ -814,9 +814,9 @@ Public Sub ExtendOpenListBig(X As Long, y As Long, currG As Long, ByRef openList
       End If
       AddAstarItem openList, newX, newY, f, g, MoveSouthLeft
   End If
-  newX = X - 1
+  newX = x - 1
   newY = y
-  GetBigMapSquareB res, X, y, z
+  GetBigMapSquareB res, x, y, z
   If (res = True) And (PositionInAstarList(closedList, newX, newY) = 0) Then
       'add to open list
       g = currG + 1

@@ -59,7 +59,7 @@ Public Sub GetOutfit(pid As Long)
   Dim b As Byte
   Dim bPos As Long
   Dim tmpID As Long
-  On Error GoTo gotErr
+  On Error GoTo goterr
   myID = Memory_ReadLong(adrNum, pid)
   myBpos = -1
   For bPos = 0 To LAST_BATTLELISTPOS
@@ -96,7 +96,7 @@ Public Sub GetOutfit(pid As Long)
     lastValid(5) = "0"
   End If
   Exit Sub
-gotErr:
+goterr:
 End Sub
 
 Public Sub ProcessAllBattleLists()
@@ -184,12 +184,12 @@ Public Sub ProcessBattleList(tibiaclient As Long)
     End If
   Next bPos
   Exit Sub
-gotErr:
+goterr:
 End Sub
 
 Public Sub LoadFile(thename As String)
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   
   Dim fso As Scripting.FileSystemObject
@@ -249,7 +249,7 @@ Public Sub LoadFile(thename As String)
   AddNameOutfit 5, thename, b6
   frmWarbot.lstGroups.AddItem thename
   Exit Sub
-gotErr:
+goterr:
   frmWarbot.Caption = "Load ERROR (" & Err.Number & "):" & Err.Description
   gotDictErr = 2
 End Sub
@@ -282,7 +282,7 @@ End Function
 
 Public Sub LoadEnemies()
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
@@ -304,13 +304,13 @@ Public Sub LoadEnemies()
       Close #fn
     End If
   Exit Sub
-gotErr:
+goterr:
   RemoveAllEnemies
 End Sub
 
 Public Sub LoadWarbotFiles()
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   frmWarbot.lstGroups.Clear
   Dim found As Long
@@ -339,7 +339,7 @@ Public Sub LoadWarbotFiles()
   ReLoadAllCharOutfits
   LoadEnemies
   Exit Sub
-gotErr:
+goterr:
   LogOnFile "errors.txt", "ERROR WITH FILESYSTEM OBJECT at LoadWarbotFiles (err number=" & _
    CStr(Err.Number) & " ; desc=" & Err.Description & ")"
   gotDictErr = 3
@@ -478,7 +478,7 @@ justend:
 End Sub
 
 Public Sub ReLoadAllCharOutfits()
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim i As Long
   Dim lastI As Long
   Dim fso As Scripting.FileSystemObject
@@ -524,7 +524,7 @@ Public Sub ReLoadAllCharOutfits()
     Close #fn
   Next i
   Exit Sub
-gotErr:
+goterr:
   frmWarbot.Caption = "ERROR LOADING LISTS"
   gotDictErr = 5
 End Sub
@@ -556,7 +556,7 @@ End Sub
 
 Public Sub ProcessAllFriendHeals()
   #If FinalMode = 1 Then
-    On Error GoTo gotErr
+    On Error GoTo goterr
   #End If
   Dim i As Integer
   Dim mx As Long
@@ -620,7 +620,7 @@ continueIt:
     End If
   Next i
   Exit Sub
-gotErr:
+goterr:
   LogOnFile "errors.txt", "ProcessAllFriendHeals failed with code " & CStr(Err.Number) & " : " & Err.Description
 End Sub
 
@@ -628,7 +628,7 @@ End Sub
 Public Function AutoHealFriend(idConnection As Integer, friendName As String, friendID As Double, _
  friendX As Long, friendY As Long, friendZ As Long, friendS As Long, castMode As Long) As Long
   #If FinalMode = 1 Then
-    On Error GoTo gotErr
+    On Error GoTo goterr
   #End If
   Dim aRes As Long
   Dim cPacket() As Byte
@@ -717,7 +717,7 @@ Public Function AutoHealFriend(idConnection As Integer, friendName As String, fr
   End If
   AutoHealFriend = 0
   Exit Function
-gotErr:
+goterr:
   AutoHealFriend = -1
 End Function
 
@@ -770,7 +770,7 @@ ignoreit:
 End Sub
 
 Public Function ExistMagebombCharInMemory(strCharname As String)
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim i As Long
   Dim res As Boolean
   Dim limt As Long
@@ -783,7 +783,7 @@ Public Function ExistMagebombCharInMemory(strCharname As String)
   Next i
   ExistMagebombCharInMemory = res
   Exit Function
-gotErr:
+goterr:
   ExistMagebombCharInMemory = False
 End Function
 
@@ -791,7 +791,7 @@ Public Sub AddToMagebombMemory(AddingLogFileName As String, AddingCharname As St
  AddingPort As Long, AddingRawKey As String, AddingUBoundRawLoginPacket As Long, AddingRawLoginPacket As String, _
  AddingMode As String, AddingTarget As String, AddingTime As Long)
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim strTmp As String
   Dim inRes As Integer
@@ -823,14 +823,14 @@ Public Sub AddToMagebombMemory(AddingLogFileName As String, AddingCharname As St
   Next i
   MagebombsLoaded = MagebombsLoaded + 1
   Exit Sub
-gotErr:
+goterr:
   MagebombsLoaded = 0
   ReDim Magebombs(0)
 End Sub
 
 Public Function DeleteMagebombMemory(elementID As Long) As Long
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim i As Long
   Dim j As Long
@@ -869,7 +869,7 @@ Public Function DeleteMagebombMemory(elementID As Long) As Long
   End If
   DeleteMagebombMemory = 0
   Exit Function
-gotErr:
+goterr:
   MagebombsLoaded = 0
   ReDim Magebombs(0)
   DeleteMagebombMemory = -1
@@ -978,7 +978,7 @@ Public Function ExecuteMagebomb(idConnection As Integer, givenTarget As String) 
     frmMagebomb.ProcessArmageddon
     ExecuteMagebomb = 0
     Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "ExecuteMagebomb() failed with code number: " & CStr(Err.Number) & " and description: " & Err.Description
   ExecuteMagebomb = -1
 End Function
@@ -996,7 +996,7 @@ Public Function BuildAttackPacket(magebombID As Long, defaultTarget As String) A
   Dim thing As String
   Dim fRes As TypeSearchItemResult2
   Dim myS As Byte
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim s As Long
   Dim z As Long
@@ -1132,11 +1132,11 @@ End Function
 
 Public Function TellBestEnemy(idConnection As Integer) As String
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As String
   Dim y As Long
-  Dim X As Long
+  Dim x As Long
   Dim s As Byte
   Dim z As Long
   Dim lSquare As String
@@ -1153,9 +1153,9 @@ Public Function TellBestEnemy(idConnection As Integer) As String
     Exit Function
   End If
   For y = -5 To 6
-    For X = -7 To 8
+    For x = -7 To 8
       For s = 1 To 10
-        tmpID = Matrix(y, X, z, idConnection).s(s).dblID
+        tmpID = Matrix(y, x, z, idConnection).s(s).dblID
         If tmpID <> 0 Then
           lSquare = GetNameFromID(idConnection, tmpID)
           If isEnemy(lSquare) Then
@@ -1167,24 +1167,24 @@ Public Function TellBestEnemy(idConnection As Integer) As String
           End If
         End If
       Next s
-    Next X
+    Next x
   Next y
   res = bestEnemy
 
   TellBestEnemy = res
   Exit Function
-gotErr:
+goterr:
   res = "ERROR " & CStr(Err.Number) & " : " & Err.Description
   TellBestEnemy = res
 End Function
 
 Public Function TellBestEnemyID(idConnection As Integer) As Double
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As String
   Dim y As Long
-  Dim X As Long
+  Dim x As Long
   Dim s As Byte
   Dim z As Long
   Dim lSquare As String
@@ -1201,9 +1201,9 @@ Public Function TellBestEnemyID(idConnection As Integer) As Double
     Exit Function
   End If
   For y = -5 To 6
-    For X = -7 To 8
+    For x = -7 To 8
       For s = 1 To 10
-        tmpID = Matrix(y, X, z, idConnection).s(s).dblID
+        tmpID = Matrix(y, x, z, idConnection).s(s).dblID
         If tmpID <> 0 Then
           lSquare = GetNameFromID(idConnection, tmpID)
           If isEnemy(lSquare) Then
@@ -1215,22 +1215,22 @@ Public Function TellBestEnemyID(idConnection As Integer) As Double
           End If
         End If
       Next s
-    Next X
+    Next x
   Next y
 
   TellBestEnemyID = bestEnemyID
   Exit Function
-gotErr:
+goterr:
  TellBestEnemyID = 0
 End Function
 
 Public Function TellBestEnemyHP(idConnection As Integer) As Long
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As String
   Dim y As Long
-  Dim X As Long
+  Dim x As Long
   Dim s As Byte
   Dim z As Long
   Dim lSquare As String
@@ -1247,9 +1247,9 @@ Public Function TellBestEnemyHP(idConnection As Integer) As Long
     Exit Function
   End If
   For y = -5 To 6
-    For X = -7 To 8
+    For x = -7 To 8
       For s = 1 To 10
-        tmpID = Matrix(y, X, z, idConnection).s(s).dblID
+        tmpID = Matrix(y, x, z, idConnection).s(s).dblID
         If tmpID <> 0 Then
           lSquare = GetNameFromID(idConnection, tmpID)
           If isEnemy(lSquare) Then
@@ -1261,7 +1261,7 @@ Public Function TellBestEnemyHP(idConnection As Integer) As Long
           End If
         End If
       Next s
-    Next X
+    Next x
   Next y
   If bestHP = 101 Then
     TellBestEnemyHP = 0
@@ -1269,12 +1269,12 @@ Public Function TellBestEnemyHP(idConnection As Integer) As Long
     TellBestEnemyHP = bestHP
   End If
   Exit Function
-gotErr:
+goterr:
  TellBestEnemyHP = 0
 End Function
 
 Public Function DoubleToStr(address As Double) As String
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim res As String
     Dim b1 As Byte
     Dim b2 As Byte
@@ -1287,7 +1287,7 @@ Public Function DoubleToStr(address As Double) As String
     res = GoodHex(b4) & " " & GoodHex(b3) & " " & GoodHex(b2) & " " & GoodHex(b1)
     DoubleToStr = res
     Exit Function
-gotErr:
+goterr:
     DoubleToStr = "00 00 00 00"
 End Function
 Public Function Byte1ofDouble(address As Double) As Byte

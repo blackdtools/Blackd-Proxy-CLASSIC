@@ -25,7 +25,7 @@ Public WARNING_USING_OTSERVER_RSA As Boolean
 '
 Private Const MAX_PATH As Long = 260
 
-Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Long, lpdwProcessId As Long) As Long
+Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As Long, lpdwProcessId As Long) As Long
 Private Const TH32CS_SNAPPROCESS As Long = 2&
 Private Const TH32CS_SNAPMODULE As Long = 8&
 Private Const TH32CS_SNAPMODULE32 As Long = 10&
@@ -72,25 +72,25 @@ Private Type PROCESSENTRY32
     szExeFile As String * MAX_PATH
 End Type
 
-Private Declare Function CreateToolhelp32Snapshot Lib "kernel32" _
+Private Declare Function CreateToolhelp32Snapshot Lib "Kernel32" _
    (ByVal lFlags As Long, ByVal lProcessID As Long) As Long
 
-Private Declare Function Module32First Lib "kernel32" _
+Private Declare Function Module32First Lib "Kernel32" _
    (ByVal hSnapshot As Long, uProcess As MODULEENTRY32) As Long
-Private Declare Function Module32Next Lib "kernel32" _
+Private Declare Function Module32Next Lib "Kernel32" _
    (ByVal hSnapshot As Long, uProcess As MODULEENTRY32) As Long
 
 
 
-Public Declare Function ProcessFirst Lib "kernel32" _
+Public Declare Function ProcessFirst Lib "Kernel32" _
     Alias "Process32First" _
    (ByVal hSnapshot As Long, uProcess As PROCESSENTRY32) As Long
 
-Public Declare Function ProcessNext Lib "kernel32" _
+Public Declare Function ProcessNext Lib "Kernel32" _
     Alias "Process32Next" _
    (ByVal hSnapshot As Long, uProcess As PROCESSENTRY32) As Long
 
-Private Declare Sub CloseHandle Lib "kernel32" _
+Private Declare Sub CloseHandle Lib "Kernel32" _
    (ByVal hPass As Long)
 
 Private Function GetMainModuleAddress(ByVal process_Hwnd As Long, ByRef MainModuleAddress As Long, ByRef MainModuleSize As Long) As Boolean
@@ -122,7 +122,7 @@ End Function
 
 
 Public Sub AutoUpdateRSA(ByVal pid As Long)
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim pg As Integer
   Dim i As Long
   Dim b As Byte
@@ -192,7 +192,7 @@ Public Sub AutoUpdateRSA(ByVal pid As Long)
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... MEMORY SCAN COMPLETED WITHOUT RESULTS"
    Exit Sub
    
-gotErr:
+goterr:
   adrRSA = 0
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA (" & CStr(Err.Number) & ") : " & Err.Description
   Exit Sub

@@ -176,27 +176,27 @@ Private Type PROCESSENTRY32
     szExeFile As String * MAX_PATH
 End Type
    
-Private Declare Function WriteProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
-Private Declare Function ReadProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByRef lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
+Private Declare Function WriteProcessMemory Lib "Kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
+Private Declare Function ReadProcessMemory Lib "Kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByRef lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
 
-Private Declare Function VirtualQueryEx& Lib "kernel32" (ByVal hProcess As Long, lpAddress As Any, lpBuffer As MEMORY_BASIC_INFORMATION, ByVal dwLength As Long)
+Private Declare Function VirtualQueryEx& Lib "Kernel32" (ByVal hProcess As Long, lpAddress As Any, lpBuffer As MEMORY_BASIC_INFORMATION, ByVal dwLength As Long)
 
-Private Declare Sub GetSystemInfo Lib "kernel32" (lpSystemInfo As SYSTEM_INFO)
+Private Declare Sub GetSystemInfo Lib "Kernel32" (lpSystemInfo As SYSTEM_INFO)
    
-Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Long, lpdwProcessId As Long) As Long
+Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As Long, lpdwProcessId As Long) As Long
 
-Private Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
-Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
+Private Declare Function OpenProcess Lib "Kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
+Private Declare Function CloseHandle Lib "Kernel32" (ByVal hObject As Long) As Long
 
 
 ' Private Declare Function VirtualProtectEx Lib "Kernel32" (ByVal hProcess As Long, ByRef lpAddress As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
 
 
 
-Private Declare Function InvalidateRect Lib "user32" (ByVal hwnd As Long, ByVal lpRect As Long, ByVal bErase As Long) As Long
+Private Declare Function InvalidateRect Lib "user32" (ByVal hWnd As Long, ByVal lpRect As Long, ByVal bErase As Long) As Long
 
 
-Private Declare Sub GetStartupInfo Lib "kernel32" Alias "GetStartupInfoA" (lpStartupInfo As STARTUPINFO)
+Private Declare Sub GetStartupInfo Lib "Kernel32" Alias "GetStartupInfoA" (lpStartupInfo As STARTUPINFO)
 
 Private Const THREAD_BASE_PRIORITY_LOWRT As Long = 15 ' value that gets a thread to LowRealtime-1
 Private Const THREAD_BASE_PRIORITY_MAX As Long = 2 ' maximum thread base priority boost
@@ -214,10 +214,10 @@ Private Enum ThreadPriority
 End Enum
 
 
-Private Declare Function TerminateProcess Lib "kernel32" Alias "Terminate Process" ( _
+Private Declare Function TerminateProcess Lib "Kernel32" Alias "Terminate Process" ( _
  ByVal hProcess As Long, ByVal uExitCode As Long) As Long
 
-Private Declare Function CreateProcess Lib "kernel32" _
+Private Declare Function CreateProcess Lib "Kernel32" _
          Alias "CreateProcessA" _
          (ByVal lpApplicationName As String, _
          ByVal lpCommandLine As String, _
@@ -328,7 +328,7 @@ End Function
 
 
 Public Function getProcessBase(ByVal hProcess As Long, ByVal expectedRegionSize As Long, Optional PIDinsteadHp As Boolean = False) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     ' expectedRegionSize is used again
     Dim lpMem As Long, ret As Long, lLenMBI As Long
     Dim lWritten As Long, CalcAddress As Long, lPos As Long
@@ -377,12 +377,12 @@ Public Function getProcessBase(ByVal hProcess As Long, ByVal expectedRegionSize 
     If PIDinsteadHp = True Then
        CloseHandle hProcess
     End If
-gotErr:
+goterr:
     getProcessBase = 0
 End Function
 
 Public Function getProcessOffset(ByVal hProcess As Long, ByVal pid As Long) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim lpMem As Long, ret As Long, lLenMBI As Long
     Dim lWritten As Long, CalcAddress As Long, lPos As Long
     Dim sBuffer As String
@@ -432,7 +432,7 @@ Public Function getProcessOffset(ByVal hProcess As Long, ByVal pid As Long) As L
            Exit Do
         End If
     Loop
-gotErr:
+goterr:
     getProcessOffset = 0
 End Function
 Public Function Memory_ReadCString(ByVal address As Long, ByVal process_Hwnd As Long, Optional absoluteAddress As Boolean = False, Optional EOLCharacter As Byte = &H0) As String
@@ -444,7 +444,7 @@ Public Function Memory_ReadCString(ByVal address As Long, ByVal process_Hwnd As 
     Dim Offset As Long
     Dim i As Long
     Dim BytesRead As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
 
     ' First get a handle to the "game" window
     If (process_Hwnd = 0) Then Exit Function
@@ -488,7 +488,7 @@ exitwhile:
     CloseHandle phandle
     Memory_ReadCString = res
     Exit Function
-gotErr:
+goterr:
     '???
     CloseHandle phandle
     Memory_ReadCString = res
@@ -597,7 +597,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As
     Dim LastBytesRead As Long
     Dim tmpStr As String
 
-    On Error GoTo gotErr
+    On Error GoTo goterr
 
     ' First get a handle to the "game" window
     If (process_Hwnd = 0) Then Exit Function
@@ -627,7 +627,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As
     For i = 1 To BytesToRead Step 1
         LastBytesRead = ReadProcessMemory(phandle, StartAddress + i - 1, ByteBuf, 1, 0&)
         If LastBytesRead <> 1 Then
-            GoTo gotErr
+            GoTo goterr
             'err.raise?
         End If
         '&H20 to &H7E - http://www.asciitable.com/
@@ -663,7 +663,7 @@ exitwhile:
     CloseHandle phandle
     Memory_Analyze1 = res
     Exit Function
-gotErr:
+goterr:
     '???
     Memory_Analyze1 = res & "... after reading " & CStr(i - 1) & " bytes, got an error reading at memory location (decimal) " & CStr(StartAddress + i - 1) & " :  Err.Number: " & _
                       CStr(Err.Number) & " Err.Description: " & Err.Description & " Err.LastDllError: " & CStr(Err.LastDllError)

@@ -19,24 +19,24 @@ dwPlatformId As Long
 szCSDVersion As String * 128
 End Type
 
-Private Declare Function GetWindowModuleFileName Lib "user32.dll" (ByVal hwnd As Long, ByVal pszFileName As String, ByVal cchFileNameMax As Long) As Long
+Private Declare Function GetWindowModuleFileName Lib "user32.dll" (ByVal hWnd As Long, ByVal pszFileName As String, ByVal cchFileNameMax As Long) As Long
 
 
-Private Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
-Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
+Private Declare Function OpenProcess Lib "Kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
+Private Declare Function CloseHandle Lib "Kernel32" (ByVal hObject As Long) As Long
 
 
-Private Declare Function GetVersionEx Lib "kernel32" _
+Private Declare Function GetVersionEx Lib "Kernel32" _
  Alias "GetVersionExA" (LpVersionInformation _
  As OSVERSIONINFO) As Long
 Private Declare Function GetCurrentProcess _
-                                                    Lib "kernel32" () As Long
-Private Declare Function GetCurrentProcessId Lib "kernel32" () As Long
-Private Declare Function GetCurrentThread Lib "kernel32" () As Long
-Private Declare Function GetCurrentThreadId Lib "kernel32" () As Long
-Private Declare Function SetThreadPriority Lib "kernel32" _
+                                                    Lib "Kernel32" () As Long
+Private Declare Function GetCurrentProcessId Lib "Kernel32" () As Long
+Private Declare Function GetCurrentThread Lib "Kernel32" () As Long
+Private Declare Function GetCurrentThreadId Lib "Kernel32" () As Long
+Private Declare Function SetThreadPriority Lib "Kernel32" _
                                                        (ByVal hThread As Long, ByVal nPriority As Long) As Long
-Private Declare Function GetThreadPriority Lib "kernel32" (ByVal hThread As Long) As Long
+Private Declare Function GetThreadPriority Lib "Kernel32" (ByVal hThread As Long) As Long
 
 Private Const THREAD_BASE_PRIORITY_LOWRT As Long = 15 ' value that gets a thread to LowRealtime-1
 Private Const THREAD_BASE_PRIORITY_MAX As Long = 2 ' maximum thread base priority boost
@@ -53,15 +53,15 @@ Public Enum ThreadPriority
     THREAD_PRIORITY_IDLE = -15 'THREAD_BASE_PRIORITY_IDLE
 End Enum
 
-Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Long, lpdwProcessId As Long) As Long
+Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As Long, lpdwProcessId As Long) As Long
 
-Private Declare Function SetPriorityClass Lib "kernel32" (ByVal hProcess As Long, ByVal dwPriorityClass As Long) As Long
-Private Declare Function GetPriorityClass Lib "kernel32" (ByVal hProcess As Long) As Long
+Private Declare Function SetPriorityClass Lib "Kernel32" (ByVal hProcess As Long, ByVal dwPriorityClass As Long) As Long
+Private Declare Function GetPriorityClass Lib "Kernel32" (ByVal hProcess As Long) As Long
 
 Public Declare Function GetLastError _
-    Lib "kernel32" () As Long
+    Lib "Kernel32" () As Long
 Public Declare Function FormatMessage _
-    Lib "kernel32" _
+    Lib "Kernel32" _
     Alias "FormatMessageA" _
    (ByVal dwFlags As Long, _
     lpSource As Any, _
@@ -145,7 +145,7 @@ ProcessPriorityName = sName
 
 End Function
 
-Public Function ProcessPriorityGet(Optional ByVal ProcessID As Long, Optional ByVal hwnd As Long) As Long
+Public Function ProcessPriorityGet(Optional ByVal ProcessID As Long, Optional ByVal hWnd As Long) As Long
 
     ' Gets the process priority identified by an Id, a hWnd
 
@@ -157,8 +157,8 @@ Public Function ProcessPriorityGet(Optional ByVal ProcessID As Long, Optional By
     ' If not passed a PID, then find value from hWnd.
 
     If ProcessID = 0 Then
-        If hwnd <> 0 Then
-            Call GetWindowThreadProcessId(hwnd, ProcessID)
+        If hWnd <> 0 Then
+            Call GetWindowThreadProcessId(hWnd, ProcessID)
         Else
             ProcessID = GetCurrentProcessId()
         End If
@@ -176,7 +176,7 @@ End Function
 
 Public Function ProcessPrioritySet( _
                     Optional ByVal ProcessID As Long, _
-                    Optional ByVal hwnd As Long, _
+                    Optional ByVal hWnd As Long, _
                     Optional ByVal priority As ProcessPriorities = NORMAL_PRIORITY_CLASS _
                     ) As Boolean
 
@@ -193,8 +193,8 @@ Public Function ProcessPrioritySet( _
     ' If not passed a PID, then find value from hWnd.
 
     If ProcessID = 0 Then
-        If hwnd <> 0 Then
-           GetWindowThreadProcessId hwnd, ProcessID
+        If hWnd <> 0 Then
+           GetWindowThreadProcessId hWnd, ProcessID
            If ProcessID = 0 Then
              PriorityErrors = PriorityErrors & " ; GetWindowThreadProcessId FAILED"
            End If
@@ -236,9 +236,9 @@ returnValue:
     ProcessPrioritySet = False
 End Function
 
-Public Function ProcIDFromhWnd(ByVal hwnd As Long) As Long
+Public Function ProcIDFromhWnd(ByVal hWnd As Long) As Long
     Dim idProc As Long
-    Call GetWindowThreadProcessId(hwnd, idProc)
+    Call GetWindowThreadProcessId(hWnd, idProc)
     ProcIDFromhWnd = idProc
 End Function
 Public Function ProcFromProcID(idProc As Long) As Long

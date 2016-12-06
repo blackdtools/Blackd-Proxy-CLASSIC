@@ -453,7 +453,7 @@ Private Sub cmdShowhk_Click()
   frmShowhk.WindowState = vbNormal
   frmShowhk.Show
   frmShowhk.SetFocus
-  SetWindowPos frmShowhk.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmShowhk.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub Form_Load()

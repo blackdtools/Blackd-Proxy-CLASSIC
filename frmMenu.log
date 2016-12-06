@@ -1,18 +1,18 @@
-Line 240: Class JwldButn2b.JeweledButton of control cmdHealingNG was not a loaded control class.
-Line 265: Class JwldButn2b.JeweledButton of control cmdExtrasNG was not a loaded control class.
-Line 290: Class JwldButn2b.JeweledButton of control cmdCavebotNG was not a loaded control class.
-Line 315: Class JwldButn2b.JeweledButton of control cmdAimbot was not a loaded control class.
-Line 340: Class JwldButn2b.JeweledButton of control cmdWarbotNG was not a loaded control class.
-Line 365: Class JwldButn2b.JeweledButton of control cmdStopAlarmNG was not a loaded control class.
-Line 390: Class JwldButn2b.JeweledButton of control cmdHotkeysNG was not a loaded control class.
-Line 415: Class JwldButn2b.JeweledButton of control cmdTrainerNG was not a loaded control class.
-Line 440: Class JwldButn2b.JeweledButton of control cmdUnknownFeatureNG was not a loaded control class.
-Line 465: Class JwldButn2b.JeweledButton of control cmdBoradcastNG was not a loaded control class.
-Line 490: Class JwldButn2b.JeweledButton of control cmdLogsNG was not a loaded control class.
-Line 515: Class JwldButn2b.JeweledButton of control cmdChangeStyle was not a loaded control class.
-Line 540: Class JwldButn2b.JeweledButton of control cmdLaunchTibiaMCNG was not a loaded control class.
-Line 565: Class JwldButn2b.JeweledButton of control cmdSave was not a loaded control class.
-Line 590: Class JwldButn2b.JeweledButton of control cmdAdvancedNG was not a loaded control class.
-Line 615: Class JwldButn2b.JeweledButton of control cmdLoad was not a loaded control class.
-Line 640: Class JwldButn2b.JeweledButton of control cmdNewsNG was not a loaded control class.
-Line 666: Class JwldButn2b.JeweledButton of control ccmdPersistent was not a loaded control class.
+Línea 240: no se puede cargar el control cmdHealingNG.
+Línea 265: no se puede cargar el control cmdExtrasNG.
+Línea 290: no se puede cargar el control cmdCavebotNG.
+Línea 315: no se puede cargar el control cmdAimbot.
+Línea 340: no se puede cargar el control cmdWarbotNG.
+Línea 365: no se puede cargar el control cmdStopAlarmNG.
+Línea 390: no se puede cargar el control cmdHotkeysNG.
+Línea 415: no se puede cargar el control cmdTrainerNG.
+Línea 440: no se puede cargar el control cmdUnknownFeatureNG.
+Línea 465: no se puede cargar el control cmdBoradcastNG.
+Línea 490: no se puede cargar el control cmdLogsNG.
+Línea 515: no se puede cargar el control cmdChangeStyle.
+Línea 541: no se puede cargar el control cmdLaunchTibiaMCNG.
+Línea 566: no se puede cargar el control cmdSave.
+Línea 591: no se puede cargar el control cmdAdvancedNG.
+Línea 616: no se puede cargar el control cmdLoad.
+Línea 641: no se puede cargar el control cmdNewsNG.
+Línea 667: no se puede cargar el control ccmdPersistent.

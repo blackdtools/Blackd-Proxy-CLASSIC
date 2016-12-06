@@ -7,7 +7,7 @@ Public Type TypeBMSquare
   walkable As Long
 End Type
 Public Type TypeBMnameInfo
-  X As Long
+  x As Long
   y As Long
   z As Long
   Color As Long
@@ -85,9 +85,9 @@ Public Function ExistBigMapName(str As String) As Boolean
   ExistBigMapName = BigMapNamesX.Exists(str)
 End Function
 
-Public Sub AddBigMapName(str As String, X As Long, y As Long, z As Long, c As Long)
+Public Sub AddBigMapName(str As String, x As Long, y As Long, z As Long, c As Long)
   ' add item to dictionary
-  BigMapNamesX.item(str) = X
+  BigMapNamesX.item(str) = x
   BigMapNamesY.item(str) = y
   BigMapNamesZ.item(str) = z
   BigMapNamesC.item(str) = c
@@ -105,12 +105,12 @@ Public Function GetBigMapNameInfo(str As String) As TypeBMnameInfo
   ' get x,y,z,c from an name
   Dim res As TypeBMnameInfo
   If BigMapNamesX.Exists(str) = True Then
-    res.X = BigMapNamesX.item(str)
+    res.x = BigMapNamesX.item(str)
     res.y = BigMapNamesY.item(str)
     res.z = BigMapNamesZ.item(str)
     res.Color = BigMapNamesC.item(str)
   Else
-    res.X = 0
+    res.x = 0
     res.y = 0
     res.z = 0
     res.Color = vbBlack
@@ -118,12 +118,12 @@ Public Function GetBigMapNameInfo(str As String) As TypeBMnameInfo
   GetBigMapNameInfo = res
 End Function
 
-Public Function GetOldMapName(X As Long, y As Long, z As Long) As String
+Public Function GetOldMapName(x As Long, y As Long, z As Long) As String
   Dim xp As String
   Dim yp As String
   Dim zp As String
   Dim res As String
-  xp = CStr(X \ 256)
+  xp = CStr(x \ 256)
   yp = CStr(y \ 256)
   If z < 10 Then
     zp = "0" & CStr(z)
@@ -133,12 +133,12 @@ Public Function GetOldMapName(X As Long, y As Long, z As Long) As String
   res = xp & yp & zp
   GetOldMapName = res
 End Function
-Public Function CalcMapID(X As Long, y As Long, z As Long) As Long
+Public Function CalcMapID(x As Long, y As Long, z As Long) As Long
   Dim xp As String
   Dim yp As String
   Dim zp As String
   Dim res As String
-  xp = CStr(X \ 256)
+  xp = CStr(x \ 256)
   yp = CStr(y \ 256)
   If z < 10 Then
     zp = "0" & CStr(z)
@@ -149,7 +149,7 @@ Public Function CalcMapID(X As Long, y As Long, z As Long) As Long
   CalcMapID = GetMapTranslation(res)
 End Function
 
-Public Sub GetBigMapSquareB(ByRef res As Boolean, X As Long, y As Long, z As Long)
+Public Sub GetBigMapSquareB(ByRef res As Boolean, x As Long, y As Long, z As Long)
   Dim bx As Long
   Dim by As Long
   Dim xp As String
@@ -160,10 +160,10 @@ Public Sub GetBigMapSquareB(ByRef res As Boolean, X As Long, y As Long, z As Lon
   Dim squares As Long
   Dim mapbyte As Byte
   Dim theMapID As Long
-  bx = X \ 256
+  bx = x \ 256
   by = y \ 256
-  theMapID = CalcMapID(X, y, z)
-  xdif = X - (bx * 256)
+  theMapID = CalcMapID(x, y, z)
+  xdif = x - (bx * 256)
   ydif = y - (by * 256)
   squares = (xdif * 256) + ydif '+0 instead +1 now
   If theMapID >= 0 Then
@@ -205,7 +205,7 @@ Public Sub GetBigMapSquareB(ByRef res As Boolean, X As Long, y As Long, z As Lon
   End If
 End Sub
 
-Public Sub GetBigMapSquare(ByRef res As TypeBMSquare, X As Long, y As Long, z As Long)
+Public Sub GetBigMapSquare(ByRef res As TypeBMSquare, x As Long, y As Long, z As Long)
   Dim bx As Long
   Dim by As Long
   Dim xp As String
@@ -216,10 +216,10 @@ Public Sub GetBigMapSquare(ByRef res As TypeBMSquare, X As Long, y As Long, z As
   Dim squares As Long
   Dim mapbyte As Byte
   Dim theMapID As Long
-  bx = X \ 256
+  bx = x \ 256
   by = y \ 256
-  theMapID = CalcMapID(X, y, z)
-  xdif = X - (bx * 256)
+  theMapID = CalcMapID(x, y, z)
+  xdif = x - (bx * 256)
   ydif = y - (by * 256)
   squares = (xdif * 256) + ydif '+0 instead +1 now
   If theMapID >= 0 Then
@@ -278,7 +278,7 @@ Public Sub GetBigMapSquare(ByRef res As TypeBMSquare, X As Long, y As Long, z As
 End Sub
 
 Public Sub LoadBigMap(ByRef map() As TypeBMSquare)
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim firstX As Long
@@ -310,14 +310,14 @@ Public Sub LoadBigMap(ByRef map() As TypeBMSquare)
   firstY = currMapY + MINY
   endY = currMapY + MAXY
   Px = MINX
-  For X = firstX To endX
+  For x = firstX To endX
     Py = MINY
     For y = firstY To endY
         z = currMapZ
-        bx = X \ 256
+        bx = x \ 256
         by = y \ 256
-        theMapID = CalcMapID(X, y, z)
-        xdif = X - (bx * 256)
+        theMapID = CalcMapID(x, y, z)
+        xdif = x - (bx * 256)
         ydif = y - (by * 256)
         squares = (xdif * 256) + ydif
         If theMapID >= 0 Then
@@ -381,14 +381,14 @@ Public Sub LoadBigMap(ByRef map() As TypeBMSquare)
     #If ShowMapLoading = 1 Then
         DoEvents
     #End If
-  Next X
+  Next x
   #If ShowMapLoading = 1 Then
     LoadingAmap = False
   #End If
 End Sub
 
 Public Sub DrawMap()
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim ix As Long
   Dim iy As Long
@@ -410,9 +410,9 @@ Public Sub DrawMap()
   'frmMapReader.picMap.AutoRedraw = True
   For iy = MINX To MAXX
     For ix = MINY To MAXY
-      X = ix - MINX
+      x = ix - MINX
       y = iy - MINY
-      frmMapReader.picMap.Line (X * 2, y * 2)-((X * 2) + 1, (y * 2) + 1), map(ix, iy).Color, BF
+      frmMapReader.picMap.Line (x * 2, y * 2)-((x * 2) + 1, (y * 2) + 1), map(ix, iy).Color, BF
     Next ix
   Next iy
   #If ShowMapLoading = 1 Then
@@ -454,12 +454,12 @@ Public Sub DrawLine(x1 As Long, y1 As Long, z1 As Long, x2 As Long, y2 As Long, 
     frmMapReader.picMap.AutoRedraw = True
   End If
 End Sub
-Public Sub DrawXYZPixel(X As Long, y As Long, z As Long, Color As Long)
+Public Sub DrawXYZPixel(x As Long, y As Long, z As Long, Color As Long)
   Dim Px As Long
   Dim Py As Long
   Dim xBase As Long
   Dim yBase As Long
-  xBase = X - currMapX
+  xBase = x - currMapX
   yBase = y - currMapY
   If (xBase >= MINX) And (xBase <= MAXX) And (yBase >= MINY) And (yBase <= MAXY) And (z = currMapZ) Then
     Px = 1 + ((xBase - MINX) * 2)
@@ -471,12 +471,12 @@ Public Sub DrawXYZPixel(X As Long, y As Long, z As Long, Color As Long)
     frmMapReader.picMap.AutoRedraw = True
   End If
 End Sub
-Public Sub DrawXYZPixel2(X As Long, y As Long, z As Long, Color As Long)
+Public Sub DrawXYZPixel2(x As Long, y As Long, z As Long, Color As Long)
   Dim Px As Long
   Dim Py As Long
   Dim xBase As Long
   Dim yBase As Long
-  xBase = X - currMapX
+  xBase = x - currMapX
   yBase = y - currMapY
   If (xBase >= MINX) And (xBase <= MAXX) And (yBase >= MINY) And (yBase <= MAXY) And (z = currMapZ) Then
     Px = 1 + ((xBase - MINX) * 2)
@@ -490,12 +490,12 @@ Public Sub DrawXYZPixel2(X As Long, y As Long, z As Long, Color As Long)
     frmMapReader.picMap.AutoRedraw = True
   End If
 End Sub
-Public Sub DrawXYZnMap(X As Long, y As Long, z As Long, Color As Long)
+Public Sub DrawXYZnMap(x As Long, y As Long, z As Long, Color As Long)
   Dim Px As Long
   Dim Py As Long
   Dim xBase As Long
   Dim yBase As Long
-  xBase = X - currMapX
+  xBase = x - currMapX
   yBase = y - currMapY
   If (xBase >= MINX) And (xBase <= MAXX) And (yBase >= MINY) And (yBase <= MAXY) And (z = currMapZ) Then
     Px = 1 + ((xBase - MINX) * 2)
@@ -534,7 +534,7 @@ End Sub
 
 Public Function ReadHardiskMapsQ() As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As Long
   Dim Ammount As Long
@@ -620,13 +620,13 @@ Public Function ReadHardiskMapsQ() As Long
   'Debug.Print "Loaded Tibia 11 maps! Total found: " & CStr(loadedOK)
   ReadHardiskMapsQ = 0
   Exit Function
-gotErr:
+goterr:
   ReadHardiskMapsQ = -1
 End Function
 
 Public Function ReadHardiskMaps() As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If (TibiaVersionLong >= 1100) Then
     ReadHardiskMaps = ReadHardiskMapsQ()
@@ -686,7 +686,7 @@ Public Function ReadHardiskMaps() As Long
   Next
   ReadHardiskMaps = 0
   Exit Function
-gotErr:
+goterr:
   ReadHardiskMaps = -1
 End Function
 
@@ -708,7 +708,7 @@ Private Function LoadPNGIntoByteArray(ByRef filePath As String, ByRef arr() As B
  ByRef imageBytesPerPixel As Long, _
  Optional ByVal atPosition As Long = 0, _
  Optional ByVal withRotation As Double = 0) As Boolean
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim imageRef As Long
     Dim pRow As Long
     Dim currentLine As Long
@@ -763,17 +763,17 @@ Private Function LoadPNGIntoByteArray(ByRef filePath As String, ByRef arr() As B
     ' All looks OK. We return True
     LoadPNGIntoByteArray = True
     Exit Function
-gotErr:
+goterr:
     '... else, we return False
     LoadPNGIntoByteArray = False
 End Function
 
 ' If array is empty then init it to an array of 1 byte
 Private Sub ensureMinimumArray(ByRef arr() As Byte)
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim test As Long
     test = UBound(arr)
     Exit Sub
-gotErr:
+goterr:
     ReDim arr(0)
 End Sub

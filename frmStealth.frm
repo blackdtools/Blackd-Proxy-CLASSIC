@@ -124,7 +124,7 @@ Option Explicit
 
 Private Const WMVSCROLL As Long = &H115
 Private Const SBBOTTOM As Long = 7
-Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByRef lParam As Any) As Long
+Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByRef lParam As Any) As Long
 
 Private Const TheLastCommand As Long = 5
 Private LastCommand(0 To TheLastCommand) As String
@@ -217,7 +217,7 @@ Public Sub LoadStealthChars()
 End Sub
 
 Public Sub ScrollToBottom()
-   SendMessage txtBoard.hwnd, WMVSCROLL, SBBOTTOM, 0
+   SendMessage txtBoard.hWnd, WMVSCROLL, SBBOTTOM, 0
 End Sub
 
 

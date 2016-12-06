@@ -45,7 +45,7 @@ Public Function InitDI() As String
   res = "DIV.SetCommonDataFormat DIFORMAT_KEYBOARD"
          DIV.SetCommonDataFormat DIFORMAT_KEYBOARD
   res = "DIV.SetCooperativeLevel frmMain.hwnd, DISCL_BACKGROUND Or DISCL_NONEXCLUSIVE"
-         DIV.SetCooperativeLevel frmMain.hwnd, DISCL_BACKGROUND Or DISCL_NONEXCLUSIVE
+         DIV.SetCooperativeLevel frmMain.hWnd, DISCL_BACKGROUND Or DISCL_NONEXCLUSIVE
   res = "DIV.Acquire"
          DIV.Acquire
   res = ""

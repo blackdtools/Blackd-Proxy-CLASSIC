@@ -606,14 +606,14 @@ If KeyB.Key(88) > 0 And KeyB.Key(54) > 0 Then   'teset show
     If frmOld.chkOldMenu.value = 0 Then
         If frmMenu.Visible = False Then
            frmMenu.Show
-           SetWindowPos frmMenu.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+           SetWindowPos frmMenu.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
         Else
            frmMenu.Hide
         End If
     Else
         If frmOld.Visible = False Then
            frmOld.Show
-           SetWindowPos frmOld.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+           SetWindowPos frmOld.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
         Else
            frmOld.Hide
         End If
@@ -1037,9 +1037,9 @@ CurrTicks = GetTickCount()
         XYZCountdowns(i, ii).s = 0
         Else
             If (TibiaVersionLong >= 1090) Then
-           modCode.sendString i, "AA 00 00 00 00 00 00 20 00 24 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " " & Hexarize2(CStr(SecondsLeft)), False, True
+           modCode.sendString i, "AA 00 00 00 00 00 00 20 00 24 " & FiveChrLon(XYZCountdowns(i, ii).x) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " " & Hexarize2(CStr(SecondsLeft)), False, True
             Else
-         modCode.sendString i, "84 " & FiveChrLon(XYZCountdowns(i, ii).X) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft)), False, True
+         modCode.sendString i, "84 " & FiveChrLon(XYZCountdowns(i, ii).x) & " " & FiveChrLon(XYZCountdowns(i, ii).y) & " " & GoodHex(CByte(XYZCountdowns(i, ii).z)) & " 66 " & Hexarize2(CStr(SecondsLeft)), False, True
           End If
 
 

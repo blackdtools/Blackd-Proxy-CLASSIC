@@ -26,7 +26,7 @@ End Function
 
 Private Sub LoadThisCharSetting(idConnection As Integer, strVar As String, strValue As String)
     #If FinalMode Then
-    On Error GoTo gotErr
+    On Error GoTo goterr
     #End If
     Dim i As Long
     Dim blnTemp As Boolean
@@ -426,7 +426,7 @@ Private Sub LoadThisCharSetting(idConnection As Integer, strVar As String, strVa
       frmTrainer.UpdateValues
     End Select
     Exit Sub
-gotErr:
+goterr:
     Exit Sub
 End Sub
 
@@ -450,7 +450,7 @@ End Function
 
 Public Function LoadCharSettings(idConnection As Integer, Optional charName As String = "") As String
     #If FinalMode Then
-    On Error GoTo gotErr
+    On Error GoTo goterr
     #End If
     Dim loadCharName As String
     Dim strSettings As String
@@ -493,7 +493,7 @@ Public Function LoadCharSettings(idConnection As Integer, Optional charName As S
     Next ai
     LoadCharSettings = ""
     Exit Function
-gotErr:
+goterr:
     LoadCharSettings = "Unexpected error #" & CStr(Err.Number) & " at LoadCharSettings: " & Err.Description
 End Function
 
@@ -507,7 +507,7 @@ Public Sub SaveCharSettings(idConnection As Integer)
     Dim i As Long
     Dim j As Long
     #If FinalMode Then
-    On Error GoTo gotErr
+    On Error GoTo goterr
     #End If
     If GameConnected(idConnection) = True Then
         charName = CharacterName(idConnection)
@@ -773,7 +773,7 @@ Public Sub SaveCharSettings(idConnection As Integer)
     DoEvents
     
     Exit Sub
-gotErr:
+goterr:
     If GameConnected(idConnection) = True Then
         aRes = GiveGMmessage(idConnection, "Unable to save settings for this character. Got unexpected error " & CStr(Err.Number), "BlackdProxy")
         DoEvents
@@ -783,7 +783,7 @@ End Sub
 Public Sub PreloadAllCharSettingsFromHardDisk()
   Dim res As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim strFileName As String
   Dim myPath As String
@@ -838,25 +838,25 @@ Public Sub PreloadAllCharSettingsFromHardDisk()
     End If
   Next
   Exit Sub
-gotErr:
+goterr:
   AutoloadUsable = False
   Exit Sub
 End Sub
 
 Public Sub AddSettingsOfChar(ByVal strChar As String, ByVal strSettings As String)
-  On Error GoTo gotErr
+  On Error GoTo goterr
   ' add item to dictionary
   Dim res As Boolean
   If AutoloadUsable = True Then
     SettingsOfChar.item(LCase(strChar)) = strSettings
   End If
   Exit Sub
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Get error at AddSettingsOfChar : " & Err.Description
 End Sub
 
 Public Function GetSettingsOfChar(ByVal strChar As String) As String
-  On Error GoTo gotErr
+  On Error GoTo goterr
   ' get the IPandport from server name
   Dim aRes As String
   Dim res As Boolean
@@ -868,7 +868,7 @@ Public Function GetSettingsOfChar(ByVal strChar As String) As String
     End If
   End If
   Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Got error at GetSettingsOfChar : " & Err.Description
   GetSettingsOfChar = ""
 End Function

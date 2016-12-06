@@ -381,7 +381,7 @@ Private Sub cmdCountBytes_Click()
   frmBigText.lblText = "Enter a hex chain. For example: AE 8C 04 45 0F" & vbCrLf & _
   "Note that you should enter the left zeros too!"
   frmBigText.Show
-  SetWindowPos frmBigText.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmBigText.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
   DisableBoardButtons
   While ClosedBoard = False
     DoEvents
@@ -446,7 +446,7 @@ Private Sub cmdOpenBoard_Click()
   ClosedBoard = False
   frmBigText.lblText = "Open board - Write anything you like here"
   frmBigText.Show
-    SetWindowPos frmBigText.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+    SetWindowPos frmBigText.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
   DisableBoardButtons
   While ClosedBoard = False
     DoEvents
@@ -529,7 +529,7 @@ Private Sub cmdSpecial_Click()
   frmBigText.lblText = "Enter a hex chain. For example: AE 8C 04 45 0F" & vbCrLf & _
   "Note that you should enter the left zeros too!"
   frmBigText.Show
-    SetWindowPos frmBigText.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+    SetWindowPos frmBigText.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
   DisableBoardButtons
   While ClosedBoard = False
     DoEvents
@@ -592,7 +592,7 @@ Private Sub cmdToAscii_Click()
   frmBigText.lblText = "Enter a hex chain. For example: AE 8C 04 45 0F" & vbCrLf & _
   "Note that you should enter the left zeros too!"
   frmBigText.Show
-  SetWindowPos frmBigText.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmBigText.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
   DisableBoardButtons
   While ClosedBoard = False
     DoEvents
@@ -627,7 +627,7 @@ Private Sub cmdToHex_Click()
   ClosedBoard = False
   frmBigText.lblText = "Enter a ascii string. For example: hello!"
   frmBigText.Show
-  SetWindowPos frmBigText.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmBigText.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
   DisableBoardButtons
   While ClosedBoard = False
     DoEvents

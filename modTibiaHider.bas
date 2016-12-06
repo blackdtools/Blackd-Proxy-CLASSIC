@@ -30,13 +30,13 @@ Private Const SW_SHOWNOACTIVATE = 4
 Private Const SW_SHOWNORMAL = 1
 'Show the window and activate it (as usual).
 
-Private Declare Function ShowWindow Lib "user32.dll" (ByVal hwnd As _
+Private Declare Function ShowWindow Lib "user32.dll" (ByVal hWnd As _
 Long, ByVal nCmdShow As Long) As Long
 
 Private Const HideProccess As Long = 0
 Private Const ShowProccess As Long = 5
 Public Const FORMAT_MESSAGE_FROM_SYSTEM = &H1000
-Public Declare Function FormatMessage Lib "kernel32" Alias _
+Public Declare Function FormatMessage Lib "Kernel32" Alias _
    "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, _
    ByVal dwMessageId As Long, ByVal dwLanguageId As Long, _
    ByVal lpBuffer As String, ByVal nSize As Long, _
@@ -94,7 +94,7 @@ End Function
 Public Sub SetTibiaClientsVisible(ByVal blnVisible As Boolean)
   Dim intMode As Long
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As Boolean
   Dim tibiaclient As Long
@@ -117,7 +117,7 @@ Public Sub SetTibiaClientsVisible(ByVal blnVisible As Boolean)
     End If
   Loop
   Exit Sub
-gotErr:
+goterr:
   intMode = -1
 End Sub
 

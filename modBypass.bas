@@ -12,7 +12,7 @@ Public AlternativeBinding As Long
 '...
 
 Public Sub LoadServerIps()
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim fso As Scripting.FileSystemObject
     Dim fn As Integer
     Dim strLine As String
@@ -55,7 +55,7 @@ Public Sub LoadServerIps()
         End
     End If
     Exit Sub
-gotErr:
+goterr:
     MsgBox "Can't load ips.txt" & vbCrLf & "Got error code " & CStr(Err.Number) & vbCrLf & _
     "Error description: " & Err.Description, vbOKOnly + vbCritical, "Load error"
 End Sub
@@ -63,7 +63,7 @@ End Sub
 
 
 Public Function sendStringAtStageOne(idConnection As Integer, str As String) As Long
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim strSending As String
   Dim ub As Long
   Dim lopa As Long
@@ -116,7 +116,7 @@ Public Function sendStringAtStageOne(idConnection As Integer, str As String) As 
     Exit Function
   End If
   Exit Function
-gotErr:
+goterr:
   sendStringAtStageOne = -1
 End Function
 

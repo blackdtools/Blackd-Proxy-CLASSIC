@@ -3,7 +3,7 @@ Attribute VB_Name = "modLooter"
 Option Explicit
 Public Const MAXLOOTQUEUE As Long = 19
 Public Type TypeLootPoint
-    X As Long
+    x As Long
     y As Long
     z As Long
     addedTime As Long
@@ -29,7 +29,7 @@ Public DoingNewLootMAXGTC() As Long
 Public Function ResetLooter(ByVal idConnection As Integer)
     Dim i As Long
     For i = 0 To MAXLOOTQUEUE
-        Looter(idConnection).points(i).X = 0
+        Looter(idConnection).points(i).x = 0
         Looter(idConnection).points(i).y = 0
         Looter(idConnection).points(i).z = 0
         Looter(idConnection).points(i).expireGtc = 0
@@ -52,7 +52,7 @@ Public Function ResetLooter(ByVal idConnection As Integer)
 End Function
 
 Public Function AddLootPoint(ByVal idConnection As Integer, _
- ByVal X As Long, _
+ ByVal x As Long, _
  ByVal y As Long, _
  ByVal z As Long)
  Dim currPoint As Long
@@ -63,7 +63,7 @@ Public Function AddLootPoint(ByVal idConnection As Integer, _
     AddLootPoint = -1
     Exit Function
  End If
- If AlreadyAddedInLootQueue(idConnection, X, y, z) = True Then
+ If AlreadyAddedInLootQueue(idConnection, x, y, z) = True Then
     AddLootPoint = -1
     Exit Function
  End If
@@ -84,7 +84,7 @@ Public Function AddLootPoint(ByVal idConnection As Integer, _
  Wend
  Looter(idConnection).points(currPoint).addedTime = gtc
  Looter(idConnection).points(currPoint).expireGtc = gtc + MAXTIMEINLOOTQUEUE(idConnection)
- Looter(idConnection).points(currPoint).X = X
+ Looter(idConnection).points(currPoint).x = x
  Looter(idConnection).points(currPoint).y = y
  Looter(idConnection).points(currPoint).z = z
  AddLootPoint = 0
@@ -106,7 +106,7 @@ Public Function ChooseBestLoot(ByVal idConnection As Integer) As Long
            (gtc - MINDELAYTOLOOT(idConnection)) _
            ) Then
          currDist = (50 * Abs(Looter(idConnection).points(i).z - myZ(idConnection)))
-         currDist = currDist + Abs(Looter(idConnection).points(i).X - myX(idConnection))
+         currDist = currDist + Abs(Looter(idConnection).points(i).x - myX(idConnection))
          currDist = currDist + Abs(Looter(idConnection).points(i).y - myY(idConnection))
          If currDist < bestDist Then
             bestDist = currDist
@@ -124,7 +124,7 @@ Public Function AlreadyAddedInLootQueue(ByVal idConnection As Integer, ByVal Px,
     gtc = GetTickCount()
     For i = 0 To MAXLOOTQUEUE
          If ( _
-           (Looter(idConnection).points(i).X = Px) And _
+           (Looter(idConnection).points(i).x = Px) And _
            (Looter(idConnection).points(i).y = Py) And _
            (Looter(idConnection).points(i).z = Pz) _
            ) Then
@@ -156,7 +156,7 @@ End Function
 Public Function PrintLootPosition(ByVal idConnection As Integer, _
  lootPos As Long) As String
     Dim res As String
-    res = CStr(Looter(idConnection).points(lootPos).X) & "," & _
+    res = CStr(Looter(idConnection).points(lootPos).x) & "," & _
      CStr(Looter(idConnection).points(lootPos).y) & "," & _
      CStr(Looter(idConnection).points(lootPos).z)
     PrintLootPosition = res
@@ -204,7 +204,7 @@ Public Sub SmartLootCorpse(ByVal idConnection As Integer)
   Dim firstAv As Byte
   Dim j As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If DoingNewLoot(idConnection) = False Then
     Exit Sub
@@ -269,6 +269,6 @@ Public Sub SmartLootCorpse(ByVal idConnection As Integer)
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
   DoEvents
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at PerformUseItem"
 End Sub

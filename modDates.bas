@@ -2,7 +2,7 @@ Attribute VB_Name = "modDates"
 #Const FinalMode = 1
 Option Explicit
 Public Type TypeTrial
-  mode As Integer
+  Mode As Integer
   bDays As Long
 End Type
 Public Function ReadTrial(ByRef backup As String) As TypeTrial
@@ -13,10 +13,10 @@ Public Function ReadTrial(ByRef backup As String) As TypeTrial
   Dim bLen As Integer
   Dim bDays As Long
   Dim strRan As String
-  Dim mode As Integer
-  On Error GoTo gotErr
+  Dim Mode As Integer
+  On Error GoTo goterr
   res.bDays = -1
-  res.mode = 2
+  res.Mode = 2
   str = backup
   impByte = Left(str, 1)
   impNum = CInt(impByte)
@@ -32,27 +32,27 @@ Public Function ReadTrial(ByRef backup As String) As TypeTrial
   str = Right(str, Len(str) - impNum)
   impNum = CInt(strRan) + 100
   If Len(str) <> (impNum + 2) Then
-    GoTo gotErr
+    GoTo goterr
   End If
   str = Right(str, Len(str) - impNum)
   str = Left(str, 1)
-  mode = CInt(str)
-  If (mode > 2) Then
+  Mode = CInt(str)
+  If (Mode > 2) Then
     ' full version
-    mode = 3
+    Mode = 3
   End If
   'valid?
-  If (mode <> 3) And ((bDays < 300) Or (bDays > 590)) Then 'max trial can be 1 Aug 2006
-    GoTo gotErr
+  If (Mode <> 3) And ((bDays < 300) Or (bDays > 590)) Then 'max trial can be 1 Aug 2006
+    GoTo goterr
   End If
   'sucesfull end
   res.bDays = bDays
-  res.mode = mode
+  res.Mode = Mode
   ReadTrial = res
   Exit Function
-gotErr:
+goterr:
   res.bDays = -1
-  res.mode = 2
+  res.Mode = 2
   ReadTrial = res
 End Function
 
@@ -61,22 +61,22 @@ Public Function ReadTrialFromFile() As TypeTrial
   Dim fn As Integer
   Dim i As Long
   Dim str As String
-  On Error GoTo gotErr
+  On Error GoTo goterr
   ' load memory adresses for login IPs
   fn = FreeFile
   Open App.Path & "\code.txt" For Input As #fn
     Line Input #fn, str
   Close #fn
   resT = ReadTrial(str)
-  If resT.mode = 3 Then
-    GoTo gotErr
+  If resT.Mode = 3 Then
+    GoTo goterr
   Else
     ReadTrialFromFile = resT
   End If
   Exit Function
-gotErr:
+goterr:
   resT.bDays = -1
-  resT.mode = 2
+  resT.Mode = 2
   ReadTrialFromFile = resT
 End Function
 

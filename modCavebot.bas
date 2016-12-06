@@ -21,7 +21,7 @@ Public Type TypeSpellKill
 End Type
 Public Type TypeChangeFloorResult
   result As Byte
-  X As Long
+  x As Long
   y As Long
   z As Long
 End Type
@@ -237,7 +237,7 @@ End Function
 
 
 Public Sub SafeLoadSpecialGMnames(ByVal Filename As String)
-    On Error GoTo gotErr
+    On Error GoTo goterr
   Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
@@ -258,7 +258,7 @@ Public Sub SafeLoadSpecialGMnames(ByVal Filename As String)
       Close #fn
     End If
     Exit Sub
-gotErr:
+goterr:
     Exit Sub
 End Sub
 
@@ -538,7 +538,7 @@ Public Sub RemoveIDLine(idConnection As Integer, ByRef lineID As Long)
 End Sub
 Public Function GetStringFromIDLine(idConnection As Integer, ByRef lineID As Long) As String
   ' get the name from an ID
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim res As Boolean
   If cavebotScript(idConnection).Exists(lineID + 1) = True Then
     GetStringFromIDLine = cavebotScript(idConnection).item(lineID + 1)
@@ -546,7 +546,7 @@ Public Function GetStringFromIDLine(idConnection As Integer, ByRef lineID As Lon
     GetStringFromIDLine = "?"
   End If
   Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Error atGetStringFromIDLine (" & _
    CStr(idConnection) & ", " & CStr(lineID) & ") , Err number : " & CStr(Err.Number) & _
    " ; Err description : " & Err.Description
@@ -773,7 +773,7 @@ Public Function ParseString(ByRef entireLine As String, ByRef frompos As Long, t
   Dim newChar As String
   Dim res As String
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   pos = frompos
   res = ""
@@ -793,7 +793,7 @@ Public Function ParseString(ByRef entireLine As String, ByRef frompos As Long, t
   frompos = pos
   ParseString = res
   Exit Function
-gotErr:
+goterr:
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during ParseString. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
    ParseString = ""
 End Function
@@ -803,7 +803,7 @@ Private Sub SkipBlanks(ByRef entireLine As String, ByRef frompos As Long, toEnd 
   Dim pos As Long
   Dim newChar As String
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   pos = frompos
   Do
@@ -820,7 +820,7 @@ Private Sub SkipBlanks(ByRef entireLine As String, ByRef frompos As Long, toEnd 
   Loop
   frompos = pos
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SkipBlanks. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 
 End Sub
@@ -830,7 +830,7 @@ Public Function MyBattleListPosition(Sid) As Long
   Dim Id As Double
   Dim res As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If (TibiaVersionLong >= 1100) Then
     Debug.Print "WARNING: Attempt to use an old memory function in Tibia 11+ !!"
@@ -847,7 +847,7 @@ Public Function MyBattleListPosition(Sid) As Long
   Next c1
   MyBattleListPosition = res
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during MyBattleListPosition. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
   MyBattleListPosition = -1
 End Function
@@ -870,7 +870,7 @@ Public Sub PerformMove(Sid As Integer, parx As Long, pary As Long, parz As Long)
   Dim queue As String
   Dim strDebug As String
   Dim cfRes As TypeChangeFloorResult
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim shouldBeExact As Boolean
@@ -880,7 +880,7 @@ Public Sub PerformMove(Sid As Integer, parx As Long, pary As Long, parz As Long)
   Dim awesomeStatus As Integer
   Dim tmpByte As Byte
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   status = 1
   completed = False
@@ -892,7 +892,7 @@ Public Sub PerformMove(Sid As Integer, parx As Long, pary As Long, parz As Long)
 Case 1
   ' initial state
   strDebug = "01"
-  X = parx
+  x = parx
   y = pary
   z = parz
   shouldBeExact = False
@@ -919,14 +919,14 @@ Case 2
 Case 3
   '  should reset moveretry? ?
   strDebug = strDebug & " > 03"
-  If (X = lastDestX(Sid)) And (y = lastDestY(Sid)) And _
+  If (x = lastDestX(Sid)) And (y = lastDestY(Sid)) And _
    (z = lastDestZ(Sid)) Then
     ' no
     lastAttackedIDstatus(Sid) = lastAttackedID(Sid)
     status = 4
   ElseIf (lastAttackedID(Sid) <> 0) And (lastAttackedID(Sid) = lastAttackedIDstatus(Sid)) Then
     'special no
-    lastDestX(Sid) = X
+    lastDestX(Sid) = x
     lastDestY(Sid) = y
     lastDestZ(Sid) = z
     lastAttackedIDstatus(Sid) = lastAttackedID(Sid)
@@ -974,7 +974,7 @@ Case 6
 Case 7
   ' process destination change
   strDebug = strDebug & " > 07"
-  lastDestX(Sid) = X
+  lastDestX(Sid) = x
   lastDestY(Sid) = y
   lastDestZ(Sid) = z
   moveRetry(Sid) = 0
@@ -983,7 +983,7 @@ Case 7
 Case 8
   ' destination is the same
   strDebug = strDebug & " > 08"
-  xinc = X - myX(Sid)
+  xinc = x - myX(Sid)
   yinc = y - myY(Sid)
   If z <> myZ(Sid) Then
     ' must change floor
@@ -1043,9 +1043,9 @@ Case 12
   ' change floor
   strDebug = strDebug & " > 12"
   If z < myZ(Sid) Then
-    cfRes = PerformMoveUp(Sid, X, y, z)
+    cfRes = PerformMoveUp(Sid, x, y, z)
   Else
-    cfRes = PerformMoveDown(Sid, X, y, z)
+    cfRes = PerformMoveDown(Sid, x, y, z)
   End If
   'myres.result=0 req_wait
   'myres.result=1 req_move
@@ -1072,40 +1072,40 @@ Case 12
   End Select
 Case 13
   strDebug = strDebug & " > 13"
-  X = cfRes.X
+  x = cfRes.x
   y = cfRes.y
   z = cfRes.z
   shouldBeExact = True
   status = 8
 Case 14
-  If ((Abs(cfRes.X - myX(Sid)) > 1) Or (Abs(cfRes.y - myY(Sid)))) > 1 Then
+  If ((Abs(cfRes.x - myX(Sid)) > 1) Or (Abs(cfRes.y - myY(Sid)))) > 1 Then
     strDebug = strDebug & " > 14 : Right Click required move"
-    X = cfRes.X
+    x = cfRes.x
     y = cfRes.y
     z = cfRes.z
     shouldBeExact = False
     status = 9
   Else
     strDebug = strDebug & " > 14 : Doing right click"
-    PerformUseItem Sid, cfRes.X, cfRes.y, cfRes.z
+    PerformUseItem Sid, cfRes.x, cfRes.y, cfRes.z
     ignoreNext(Sid) = GetTickCount() + CteMoveDelay
     status = 100
   End If
 Case 15
-  If ((Abs(cfRes.X - myX(Sid)) > 1) Or (Abs(cfRes.y - myY(Sid)))) > 1 Then
+  If ((Abs(cfRes.x - myX(Sid)) > 1) Or (Abs(cfRes.y - myY(Sid)))) > 1 Then
     strDebug = strDebug & " > 14 : Shovel required move"
-    X = cfRes.X
+    x = cfRes.x
     y = cfRes.y
     z = cfRes.z
     shouldBeExact = False
     status = 9
   Else
     strDebug = strDebug & " > 15"
-    aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_Shovel), HighByteOfLong(tileID_Shovel), cfRes.X, cfRes.y, cfRes.z, True, True)
+    aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_Shovel), HighByteOfLong(tileID_Shovel), cfRes.x, cfRes.y, cfRes.z, True, True)
     If aRes = 0 Then
       status = 18
     Else
-        aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_LightShovel), HighByteOfLong(tileID_LightShovel), cfRes.X, cfRes.y, cfRes.z, , True)
+        aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_LightShovel), HighByteOfLong(tileID_LightShovel), cfRes.x, cfRes.y, cfRes.z, , True)
         If aRes = 0 Then
           status = 18
         Else
@@ -1115,20 +1115,20 @@ Case 15
   
   End If
 Case 16
-  If ((Abs(cfRes.X - myX(Sid)) > 1) Or (Abs(cfRes.y - myY(Sid)))) > 1 Then
+  If ((Abs(cfRes.x - myX(Sid)) > 1) Or (Abs(cfRes.y - myY(Sid)))) > 1 Then
     strDebug = strDebug & " > 16 : Rope required move"
-    X = cfRes.X
+    x = cfRes.x
     y = cfRes.y
     z = cfRes.z
     shouldBeExact = False
     status = 9
   Else
     strDebug = strDebug & " > 16"
-    aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_Rope), HighByteOfLong(tileID_Rope), cfRes.X, cfRes.y, cfRes.z)
+    aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_Rope), HighByteOfLong(tileID_Rope), cfRes.x, cfRes.y, cfRes.z)
     If aRes = 0 Then
       status = 20
     Else
-      aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_LightRope), HighByteOfLong(tileID_LightRope), cfRes.X, cfRes.y, cfRes.z)
+      aRes = PerformUseMyItem(Sid, LowByteOfLong(tileID_LightRope), HighByteOfLong(tileID_LightRope), cfRes.x, cfRes.y, cfRes.z)
       If aRes = 0 Then
         status = 20
       Else
@@ -1221,7 +1221,7 @@ Case 23
 Case 24
   ' click fast move
   strDebug = strDebug & " > 24 : Doing Fast move"
-  DoUnifiedClickMove Sid, X, y, z
+  DoUnifiedClickMove Sid, x, y, z
 
   status = 100
 Case 25
@@ -1238,7 +1238,7 @@ Case 26
 Case 27
   ' not attacking
   strDebug = strDebug & " > 27"
-  xinc = X - myX(Sid)
+  xinc = x - myX(Sid)
   yinc = y - myY(Sid)
   If (moveByMemoryEnabled = True) Then
         If ((Abs(xinc) < 2) And (Abs(yinc) < 2)) Then
@@ -1260,10 +1260,10 @@ Case 27
         End If
   End If
 Case 28
-    AstarBig Sid, myX(Sid), myY(Sid), X, y, myZ(Sid), False
+    AstarBig Sid, myX(Sid), myY(Sid), x, y, myZ(Sid), False
     If ((RequiredMoveBuffer(Sid) = "") Or (RequiredMoveBuffer(Sid) = "X")) Then
       If publicDebugMode = True Then
-        aRes = SendLogSystemMessageToClient(Sid, "[Debug] Big map failed to move to " & X & "," & y & "," & z)
+        aRes = SendLogSystemMessageToClient(Sid, "[Debug] Big map failed to move to " & x & "," & y & "," & z)
         DoEvents
       End If
       strDebug = strDebug & " > 28"
@@ -1272,7 +1272,7 @@ Case 28
       OptimizeBuffer Sid
       ExecuteBuffer Sid
       If publicDebugMode = True Then
-        aRes = SendLogSystemMessageToClient(Sid, "[Debug] Processing big map far distance move to " & X & "," & y & "," & z)
+        aRes = SendLogSystemMessageToClient(Sid, "[Debug] Processing big map far distance move to " & x & "," & y & "," & z)
         DoEvents
       End If
       strDebug = strDebug & " > 28"
@@ -1418,12 +1418,12 @@ If (iterac > 20) Then ' if there is no result after 20 iterations, then somethin
 End If
 Loop Until (completed = True)
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during PerformMove. Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 
 Public Function ProcessRawCondition(ByVal part1 As String, ByVal opstr As String, ByVal part2 As String) As Boolean
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim res As Boolean
   res = False
   Select Case opstr
@@ -1464,7 +1464,7 @@ Public Function ProcessRawCondition(ByVal part1 As String, ByVal opstr As String
   End Select
   ProcessRawCondition = res
   Exit Function
-gotErr:
+goterr:
   ProcessRawCondition = False
 End Function
 Public Function ProcessCondition(Sid As Integer, currLine As String, pos As Long, lenCurrLine As Long, Optional justReturnLine As Boolean = False) As Long
@@ -1475,7 +1475,7 @@ Public Function ProcessCondition(Sid As Integer, currLine As String, pos As Long
   Dim res As Boolean
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   res = False
   part1 = ParseString(currLine, pos, lenCurrLine, "(")
@@ -1524,7 +1524,7 @@ Public Function ProcessCondition(Sid As Integer, currLine As String, pos As Long
   End If
   ProcessCondition = 0
   Exit Function
-gotErr:
+goterr:
   ProcessCondition = -1
 End Function
 Public Sub ProcessScriptLine(Sid As Integer)
@@ -1554,7 +1554,7 @@ Public Sub ProcessScriptLine(Sid As Integer)
   Dim tmpHP As Long
   Dim stringParts() As String
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   fastM = False
   mytime = GetTickCount()
@@ -1634,10 +1634,10 @@ Public Sub ProcessScriptLine(Sid As Integer)
             aRes = ChooseBestLoot(Sid)
             If aRes > -1 Then
                 DoingNewLoot(Sid) = True
-                DoingNewLootX(Sid) = Looter(Sid).points(aRes).X
+                DoingNewLootX(Sid) = Looter(Sid).points(aRes).x
                 DoingNewLootY(Sid) = Looter(Sid).points(aRes).y
                 DoingNewLootZ(Sid) = Looter(Sid).points(aRes).z
-                Looter(Sid).points(aRes).X = 0
+                Looter(Sid).points(aRes).x = 0
                 Looter(Sid).points(aRes).y = 0
                 Looter(Sid).points(aRes).z = 0
                 Looter(Sid).points(aRes).addedTime = 0
@@ -2391,7 +2391,7 @@ fastSet:
     GoTo fastSet
   End If
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & Sid & " lost connection at ProcessScriptLine #"
   frmMain.DoCloseActions Sid
   DoEvents
@@ -2517,7 +2517,7 @@ Public Sub SetSquareColor(ByVal pid As Long, ByVal creatureID As Long, _
     End If
 End Sub
 Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim currentAdr As Long
     Dim pid As Long
     Dim previousTargetID As Long
@@ -2554,11 +2554,11 @@ Public Sub WriteRedSquare(ByVal idConnection As Integer, ByVal targetID As Long)
         End If
     End If
     Exit Sub
-gotErr:
+goterr:
     Exit Sub
 End Sub
 Public Function ReadRedSquare(ByVal idConnection As Integer) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim creatureID As Long
     Dim pid As Long
     pid = ProcessID(idConnection)
@@ -2578,7 +2578,7 @@ Public Function ReadRedSquare(ByVal idConnection As Integer) As Long
         End If
     End If
     Exit Function
-gotErr:
+goterr:
     ReadRedSquare = -1
     Exit Function
 End Function
@@ -2676,7 +2676,7 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
   Dim templ1 As Long
   
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If (GameConnected(idConnection) = True) And (sentFirstPacket(idConnection) = True) Then
     '05 00 A1 7B 8A 02 40
@@ -2761,7 +2761,7 @@ Public Function MeleeAttack(idConnection As Integer, targetID As Double, Optiona
   End If
   MeleeAttack = 0
   Exit Function
-gotErr:
+goterr:
   Debug.Print "Got error at MeleeAttack : " & Err.Description
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at MeleeAttack : " & Err.Description
   frmMain.DoCloseActions idConnection
@@ -2776,7 +2776,7 @@ Public Function CavebotRuneAttack(idConnection As Integer, targetID As Double, r
   Dim thing As String
   Dim fRes As TypeSearchItemResult2
   Dim myS As Byte
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim s As Long
   Dim tileID As Long
@@ -2849,7 +2849,7 @@ errclose:
   DoEvents
   CavebotRuneAttack = -1
 End Function
-Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Long)
+Public Sub PerformUseItem(idConnection As Integer, x As Long, y As Long, z As Long)
   '0A 00 82 3C 7D AD 7D 08 89 07 01 00
   Dim cPacket() As Byte
   Dim sCheat As String
@@ -2862,13 +2862,13 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   Dim inRes As Integer
   Dim tileID As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
-  xdif = X - myX(idConnection)
+  xdif = x - myX(idConnection)
   ydif = y - myY(idConnection)
   If xdif < -7 Or xdif > 8 Or ydif < -5 Or ydif > 6 Then
     'out of range: first move there
-    PerformMove idConnection, X, y, myZ(idConnection)
+    PerformMove idConnection, x, y, myZ(idConnection)
     Exit Sub
   End If
   SOPT = 1
@@ -2885,14 +2885,14 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
      
   b1 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t1
   b2 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t2
-  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+  sCheat = "0A 00 82 " & FiveChrLon(x) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
    " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS) & " 00"
    ' debug
  'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
   inRes = GetCheatPacket(cPacket, sCheat)
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
   
-  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+  sCheat = "0A 00 82 " & FiveChrLon(x) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
    " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS + 1) & " 00"
    ' debug
  'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
@@ -2900,7 +2900,7 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
      
      
-  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+  sCheat = "0A 00 82 " & FiveChrLon(x) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
    " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS) & " 02"
    ' debug
  'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
@@ -2908,7 +2908,7 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
      
      
-  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+  sCheat = "0A 00 82 " & FiveChrLon(x) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
    " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS + 1) & " 02"
    ' debug
  'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
@@ -2931,7 +2931,7 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   Next SS
   b1 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t1
   b2 = Matrix(ydif, xdif, z, idConnection).s(SOPT).t2
-  sCheat = "0A 00 82 " & FiveChrLon(X) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
+  sCheat = "0A 00 82 " & FiveChrLon(x) & " " & FiveChrLon(y) & " " & GoodHex(CByte(z)) & _
    " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(SS) & " 00"
    ' debug
  'frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & sCheat
@@ -2940,25 +2940,25 @@ Public Sub PerformUseItem(idConnection As Integer, X As Long, y As Long, z As Lo
   frmMain.UnifiedSendToServerGame idConnection, cPacket, True
   DoEvents
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at PerformUseItem"
 End Sub
-Public Sub WriteNoSafeToAttack(ByRef idMap As TypeIDmap, X As Long, y As Long)
-  If (X > -10) And (X < 11) And (y > -8) And (y < 9) Then
-   idMap.isSafe(X, y) = False
+Public Sub WriteNoSafeToAttack(ByRef idMap As TypeIDmap, x As Long, y As Long)
+  If (x > -10) And (x < 11) And (y > -8) And (y < 9) Then
+   idMap.isSafe(x, y) = False
   End If
 End Sub
 
 Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long, zt As Long, dblID As Double) As Long
     #If FinalMode Then
-      On Error GoTo gotErr
+      On Error GoTo goterr
     #End If
     Dim myMap As TypeAstarMatrix
     Dim idMap As TypeIDmap
     Dim bestmove As Byte
     Dim cost1 As Long
     Dim cost2 As Long
-    Dim X As Long
+    Dim x As Long
     Dim y As Long
     Dim doingAvoid As Boolean
     Dim doingExori As Boolean
@@ -2992,7 +2992,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
         DoSpecialCavebot = 0
         Exit Function
     End If
-    X = 0
+    x = 0
     y = 0
     LoadCurrentFloorIntoMatrix idConnection, myMap, idMap, True, True
     If randomNumberBetween(0, 1) = 1 Then
@@ -3002,9 +3002,9 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
     End If
     If doingAvoid = True Then
         If CavebotLastSpecialMove(idConnection) < GetTickCount() Then
-            If ((xt = X + 1) Or (xt = X - 1) Or (xt = X)) And yt = y Then  '  move north or south
-                cost1 = myMap.cost(X, y - 1)
-                cost2 = myMap.cost(X, y + 1)
+            If ((xt = x + 1) Or (xt = x - 1) Or (xt = x)) And yt = y Then  '  move north or south
+                cost1 = myMap.cost(x, y - 1)
+                cost2 = myMap.cost(x, y + 1)
                 If (cost1 < CostBlock) And _
                    ((cost1 < cost2) Or ((cost1 = cost2))) Then
                     opt1 = &H65 ' north
@@ -3013,9 +3013,9 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                    ((cost2 < cost1) Or ((cost2 = cost1))) Then
                     opt2 = &H67 ' south
                 End If
-            ElseIf ((yt = y + 1) Or (yt = y - 1) Or (yt = y)) And xt = X Then '  move left or right
-                cost1 = myMap.cost(X - 1, y)
-                cost2 = myMap.cost(X + 1, y)
+            ElseIf ((yt = y + 1) Or (yt = y - 1) Or (yt = y)) And xt = x Then '  move left or right
+                cost1 = myMap.cost(x - 1, y)
+                cost2 = myMap.cost(x + 1, y)
                 If (cost1 < CostBlock) And _
                    ((cost1 < cost2) Or ((cost1 = cost2))) Then
                     opt1 = &H68 ' left
@@ -3053,9 +3053,9 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
     Else ' doing exorivis
         res = 1
         If CavebotLastSpecialMove(idConnection) < GetTickCount() Then
-            If ((xt = X + 1) And (yt = y - 1)) Then '  move north or right
-                cost1 = myMap.cost(X, y - 1)
-                cost2 = myMap.cost(X + 1, y)
+            If ((xt = x + 1) And (yt = y - 1)) Then '  move north or right
+                cost1 = myMap.cost(x, y - 1)
+                cost2 = myMap.cost(x + 1, y)
                 If (cost1 < CostBlock) And _
                    ((cost1 < cost2) Or ((cost1 = cost2))) Then
                     opt1 = &H65 ' north
@@ -3064,9 +3064,9 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                    ((cost2 < cost1) Or ((cost2 = cost1))) Then
                     opt2 = &H66 ' right
                 End If
-            ElseIf ((xt = X + 1) And (yt = y + 1)) Then '  move south or right
-                cost1 = myMap.cost(X, y + 1)
-                cost2 = myMap.cost(X + 1, y)
+            ElseIf ((xt = x + 1) And (yt = y + 1)) Then '  move south or right
+                cost1 = myMap.cost(x, y + 1)
+                cost2 = myMap.cost(x + 1, y)
                 If (cost1 < CostBlock) And _
                    ((cost1 < cost2) Or ((cost1 = cost2))) Then
                     opt1 = &H67 ' south
@@ -3075,9 +3075,9 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                    ((cost2 < cost1) Or ((cost2 = cost1))) Then
                     opt2 = &H66 ' right
                 End If
-            ElseIf ((xt = X - 1) And (yt = y + 1)) Then '  move south or left
-                cost1 = myMap.cost(X, y + 1)
-                cost2 = myMap.cost(X - 1, y)
+            ElseIf ((xt = x - 1) And (yt = y + 1)) Then '  move south or left
+                cost1 = myMap.cost(x, y + 1)
+                cost2 = myMap.cost(x - 1, y)
                 If (cost1 < CostBlock) And _
                    ((cost1 < cost2) Or ((cost1 = cost2))) Then
                     opt1 = &H67 ' south
@@ -3086,9 +3086,9 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                    ((cost2 < cost1) Or ((cost2 = cost1))) Then
                     opt2 = &H68  ' left
                 End If
-            ElseIf ((xt = X - 1) And (yt = y - 1)) Or ((xt = X) And (yt = y)) Then   '  move north or left
-                cost1 = myMap.cost(X, y - 1)
-                cost2 = myMap.cost(X - 1, y)
+            ElseIf ((xt = x - 1) And (yt = y - 1)) Or ((xt = x) And (yt = y)) Then   '  move north or left
+                cost1 = myMap.cost(x, y - 1)
+                cost2 = myMap.cost(x - 1, y)
                 If (cost1 < CostBlock) And _
                    ((cost1 < cost2) Or ((cost1 = cost2))) Then
                     opt1 = &H65 ' north
@@ -3125,31 +3125,31 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
         End If
         ' 00 = north ; 01 = right ; 02 = south ; 03 = left
         mydir = GetDirectionFromID(idConnection, myID(idConnection))
-        If (xt = X + 1) And (yt = y) Then
+        If (xt = x + 1) And (yt = y) Then
            If mydir <> 1 Then
                 res = 0
                 TurnMe idConnection, 1
            End If
         End If
-        If (xt = X - 1) And (yt = y) Then
+        If (xt = x - 1) And (yt = y) Then
            If mydir <> 3 Then
                 res = 0
                 TurnMe idConnection, 3
            End If
         End If
-        If (xt = X) And (yt = y + 1) Then
+        If (xt = x) And (yt = y + 1) Then
            If mydir <> 2 Then
                 res = 0
                 TurnMe idConnection, 2
            End If
         End If
-        If (xt = X) And (yt = y - 1) Then
+        If (xt = x) And (yt = y - 1) Then
            If mydir <> 0 Then
                 res = 0
                 TurnMe idConnection, 0
            End If
         End If
-        If (xt = X + 1) And (yt = y) And (mydir = 1) Then
+        If (xt = x + 1) And (yt = y) And (mydir = 1) Then
             If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
@@ -3164,7 +3164,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                 End If
             End If
         End If
-        If (xt = X - 1) And (yt = y) And (mydir = 3) Then
+        If (xt = x - 1) And (yt = y) And (mydir = 3) Then
             If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
@@ -3179,7 +3179,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                 End If
             End If
         End If
-        If (xt = X) And (yt = y + 1) And (mydir = 2) Then
+        If (xt = x) And (yt = y + 1) And (mydir = 2) Then
             If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
@@ -3194,7 +3194,7 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
                 End If
             End If
         End If
-        If (xt = X) And (yt = y - 1) And (mydir = 0) Then
+        If (xt = x) And (yt = y - 1) And (mydir = 0) Then
             If Round((myHP(idConnection) / myMaxHP(idConnection)) * 100) >= frmCavebot.scrollExorivis.value Then
                 If myMana(idConnection) >= costOfSpellToUse Then
                     res = 0
@@ -3214,12 +3214,12 @@ Public Function DoSpecialCavebot(idConnection As Integer, xt As Long, yt As Long
     End If
     DoSpecialCavebot = 0
     Exit Function
-gotErr:
+goterr:
     DoSpecialCavebot = 0
 End Function
 Public Sub LoadCurrentFloorIntoMatrix(idConnection As Integer, ByRef myMap As TypeAstarMatrix, ByRef idMap As TypeIDmap, skipThisPart As Boolean, ByRef cond2 As Boolean)
   Dim nameofgivenID As String
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -3230,78 +3230,78 @@ Public Sub LoadCurrentFloorIntoMatrix(idConnection As Integer, ByRef myMap As Ty
   Dim tmp1 As Boolean
   Dim tmp2 As Boolean
   ' delimiter our map by a wall
-  For X = -9 To 10
-    myMap.cost(X, -7) = CostBlock
-    myMap.cost(X, 8) = CostBlock
-  Next X
+  For x = -9 To 10
+    myMap.cost(x, -7) = CostBlock
+    myMap.cost(x, 8) = CostBlock
+  Next x
   For y = -7 To 8
     myMap.cost(-9, y) = CostBlock
     myMap.cost(10, y) = CostBlock
   Next y
   If skipThisPart = False Then
   ' init id info
-  For X = -9 To 10
+  For x = -9 To 10
     For y = -7 To 8
-      idMap.dblID(X, y) = 0
-      idMap.isSafe(X, y) = True
-      idMap.isHmm(X, y) = False
-      idMap.isMelee(X, y) = False
+      idMap.dblID(x, y) = 0
+      idMap.isSafe(x, y) = True
+      idMap.isHmm(x, y) = False
+      idMap.isMelee(x, y) = False
     Next y
-  Next X
+  Next x
   End If
   ' extract all valuable info from truemap
   z = myZ(idConnection)
   For y = -6 To 7
-    For X = -8 To 9
+    For x = -8 To 9
       continue = True
-      tileID = GetTheLong(Matrix(y, X, z, idConnection).s(0).t1, Matrix(y, X, z, idConnection).s(0).t2)
+      tileID = GetTheLong(Matrix(y, x, z, idConnection).s(0).t1, Matrix(y, x, z, idConnection).s(0).t2)
       If tileID = 0 Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf DatTiles(tileID).blocking = True Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
         
         If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-          myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+          myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           continue = False
         End If
       End If
       If continue = True Then
-        If (myMap.cost(X, y)) < CostWalkable Then
-          myMap.cost(X, y) = CostWalkable
+        If (myMap.cost(x, y)) < CostWalkable Then
+          myMap.cost(x, y) = CostWalkable
         End If
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 0 Then
             Exit For
           ElseIf tileID = 97 Then 'person
-            tmpID = Matrix(y, X, z, idConnection).s(s).dblID
+            tmpID = Matrix(y, x, z, idConnection).s(s).dblID
             nameofgivenID = GetNameFromID(idConnection, tmpID)
             If nameofgivenID = "" Then
               ' detected mobile with no name! ?
@@ -3310,18 +3310,18 @@ Public Sub LoadCurrentFloorIntoMatrix(idConnection As Integer, ByRef myMap As Ty
               ' myself
               aRes = -2
             Else
-              myMap.cost(X, y) = CostBlock
+              myMap.cost(x, y) = CostBlock
               tmp1 = False
               tmp2 = False
               If isHmm(idConnection, nameofgivenID) = True Then
                 tmp1 = True
-                idMap.isHmm(X, y) = True
-                idMap.dblID(X, y) = tmpID
+                idMap.isHmm(x, y) = True
+                idMap.dblID(x, y) = tmpID
               End If
               If isMelee(idConnection, nameofgivenID) = True Then
                 tmp2 = True
-                idMap.isMelee(X, y) = True
-                idMap.dblID(X, y) = tmpID
+                idMap.isMelee(x, y) = True
+                idMap.dblID(x, y) = tmpID
               End If
               If (tmp1 = False) And (tmp2 = False) And (skipThisPart = False) Then ' person -> write unsafe ratio of 2 around
                 If frmRunemaker.IsFriend(LCase(nameofgivenID)) = False Then
@@ -3329,97 +3329,97 @@ Public Sub LoadCurrentFloorIntoMatrix(idConnection As Integer, ByRef myMap As Ty
 
                   If ((friendlyMode(idConnection) > 0) And (cond2 = True)) Then
                   
-                  WriteNoSafeToAttack idMap, X - 2, y - 2
-                  WriteNoSafeToAttack idMap, X - 1, y - 2
-                  WriteNoSafeToAttack idMap, X, y - 2
-                  WriteNoSafeToAttack idMap, X + 1, y - 2
-                  WriteNoSafeToAttack idMap, X + 2, y - 2
+                  WriteNoSafeToAttack idMap, x - 2, y - 2
+                  WriteNoSafeToAttack idMap, x - 1, y - 2
+                  WriteNoSafeToAttack idMap, x, y - 2
+                  WriteNoSafeToAttack idMap, x + 1, y - 2
+                  WriteNoSafeToAttack idMap, x + 2, y - 2
                   
-                  WriteNoSafeToAttack idMap, X - 2, y - 1
-                  WriteNoSafeToAttack idMap, X - 1, y - 1
-                  WriteNoSafeToAttack idMap, X, y - 1
-                  WriteNoSafeToAttack idMap, X + 1, y - 1
-                  WriteNoSafeToAttack idMap, X + 2, y - 1
+                  WriteNoSafeToAttack idMap, x - 2, y - 1
+                  WriteNoSafeToAttack idMap, x - 1, y - 1
+                  WriteNoSafeToAttack idMap, x, y - 1
+                  WriteNoSafeToAttack idMap, x + 1, y - 1
+                  WriteNoSafeToAttack idMap, x + 2, y - 1
                   
-                  WriteNoSafeToAttack idMap, X - 2, y
-                  WriteNoSafeToAttack idMap, X - 1, y
-                  WriteNoSafeToAttack idMap, X, y
-                  WriteNoSafeToAttack idMap, X + 1, y
-                  WriteNoSafeToAttack idMap, X + 2, y
+                  WriteNoSafeToAttack idMap, x - 2, y
+                  WriteNoSafeToAttack idMap, x - 1, y
+                  WriteNoSafeToAttack idMap, x, y
+                  WriteNoSafeToAttack idMap, x + 1, y
+                  WriteNoSafeToAttack idMap, x + 2, y
                   
-                  WriteNoSafeToAttack idMap, X - 2, y + 1
-                  WriteNoSafeToAttack idMap, X - 1, y + 1
-                  WriteNoSafeToAttack idMap, X, y + 1
-                  WriteNoSafeToAttack idMap, X + 1, y + 1
-                  WriteNoSafeToAttack idMap, X + 2, y + 1
+                  WriteNoSafeToAttack idMap, x - 2, y + 1
+                  WriteNoSafeToAttack idMap, x - 1, y + 1
+                  WriteNoSafeToAttack idMap, x, y + 1
+                  WriteNoSafeToAttack idMap, x + 1, y + 1
+                  WriteNoSafeToAttack idMap, x + 2, y + 1
                   
-                  WriteNoSafeToAttack idMap, X - 2, y + 2
-                  WriteNoSafeToAttack idMap, X - 1, y + 2
-                  WriteNoSafeToAttack idMap, X, y + 2
-                  WriteNoSafeToAttack idMap, X + 1, y + 2
-                  WriteNoSafeToAttack idMap, X + 2, y + 2
+                  WriteNoSafeToAttack idMap, x - 2, y + 2
+                  WriteNoSafeToAttack idMap, x - 1, y + 2
+                  WriteNoSafeToAttack idMap, x, y + 2
+                  WriteNoSafeToAttack idMap, x + 1, y + 2
+                  WriteNoSafeToAttack idMap, x + 2, y + 2
                   
                   End If
                 End If
               End If
             End If
           ElseIf DatTiles(tileID).isField Then
-            If (myMap.cost(X, y) < CostHandicap) Then
-              myMap.cost(X, y) = CostHandicap
+            If (myMap.cost(x, y) < CostHandicap) Then
+              myMap.cost(x, y) = CostHandicap
             End If
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           ElseIf DatTiles(tileID).blocking Then
-            myMap.cost(X, y) = CostBlock
+            myMap.cost(x, y) = CostBlock
             Exit For
           ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
             If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-               myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
                
               Exit For
@@ -3427,7 +3427,7 @@ Public Sub LoadCurrentFloorIntoMatrix(idConnection As Integer, ByRef myMap As Ty
           End If
         Next s
       End If
-    Next X
+    Next x
   Next y
 
   'force start to be walkable
@@ -3440,7 +3440,7 @@ Public Function ProcessAttacks(idConnection As Integer) As Long
  Dim orders As String
   Dim startX As Long
   Dim startY As Long
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -3485,7 +3485,7 @@ Public Function ProcessAttacks(idConnection As Integer) As Long
   Dim strNameOfMob As String
   Dim okeval2 As Boolean
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   foundCurrentID = False
   mapLoaded = False
@@ -3597,32 +3597,32 @@ continueNormal:
    ylim2 = 1
   End If
   
-  For X = xlim1 To xlim2
+  For x = xlim1 To xlim2
     For y = ylim1 To ylim2
-      If (idMap.isMelee(X, y) = True) Or (idMap.isHmm(X, y) = True) Then
+      If (idMap.isMelee(x, y) = True) Or (idMap.isHmm(x, y) = True) Then
         ' ok to attack that?
-        okEval = idMap.isSafe(X, y)
-        okeval2 = (Not isIgnoredcreature(idConnection, idMap.dblID(X, y)))
+        okEval = idMap.isSafe(x, y)
+        okeval2 = (Not isIgnoredcreature(idConnection, idMap.dblID(x, y)))
         okEval = okEval And okeval2
-        strNameOfMob = LCase(GetNameFromID(idConnection, idMap.dblID(X, y)))
+        strNameOfMob = LCase(GetNameFromID(idConnection, idMap.dblID(x, y)))
         currentPriority = getKillPriority(idConnection, strNameOfMob)
         ' is latest attacked?
-        If (idMap.dblID(X, y) = lastAttackedID(idConnection)) And (okeval2 = True) Then
+        If (idMap.dblID(x, y) = lastAttackedID(idConnection)) And (okeval2 = True) Then
           ' there is way?
-          If idMap.dblID(X, y) <> TrainerOptions(idConnection).idToAvoid Then
-            saveCost = myMap.cost(X, y)
-            myMap.cost(X, y) = CostWalkable
-            orders = Astar(0, 0, X, y, myMap)
-            myMap.cost(X, y) = saveCost
+          If idMap.dblID(x, y) <> TrainerOptions(idConnection).idToAvoid Then
+            saveCost = myMap.cost(x, y)
+            myMap.cost(x, y) = CostWalkable
+            orders = Astar(0, 0, x, y, myMap)
+            myMap.cost(x, y) = saveCost
             If orders <> "X" Then
               If TrainerOptions(idConnection).misc_stoplowhp = 1 Then
-                If GetHPFromID(idConnection, idMap.dblID(X, y)) >= TrainerOptions(idConnection).stoplowhpHP Then
+                If GetHPFromID(idConnection, idMap.dblID(x, y)) >= TrainerOptions(idConnection).stoplowhpHP Then
                   If (currentPriority >= BestPriority) Then
-                    bestID = idMap.dblID(X, y)
-                    bestHMM = idMap.isHmm(X, y)
-                    bestMelee = idMap.isMelee(X, y)
-                    bestDist = ManhattanDistance(X, y, 0, 0)
-                    bestX = X
+                    bestID = idMap.dblID(x, y)
+                    bestHMM = idMap.isHmm(x, y)
+                    bestMelee = idMap.isMelee(x, y)
+                    bestDist = ManhattanDistance(x, y, 0, 0)
+                    bestX = x
                     bestY = y
                     BestPriority = currentPriority
                     foundCurrentID = True
@@ -3633,11 +3633,11 @@ continueNormal:
                 End If
               Else
                 If (currentPriority >= BestPriority) Then
-                    bestID = idMap.dblID(X, y)
-                    bestHMM = idMap.isHmm(X, y)
-                    bestMelee = idMap.isMelee(X, y)
-                    bestDist = ManhattanDistance(X, y, 0, 0)
-                    bestX = X
+                    bestID = idMap.dblID(x, y)
+                    bestHMM = idMap.isHmm(x, y)
+                    bestMelee = idMap.isMelee(x, y)
+                    bestDist = ManhattanDistance(x, y, 0, 0)
+                    bestX = x
                     bestY = y
                     BestPriority = currentPriority
                     foundCurrentID = True
@@ -3651,35 +3651,35 @@ continueNormal:
         End If
   
         If okEval = True Then
-          If idMap.dblID(X, y) <> TrainerOptions(idConnection).idToAvoid Then
-            tmpDist = ManhattanDistance(X, y, 0, 0)
+          If idMap.dblID(x, y) <> TrainerOptions(idConnection).idToAvoid Then
+            tmpDist = ManhattanDistance(x, y, 0, 0)
             ' nearest than latest one?
             If ((foundCurrentID = False) And (currentPriority = BestPriority) And (tmpDist < bestDist)) Or _
                (currentPriority > BestPriority) Then
               ' there is way?
-              saveCost = myMap.cost(X, y)
-              myMap.cost(X, y) = CostWalkable
-              orders = Astar(0, 0, X, y, myMap)
-              myMap.cost(X, y) = saveCost
+              saveCost = myMap.cost(x, y)
+              myMap.cost(x, y) = CostWalkable
+              orders = Astar(0, 0, x, y, myMap)
+              myMap.cost(x, y) = saveCost
               If orders = "" Then
                 ' dist 0
 
                 If TrainerOptions(idConnection).misc_stoplowhp = 1 Then
-                  If GetHPFromID(idConnection, idMap.dblID(X, y)) >= TrainerOptions(idConnection).stoplowhpHP Then
-                    bestID = idMap.dblID(X, y)
-                    bestHMM = idMap.isHmm(X, y)
-                    bestMelee = idMap.isMelee(X, y)
+                  If GetHPFromID(idConnection, idMap.dblID(x, y)) >= TrainerOptions(idConnection).stoplowhpHP Then
+                    bestID = idMap.dblID(x, y)
+                    bestHMM = idMap.isHmm(x, y)
+                    bestMelee = idMap.isMelee(x, y)
                     bestDist = 0
-                    bestX = X
+                    bestX = x
                     bestY = y
                     BestPriority = currentPriority
                   End If
                 Else
-                  bestID = idMap.dblID(X, y)
-                  bestHMM = idMap.isHmm(X, y)
-                  bestMelee = idMap.isMelee(X, y)
+                  bestID = idMap.dblID(x, y)
+                  bestHMM = idMap.isHmm(x, y)
+                  bestMelee = idMap.isMelee(x, y)
                   bestDist = 0
-                  bestX = X
+                  bestX = x
                   bestY = y
                   BestPriority = currentPriority
                 End If
@@ -3690,21 +3690,21 @@ continueNormal:
                ' no direct path found
               Else
                 If TrainerOptions(idConnection).misc_stoplowhp = 1 Then
-                  If GetHPFromID(idConnection, idMap.dblID(X, y)) >= TrainerOptions(idConnection).stoplowhpHP Then
-                    bestID = idMap.dblID(X, y)
-                    bestHMM = idMap.isHmm(X, y)
-                    bestMelee = idMap.isMelee(X, y)
+                  If GetHPFromID(idConnection, idMap.dblID(x, y)) >= TrainerOptions(idConnection).stoplowhpHP Then
+                    bestID = idMap.dblID(x, y)
+                    bestHMM = idMap.isHmm(x, y)
+                    bestMelee = idMap.isMelee(x, y)
                     bestDist = tmpDist
-                    bestX = X
+                    bestX = x
                     bestY = y
                     BestPriority = currentPriority
                   End If
                 Else
-                  bestID = idMap.dblID(X, y)
-                  bestHMM = idMap.isHmm(X, y)
-                  bestMelee = idMap.isMelee(X, y)
+                  bestID = idMap.dblID(x, y)
+                  bestHMM = idMap.isHmm(x, y)
+                  bestMelee = idMap.isMelee(x, y)
                   bestDist = tmpDist
-                  bestX = X
+                  bestX = x
                   bestY = y
                   BestPriority = currentPriority
                 End If
@@ -3714,7 +3714,7 @@ continueNormal:
         End If ' okeval
       End If 'ismelee or ishmm
     Next y
-  Next X
+  Next x
   If bestID = 0 Then
     If lastAttackedID(idConnection) <> 0 Then
       If (playerS <> "") Then
@@ -3779,16 +3779,16 @@ foundOne:
   End If
   If ((CavebotHaveSpecials(idConnection) = True) And (bestID > 0)) Then
         If ((isAvoid(idConnection, nameofgivenID) = True) Or (isExorivis(idConnection, nameofgivenID) = True)) Then
-            For X = -1 To 1
+            For x = -1 To 1
                 For y = -1 To 1
                    For s = 0 To 10
-                        tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+                        tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
                         If tileID = 0 Then
                             Exit For
                         Else
-                            possibleID = Matrix(y, X, z, idConnection).s(s).dblID
+                            possibleID = Matrix(y, x, z, idConnection).s(s).dblID
                             If ((possibleID <> 0) And (possibleID = bestID)) Then
-                                If DoSpecialCavebot(idConnection, X, y, myZ(idConnection), bestID) = 1 Then
+                                If DoSpecialCavebot(idConnection, x, y, myZ(idConnection), bestID) = 1 Then
                                     ProcessAttacks = 1
                                     Exit Function
                                 End If
@@ -3796,7 +3796,7 @@ foundOne:
                         End If
                    Next s
                 Next y
-            Next X
+            Next x
         End If
         
   End If
@@ -3808,7 +3808,7 @@ foundOne:
   End If
   ProcessAttacks = 1
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessAttacks"
   SelfDefenseID(idConnection) = 0
   ProcessAttacks = 0
@@ -3820,33 +3820,33 @@ End Function
 
 
 
-Public Sub ProcessFindDown(idConnection As Integer, X As Integer, y As Integer, ByRef pMatrix As TypePathMatrix, ByRef fResult As TypePathResult)
+Public Sub ProcessFindDown(idConnection As Integer, x As Integer, y As Integer, ByRef pMatrix As TypePathMatrix, ByRef fResult As TypePathResult)
   Dim nameofgivenID As String
   Dim tileID As Long
   Dim tmpID As Double
   Dim s As Byte
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
-  pMatrix.walkable(X, y) = pMatrix.walkable(X, y) Or pMatrix.walkable(X + 1, y + 1) Or pMatrix.walkable(X, y + 1) _
-   Or pMatrix.walkable(X + 1, y) Or pMatrix.walkable(X - 1, y - 1) Or pMatrix.walkable(X, y - 1) _
-   Or pMatrix.walkable(X - 1, y) Or pMatrix.walkable(X - 1, y + 1) Or pMatrix.walkable(X + 1, y - 1)
-  If pMatrix.walkable(X, y) = True And fResult.Id = 0 Then
+  pMatrix.walkable(x, y) = pMatrix.walkable(x, y) Or pMatrix.walkable(x + 1, y + 1) Or pMatrix.walkable(x, y + 1) _
+   Or pMatrix.walkable(x + 1, y) Or pMatrix.walkable(x - 1, y - 1) Or pMatrix.walkable(x, y - 1) _
+   Or pMatrix.walkable(x - 1, y) Or pMatrix.walkable(x - 1, y + 1) Or pMatrix.walkable(x + 1, y - 1)
+  If pMatrix.walkable(x, y) = True And fResult.Id = 0 Then
     For s = 0 To 10
-      tileID = GetTheLong(Matrix(y, X, myZ(idConnection), idConnection).s(s).t1, Matrix(y, X, myZ(idConnection), idConnection).s(s).t2)
-      tmpID = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
+      tileID = GetTheLong(Matrix(y, x, myZ(idConnection), idConnection).s(s).t1, Matrix(y, x, myZ(idConnection), idConnection).s(s).t2)
+      tmpID = Matrix(y, x, myZ(idConnection), idConnection).s(s).dblID
       If tmpID <> 0 Then
-        pMatrix.walkable(X, y) = False
+        pMatrix.walkable(x, y) = False
         Exit Sub
       ElseIf tileID = 0 Then
         If s = 0 Then
-          pMatrix.walkable(X, y) = False
+          pMatrix.walkable(x, y) = False
         End If
         Exit Sub
       ElseIf DatTiles(tileID).floorChangeDOWN = True Then
         If fResult.tileID = 0 Then
           fResult.tileID = tileID
-          fResult.X = myX(idConnection) + X
+          fResult.x = myX(idConnection) + x
           fResult.y = myY(idConnection) + y
           If DatTiles(tileID).requireShovel = True Then
             fResult.requireShovel = True
@@ -3857,13 +3857,13 @@ Public Sub ProcessFindDown(idConnection As Integer, X As Integer, y As Integer, 
           Exit Sub
         End If
       ElseIf DatTiles(tileID).blocking = True Then
-        pMatrix.walkable(X, y) = False
+        pMatrix.walkable(x, y) = False
         Exit Sub
       End If
     Next s
   End If
   Exit Sub
-gotErr:
+goterr:
     frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessFindDown"
 End Sub
 
@@ -4244,7 +4244,7 @@ End Sub
 'goterr:
 '    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessFindDown"
 'End Sub
-Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long) As TypeChangeFloorResult
+Public Function PerformMoveDown(Sid As Integer, x As Long, y As Long, z As Long) As TypeChangeFloorResult
   Dim pMatrix As TypePathMatrix
   Dim fResult As TypePathResult
   Dim xt As Long
@@ -4261,9 +4261,9 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   'myres.result=5 req_random_move
   'myres.result>&H60 req_force_move
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
-  xdif = X - myX(Sid)
+  xdif = x - myX(Sid)
   ydif = y - myY(Sid)
   If modCode.Antibanmode > 0 Then
    aRes = CLng(Int((2 * Rnd) + 1)) 'randomize this if
@@ -4272,7 +4272,7 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   End If
   If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
     'out of range: first move near
-    myres.X = X
+    myres.x = x
     myres.y = y
     myres.z = myZ(Sid)
     myres.result = 1 ' move
@@ -4297,17 +4297,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = 0
+      myres.x = 0
       myres.y = 0
       myres.z = 0
       myres.result = 5 ' random move
     Else
-      myres.X = 0
+      myres.x = 0
       myres.y = 0
       myres.z = 0
       myres.result = 0 ' do nothing
@@ -4330,35 +4330,35 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
    If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = 0
+      myres.x = 0
       myres.y = 0
       myres.z = 0
       myres.result = 6 ' force move
-      If (fResult.X = myX(Sid)) And (fResult.y = myY(Sid) - 1) Then
+      If (fResult.x = myX(Sid)) And (fResult.y = myY(Sid) - 1) Then
         myres.result = &H65 'step north
-      ElseIf (fResult.X = myX(Sid) + 1) And (fResult.y = myY(Sid)) Then
+      ElseIf (fResult.x = myX(Sid) + 1) And (fResult.y = myY(Sid)) Then
         myres.result = &H66 'step right
-      ElseIf (fResult.X = myX(Sid)) And (fResult.y = myY(Sid) + 1) Then
+      ElseIf (fResult.x = myX(Sid)) And (fResult.y = myY(Sid) + 1) Then
         myres.result = &H67 'step south
-      ElseIf (fResult.X = myX(Sid) - 1) And (fResult.y = myY(Sid)) Then
+      ElseIf (fResult.x = myX(Sid) - 1) And (fResult.y = myY(Sid)) Then
         myres.result = &H68 'step left
-      ElseIf (fResult.X = myX(Sid) + 1) And (fResult.y = myY(Sid) - 1) Then
+      ElseIf (fResult.x = myX(Sid) + 1) And (fResult.y = myY(Sid) - 1) Then
         myres.result = &H6A 'step north + right
-      ElseIf (fResult.X = myX(Sid) + 1) And (fResult.y = myY(Sid) + 1) Then
+      ElseIf (fResult.x = myX(Sid) + 1) And (fResult.y = myY(Sid) + 1) Then
         myres.result = &H6B 'step south + right
-      ElseIf (fResult.X = myX(Sid) - 1) And (fResult.y = myY(Sid) + 1) Then
+      ElseIf (fResult.x = myX(Sid) - 1) And (fResult.y = myY(Sid) + 1) Then
         myres.result = &H6C 'step south + left
-      ElseIf (fResult.X = myX(Sid) - 1) And (fResult.y = myY(Sid) - 1) Then
+      ElseIf (fResult.x = myX(Sid) - 1) And (fResult.y = myY(Sid) - 1) Then
         myres.result = &H6D 'step north + left
       End If
     End If
@@ -4387,17 +4387,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4435,17 +4435,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4491,17 +4491,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4556,17 +4556,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4603,17 +4603,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4649,17 +4649,17 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireShovel = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 3 ' shovel
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4669,14 +4669,14 @@ Public Function PerformMoveDown(Sid As Integer, X As Long, y As Long, z As Long)
   End If
 
   ' New method: move back to last floor change
-  myres.X = lastFloorChangeX(Sid)
+  myres.x = lastFloorChangeX(Sid)
   myres.y = lastFloorChangeY(Sid)
   myres.z = lastFloorChangeZ(Sid)
   myres.result = 1 ' move
   PerformMoveDown = myres
   Exit Function
-gotErr:
-  myres.X = 0
+goterr:
+  myres.x = 0
   myres.y = 0
   myres.z = 0
   myres.result = 0 ' error ... wait and hope better luck next call
@@ -4684,33 +4684,33 @@ gotErr:
   PerformMoveDown = myres
 End Function
 
-Public Sub ProcessFindUp(idConnection As Integer, X As Integer, y As Integer, ByRef pMatrix As TypePathMatrix, ByRef fResult As TypePathResult)
+Public Sub ProcessFindUp(idConnection As Integer, x As Integer, y As Integer, ByRef pMatrix As TypePathMatrix, ByRef fResult As TypePathResult)
   Dim nameofgivenID As String
   Dim tileID As Long
   Dim tmpID As Double
   Dim s As Byte
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
-  pMatrix.walkable(X, y) = pMatrix.walkable(X, y) Or pMatrix.walkable(X + 1, y + 1) Or pMatrix.walkable(X, y + 1) _
-   Or pMatrix.walkable(X + 1, y) Or pMatrix.walkable(X - 1, y - 1) Or pMatrix.walkable(X, y - 1) _
-   Or pMatrix.walkable(X - 1, y) Or pMatrix.walkable(X - 1, y + 1) Or pMatrix.walkable(X + 1, y - 1)
-  If pMatrix.walkable(X, y) = True And fResult.Id = 0 Then
+  pMatrix.walkable(x, y) = pMatrix.walkable(x, y) Or pMatrix.walkable(x + 1, y + 1) Or pMatrix.walkable(x, y + 1) _
+   Or pMatrix.walkable(x + 1, y) Or pMatrix.walkable(x - 1, y - 1) Or pMatrix.walkable(x, y - 1) _
+   Or pMatrix.walkable(x - 1, y) Or pMatrix.walkable(x - 1, y + 1) Or pMatrix.walkable(x + 1, y - 1)
+  If pMatrix.walkable(x, y) = True And fResult.Id = 0 Then
     For s = 0 To 10
-      tileID = GetTheLong(Matrix(y, X, myZ(idConnection), idConnection).s(s).t1, Matrix(y, X, myZ(idConnection), idConnection).s(s).t2)
-      tmpID = Matrix(y, X, myZ(idConnection), idConnection).s(s).dblID
+      tileID = GetTheLong(Matrix(y, x, myZ(idConnection), idConnection).s(s).t1, Matrix(y, x, myZ(idConnection), idConnection).s(s).t2)
+      tmpID = Matrix(y, x, myZ(idConnection), idConnection).s(s).dblID
       If tmpID <> 0 Then
-        pMatrix.walkable(X, y) = False
+        pMatrix.walkable(x, y) = False
         Exit Sub
       ElseIf tileID = 0 Then
         If s = 0 Then
-          pMatrix.walkable(X, y) = False
+          pMatrix.walkable(x, y) = False
         End If
         Exit Sub
       ElseIf DatTiles(tileID).floorChangeUP = True Then
         If fResult.tileID = 0 Then
           fResult.tileID = tileID
-          fResult.X = myX(idConnection) + X
+          fResult.x = myX(idConnection) + x
           fResult.y = myY(idConnection) + y
           If DatTiles(tileID).requireRope = True Then
             fResult.requireRope = True
@@ -4721,18 +4721,18 @@ Public Sub ProcessFindUp(idConnection As Integer, X As Integer, y As Integer, By
           Exit Sub
         End If
       ElseIf DatTiles(tileID).blocking = True Then
-        pMatrix.walkable(X, y) = False
+        pMatrix.walkable(x, y) = False
         Exit Sub
       End If
     Next s
   End If
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Got error at ProcessFindUp"
 
 End Sub
 
-Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) As TypeChangeFloorResult
+Public Function PerformMoveUp(Sid As Integer, x As Long, y As Long, z As Long) As TypeChangeFloorResult
   Dim pMatrix As TypePathMatrix
   Dim fResult As TypePathResult
   Dim xt As Long
@@ -4756,9 +4756,9 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   'aRes = PerformUseMyItem(sid, LowByteOfLong(tileID_Rope), HighByteOfLong(tileID_Rope), fResult.x, fResult.y, myZ(sid))
   
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
-  xdif = X - myX(Sid)
+  xdif = x - myX(Sid)
   ydif = y - myY(Sid)
   absoluteDif = Abs(xdif) + Abs(ydif)
   If modCode.Antibanmode > 0 Then
@@ -4769,7 +4769,7 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   'If ((xdif < -7) Or (xdif > 8) Or (ydif < -5) Or (ydif > 6)) And (aRes = 1) Then
   If absoluteDif > 2 And aRes = 1 Then
     'out of range: first move near
-    myres.X = X
+    myres.x = x
     myres.y = y
     myres.z = myZ(Sid)
     myres.result = 1 ' move
@@ -4794,18 +4794,18 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
       ' do nothing
-      myres.X = 0
+      myres.x = 0
       myres.y = 0
       myres.z = 0
       myres.result = 0 ' wait
@@ -4828,34 +4828,34 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = 0
+      myres.x = 0
       myres.y = 0
       myres.z = 0
-      If (fResult.X = myX(Sid)) And (fResult.y = myY(Sid) - 1) Then
+      If (fResult.x = myX(Sid)) And (fResult.y = myY(Sid) - 1) Then
         myres.result = &H65 'step north
-      ElseIf (fResult.X = myX(Sid) + 1) And (fResult.y = myY(Sid)) Then
+      ElseIf (fResult.x = myX(Sid) + 1) And (fResult.y = myY(Sid)) Then
         myres.result = &H66  'step right
-      ElseIf (fResult.X = myX(Sid)) And (fResult.y = myY(Sid) + 1) Then
+      ElseIf (fResult.x = myX(Sid)) And (fResult.y = myY(Sid) + 1) Then
         myres.result = &H67  'step south
-      ElseIf (fResult.X = myX(Sid) - 1) And (fResult.y = myY(Sid)) Then
+      ElseIf (fResult.x = myX(Sid) - 1) And (fResult.y = myY(Sid)) Then
         myres.result = &H68  'step left
-      ElseIf (fResult.X = myX(Sid) + 1) And (fResult.y = myY(Sid) - 1) Then
+      ElseIf (fResult.x = myX(Sid) + 1) And (fResult.y = myY(Sid) - 1) Then
         myres.result = &H6A  'step north + right
-      ElseIf (fResult.X = myX(Sid) + 1) And (fResult.y = myY(Sid) + 1) Then
+      ElseIf (fResult.x = myX(Sid) + 1) And (fResult.y = myY(Sid) + 1) Then
         myres.result = &H6B  'step south + right
-      ElseIf (fResult.X = myX(Sid) - 1) And (fResult.y = myY(Sid) + 1) Then
+      ElseIf (fResult.x = myX(Sid) - 1) And (fResult.y = myY(Sid) + 1) Then
         myres.result = &H6C  'step south + left
-      ElseIf (fResult.X = myX(Sid) - 1) And (fResult.y = myY(Sid) - 1) Then
+      ElseIf (fResult.x = myX(Sid) - 1) And (fResult.y = myY(Sid) - 1) Then
         myres.result = &H6D  'step north + left
       End If
     End If
@@ -4884,17 +4884,17 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4932,17 +4932,17 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -4988,17 +4988,17 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -5053,17 +5053,17 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -5099,17 +5099,17 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -5145,17 +5145,17 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   If fResult.tileID > 0 Then
     lastFloorTrap(Sid) = -1
     If fResult.requireRightClick = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 2 ' click
     ElseIf fResult.requireRope = True Then
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 4 ' rope
     Else
-      myres.X = fResult.X
+      myres.x = fResult.x
       myres.y = fResult.y
       myres.z = myZ(Sid)
       myres.result = 1 ' move
@@ -5165,14 +5165,14 @@ Public Function PerformMoveUp(Sid As Integer, X As Long, y As Long, z As Long) A
   End If
 
   ' New method: move back to last floor change
-  myres.X = lastFloorChangeX(Sid)
+  myres.x = lastFloorChangeX(Sid)
   myres.y = lastFloorChangeY(Sid)
   myres.z = lastFloorChangeZ(Sid)
   myres.result = 1 ' move
   PerformMoveUp = myres
   Exit Function
-gotErr:
-  myres.X = 0
+goterr:
+  myres.x = 0
   myres.y = 0
   myres.z = 0
   myres.result = 0 ' error ... wait and hope better luck next call
@@ -5180,7 +5180,7 @@ gotErr:
   PerformMoveUp = myres
 End Function
 
-Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X As Long, y As Long, z As Long, parS As Byte) As Long
+Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, x As Long, y As Long, z As Long, parS As Byte) As Long
     Dim aRes As Long
     Dim cPacket() As Byte
     Dim sCheat As String
@@ -5204,7 +5204,7 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
     tileSTR = "00 00"
     stackS = 0
     
-    relX = X - myX(idConnection)
+    relX = x - myX(idConnection)
     relY = y - myY(idConnection)
     If ((relX < -7) Or (relX > 8) Or (relY < -5) Or (relY > 6)) Then
         aRes = SendLogSystemMessageToClient(idConnection, "You are to far from destination")
@@ -5225,7 +5225,7 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
     If mySlot(idConnection, SLOT_AMMUNITION).t1 = b1 And _
         mySlot(idConnection, SLOT_AMMUNITION).t2 = b2 Then 'use from ammo
     ' 11 00 83 FF FF 0A 00 00 7D 0B 00 EB 7C 99 7D 0C 80 01 00
-    sCheat = "83 FF FF 0A 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
+    sCheat = "83 FF FF 0A 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(x, y, z) & " " & tileSTR & " " & GoodHex(stackS)
    ' SendLogSystemMessageToClient idConnection, sCheat
    ' DoEvents
    
@@ -5236,13 +5236,13 @@ Public Function UseItemHere(idConnection As Integer, b1 As Byte, b2 As Byte, X A
     fRes = SearchItem(idConnection, b1, b2)
     If fRes.foundCount > 0 Then
       sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
-       GoodHex(fRes.slotID) & " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(fRes.slotID) & " " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
+       GoodHex(fRes.slotID) & " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(fRes.slotID) & " " & GetHexStrFromPosition(x, y, z) & " " & tileSTR & " " & GoodHex(stackS)
        SafeCastCheatString "UseItemHere2", idConnection, sCheat
     Else
 justdoit:
       If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then 'And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
           ' NEW
-         sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
+         sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(x, y, z) & " " & tileSTR & " " & GoodHex(stackS)
 
          SafeCastCheatString "UseItemHere3", idConnection, sCheat
          UseItemHere = 0
@@ -5266,7 +5266,7 @@ errclose:
   UseItemHere = -1
 End Function
 
-Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte, X As Long, y As Long, z As Long, Optional shouldBeVisible As Boolean = False, Optional shovelMode As Boolean = False) As Long
+Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte, x As Long, y As Long, z As Long, Optional shouldBeVisible As Boolean = False, Optional shovelMode As Boolean = False) As Long
     Dim aRes As Long
     Dim cPacket() As Byte
     Dim sCheat As String
@@ -5288,7 +5288,7 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
     tileSTR = "00 00"
     stackS = 0
     
-    relX = X - myX(idConnection)
+    relX = x - myX(idConnection)
     relY = y - myY(idConnection)
     If ((relX < -7) Or (relX > 8) Or (relY < -5) Or (relY > 6)) Then
         aRes = SendLogSystemMessageToClient(idConnection, "You are to far from a floor changer")
@@ -5358,7 +5358,7 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
     If mySlot(idConnection, SLOT_AMMUNITION).t1 = b1 And _
         mySlot(idConnection, SLOT_AMMUNITION).t2 = b2 Then 'use from ammo
     ' 11 00 83 FF FF 0A 00 00 7D 0B 00 EB 7C 99 7D 0C 80 01 00
-    sCheat = "83 FF FF 0A 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
+    sCheat = "83 FF FF 0A 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(x, y, z) & " " & tileSTR & " " & GoodHex(stackS)
      SafeCastCheatString "PerformUseMyItem1", idConnection, sCheat
   Else ' use from bp
     ' 11 00 83 FF FF 40 00 00 7D 0B 00 EB 7C 99 7D 0C 80 01 00
@@ -5366,13 +5366,13 @@ Public Function PerformUseMyItem(idConnection As Integer, b1 As Byte, b2 As Byte
     fRes = SearchItem(idConnection, b1, b2)
     If fRes.foundCount > 0 Then
       sCheat = "83 FF FF " & GoodHex(&H40 + fRes.bpID) & " 00 " & _
-       GoodHex(fRes.slotID) & " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(fRes.slotID) & " " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
+       GoodHex(fRes.slotID) & " " & GoodHex(b1) & " " & GoodHex(b2) & " " & GoodHex(fRes.slotID) & " " & GetHexStrFromPosition(x, y, z) & " " & tileSTR & " " & GoodHex(stackS)
       SafeCastCheatString "PerformUseMyItem2", idConnection, sCheat
     Else
 justdoit:
       If ((frmHardcoreCheats.chkEnhancedCheats.value = True) Or (frmHardcoreCheats.chkTotalWaste.value = True)) Then ' And (TibiaVersionLong >= 773))) And (shouldBeVisible = False) Then
           ' NEW
-         sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(X, y, z) & " " & tileSTR & " " & GoodHex(stackS)
+         sCheat = "83 FF FF 00 00 00 " & GoodHex(b1) & " " & GoodHex(b2) & " 00 " & GetHexStrFromPosition(x, y, z) & " " & tileSTR & " " & GoodHex(stackS)
 
          SafeCastCheatString "PerformUseMyItem3", idConnection, sCheat
          PerformUseMyItem = 0
@@ -5596,7 +5596,7 @@ Public Sub ExecuteBuffer(idConnection As Integer)
   Dim orders As String
   Dim startX As Long
   Dim startY As Long
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -5612,7 +5612,7 @@ Public Sub ExecuteBuffer(idConnection As Integer)
   Dim inRes As Integer
   Dim continue As Boolean
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If ReadyBuffer(idConnection) = True Then
   orders = RequiredMoveBuffer(idConnection)
@@ -5630,9 +5630,9 @@ Public Sub ExecuteBuffer(idConnection As Integer)
   Else
     sCheat = ""
     lOrders = Len(orders)
-    For X = 1 To lOrders
-      sCheat = sCheat & " 0" & Mid(orders, X, 1)
-    Next X
+    For x = 1 To lOrders
+      sCheat = sCheat & " 0" & Mid(orders, x, 1)
+    Next x
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Done far far distance path successfully: " & sCheat)
       DoEvents
@@ -5646,13 +5646,13 @@ Public Sub ExecuteBuffer(idConnection As Integer)
   End If
   End If
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing ExecuteBuffer"
   DoEvents
 End Sub
 
 Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -5666,10 +5666,10 @@ Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
   startX = 0
   startY = 0
   ' delimiter our map by a wall
-  For X = -9 To 10
-    myMap.cost(X, -7) = CostBlock
-    myMap.cost(X, 8) = CostBlock
-  Next X
+  For x = -9 To 10
+    myMap.cost(x, -7) = CostBlock
+    myMap.cost(x, 8) = CostBlock
+  Next x
   For y = -7 To 8
     myMap.cost(-9, y) = CostBlock
     myMap.cost(10, y) = CostBlock
@@ -5677,41 +5677,41 @@ Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
   ' export truemap into astar map inside zone
   z = myZ(idConnection)
   For y = -6 To 7
-    For X = -8 To 9
+    For x = -8 To 9
       continue = True
-      tileID = GetTheLong(Matrix(y, X, z, idConnection).s(0).t1, Matrix(y, X, z, idConnection).s(0).t2)
+      tileID = GetTheLong(Matrix(y, x, z, idConnection).s(0).t1, Matrix(y, x, z, idConnection).s(0).t2)
       If tileID = 0 Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf DatTiles(tileID).blocking = True Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
         If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-          myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+          myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           
           
@@ -5719,15 +5719,15 @@ Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
         End If
       End If
       If continue = True Then
-        If (myMap.cost(X, y)) < CostWalkable Then
-          myMap.cost(X, y) = CostWalkable
+        If (myMap.cost(x, y)) < CostWalkable Then
+          myMap.cost(x, y) = CostWalkable
         End If
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 0 Then
             Exit For
           ElseIf tileID = 97 Then 'person
-            tmpID = Matrix(y, X, z, idConnection).s(s).dblID
+            tmpID = Matrix(y, x, z, idConnection).s(s).dblID
             nameofgivenID = GetNameFromID(idConnection, tmpID)
             If nameofgivenID = "" Then
               ' detected mobile with no name! ?
@@ -5736,66 +5736,66 @@ Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
               ' myself
               aRes = -2
             Else
-              myMap.cost(X, y) = CostBlock
+              myMap.cost(x, y) = CostBlock
               Exit For
             End If
           ElseIf DatTiles(tileID).isField Then
-            If (myMap.cost(X, y)) < CostHandicap Then
-              myMap.cost(X, y) = CostHandicap
+            If (myMap.cost(x, y)) < CostHandicap Then
+              myMap.cost(x, y) = CostHandicap
             End If
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           ElseIf DatTiles(tileID).blocking Then
-            myMap.cost(X, y) = CostBlock
+            myMap.cost(x, y) = CostBlock
             Exit For
           ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
             If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-               myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
                
               Exit For
@@ -5803,7 +5803,7 @@ Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
           End If
         Next s
       End If
-    Next X
+    Next x
   Next y
   'force start to be walkable
   myMap.cost(startX, startY) = CostWalkable
@@ -5811,7 +5811,7 @@ End Sub
 
 Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long, ByVal goalY As Long, ByVal showPath As Boolean) As Long
   Dim orders As String
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -5827,7 +5827,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
   Dim inRes As Integer
   Dim continue As Boolean
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   'showPath = True
   ChaotizeXYrel idConnection, goalX, goalY, myZ(idConnection)
@@ -5850,9 +5850,9 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
   Else
     sCheat = ""
     lOrders = Len(orders)
-    For X = 1 To lOrders
-      sCheat = sCheat & " 0" & Mid(orders, X, 1)
-    Next X
+    For x = 1 To lOrders
+      sCheat = sCheat & " 0" & Mid(orders, x, 1)
+    Next x
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Doing short distance path to " & goalX & "," & goalY & " : " & sCheat)
       DoEvents
@@ -5866,8 +5866,8 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
       frmTrueMap.gridMap.Redraw = False
       Px = 8 'start draw path in 0,0 of our gridmap
       Py = 6
-      For X = 1 To lOrders
-        chCompare = Mid(orders, X, 1)
+      For x = 1 To lOrders
+        chCompare = Mid(orders, x, 1)
         frmTrueMap.gridMap.Col = Px
         frmTrueMap.gridMap.Row = Py
         frmTrueMap.gridMap.CellBackColor = &HFFFFC0
@@ -5893,7 +5893,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
           Px = Px - 1
           Py = Py - 1
         End Select
-      Next X
+      Next x
       frmTrueMap.gridMap.Col = Px
       frmTrueMap.gridMap.Row = Py
       frmTrueMap.gridMap.CellBackColor = ColourPath
@@ -5905,8 +5905,8 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
       Px = myX(idConnection) 'start draw path in our ingame position
       Py = myY(idConnection)
       sCheat = ""
-      For X = 1 To lOrders
-        chCompare = Mid(orders, X, 1)
+      For x = 1 To lOrders
+        chCompare = Mid(orders, x, 1)
         Select Case chCompare
         Case StrMoveNorth
           Py = Py - 1
@@ -5930,7 +5930,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
           Py = Py - 1
         End Select
         sCheat = sCheat & " 83 " & FiveChrLon(Px) & " " & FiveChrLon(Py) & " " & GoodHex(CByte(myZ(idConnection))) & " 0A"
-      Next X
+      Next x
       sCheat = FiveChrLon(lOrders * 7) & sCheat
       'aRes = SendLogSystemMessageToClient(idConnection, "Drawing path to " & goalX & "," & goalY & " : " & sCheat)
       inRes = GetCheatPacket(cPacket, sCheat)
@@ -5941,7 +5941,7 @@ Public Function FindBestPath(ByVal idConnection As Integer, ByVal goalX As Long,
     FindBestPath = 0
   End If
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing FindBestPath"
   DoEvents
   FindBestPath = -1
@@ -5950,7 +5950,7 @@ End Function
 
 Public Function FindBestPathV2(ByVal idConnection As Integer, ByVal goalX As Long, ByVal goalY As Long, ByVal showPath As Boolean) As Long
   Dim orders As String
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -5971,7 +5971,7 @@ Public Function FindBestPathV2(ByVal idConnection As Integer, ByVal goalX As Lon
   Dim tryingX As Long
   Dim tryingY As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
  ' showPath = True
   ChaotizeXYrel idConnection, goalX, goalY, myZ(idConnection)
@@ -6082,9 +6082,9 @@ continue:
   Else
     sCheat = ""
     lOrders = Len(orders)
-    For X = 1 To lOrders
-      sCheat = sCheat & " 0" & Mid(orders, X, 1)
-    Next X
+    For x = 1 To lOrders
+      sCheat = sCheat & " 0" & Mid(orders, x, 1)
+    Next x
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Doing short distance path to " & goalX & "," & goalY & " : " & sCheat)
       DoEvents
@@ -6099,8 +6099,8 @@ continue:
       frmTrueMap.gridMap.Redraw = False
       Px = 8 'start draw path in 0,0 of our gridmap
       Py = 6
-      For X = 1 To lOrders
-        chCompare = Mid(orders, X, 1)
+      For x = 1 To lOrders
+        chCompare = Mid(orders, x, 1)
         frmTrueMap.gridMap.Col = Px
         frmTrueMap.gridMap.Row = Py
         frmTrueMap.gridMap.CellBackColor = &HFFFFC0
@@ -6126,7 +6126,7 @@ continue:
           Px = Px - 1
           Py = Py - 1
         End Select
-      Next X
+      Next x
       frmTrueMap.gridMap.Col = Px
       frmTrueMap.gridMap.Row = Py
       frmTrueMap.gridMap.CellBackColor = ColourPath
@@ -6138,8 +6138,8 @@ continue:
       Px = myX(idConnection) 'start draw path in our ingame position
       Py = myY(idConnection)
       sCheat = ""
-      For X = 1 To lOrders
-        chCompare = Mid(orders, X, 1)
+      For x = 1 To lOrders
+        chCompare = Mid(orders, x, 1)
         Select Case chCompare
         Case StrMoveNorth
           Py = Py - 1
@@ -6163,7 +6163,7 @@ continue:
           Py = Py - 1
         End Select
         sCheat = sCheat & " 83 " & FiveChrLon(Px) & " " & FiveChrLon(Py) & " " & GoodHex(CByte(myZ(idConnection))) & " 0A"
-      Next X
+      Next x
       sCheat = FiveChrLon(lOrders * 7) & sCheat
       'aRes = SendLogSystemMessageToClient(idConnection, "Drawing path to " & goalX & "," & goalY & " : " & sCheat)
       inRes = GetCheatPacket(cPacket, sCheat)
@@ -6175,7 +6175,7 @@ continue:
     Exit Function
   End If
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing FindBestPathV2"
   DoEvents
   FindBestPathV2 = -1
@@ -6186,7 +6186,7 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
   Dim orders As String
   Dim startX As Long
   Dim startY As Long
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -6202,15 +6202,15 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
   Dim inRes As Integer
   Dim continue As Boolean
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   startX = 0
   startY = 0
   ' delimiter our map by a wall
-  For X = -9 To 10
-    myMap.cost(X, -7) = CostBlock
-    myMap.cost(X, 8) = CostBlock
-  Next X
+  For x = -9 To 10
+    myMap.cost(x, -7) = CostBlock
+    myMap.cost(x, 8) = CostBlock
+  Next x
   For y = -7 To 8
     myMap.cost(-9, y) = CostBlock
     myMap.cost(10, y) = CostBlock
@@ -6218,41 +6218,41 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
   ' export truemap into astar map inside zone
   z = myZ(idConnection)
   For y = -6 To 7
-    For X = -8 To 9
+    For x = -8 To 9
       continue = True
-      tileID = GetTheLong(Matrix(y, X, z, idConnection).s(0).t1, Matrix(y, X, z, idConnection).s(0).t2)
+      tileID = GetTheLong(Matrix(y, x, z, idConnection).s(0).t1, Matrix(y, x, z, idConnection).s(0).t2)
       If tileID = 0 Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf DatTiles(tileID).blocking = True Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
         If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-          myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+          myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           
           
@@ -6260,68 +6260,68 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
         End If
       End If
       If continue = True Then
-        If (myMap.cost(X, y)) < CostWalkable Then
-          myMap.cost(X, y) = CostWalkable
+        If (myMap.cost(x, y)) < CostWalkable Then
+          myMap.cost(x, y) = CostWalkable
         End If
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 0 Then
             Exit For
           ElseIf DatTiles(tileID).isField Then
-            myMap.cost(X, y) = CostHandicap
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+            myMap.cost(x, y) = CostHandicap
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           ElseIf DatTiles(tileID).blocking Then
-            myMap.cost(X, y) = CostBlock
+            myMap.cost(x, y) = CostBlock
             Exit For
           ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
             If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-               myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
                
               Exit For
@@ -6329,7 +6329,7 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
           End If
         Next s
       End If
-    Next X
+    Next x
   Next y
   'force goal to be walkable
   myMap.cost(goalX, goalY) = CostWalkable
@@ -6350,7 +6350,7 @@ Public Function ExistsPath(idConnection As Integer, goalX As Long, goalY As Long
     Exit Function
   End If
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing ExistsPath"
   DoEvents
   ExistsPath = -1
@@ -6361,7 +6361,7 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
   Dim orders As String
   Dim startX As Long
   Dim startY As Long
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Long
@@ -6380,15 +6380,15 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
   Dim difx As Long
   Dim dify As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   startX = 0
   startY = 0
   ' delimiter our map by a wall
-  For X = -9 To 10
-    myMap.cost(X, -7) = CostBlock
-    myMap.cost(X, 8) = CostBlock
-  Next X
+  For x = -9 To 10
+    myMap.cost(x, -7) = CostBlock
+    myMap.cost(x, 8) = CostBlock
+  Next x
   For y = -7 To 8
     myMap.cost(-9, y) = CostBlock
     myMap.cost(10, y) = CostBlock
@@ -6396,41 +6396,41 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
   ' export truemap into astar map inside zone
   z = myZ(idConnection)
   For y = -6 To 7
-    For X = -8 To 9
+    For x = -8 To 9
       continue = True
-      tileID = GetTheLong(Matrix(y, X, z, idConnection).s(0).t1, Matrix(y, X, z, idConnection).s(0).t2)
+      tileID = GetTheLong(Matrix(y, x, z, idConnection).s(0).t1, Matrix(y, x, z, idConnection).s(0).t2)
       If tileID = 0 Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf DatTiles(tileID).blocking = True Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
         If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-          myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+          myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           
           
@@ -6438,68 +6438,68 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
         End If
       End If
       If continue = True Then
-        If (myMap.cost(X, y)) < CostWalkable Then
-          myMap.cost(X, y) = CostWalkable
+        If (myMap.cost(x, y)) < CostWalkable Then
+          myMap.cost(x, y) = CostWalkable
         End If
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 0 Then
             Exit For
           ElseIf DatTiles(tileID).isField Then
-            myMap.cost(X, y) = CostHandicap
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+            myMap.cost(x, y) = CostHandicap
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           ElseIf DatTiles(tileID).blocking Then
-            myMap.cost(X, y) = CostBlock
+            myMap.cost(x, y) = CostBlock
             Exit For
           ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
             If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-               myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
                
               Exit For
@@ -6507,13 +6507,13 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
           End If
         Next s
       End If
-    Next X
+    Next x
   Next y
   'force start to be walkable
   myMap.cost(startX, startY) = CostWalkable
   ' find best local goal
   bestGoal = AstarGiveBestGoal(startX, startY, goalX, goalY, myMap)
-  difx = Abs(bestGoal.X)
+  difx = Abs(bestGoal.x)
   dify = Abs(bestGoal.y)
   If (difx < 2) And (dify < 2) Then
     If publicDebugMode = True Then
@@ -6524,11 +6524,11 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
     Exit Function
   Else
     If publicDebugMode = True Then
-      aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Trying to find an alternative long distance path to " & goalX & "," & goalY & " .Translated to local move to " & bestGoal.X & "," & bestGoal.y)
+      aRes = SendLogSystemMessageToClient(idConnection, "[Debug] Trying to find an alternative long distance path to " & goalX & "," & goalY & " .Translated to local move to " & bestGoal.x & "," & bestGoal.y)
       DoEvents
     End If
   End If
-  orders = Astar(startX, startY, bestGoal.X, bestGoal.y, myMap)
+  orders = Astar(startX, startY, bestGoal.x, bestGoal.y, myMap)
   If orders = "" Then
     ' we are already in the goal
     FindAnyLongPath = -1
@@ -6538,9 +6538,9 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
   Else
     sCheat = ""
     lOrders = Len(orders)
-    For X = 1 To lOrders
-      sCheat = sCheat & " 0" & Mid(orders, X, 1)
-    Next X
+    For x = 1 To lOrders
+      sCheat = sCheat & " 0" & Mid(orders, x, 1)
+    Next x
 
     sCheat = FiveChrLon(lOrders + 2) & " 64 " & GoodHex(CByte(lOrders)) & sCheat
     inRes = GetCheatPacket(cPacket, sCheat)
@@ -6549,7 +6549,7 @@ Public Function FindAnyLongPath(idConnection As Integer, goalX As Long, goalY As
     FindAnyLongPath = 0
   End If
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing FindAnyLongPath"
   DoEvents
   FindAnyLongPath = -1
@@ -6560,7 +6560,7 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
   Dim orders As String
   Dim startX As Long
   Dim startY As Long
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim s As Byte
@@ -6585,15 +6585,15 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
   Dim sMinusOne As Byte
   Dim PrevTileID As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   startX = 0
   startY = 0
   ' delimiter our map by a wall
-  For X = -9 To 10
-    myMap.cost(X, -7) = CostBlock
-    myMap.cost(X, 8) = CostBlock
-  Next X
+  For x = -9 To 10
+    myMap.cost(x, -7) = CostBlock
+    myMap.cost(x, 8) = CostBlock
+  Next x
   For y = -7 To 8
     myMap.cost(-9, y) = CostBlock
     myMap.cost(10, y) = CostBlock
@@ -6601,41 +6601,41 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
   ' export truemap into astar map inside zone
   z = myZ(idConnection)
   For y = -6 To 7
-    For X = -8 To 9
+    For x = -8 To 9
       continue = True
-      tileID = GetTheLong(Matrix(y, X, z, idConnection).s(0).t1, Matrix(y, X, z, idConnection).s(0).t2)
+      tileID = GetTheLong(Matrix(y, x, z, idConnection).s(0).t1, Matrix(y, x, z, idConnection).s(0).t2)
       If tileID = 0 Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf DatTiles(tileID).blocking = True Then
-        myMap.cost(X, y) = CostBlock
+        myMap.cost(x, y) = CostBlock
         continue = False
       ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
         If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-          myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+          myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           
           
@@ -6643,68 +6643,68 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
         End If
       End If
       If continue = True Then
-        If (myMap.cost(X, y)) < CostWalkable Then
-          myMap.cost(X, y) = CostWalkable
+        If (myMap.cost(x, y)) < CostWalkable Then
+          myMap.cost(x, y) = CostWalkable
         End If
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 0 Then
             Exit For
           ElseIf DatTiles(tileID).isField Then
-            myMap.cost(X, y) = CostHandicap
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+            myMap.cost(x, y) = CostHandicap
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
           ElseIf DatTiles(tileID).blocking Then
-            myMap.cost(X, y) = CostBlock
+            myMap.cost(x, y) = CostBlock
             Exit For
           ElseIf (DatTiles(tileID).floorChangeDOWN = True) Or (DatTiles(tileID).floorChangeUP = True) Then
             If (DatTiles(tileID).requireShovel = False) And (DatTiles(tileID).requireRope = False) And (DatTiles(tileID).requireRightClick = False) Then
-               myMap.cost(X, y) = CostBlock
-               If (myMap.cost(X - 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y - 1) = CostNearHandicap
+               myMap.cost(x, y) = CostBlock
+               If (myMap.cost(x - 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y) = CostNearHandicap
+               If (myMap.cost(x - 1, y)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X - 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X - 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x - 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x - 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X, y + 1) = CostNearHandicap
+               If (myMap.cost(x, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y + 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y + 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y + 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y + 1) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y) = CostNearHandicap
+               If (myMap.cost(x + 1, y)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y) = CostNearHandicap
                End If
-               If (myMap.cost(X + 1, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X + 1, y - 1) = CostNearHandicap
+               If (myMap.cost(x + 1, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x + 1, y - 1) = CostNearHandicap
                End If
-               If (myMap.cost(X, y - 1)) < CostNearHandicap Then
-                 myMap.cost(X, y - 1) = CostNearHandicap
+               If (myMap.cost(x, y - 1)) < CostNearHandicap Then
+                 myMap.cost(x, y - 1) = CostNearHandicap
                End If
                
               Exit For
@@ -6712,31 +6712,31 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
           End If
         Next s
       End If
-    Next X
+    Next x
   Next y
   myMap.cost(0, 0) = CostWalkable
   bestDist = 10000
   For y = -6 To 7
-    For X = -8 To 9
+    For x = -8 To 9
       For s = 1 To 10
-        tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+        tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
         If DatTiles(tileID).isDepot = True Then
-          If (myMap.cost(X - 1, y - 1) = CostWalkable) Or _
-             (myMap.cost(X - 1, y) = CostWalkable) Or _
-             (myMap.cost(X - 1, y + 1) = CostWalkable) Or _
-             (myMap.cost(X, y + 1) = CostWalkable) Or _
-             (myMap.cost(X + 1, y + 1) = CostWalkable) Or _
-             (myMap.cost(X + 1, y) = CostWalkable) Or _
-             (myMap.cost(X + 1, y - 1) = CostWalkable) Or _
-             (myMap.cost(X, y - 1) = CostWalkable) Then
+          If (myMap.cost(x - 1, y - 1) = CostWalkable) Or _
+             (myMap.cost(x - 1, y) = CostWalkable) Or _
+             (myMap.cost(x - 1, y + 1) = CostWalkable) Or _
+             (myMap.cost(x, y + 1) = CostWalkable) Or _
+             (myMap.cost(x + 1, y + 1) = CostWalkable) Or _
+             (myMap.cost(x + 1, y) = CostWalkable) Or _
+             (myMap.cost(x + 1, y - 1) = CostWalkable) Or _
+             (myMap.cost(x, y - 1) = CostWalkable) Then
              sMinusOne = s - 1
-             PrevTileID = GetTheLong(Matrix(y, X, z, idConnection).s(sMinusOne).t1, Matrix(y, X, z, idConnection).s(sMinusOne).t2)
+             PrevTileID = GetTheLong(Matrix(y, x, z, idConnection).s(sMinusOne).t1, Matrix(y, x, z, idConnection).s(sMinusOne).t2)
              ' don't try depots with something over them
              If DatTiles(PrevTileID).blocking = True Then
-               tmpDist = ManhattanDistance(X, y, 0, 0)
+               tmpDist = ManhattanDistance(x, y, 0, 0)
                If tmpDist < bestDist Then
-                 If ExistsPath(idConnection, X, y) = True Then
-                   bestX = X
+                 If ExistsPath(idConnection, x, y) = True Then
+                   bestX = x
                    bestY = y
                    bestS = s
                    bestTileID = tileID
@@ -6749,7 +6749,7 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
           Exit For
         End If
       Next s
-    Next X
+    Next x
   Next y
   If tmpDist = 10000 Then
     aRes = SendLogSystemMessageToClient(idConnection, "Could not find any depot avaiable! Resuming with next command ...")
@@ -6769,7 +6769,7 @@ Public Function GetNearestDepot(idConnection As Integer) As Long
     GetNearestDepot = 0
     Exit Function
   End If
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing GetNearestDepot"
   DoEvents
   GetNearestDepot = -1
@@ -6781,7 +6781,7 @@ Public Sub OpenTheDepot(idConnection As Integer)
   Dim sCheat As String
   Dim cPacket() As Byte
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   '0A 00 82 37 7D A7 7D 09 59 0F 02 00
   bpID = frmBackpacks.GetFirstFreeBpID(idConnection)
@@ -6795,7 +6795,7 @@ Public Sub OpenTheDepot(idConnection As Integer)
     DoEvents
   End If
   Exit Sub
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing OpenTheDepot"
 End Sub
 
@@ -6838,7 +6838,7 @@ Public Function DropLoot(idConnection As Integer) As Long
   Dim inRes As Integer
   Dim amount As Byte
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   DropDelayerTurn(idConnection) = DropDelayerTurn(idConnection) + 1
   If (DropDelayerTurn(idConnection) < DropDelayerConst) Then
@@ -6947,7 +6947,7 @@ Public Function DropLoot(idConnection As Integer) As Long
       Exit Function
     End If
   End If
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing DropLoot"
   DropLoot = -1
   Exit Function
@@ -6975,7 +6975,7 @@ Public Function DropLootToGround(idConnection As Integer) As Long
   Dim amount As Byte
   Dim b3 As Byte
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   DropDelayerTurn(idConnection) = DropDelayerTurn(idConnection) + 1
   If (DropDelayerTurn(idConnection) < DropDelayerConst) Then
@@ -7051,13 +7051,13 @@ Public Function DropLootToGround(idConnection As Integer) As Long
   SafeCastCheatString "DropLootToGround1", idConnection, sCheat
   DropLootToGround = 0
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & " Got connection lose while doing DropLoot"
   DropLootToGround = -1
   Exit Function
 End Function
 Public Function DropItemOnGroundBytes(ByVal idConnection As Integer, ByVal b1 As Byte, ByVal b2 As Byte, maxamount As Byte) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim foundAsource As Boolean
     Dim res1 As TypeSearchItemResult2
     Dim i As Long
@@ -7095,7 +7095,7 @@ Public Function DropItemOnGroundBytes(ByVal idConnection As Integer, ByVal b1 As
     SafeCastCheatString "DropItemOnGroundBytes1", idConnection, sCheat
     DropItemOnGroundBytes = 0
     Exit Function
-gotErr:
+goterr:
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] DropItemOnGround failed (code " & CStr(Err.Number) & ": " & Err.Description & ")")
       DoEvents
@@ -7104,7 +7104,7 @@ gotErr:
     Exit Function
 End Function
 Public Function DropItemOnGround(ByVal idConnection As Integer, ByVal strTile As String) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim b1 As Byte
     Dim b2 As Byte
     Dim b3 As Byte
@@ -7117,7 +7117,7 @@ Public Function DropItemOnGround(ByVal idConnection As Integer, ByVal strTile As
        DropItemOnGround = DropItemOnGroundBytes(idConnection, b1, b2, b3)
        Exit Function
     End If
-gotErr:
+goterr:
     If publicDebugMode = True Then
       aRes = SendLogSystemMessageToClient(idConnection, "[Debug] DropItemOnGround failed (bad format)")
       DoEvents
@@ -7149,7 +7149,7 @@ Public Function PrintDictionary(idConnection As Integer) As Long
   Dim showStr As String
   Dim showStr2 As String
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   aRes = SendLogSystemMessageToClient(idConnection, "Listing all creatures on memory:")
   DoEvents
@@ -7166,7 +7166,7 @@ Public Function PrintDictionary(idConnection As Integer) As Long
   Next
   PrintDictionary = 0
   Exit Function
-gotErr:
+goterr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "# ID" & idConnection & " lost connection at PrintDictionary #"
   frmMain.DoCloseActions idConnection
   DoEvents
@@ -7458,14 +7458,14 @@ Public Sub AddCavebotMove()
   End If
 End Sub
 
-Public Sub AddCavebotMovePoint(idConnection As Integer, X As Long, y As Long, z As Long)
+Public Sub AddCavebotMovePoint(idConnection As Integer, x As Long, y As Long, z As Long)
   If cavebotIDselected > 0 Then
-    frmCavebot.AddScriptLine "move " & X & "," & y & "," & z
+    frmCavebot.AddScriptLine "move " & x & "," & y & "," & z
   End If
 End Sub
 
 Public Function DistBetweenMeAndID(idConnection As Integer, Sid As Double) As Long
-  Dim X As Integer
+  Dim x As Integer
   Dim y As Integer
   Dim z As Integer
   Dim s As Integer
@@ -7473,15 +7473,15 @@ Public Function DistBetweenMeAndID(idConnection As Integer, Sid As Double) As Lo
   Dim currentID As Double
   Dim nameofgivenID As String
   z = myZ(idConnection)
-  For X = -8 To 9
+  For x = -8 To 9
     For y = -6 To 7
         For s = 1 To 10
-          tileID = GetTheLong(Matrix(y, X, z, idConnection).s(s).t1, Matrix(y, X, z, idConnection).s(s).t2)
+          tileID = GetTheLong(Matrix(y, x, z, idConnection).s(s).t1, Matrix(y, x, z, idConnection).s(s).t2)
           If tileID = 97 Then
-           currentID = Matrix(y, X, z, idConnection).s(s).dblID
+           currentID = Matrix(y, x, z, idConnection).s(s).dblID
             If currentID = Sid Then
-                If Abs(X) > Abs(y) Then
-                    DistBetweenMeAndID = Abs(X)
+                If Abs(x) > Abs(y) Then
+                    DistBetweenMeAndID = Abs(x)
                 Else
                     DistBetweenMeAndID = Abs(y)
                 End If
@@ -7492,7 +7492,7 @@ Public Function DistBetweenMeAndID(idConnection As Integer, Sid As Double) As Lo
           End If
         Next s
     Next y
-  Next X
+  Next x
   DistBetweenMeAndID = 1000
 End Function
 
@@ -7500,7 +7500,7 @@ Public Sub DoUnifiedClickMove(idConnection As Integer, ByVal Px As Long, ByVal P
   Dim myBpos As Long
   Dim b1 As Byte
   Dim b2 As Byte
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
 
@@ -7509,7 +7509,7 @@ Public Sub DoUnifiedClickMove(idConnection As Integer, ByVal Px As Long, ByVal P
   Dim pid As Long
   Sid = idConnection
   pid = ProcessID(Sid)
-  X = Px
+  x = Px
   y = Py
   z = Pz
   If z <> myZ(idConnection) Then
@@ -7518,9 +7518,9 @@ Public Sub DoUnifiedClickMove(idConnection As Integer, ByVal Px As Long, ByVal P
   If ((onDepotPhase(idConnection) = 2) Or (onDepotPhase(idConnection) = 6)) Then
     b1 = 0 ' do nothing
   Else
-    ChaotizeXY idConnection, X, y, z
+    ChaotizeXY idConnection, x, y, z
   End If
-  If X < 0 Then
+  If x < 0 Then
     Exit Sub ' Stop because that would be an illegal move
   End If
   If y < 0 Then
@@ -7547,11 +7547,11 @@ Public Sub DoUnifiedClickMove(idConnection As Integer, ByVal Px As Long, ByVal P
 '    ' TODO: read new battle list
 '    Debug.Print "QMoveXYZ not implemented yet"
 '  End If
-  SafeMemoryMoveXYZ Sid, X, y, z
+  SafeMemoryMoveXYZ Sid, x, y, z
 End Sub
 
 
-Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal X As Long, ByVal y As Long, ByVal z As Long)
+Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal x As Long, ByVal y As Long, ByVal z As Long)
   Dim myBpos As Long
   Dim b1 As Byte
   Dim b2 As Byte
@@ -7559,7 +7559,7 @@ Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal X As Long, ByV
   If z <> myZ(idConnection) Then
     Exit Sub ' Stop because that would be an illegal move
   End If
-  If X < 0 Then
+  If x < 0 Then
     Exit Sub ' Stop because that would be an illegal move
   End If
   If y < 0 Then
@@ -7571,8 +7571,8 @@ Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal X As Long, ByV
   pid = ProcessID(idConnection)
   If TibiaVersionLong < 1100 Then
     myBpos = MyBattleListPosition(idConnection)
-    b1 = LowByteOfLong(X)
-    b2 = HighByteOfLong(X)
+    b1 = LowByteOfLong(x)
+    b2 = HighByteOfLong(x)
     Memory_WriteByte adrXgo, b1, pid
     Memory_WriteByte adrXgo + 1, b2, pid
     b1 = LowByteOfLong(y)
@@ -7583,27 +7583,27 @@ Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal X As Long, ByV
     Memory_WriteByte adrZgo, b1, pid
     Memory_WriteByte adrGo + (myBpos * CharDist), 1, pid
   Else
-    SafeMemoryMoveXYZ_Tibia11 idConnection, X, y, z
+    SafeMemoryMoveXYZ_Tibia11 idConnection, x, y, z
   End If
 End Sub
 
 Public Sub ChaotizeXYrel(ByVal idConnection As Integer, ByRef Px As Long, ByRef Py As Long, ByVal Pz As Long)
-    Dim X As Long
+    Dim x As Long
     Dim y As Long
-    X = myX(idConnection) + Px
+    x = myX(idConnection) + Px
     y = myY(idConnection) + Py
-    ChaotizeXY idConnection, X, y, Pz
-    Px = X - myX(idConnection)
+    ChaotizeXY idConnection, x, y, Pz
+    Px = x - myX(idConnection)
     Py = y - myY(idConnection)
 End Sub
 Public Sub ChaotizeXY(ByVal idConnection As Integer, ByRef Px As Long, ByRef Py As Long, ByVal Pz As Long)
   Dim tries As Long
   Dim res As TypeBMSquare
-  Dim X As Long
+  Dim x As Long
   Dim y As Long
   Dim z As Long
   Dim aRes As Long
-  X = Px
+  x = Px
   y = Py
   z = Pz
   tries = 0
@@ -7613,22 +7613,22 @@ Public Sub ChaotizeXY(ByVal idConnection As Integer, ByRef Px As Long, ByRef Py 
        res.walkable = False
        ' randomize, but avoid no walkable points
        While ((res.Color <> &H0) And (res.walkable = False) And (tries < 4))
-          X = Px + randomNumberBetween(-1, 1)
+          x = Px + randomNumberBetween(-1, 1)
           y = Py + randomNumberBetween(-1, 1)
           tries = tries + 1
-          GetBigMapSquare res, X, y, z
+          GetBigMapSquare res, x, y, z
        Wend
        If tries = 4 Then ' use original waypoint
-          X = Px
+          x = Px
           y = Py
        End If
         If publicDebugMode = True Then
-          aRes = SendLogSystemMessageToClient(idConnection, "Doing chaotic move. Original waypoint=" & CStr(Px) & "," & CStr(Py) & "," & CStr(Pz) & " ; Final= " & CStr(X) & "," & CStr(y) & "," & CStr(z))
+          aRes = SendLogSystemMessageToClient(idConnection, "Doing chaotic move. Original waypoint=" & CStr(Px) & "," & CStr(Py) & "," & CStr(Pz) & " ; Final= " & CStr(x) & "," & CStr(y) & "," & CStr(z))
           DoEvents
         End If
     End If
   End If
-  Px = X
+  Px = x
   Py = y
 End Sub
 
@@ -7656,7 +7656,7 @@ Public Function CheckSETUSEITEM(idConnection As Integer) As Boolean
     Dim chosenPoint As Long
     Dim useb1 As Byte
     Dim useb2 As Byte
-    Dim X As Long
+    Dim x As Long
     Dim y As Long
     Dim z As Long
     Dim s As Byte
@@ -7672,18 +7672,18 @@ Public Function CheckSETUSEITEM(idConnection As Integer) As Boolean
         posiblePoints(0).tileb1 = 0
         posiblePoints(0).tileb2 = 0
         posiblePoints(0).strItem = ""
-        For X = -currentDist To currentDist
+        For x = -currentDist To currentDist
           For y = -currentDist To currentDist
-            If MaxV(Abs(X), Abs(y)) = currentDist Then
+            If MaxV(Abs(x), Abs(y)) = currentDist Then
               
               For s = 1 To 10
-                b1 = Matrix(y, X, z, idConnection).s(s).t1
-                b2 = Matrix(y, X, z, idConnection).s(s).t2
+                b1 = Matrix(y, x, z, idConnection).s(s).t1
+                b2 = Matrix(y, x, z, idConnection).s(s).t2
                 tileSTR = GoodHex(b1) & " " & GoodHex(b2)
                 useSTR = getSETUSEITEM(idConnection, tileSTR)
                 If (Not (useSTR = "")) Then
                     'Debug.Print "Found usable target at distance " & CStr(currentDist) & ": " & CStr(X) & "," & CStr(Y)
-                    realX = myX(idConnection) + X
+                    realX = myX(idConnection) + x
                     realY = myY(idConnection) + y
                     If (Not ((realX = SETUSEITEM_lastX(idConnection)) And (realY = SETUSEITEM_lastY(idConnection)))) Then
                         totalPoints = totalPoints + 1
@@ -7699,7 +7699,7 @@ Public Function CheckSETUSEITEM(idConnection As Integer) As Boolean
               Next s
             End If
           Next y
-        Next X
+        Next x
         If totalPoints > 0 Then
             chosenPoint = randomNumberBetween(1, totalPoints)
             Exit For

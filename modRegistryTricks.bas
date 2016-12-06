@@ -75,7 +75,7 @@ Private Function GetCurrentDate()
    GetCurrentDate = FormatDateTime(Date, 1)
 End Function
 Public Function RemoveProgramFromInstallationList(lngGroup As Long, strRegistryPath As String, strToCompare As String, strName As String) As String
-  On Error GoTo gotErr
+  On Error GoTo goterr
         Dim strRes As String
         Dim hSubKey As Long
         Dim rc As Long
@@ -138,7 +138,7 @@ GetKeyError:
          RegCloseKey (hSubKey)
          RemoveProgramFromInstallationList = ""
          Exit Function
-gotErr:
+goterr:
          RemoveProgramFromInstallationList = "ERROR: at RemoveProgramFromInstallationList, code " & CStr(Err.Number) & " : " & Err.Description
 End Function
 
@@ -148,7 +148,7 @@ End Function
  'Delete this key.
 Private Function DeleteKey(ByVal section As Long, ByVal key_name _
     As String) As String
-    On Error GoTo gotErr
+    On Error GoTo goterr
 Dim pos As Integer
 Dim parent_key_name As String
 Dim parent_hKey As Long
@@ -194,14 +194,14 @@ Dim strRes As String
     End If
     DeleteKey = "OK"
     Exit Function
-gotErr:
+goterr:
     DeleteKey = "ERROR: at DeleteKey, code " & CStr(Err.Number) & " : " & Err.Description
 End Function
 
 ' Delete all the key's subkeys.
 Private Function DeleteSubkeys(ByVal section As Long, ByVal _
     key_name As String) As String
-    On Error GoTo gotErr
+    On Error GoTo goterr
 Dim hKey As Long
 Dim subkeys As Collection
 Dim subkey_num As Long
@@ -247,7 +247,7 @@ Dim subkey_name As String
     RegCloseKey hKey
     DeleteSubkeys = "OK"
     Exit Function
-gotErr:
+goterr:
     DeleteSubkeys = "ERROR: at DeleteSubkeys, code " & CStr(Err.Number) & " : " & Err.Description
 End Function
 
@@ -332,7 +332,7 @@ End Function
 
 
 Public Function BlackdFileCopy(strFrom As String, strTo As String) As String
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim fs As Scripting.FileSystemObject
     Dim fol As Scripting.Folder
     Dim fil As Scripting.Folder
@@ -343,7 +343,7 @@ Public Function BlackdFileCopy(strFrom As String, strTo As String) As String
     fs.CopyFile strFrom, strTo, True
     BlackdFileCopy = ""
     Exit Function
-gotErr:
+goterr:
         BlackdFileCopy = "ERROR: System was not able to do the copy" & vbCrLf & _
         "ERROR CODE: " & CStr(Err.Number) & vbCrLf & _
         "ERROR DESCRIPTION: " & Err.Description & vbCrLf & _
@@ -352,7 +352,7 @@ gotErr:
 End Function
 
 Public Function BlackdFileExistCheck(strTo As String) As Boolean
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim fs As Scripting.FileSystemObject
     Dim fol As Scripting.Folder
     Dim fil As Scripting.Folder
@@ -363,7 +363,7 @@ Public Function BlackdFileExistCheck(strTo As String) As Boolean
          BlackdFileExistCheck = True
     End If
     Exit Function
-gotErr:
+goterr:
         MsgBox "ERROR: Filesystem critical error." & vbCrLf & _
         "ERROR CODE: " & CStr(Err.Number) & vbCrLf & _
         "ERROR DESCRIPTION: " & Err.Description, vbCritical + vbOKOnly, "ERROR"
@@ -429,7 +429,7 @@ Public Function RandomFileName() As String
 End Function
 
 Public Function CopyMyselfTo(strNewName As String) As String
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim blnok As Boolean
     Dim strbase As String
     Dim strFrom As String
@@ -442,7 +442,7 @@ Public Function CopyMyselfTo(strNewName As String) As String
     strTo = strbase & strNewName
     CopyMyselfTo = BlackdFileCopy(strFrom, strTo)
     Exit Function
-gotErr:
+goterr:
     If Err.Number = 70 Then
         CopyMyselfTo = "WINDOWS VISTA: a part of the stealth process should be done manually! :" & vbCrLf & _
         "FOR YOUR SAFETY..." & vbCrLf & _

@@ -265,12 +265,12 @@ giveError:
     "Unable to complete the loading." & vbCrLf & _
     "Error description from system: " & Err.Description & vbCrLf & vbCrLf & _
     "PLEASE TRY THE SOLUTIONS POSTED IN THE STICKY FOUND AT OUR SUPPORT FORUM!" & vbCrLf & _
-    "http://www.blackdtools.com/forum/showthread.php?t=16977", _
+    "http://http://www.blackdtools.net/showthread.php?16977-Possible-solutions-for-errors-429-or-339-(Windows-Vista-Windows-7)", _
     vbOKOnly + vbCritical, "Blackd Proxy " & ProxyVersion & " - Critical error"
     startError = "Dim Y"
     Dim y
     startError = "Infinite Loop"
-    y = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    y = ShellExecute(Me.hWnd, "Open", "http://http://www.blackdtools.net/showthread.php?16977-Possible-solutions-for-errors-429-or-339-(Windows-Vista-Windows-7)", &O0, &O0, SW_NORMAL)
     End
   Else
     MsgBox "Sorry, unexpected error detected" & vbCrLf & "Possible reasons:" & vbCrLf & _
@@ -299,9 +299,9 @@ giveError2:
     GoTo continueload
   Else
     startError = "Dim X"
-    Dim X
+    Dim x
     startError = "Infinite Loop"
-    X = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    x = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
   End
   End If
 End Sub
@@ -310,7 +310,7 @@ End Sub
 
 
 Private Function ShowConfigWizard() As Boolean
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim res As Boolean
   Dim strInfo As String
   Dim i As Long
@@ -345,17 +345,17 @@ Private Function ShowConfigWizard() As Boolean
   End If
   ShowConfigWizard = res
   Exit Function
-gotErr:
+goterr:
   ShowConfigWizard = True
 End Function
 
 
 Private Function SafeInitWMI() As Boolean
-On Error GoTo gotErr
+On Error GoTo goterr
 Set objWMIService = GetObject("winmgmts:\\.\root\CIMV2")
 SafeInitWMI = True
 Exit Function
-gotErr:
+goterr:
 SafeInitWMI = False
 End Function
 
@@ -471,7 +471,7 @@ giveError:
     startError = "Dim Y"
     Dim y
     startError = "Infinite Loop"
-    y = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
+    y = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=16977", &O0, &O0, SW_NORMAL)
     End
   Else
     MsgBox "Sorry, unexpected error detected" & vbCrLf & "Possible reasons:" & vbCrLf & _

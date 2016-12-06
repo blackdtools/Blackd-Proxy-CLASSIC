@@ -401,7 +401,7 @@ End Sub
 Private Sub cmdAd_Click()
 Dim a
 
-  a = ShellExecute(Me.hwnd, "Open", "https://blackdtools.com/worldtrade.php", &O0, &O0, SW_NORMAL)
+  a = ShellExecute(Me.hWnd, "Open", "https://blackdtools.com/worldtrade.php", &O0, &O0, SW_NORMAL)
 
 End Sub
 
@@ -410,7 +410,7 @@ Private Sub cmdAdvanced_Click()
   frmAdvanced.WindowState = vbNormal
   frmAdvanced.Show
   frmAdvanced.SetFocus
-  SetWindowPos frmAdvanced.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmAdvanced.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -418,7 +418,7 @@ Private Sub cmdBroadcast_Click()
   frmBroadcast.WindowState = vbNormal
   frmBroadcast.Show
   frmBroadcast.SetFocus
-  SetWindowPos frmBroadcast.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmBroadcast.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 '#Const FinalMode =0
@@ -433,7 +433,7 @@ Private Sub cmdCavebot_Click()
   frmCavebot.WindowState = vbNormal
   frmCavebot.Show
   frmCavebot.SetFocus
-  SetWindowPos frmCavebot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmCavebot.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -442,14 +442,14 @@ Private Sub cmdCheats_Click()
   frmCheats.WindowState = vbNormal
   frmCheats.Show
   frmCheats.SetFocus
-  SetWindowPos frmCheats.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmCheats.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdEvents_Click()
   frmEvents.WindowState = vbNormal
   frmEvents.Show
   frmEvents.SetFocus
-  SetWindowPos frmEvents.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmEvents.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdHardcoreCheats_Click()
@@ -457,7 +457,7 @@ Private Sub cmdHardcoreCheats_Click()
   frmHardcoreCheats.WindowState = vbNormal
   frmHardcoreCheats.Show
   frmHardcoreCheats.SetFocus
-  SetWindowPos frmHardcoreCheats.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmHardcoreCheats.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdHotkeys_Click()
@@ -465,7 +465,7 @@ Private Sub cmdHotkeys_Click()
   frmHotkeys.WindowState = vbNormal
   frmHotkeys.Show
   frmHotkeys.SetFocus
-  SetWindowPos frmHotkeys.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmHotkeys.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -474,7 +474,7 @@ Private Sub cmdHPmana_Click()
   frmHPmana.WindowState = vbNormal
   frmHPmana.Show
   frmHPmana.SetFocus
-  SetWindowPos frmHPmana.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmHPmana.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -482,8 +482,8 @@ End Sub
 
 Private Sub cmdLaunchTibia_Click()
   ' open Shoot Fruits in default web navigator
-  Dim X
-  X = ShellExecute(Me.hwnd, "Open", "http://shootfruits.com", &O0, &O0, SW_NORMAL)
+  Dim x
+  x = ShellExecute(Me.hWnd, "Open", "http://shootfruits.com", &O0, &O0, SW_NORMAL)
   
 '    Dim res As String
 '    Dim tpath As String
@@ -534,7 +534,7 @@ Private Sub cmdLogs_Click()
   frmMain.WindowState = vbNormal
   frmMain.Show
   frmMain.SetFocus
-  SetWindowPos frmMain.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmMain.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -542,7 +542,7 @@ Private Sub cmdMagebomb_Click()
   frmMagebomb.WindowState = vbNormal
   frmMagebomb.Show
   frmMagebomb.SetFocus
-  SetWindowPos frmMagebomb.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmMagebomb.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 'Private Sub cmdMagebot_Click()
@@ -566,7 +566,7 @@ Private Sub cmdNews_Click()
   frmNews.WindowState = vbNormal
   frmNews.Show
   frmNews.SetFocus
-  SetWindowPos frmNews.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmNews.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -575,7 +575,7 @@ Private Sub cmdRunemaker_Click()
   frmRunemaker.WindowState = vbNormal
   frmRunemaker.Show
   frmRunemaker.SetFocus
-  SetWindowPos frmRunemaker.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmRunemaker.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdSave_Click()
@@ -597,7 +597,7 @@ Private Sub cmdStealth_Click()
   frmStealth.WindowState = vbNormal
   frmStealth.Show
   frmStealth.SetFocus
-  SetWindowPos frmStealth.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmStealth.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 Private Sub cmdStopAlarm_Click()
@@ -636,14 +636,14 @@ Private Sub cmdTrainer_Click()
   frmTrainer.WindowState = vbNormal
   frmTrainer.Show
   frmTrainer.SetFocus
-  SetWindowPos frmTrainer.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmTrainer.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
 Private Sub cmdTutorial_Click()
   ' open tutorial in default web navigator
-  Dim X
-  X = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=221", &O0, &O0, SW_NORMAL)
+  Dim x
+  x = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/showthread.php?t=221", &O0, &O0, SW_NORMAL)
 End Sub
 
 
@@ -653,14 +653,14 @@ Private Sub cmdUnknownFeature_Click()
   frmCondEvents.WindowState = vbNormal
   frmCondEvents.Show
   frmCondEvents.SetFocus
-  SetWindowPos frmCondEvents.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmCondEvents.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
 Private Sub cmdVIPsupport_Click()
  ' open tutorial in default web navigator
-  Dim X
-  X = ShellExecute(Me.hwnd, "Open", "https://blackdtools.com/vip.php", &O0, &O0, SW_NORMAL)
+  Dim x
+  x = ShellExecute(Me.hWnd, "Open", "https://blackdtools.com/vip.php", &O0, &O0, SW_NORMAL)
 
 End Sub
 
@@ -668,7 +668,7 @@ Private Sub cmdWarbot_Click()
   frmWarbot.WindowState = vbNormal
   frmWarbot.Show
   frmWarbot.SetFocus
-  SetWindowPos frmWarbot.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
+  SetWindowPos frmWarbot.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE
 End Sub
 
 
@@ -695,33 +695,33 @@ Public Sub Form_Unload(Cancel As Integer)
     End If
 End Sub
 
-Private Sub lblAltSite_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lblAltSite_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim a
 If Button = 1 Then
- a = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.es/index.php", &O0, &O0, SW_NORMAL)
+ a = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.es/index.php", &O0, &O0, SW_NORMAL)
 End If
 End Sub
 
-Private Sub lblForum_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lblForum_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim a
 If Button = 1 Then
-  a = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/forum/index.php", &O0, &O0, SW_NORMAL)
+  a = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/forum/index.php", &O0, &O0, SW_NORMAL)
 End If
 End Sub
 
-Private Sub lblMainSite_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lblMainSite_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim a
 If Button = 1 Then
- a = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/index.php", &O0, &O0, SW_NORMAL)
+ a = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/index.php", &O0, &O0, SW_NORMAL)
 End If
 End Sub
 
 
 
-Private Sub lblUpdates_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lblUpdates_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim a
 If Button = 1 Then
-  a = ShellExecute(Me.hwnd, "Open", "http://www.blackdtools.com/freedownloads.php", &O0, &O0, SW_NORMAL)
+  a = ShellExecute(Me.hWnd, "Open", "http://www.blackdtools.com/freedownloads.php", &O0, &O0, SW_NORMAL)
 End If
 End Sub
 
@@ -741,7 +741,7 @@ Private Sub mPopRestore_Click()
   'called when the user clicks the popup menu Restore command
   Dim result As Long
   Me.WindowState = vbNormal
-  result = SetForegroundWindow(Me.hwnd)
+  result = SetForegroundWindow(Me.hWnd)
   Me.Show
 End Sub
 

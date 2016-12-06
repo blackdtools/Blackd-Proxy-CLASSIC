@@ -46,7 +46,7 @@ Public Type TypeDatTile
 End Type
 Public highestDatTile As Long 'number of last Tile loaded
 Public DatTiles() As TypeDatTile ' array of tiles
-'Public DatTiles2() As TypeDatTile ' array of tiles - for debug compare
+' Public DatTiles2() As TypeDatTile ' array of tiles - for debug compare
 Public MAXDATTILES As Long
 Public MAXTILEIDLISTSIZE As Long
 Public AditionalStairsToDownFloor() As Long
@@ -60,12 +60,12 @@ Private debugGraphicPart As Boolean
 Private byteArray() As Byte
 
 Public Function protectedMult(lWidth, lHeight, lBlendframes, lXdiv, lYdiv, lAnimcount, lRare, lFactor) As Long
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim res As Long
   res = lWidth * lHeight * lBlendframes * lXdiv * lYdiv * lAnimcount * lRare * lFactor
   protectedMult = res
   Exit Function
-gotErr:
+goterr:
   res = -1
 End Function
 
@@ -8482,7 +8482,7 @@ Public Function readProtobufNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef
      Dim b3 As Byte
      Dim b4 As Byte
      Dim b5 As Byte
-     On Error GoTo gotErr
+     On Error GoTo goterr
      b1 = arr(pos)
      num = CLng(b1)
      If (b1 < &H80) Then
@@ -8505,15 +8505,21 @@ Public Function readProtobufNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef
                     positionsRead = 4
                 Else
                     b5 = arr(pos + 4)
-                    num = num + (268435456 * (CLng(b5) - 1)) ' 268435456 = 2097152*128
-                    positionsRead = 5
+              
+                    If (arr(pos + 5) = &HFF) Then
+                       positionsRead = 10
+                       num = -1
+                    Else
+                       num = num + (268435456 * (CLng(b5) - 1)) ' 268435456 = 2097152*128
+                       positionsRead = 5
+                    End If
                 End If
             End If
         End If
      End If
      readProtobufNumber = num
      Exit Function
-gotErr:
+goterr:
      readProtobufNumber = -2
 End Function
 
@@ -8737,6 +8743,10 @@ Const expectedVersion As Long = 17223
   Dim expectedBytes As Long
   Dim rareBytes As Long
   Dim gDebug As String
+  Dim gTileCount As Long
+  Dim gproperties_end As Long
+  Dim realGstart As Long
+  Dim expectedGTiles As Long
   #If TileDebug = 1 Then
     OverwriteOnFile "tibiadatdebug.txt", "Here is what Blackd Proxy could read in your .dat file :"
   #End If
@@ -8773,7 +8783,8 @@ Const expectedVersion As Long = 17223
     lPrev2 = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
     graphicPart2_size = readProtobufNumber(byteArray, pos, positionsRead)
-        
+    realGstart = pos + positionsRead
+    
     properties_start = pos + positionsRead + graphicPart2_size
     graphicPart_end = properties_start - 1
     pos = pos + 1 + positionsRead
@@ -8784,7 +8795,8 @@ Const expectedVersion As Long = 17223
     lAnimcount = readProtobufNumber(byteArray, pos, positionsRead)
     pos = pos + 1 + positionsRead
     lNew = readProtobufNumber(byteArray, pos, positionsRead)
-    expectedBytes = 10 + (lXdiv * lYdiv * lAnimcount * 4)
+    expectedGTiles = lXdiv * lYdiv * lAnimcount
+    expectedBytes = 10 + (expectedGTiles * 4)
  
 '    If (currentTile = 134) Then
 '    Debug.Print expectedBytes & "vs" & graphicPart2_size
@@ -8799,9 +8811,10 @@ Const expectedVersion As Long = 17223
           tileLog = "tile #" & CStr(currentTile) & ":"
       
           gDebug = "[lXdiv=" & GoodHex(CByte(lXdiv)) & "] [lYdiv=" & GoodHex(CByte(lYdiv)) & "] [lAnimcount=" & GoodHex(CByte(lAnimcount)) & "]"
-          If (graphicPart2_size > expectedBytes) Then
-              gDebug = gDebug & " [lRare>01]"
-          End If
+'          If (graphicPart2_size > expectedBytes) Then
+'              gDebug = gDebug & " [lRare>01]"
+'          End If
+         ' gDebug = gDebug & " [g2=" & graphicPart2_size & "] [ex=" & expectedBytes & "]"
           ' Following cases should not happen, else write log about it:
           If lPrev1 <> 2 Then
             tileLog = tileLog & "lPrev1!!!!!!!!!!!" & vbCrLf
@@ -8821,18 +8834,87 @@ Const expectedVersion As Long = 17223
             debugGraphicPart = False
         End If
     #End If
-    ' debugGraphicPart = True ' uncomment this line to log full content
+   ' debugGraphicPart = True ' uncomment this line to log full content
 
 
-    pos = graphicPart_start
-    movePos pos, graphicPart_end - graphicPart_start + 1, True
+   ' pos = graphicPart_start
+  '  movePos pos, graphicPart_end - graphicPart_start + 1, True
+    pos = realGstart
+    gTileCount = 0
+    Do While pos <= graphicPart_end
+            optByte = byteArray(pos)
+            Select Case optByte
+            Case &H1A
+               movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H8
+              movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H10
+              movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H18
+              movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H20
+              movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H28
+               gTileCount = gTileCount + 1
+                 movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H32
+               movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H38
+               movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H40
+              movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case &H4A
+               movePos pos, 0, True
+               movePos pos, 1, False, 0
+               lonNumber = readProtobufNumber(byteArray, pos, positionsRead)
+               movePos pos, positionsRead
+            Case Else
+                ' Our parser needs an update
+                #If TileDebug = 1 Then
+                     tileLog = tileLog & vbCrLf & "GPARSER ERROR - Unexpected gtile: " & GoodHex(optByte) & vbCrLf
+                     tileLog = tileLog & vbCrLf & "File continues:"
+                     movePos pos, 100
+                     LogOnFile "tibiadatdebug.txt", tileLog
+                #End If
+                LoadDatFileQ = -4 ' Unknown property
+                Exit Function
+            End Select
+    Loop
+    lRare = gTileCount / expectedGTiles
+    gDebug = gDebug & " [lRare=" & GoodHex(CByte(lRare)) & "]"
+    atGraphicPart = False
     
     ' Skip properties block header (It only contains number of bytes of real properties)
     properties_size_without_header = readProtobufNumber(byteArray, pos, positionsRead)
     properties_header_size = 1 + positionsRead
     movePos pos, properties_header_size
-    
-    atGraphicPart = False
     
     #If ParseProperties = 0 Then
         movePos pos, properties_end - properties_start + 1 - properties_header_size, True
@@ -9296,10 +9378,15 @@ Const expectedVersion As Long = 17223
   Loop
   AddBlackdProxyFlags ' Add our custom properties
   
+  
+  
 '  CopyToDatTiles2
 '  Dim resIgnore As Long
 '  resIgnore = LoadDatFile11("c:\tibiaold\Tibia.dat")
 '  CompareDatTiles
+
+
+
   LoadDatFileQ = 0
   Exit Function
   
@@ -9307,8 +9394,8 @@ badErr:
   DBGtileError = "Error number = " & CStr(Err.Number) & vbCrLf & "Error description = " & Err.Description & vbCrLf & "Path = " & tibiadathere
   LoadDatFileQ = -4 ' bad format or wrong version of given tibia.dat
 End Function
-
-
+'
+'
 'Public Sub CopyToDatTiles2()
 '    Dim lastT As Long
 '    Dim i As Integer
@@ -9648,7 +9735,7 @@ End Function
 
 
 Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As Long, ByRef par_file As String)
-  On Error GoTo gotErr
+  On Error GoTo goterr
   par_version = 0
   par_file = ""
   If (Right$(strFilePath, 9) = "tibia.dat") Then
@@ -9703,7 +9790,7 @@ Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As
       Close #fn
     End If
     Exit Sub
-gotErr:
+goterr:
     dateErrDescription = "Error " & Err.Number & " at GetDATEOfFile. Here:" & vbCrLf & _
      strLine & vbCrLf & vbCrLf & "Error description: " & Err.Description
     par_version = -1
