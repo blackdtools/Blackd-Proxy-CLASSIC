@@ -62,6 +62,6 @@ frmOld = 0, 0, 0, 0, C, 104, 104, 1129, 764, C
 frmPersistent = 0, 0, 0, 0, C, 130, 130, 1155, 790, C
 frmShowhk = 0, 0, 0, 0, C, 156, 156, 1181, 816, C
 frmIdlist = 0, 0, 0, 0, C, 182, 182, 1207, 842, C
-modTibia11Functions = 52, 52, 1077, 712, 
+modTibia11Functions = 52, 52, 1077, 712, Z
 modFreeImage = 0, 0, 0, 0, C
 modFloat = 0, 0, 0, 0, C

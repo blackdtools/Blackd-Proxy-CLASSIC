@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "41.8" ' Proxy version ' string version
-Public Const myNumericVersion = 41800 ' numeric version
+Public Const ProxyVersion = "41.9" ' Proxy version ' string version
+Public Const myNumericVersion = 41900 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -6372,7 +6372,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' E7 00 20 1C
 
       pos = pos + 4
-    Case &HE8 ' Prey Menu - Tibia 11.02 +
+Case &HE8 ' Prey Menu - Tibia 11.02 +
     
       ' E8 00 02 0D 00 64 77 61 72 66 20 73 6F 6C 64 69 65 72
       ' 47 00 00 00 00 00 00
@@ -6401,12 +6401,18 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       ' 08 00 00 00 00 00 00
       ' B0 04
 
-
-
       lonN = CLng(packet(pos + 2))
-      If lonN = 0 Then
+      Select Case lonN
+      Case 0
         pos = pos + 6
-      ElseIf lonN = 3 Then
+      Case 1
+        ' E8 00 01 00 00
+        pos = pos + 5
+      Case 2
+        pos = pos + 3
+        templ2 = GetTheLong(packet(pos), packet(pos + 1))
+        pos = pos + 2 + templ2 + 7 + 8
+      Case 3
         itemCount = CLng(packet(pos + 3))
         pos = pos + 4
         For templ1 = 1 To itemCount
@@ -6414,11 +6420,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           pos = pos + 2 + templ2 + 7
         Next templ1
         pos = pos + 2
-      ElseIf lonN = 2 Then
-        pos = pos + 3
-        templ2 = GetTheLong(packet(pos), packet(pos + 1))
-        pos = pos + 2 + templ2 + 7 + 8
-      ElseIf lonN = 4 Then
+      Case 4
         itemCount = CLng(packet(pos + 7))
         pos = pos + 8
         For templ1 = 1 To itemCount
@@ -6426,12 +6428,9 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           pos = pos + 2 + templ2 + 7
         Next templ1
         pos = pos + 2
-      Else
+      Case Else
         pos = pos + 10000
-      End If
-      
-   
-
+      End Select
     Case &HE9 ' Prey Menu - Tibia 11.02 +
      ' E9 90 01 00 00
       pos = pos + 5
