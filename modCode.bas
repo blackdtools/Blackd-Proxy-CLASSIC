@@ -5,15 +5,15 @@ Attribute VB_Name = "modCode"
 Option Explicit
 
 Public Const FIX_addConfigPaths As String = _
-"config1033,config1034,config1035,config1036,config1037,config1038,config1039,config1040,config1041,config1050,config1051,config1051preview,config1052,config1052preview,config1053,config1053preview,config1054,config1055,config1056,config1057,config1058,config1059,config1060,config1061,config1062,config1063,config1064,config1070,config1071,config1072,config1073,config1074,config1075,config1076,config1077,config1078,config1079,config1080,config1081,config1082,config1090,config1091,config1092,config1093,config1094,config1095,config1096,config1097,config1098,config1099,config1100,config1101,config1102"
+"config1033,config1034,config1035,config1036,config1037,config1038,config1039,config1040,config1041,config1050,config1051,config1051preview,config1052,config1052preview,config1053,config1053preview,config1054,config1055,config1056,config1057,config1058,config1059,config1060,config1061,config1062,config1063,config1064,config1070,config1071,config1072,config1073,config1074,config1075,config1076,config1077,config1078,config1079,config1080,config1081,config1082,config1090,config1091,config1092,config1093,config1094,config1095,config1096,config1097,config1098,config1099,config1100,config1101,config1102,config1103"
 
 Public Const FIX_addConfigVersions As String = _
-"10.33,10.34,10.35,10.36,10.37,10.38,10.39,10.4,10.41,10.5,10.51,10.51 preview,10.52,10.52 preview,10.53,10.53 preview,10.54,10.55,10.56,10.57,10.58,10.59,10.60,10.61,10.62,10.63,10.64,10.70,10.71,10.72,10.73,10.74,10.75,10.76,10.77,10.78,10.79,10.80,10.81,10.82,10.90,10.91,10.92,10.93,10.94,10.95,10.96,10.97,10.98,10.99,11.00,11.01,11.02"
+"10.33,10.34,10.35,10.36,10.37,10.38,10.39,10.4,10.41,10.5,10.51,10.51 preview,10.52,10.52 preview,10.53,10.53 preview,10.54,10.55,10.56,10.57,10.58,10.59,10.60,10.61,10.62,10.63,10.64,10.70,10.71,10.72,10.73,10.74,10.75,10.76,10.77,10.78,10.79,10.80,10.81,10.82,10.90,10.91,10.92,10.93,10.94,10.95,10.96,10.97,10.98,10.99,11.00,11.01,11.02,11.03"
 
 Public Const FIX_addConfigVersionsLongs As String = _
-"1033,1034,1035,1036,1037,1038,1039,1040,1041,1050,1051,1051,1052,1052,1053,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1090,1091,1092,1093,1094,1095,1096,1097,1098,1099,1100,1101,1102"
+"1033,1034,1035,1036,1037,1038,1039,1040,1041,1050,1051,1051,1052,1052,1053,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1090,1091,1092,1093,1094,1095,1096,1097,1098,1099,1100,1101,1102,1103"
 
-Public Const FIX_highestTibiaVersionLong As String = "1102"
+Public Const FIX_highestTibiaVersionLong As String = "1103"
 Public Const FIX_TibiaVersionDefaultString As String = "10.99"
 Public Const FIX_TibiaVersionDefaultLong As String = "1099"
 Public Const FIX_TibiaVersionForceString As String = "10.99"
@@ -31,6 +31,10 @@ Public Const cte_initMANA = 10000
 Public Const localstr As String = "127.0.0.1"
 Public Const longsecretkey = "pfiwmvjgjikdfzasdruieopqwfhgkvvbnmklpofufrhufhuhsqaewftswgyguuhbvxhchufudhgoipopeqwiueifhjhsfdzvvcdvhfhfruyiurtuiuwfewqweffswqdepoffr"
 
+Public Type TypeInitialPacket
+    packet() As Byte
+    mustSend As Boolean
+End Type
 Type url
     Scheme As String
     Host As String
@@ -525,6 +529,7 @@ Public aimbotOptions() As TypeaimbotOptions
 Public ConnectionBuffer() As TypeBuffer
 Public ConnectionBufferLogin() As TypeBuffer
 
+
 Public CharacterList As TypeCharacterList
 Public CharacterList2() As TypeCharacterList2
 
@@ -826,6 +831,8 @@ Public CurrBlackdServer_folder As String
 
 Public ValueOfUservar As Scripting.Dictionary  ' A dictionary Uservar (string) -> name (string)
 Public lastUsedChannelID() As String
+
+Public mustSendFirstWhenConnected() As TypeInitialPacket
 'Public VarProtection5 As Long
 Public lastRecChannelID() As String
 
@@ -1127,14 +1134,14 @@ End Function
 '  End If
 'End Function
 
-Public Sub OverwriteOnFileSimple(file_name As String, strtext As String)
+Public Sub OverwriteOnFileSimple(file_name As String, strText As String)
   Dim fn As Integer
   Dim writeThis As String
   Dim a As Long
   On Error GoTo ignoreit
   a = 0
   fn = FreeFile
-    writeThis = strtext
+    writeThis = strText
   Open App.Path & "\" & file_name For Output As #fn
     Print #fn, writeThis
   Close #fn
@@ -1144,14 +1151,14 @@ ignoreit:
   a = -1
 End Sub
 
-Public Sub AddwriteOnFileSimple(file_name As String, strtext As String)
+Public Sub AddwriteOnFileSimple(file_name As String, strText As String)
   Dim fn As Integer
   Dim writeThis As String
   Dim a As Long
   On Error GoTo ignoreit
   a = 0
   fn = FreeFile
-    writeThis = strtext
+    writeThis = strText
   Open App.Path & "\" & file_name For Append As #fn
     Print #fn, writeThis
   Close #fn
@@ -3943,6 +3950,50 @@ Public Function FromHexToDec(str As String) As Byte
   End Select
   FromHexToDec = res
 End Function
+
+'Public Sub GenerateSelectionPacket(ByRef genPacket() As Byte, ByRef lastServerName As String)
+ '   Dim l As Integer
+ '   Dim c As String
+   ' Dim i As Integer
+   ' l = Len(lastServerName)
+    'ReDim genPacket(l)
+    'For i = 0 To l - 1
+     '   c = Mid(lastServerName, i + 1, 1)
+      '  genPacket(i) = Asc(c)
+    'Next i
+    'genPacket(l) = &HA
+'End Sub
+Public Function ConvSToAscii(ByRef b() As Byte) As String
+  ' converts an 2 character string that represents a byte
+  ' to a 1 ascii character (1 character string)
+  Dim res As String
+  Dim i As Integer
+  #If FinalMode Then
+  On Error GoTo endF
+  #End If
+  res = ""
+  For i = 0 To UBound(b)
+  If Not (b(i) = &HA) Then
+    res = res & Chr(b(i))
+    End If
+  Next i
+endF:
+  ConvSToAscii = res
+End Function
+Public Function ConvBToAscii(b As Byte) As String
+  ' converts an 2 character string that represents a byte
+  ' to a 1 ascii character (1 character string)
+  Dim res As String
+  #If FinalMode Then
+  On Error GoTo endF
+  #End If
+  res = "?"
+  res = Chr(b)
+
+endF:
+  ConvBToAscii = res
+End Function
+
 Public Function ConvToAscii(str As String) As String
   ' converts an 2 character string that represents a byte
   ' to a 1 ascii character (1 character string)
@@ -5037,7 +5088,7 @@ Public Function GetMyAppDataFolder() As String
 goterr:
     GetMyAppDataFolder = App.Path
 End Function
-Public Sub LogOnFile(file_name As String, strtext As String)
+Public Sub LogOnFile(file_name As String, strText As String)
   Dim fn As Integer
   Dim errheader As String
   Dim writeThis As String
@@ -5057,10 +5108,10 @@ Public Sub LogOnFile(file_name As String, strtext As String)
     Else
        errheader = errheader & "[Playing real servers] "
     End If
-    writeThis = errheader & strtext
+    writeThis = errheader & strText
     frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & writeThis
   Else
-    writeThis = strtext
+    writeThis = strText
   End If
   If (file_name = "errors.txt") Then
     Dim mySafeSolder As String
@@ -5090,7 +5141,7 @@ ignoreit:
   a = -1
 End Sub
 
-Public Sub OverwriteOnFile(file_name As String, strtext As String)
+Public Sub OverwriteOnFile(file_name As String, strText As String)
   Dim fn As Integer
   Dim errheader As String
   Dim writeThis As String
@@ -5100,9 +5151,9 @@ Public Sub OverwriteOnFile(file_name As String, strtext As String)
   fn = FreeFile
   If file_name = "errors.txt" Then
     errheader = "[" & Format(Date, "dd/mm/yyyy") & " " & Format(Time, "hh:mm:ss") & " using version " & ProxyVersion & " , with config.ini v" & CStr(TibiaVersionLong) & " ] "
-    writeThis = errheader & strtext
+    writeThis = errheader & strText
   Else
-    writeThis = strtext
+    writeThis = strText
   End If
   If (file_name = "errors.txt") Then
     Dim mySafeSolder As String
@@ -8500,7 +8551,10 @@ While pos <= lastp
 Wend
 parseVars = resP
 End Function
-
+Public Sub initInitialPacket(idConnection As Integer)
+    ReDim mustSendFirstWhenConnected(idConnection).packet(0)
+    mustSendFirstWhenConnected(idConnection).mustSend = False
+End Sub
 Public Function GiveExpInfo(idConnection As Integer, formatStr As String) As Long
   Dim aRes As Long
   Dim theMessage As String

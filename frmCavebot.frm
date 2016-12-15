@@ -2041,7 +2041,7 @@ Private Sub cmdLoadCopyPaste_Click()
     Dim ai As Long
     Dim pieces() As String
     Dim strLine As String
-    Dim strtext As String
+    Dim strText As String
     If cavebotIDselected > 0 Then
         lblInfo.Caption = "Waiting for copy/paste..."
         ClosedBoard = False
@@ -2066,9 +2066,9 @@ Private Sub cmdLoadCopyPaste_Click()
         If CanceledBoard = False Then
             cavebotScript(cavebotIDselected).RemoveAll
             cavebotLenght(cavebotIDselected) = 0
-            strtext = "" & frmBigText.txtBoard.Text
-            If strtext <> "" Then
-                pieces = Split(strtext, vbCrLf)
+            strText = "" & frmBigText.txtBoard.Text
+            If strText <> "" Then
+                pieces = Split(strText, vbCrLf)
                 i = 0
                 For ai = 0 To UBound(pieces)
                   strLine = pieces(ai)

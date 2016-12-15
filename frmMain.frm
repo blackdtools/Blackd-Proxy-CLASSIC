@@ -891,6 +891,7 @@ lastLoadLine = 660
     CavebotLastSpecialMove(i) = 0
     StatusBits(i) = "0000000000000000"
     lastUsedChannelID(i) = "05 00"
+    initInitialPacket CInt(i)
     lastRecChannelID(i) = "05 00"
     makingRune(i) = False
     UHRetryCount(i) = 0
@@ -1709,6 +1710,7 @@ Public Sub DoCloseActions(ByVal Index As Integer)
   StatusBits(Index) = "0000000000000000"
   runeTurn(Index) = randomNumberBetween(0, 29)
   lastUsedChannelID(Index) = "05 00"
+  initInitialPacket CInt(Index)
   lastRecChannelID(Index) = "05 00"
   reconnectionRetryCount(Index) = 0
   nextReconnectionRetry(Index) = 0
@@ -3001,6 +3003,10 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   Else
     MAXDATTILES = 10000
   End If
+  If (TibiaVersionLong >= 1099) And (MAXDATTILES < 30000) Then
+    MAXDATTILES = 30000
+    Debug.Print "Warning: Fixed MAXDATTILES"
+  End If
   MAXDATTILESpath = here
   
   strInfo = String$(50, 0)
@@ -3132,6 +3138,12 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
         NumberOfLoginServers = 10
     Else
         NumberOfLoginServers = 5
+    End If
+  End If
+  If (TibiaVersionLong >= 1099) And (subTibiaVersionLong > 0) Then
+    If NumberOfLoginServers > 8 Then
+        NumberOfLoginServers = 8
+        Debug.Print "Warning: Fixed NumberOfLoginServers"
     End If
   End If
   
@@ -4092,6 +4104,7 @@ ReDim DoingNewLootMAXGTC(1 To MAXCLIENTS)
   ReDim runemakerMana1(1 To MAXCLIENTS)
   ReDim makingRune(1 To MAXCLIENTS)
   ReDim lastUsedChannelID(1 To MAXCLIENTS)
+  ReDim mustSendFirstWhenConnected(1 To MAXCLIENTS)
   ReDim lastRecChannelID(1 To MAXCLIENTS)
   ReDim CavebotHaveSpecials(1 To MAXCLIENTS)
   ReDim CavebotLastSpecialMove(1 To MAXCLIENTS)
@@ -6992,6 +7005,8 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
   Dim tmpPORT As Long
   Dim strToDomain As String
   Dim tmpStr As String
+  Dim genPacket() As Byte
+  
   #If FinalMode Then
   On Error GoTo goterr
   #End If
@@ -7172,6 +7187,10 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
           Else
             strToDomain = CharacterList2(tmpID).item(listPos).serverDOMAIN
           End If
+          'lastServerName = CharacterList2(tmpID).item(listPos).ServerName
+          
+          
+   
           txtPackets.Text = txtPackets.Text & vbCrLf & "#the client ID " & tmpID & " selected the character " & _
            CharacterList2(tmpID).item(listPos).CharacterName & " - forwarding connection to " & strToDomain & ":" & _
            CStr(CharacterList2(tmpID).item(listPos).serverPort) & " ( " & _
@@ -7185,6 +7204,9 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
           tmpPORT = CLng(CharacterList2(tmpID).item(listPos).serverPort)
           sckServerGame(tmpID).RemotePort = tmpPORT
           sckServerGame(tmpID).Connect
+          
+          
+
           If cteDebugConEvents = True Then
             LogConEvent "Connecting to " & CharacterList2(tmpID).item(listPos).ServerName & " = " & CharacterList2(tmpID).item(listPos).serverDOMAIN & ":" & CharacterList2(tmpID).item(listPos).serverPort
           End If
@@ -7534,8 +7556,27 @@ Private Sub SckClientGame_DataArrival(Index As Integer, ByVal bytesTotal As Long
     Dim SubPacket() As Byte
     Dim Offset As Long
     Dim SubPacketLen As Long
-
+   ' Dim genPacket() As Byte
+    Dim strText As String
+    Dim i As Integer
+    Dim li As Integer
+    Dim headerVal As Long
     sckClientGame(Index).GetData FullPacket, vbArray + vbByte
+    If (TibiaVersionLong = 1099) And (subTibiaVersionLong > 0) Or (TibiaVersionLong > 1102) Then
+            headerVal = GetTheLong(FullPacket(0), FullPacket(1))
+            If headerVal > bytesTotal Then
+                ' Debug.Print "headerVal=" & CStr(headerVal) & " bytesTotal=" & CStr(bytesTotal)
+                ' strText = ConvSToAscii(FullPacket)
+                ' Debug.Print "selecting server: " & strText
+                 li = bytesTotal - 1
+                 ReDim mustSendFirstWhenConnected(Index).packet(li)
+                 For i = 0 To li
+                    mustSendFirstWhenConnected(Index).packet(i) = FullPacket(i)
+                 Next i
+                 mustSendFirstWhenConnected(Index).mustSend = True
+                 Exit Sub
+            End If
+    End If
     Offset = 0
     While Offset < bytesTotal    '
         If UBound(FullPacket) < Offset + 2 Then    'should never happen. means coding error
@@ -7562,10 +7603,13 @@ Private Sub SckClientGame_DataArrival(Index As Integer, ByVal bytesTotal As Long
     Wend
 
     If Offset <> bytesTotal Then    'this should never happen.. means coding error
-        Err.Raise _
-                Number:=errIndexOutOfRange, _
-                Description:="Failed to read all packets in SckClientGame_DataArrival (after reading 'all' packets, offset was not equal to bytesTotal)", _
-                Source:="SckClientGame_DataArrival"
+       Debug.Print CStr(Offset) & " vs " & CStr(bytesTotal)
+       ' Err.Raise _
+               ' Number:=errIndexOutOfRange, _
+              '  Description:="Failed to read all packets in SckClientGame_DataArrival (after reading 'all' packets, offset was not equal to bytesTotal)", _
+              '  Source:="SckClientGame_DataArrival"
+                MsgBox "Critical error when trying to read initial packets.  This might mean 2 things: You are not running Blackd Proxy as admin -OR- You are running a non standard Tibia client.", vbOKOnly + vbCritical, "Critical error"
+    End
     End If
 
 
@@ -8439,6 +8483,7 @@ Private Sub SckServerGame_Connect(Index As Integer)
   #If FinalMode Then
   On Error GoTo goterr
   #End If
+
   setsockopt sckServerGame(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
 '  If TibiaVersionLong >= 841 Then
     'Debug.Print "servergame (" & Index & ") connected to " & sckServerGame(Index).RemoteHostIP & ":" & sckServerGame(Index).RemotePort
@@ -8454,6 +8499,15 @@ Private Sub SckServerGame_Connect(Index As Integer)
     GameConnected(Index) = True
     frmMain.sckServerGame(Index).SendData ReconnectionPacket(Index).packet
     DoEvents
+  End If
+  If mustSendFirstWhenConnected(Index).mustSend = True Then
+           ' GenerateSelectionPacket genPacket, lastServerName
+           ' Debug.Print "sending special first packet for " & ConvSToAscii(mustSendFirstWhenConnected(Index).packet)
+                'GenerateSelectionPacket genPacket, lastServerName
+                 mustSendFirstWhenConnected(Index).mustSend = False
+                 frmMain.sckServerGame(Index).SendData mustSendFirstWhenConnected(Index).packet
+                DoEvents
+              
   End If
   Exit Sub
 goterr:

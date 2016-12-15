@@ -282,7 +282,7 @@ Private Sub cmbVersion_Click()
     End If
 End Sub
 
-Private Function parseVersionFromSelection(ByVal strtext As String)
+Private Function parseVersionFromSelection(ByVal strText As String)
   Dim arrParts() As String
   Dim arrParts2() As String
   Dim partA As String
@@ -290,7 +290,7 @@ Private Function parseVersionFromSelection(ByVal strtext As String)
   Dim resString As String
   Dim intString As Integer
   On Error GoTo goterr
-  arrParts = Split(strtext, " ", , vbTextCompare)
+  arrParts = Split(strText, " ", , vbTextCompare)
   arrParts2 = Split(arrParts(1), ".", , vbTextCompare)
   partA = Trim$(arrParts2(0))
   partB = Trim$(arrParts2(1))

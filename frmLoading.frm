@@ -645,10 +645,10 @@ End Sub
 '  RenamePatchExe = strRes
 'End Function
 
-Private Function HexTextWithLen(strtext As String) As String
+Private Function HexTextWithLen(strText As String) As String
 Dim res As String
-res = GoodHex(LowByteOfLong(Len(strtext))) & " " & GoodHex(HighByteOfLong(Len(strtext))) & " " & _
- StringToHexString(strtext)
+res = GoodHex(LowByteOfLong(Len(strText))) & " " & GoodHex(HighByteOfLong(Len(strText))) & " " & _
+ StringToHexString(strText)
 HexTextWithLen = res
 End Function
 

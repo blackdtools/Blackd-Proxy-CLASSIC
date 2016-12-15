@@ -430,14 +430,14 @@ goterr:
     Exit Sub
 End Sub
 
-Public Function OverwriteOnPathFileSimple(pathfile As String, strtext As String) As Long
+Public Function OverwriteOnPathFileSimple(pathfile As String, strText As String) As Long
   Dim fn As Integer
   Dim writeThis As String
   Dim a As Long
   On Error GoTo ignoreit
   a = 0
   fn = FreeFile
-  writeThis = strtext
+  writeThis = strText
   Open pathfile For Output As #fn
     Print #fn, writeThis
   Close #fn
