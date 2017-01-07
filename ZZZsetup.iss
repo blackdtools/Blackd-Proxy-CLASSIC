@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Blackd Proxy"
-#define MyAppVersion "42.1"
+#define MyAppVersion "42.2"
 #define MyAppPublisher "blackdtools.com"
 #define MyAppURL "http://blackdtools.com"
 #define MyAppExeName "Tibia.exe"
@@ -235,6 +235,7 @@ Source: "config1097\*"; DestDir: "{app}\config1097"; Flags: ignoreversion recurs
 Source: "config1098\*"; DestDir: "{app}\config1098"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1099-old0\*"; DestDir: "{app}\config1099-old0"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1099-old1\*"; DestDir: "{app}\config1099-old1"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "config1099-old2\*"; DestDir: "{app}\config1099-old2"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1099\*"; DestDir: "{app}\config1099"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1100\*"; DestDir: "{app}\config1100"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1101\*"; DestDir: "{app}\config1101"; Flags: ignoreversion recursesubdirs createallsubdirs

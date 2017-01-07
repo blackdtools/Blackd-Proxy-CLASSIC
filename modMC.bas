@@ -166,7 +166,7 @@ Public Function LaunchTibia(ByVal strTibiaPath, withMC As Boolean) As String
 End Function
 
 Public Function autoGetTibiaFolder(Optional ByVal ParTibiaFolder As String = "") As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim tpath As String
     If ParTibiaFolder = "" Then
         If DefaultTibiaFolder = "" Then
@@ -189,12 +189,12 @@ Public Function autoGetTibiaFolder(Optional ByVal ParTibiaFolder As String = "")
     tpath = tpath & ParTibiaFolder & "\"
     autoGetTibiaFolder = tpath
     Exit Function
-goterr:
+gotErr:
     autoGetTibiaFolder = ""
 End Function
 
 Public Function autoGetMagebotFolder() As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim tpath As String
     Dim fs As Scripting.FileSystemObject
     Set fs = New Scripting.FileSystemObject
@@ -205,7 +205,7 @@ Public Function autoGetMagebotFolder() As String
     tpath = tpath & "Magebot\"
     autoGetMagebotFolder = tpath
     Exit Function
-goterr:
+gotErr:
     autoGetMagebotFolder = ""
 End Function
 
@@ -218,7 +218,7 @@ End Function
 'End Function
 
 Public Function autoGetFileContaining(strPath As String, strCriteria) As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim tpath As String
     Dim sName As String
     Dim lPos As Long
@@ -237,7 +237,7 @@ Public Function autoGetFileContaining(strPath As String, strCriteria) As String
     Next fil
     autoGetFileContaining = ""
     Exit Function
-goterr:
+gotErr:
     autoGetFileContaining = ""
 End Function
 

@@ -289,7 +289,7 @@ Private Function parseVersionFromSelection(ByVal strText As String)
   Dim partB As String
   Dim resString As String
   Dim intString As Integer
-  On Error GoTo goterr
+  On Error GoTo gotErr
   arrParts = Split(strText, " ", , vbTextCompare)
   arrParts2 = Split(arrParts(1), ".", , vbTextCompare)
   partA = Trim$(arrParts2(0))
@@ -302,7 +302,7 @@ Private Function parseVersionFromSelection(ByVal strText As String)
   'Debug.Print intString
   parseVersionFromSelection = intString
   Exit Function
-goterr:
+gotErr:
   parseVersionFromSelection = highestTibiaVersionLong
 End Function
 Private Sub cmdBrowse_Click()
@@ -421,7 +421,7 @@ End If
    .AddItem "Tibia 7.7"
    .AddItem "Tibia 7.6"
    .AddItem "Tibia 7.4 (it uses 7.72 config)"
-   On Error GoTo goterr
+   On Error GoTo gotErr
    crashLine = ".Text = """ & spversion & """"
    .Text = spversion
    End With
@@ -434,7 +434,7 @@ End If
    crashLine = "txtTibiaMapsPath.Text = PostLoad"
    PostLoad
    Exit Sub
-goterr:
+gotErr:
    If MsgBox("Load error, could not read config.ini correctly. Problem found at version '" & spversion & "'" & vbCrLf & "Debug info:" & loadDebugStart & vbCrLf & crashLine & vbCrLf & vbCrLf & "Try to continue anyways?", vbYesNo + vbExclamation, "Warning") = vbYes Then
     Me.txtTibiaClientPath.Text = autoGetTibiaFolder(defaultSelectedTibiaFolder)
     TibiaVersionLong = highestTibiaVersionLong
@@ -452,7 +452,7 @@ TranslateTextBox
 End Sub
 
 Private Sub cmdReloadHD_Click()
-On Error GoTo goterr
+On Error GoTo gotErr
   Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
   Dim strLine As String
@@ -485,13 +485,13 @@ On Error GoTo goterr
     Me.txtDebug.Text = stres
     TranslateTextBox
     Exit Sub
-goterr:
+gotErr:
     stres = "ERRROR: Unable to read file " & vbCrLf & myMainConfigINIPath()
     Me.txtDebug.Text = stres
 End Sub
 
 Private Sub TranslateTextBox()
-On Error GoTo goterr
+On Error GoTo gotErr
     Dim parts() As String
     Dim varParts() As String
     Dim uParts As Long
@@ -534,7 +534,7 @@ On Error GoTo goterr
     arrayConfigVersionsLong = Split(addConfigVersionsLongs, ",")
     ReloadAdvanced
     Exit Sub
-goterr:
+gotErr:
     MsgBox "Unable to parse textbox. Bad format." & vbCrLf & "Error " & CStr(Err.Number) & ":" & vbCrLf & Err.Description, vbOKOnly + vbExclamation, "Parse error"
 End Sub
 Private Sub Form_Load()

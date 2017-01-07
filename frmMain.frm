@@ -687,7 +687,7 @@ Private Sub Form_Load()
   Dim lngTemp As Long
   Dim moreDetails As String
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   dblAmLoaded = 0
   lastLoadLine = 1
@@ -1638,7 +1638,7 @@ lastLoadLine = 895
   frmTrainer.timerTrainer.enabled = True
   LoadWasCompleted = True
   Exit Sub
-goterr:
+gotErr:
   'LogOnFile "debug.txt", "Terminated by critical error (-4)"
   Select Case lastLoadLine
   Case 749 ' first jwldbutton
@@ -2308,7 +2308,7 @@ Public Function ReadIniThisFirst() As Long
   Dim tmpVersion As String
   Dim debugPoint As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   res = -1
   debugPoint = 1
@@ -4314,7 +4314,7 @@ ReDim DoingNewLootMAXGTC(1 To MAXCLIENTS)
   
   res = 0
   Exit Function
-goterr:
+gotErr:
   MsgBox "Sorry, Blackd Proxy was not able to read .ini files (start)" & vbCrLf & "Possible reasons:" & vbCrLf & _
   " - Corrupted settings.ini ?" & vbCrLf & _
   " - Corrupted config.ini ?" & vbCrLf & _
@@ -4338,7 +4338,7 @@ Public Sub ReadIni()
   Dim idLoginSP As Long
   Dim ibucle As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   userHere = App.Path & "\settings.ini" ' user config file name
   If configPath = "" Then
@@ -5775,7 +5775,7 @@ frmRunemaker.txrRunemakerChaos2.Text = CStr(RunemakerChaos2)
    frmMain.Caption = frmMain.Caption & " for Tibia " & TibiaVersion
 
   Exit Sub
-goterr:
+gotErr:
   MsgBox "Sorry, Blackd Proxy was not able to read ini files (end)" & vbCrLf & "Possible reasons:" & vbCrLf & _
   " - Corrupted config.ini" & vbCrLf & _
   " - Corrupted settings.ini" & vbCrLf & _
@@ -6630,7 +6630,7 @@ End Sub
 Private Sub SckClient_Close(Index As Integer)
   ' client closes
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   SckClient(Index).Close
   'SckServer(index).Close 'close his brother server
@@ -6639,7 +6639,7 @@ Private Sub SckClient_Close(Index As Integer)
    txtPackets.Text = txtPackets.Text & vbCrLf & "#client" & Index & " closed#"
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckClient_Close(" & Index & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 
@@ -6659,7 +6659,7 @@ Private Sub SckClient_ConnectionRequest(Index As Integer, ByVal requestID As Lon
     Dim lngVirtualTooSlow As Long
 
     #If FinalMode Then
-    On Error GoTo goterr
+    On Error GoTo gotErr
     #End If
     useID = 0
     For i = 1 To MAXCLIENTS
@@ -6730,7 +6730,7 @@ Private Sub SckClient_ConnectionRequest(Index As Integer, ByVal requestID As Lon
                 On Error GoTo gotPortErr
                 sckServer(useID).RemotePort = CLng(txtServerLoginP.Text)
             End If
-            On Error GoTo goterr
+            On Error GoTo gotErr
             If blnDoingBest = False Then
                 sckServer(useID).Connect
                 ' ot servers
@@ -6788,7 +6788,7 @@ Private Sub SckClient_ConnectionRequest(Index As Integer, ByVal requestID As Lon
         End If
     End If
     Exit Sub
-goterr:
+gotErr:
     frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckClient_ConnectionRequest(" & Index & "," & requestID & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
     Exit Sub
 gotHostErr:
@@ -6943,7 +6943,7 @@ End Sub
 Private Sub SckClientGame_Close(Index As Integer)
   ' game client closes
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If frmRunemaker.chkCloseSound.value = 1 Then
      ChangePlayTheDangerSound True
@@ -6959,7 +6959,7 @@ Private Sub SckClientGame_Close(Index As Integer)
   txtPackets.Text = txtPackets.Text & vbCrLf & "#gameclient" & Index & " closed ( by client )#"
   DoCloseActions Index
   Exit Sub
-goterr:
+gotErr:
  frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckClientGame_Close(" & Index & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
  DoCloseActions Index
 End Sub
@@ -7008,7 +7008,7 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
   Dim genPacket() As Byte
   
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   
   If cteDebugConEvents = True Then
@@ -7232,7 +7232,7 @@ Private Sub SckClientGame_ConnectionRequest(Index As Integer, ByVal requestID As
     End If  ' tibia > 8.41
   End If ' If useID > 0 Then
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckClientGame_ConnectionRequest(" & Index & "," & requestID & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 Private Sub HandleSckClientGame_Data(ByRef Index As Integer, ByRef MyCodingIsLazyPacket() As Byte, ByRef bytesTotal As Long)
@@ -7910,7 +7910,7 @@ End Sub
 Private Sub SckServer_Close(Index As Integer)
   ' server closes
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   sckServer(Index).Close
   DoEvents
@@ -7922,14 +7922,14 @@ Private Sub SckServer_Close(Index As Integer)
     DoingMainLoopLogin(Index) = False
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckServer_Close(" & Index & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 
 Private Sub SckServer_Connect(Index As Integer)
   ' server connects
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   setsockopt sckServer(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
   If Index > 0 Then
@@ -7940,7 +7940,7 @@ Private Sub SckServer_Connect(Index As Integer)
   DoingMainLoopLogin(Index) = False
   txtPackets.Text = txtPackets.Text & vbCrLf & "#server" & Index & " connected#"
   Exit Sub
-goterr:
+gotErr:
  frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckServer_Connect(" & Index & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 
@@ -8429,7 +8429,7 @@ End Sub
 Private Sub SckServerGame_Close(Index As Integer)
   ' game server closes
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim rwait As Long
   If TibiaVersionLong >= 841 Then
@@ -8472,7 +8472,7 @@ Private Sub SckServerGame_Close(Index As Integer)
         sckServerGame(Index).Close
     End If
     Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckServerGame_Close(" & Index & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
   DoCloseActions Index
 End Sub
@@ -8481,7 +8481,7 @@ End Sub
 Private Sub SckServerGame_Connect(Index As Integer)
   ' game server connects
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
 
   setsockopt sckServerGame(Index).SocketHandle, IPPROTO_TCP, TCP_NODELAY, 1, 4
@@ -8510,7 +8510,7 @@ Private Sub SckServerGame_Connect(Index As Integer)
               
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error during SckServerGame_Connect(" & Index & ") Number: " & Err.Number & " Description: " & Err.Description & " Source: " & Err.Source
 End Sub
 
@@ -8910,7 +8910,7 @@ Private Sub timeToSpam_Timer()
   Dim gtc As Long
   Dim conds As Boolean
   #If FinalMode Then
-    On Error GoTo goterr
+    On Error GoTo gotErr
   #End If
   i = 0
   gtc = GetTickCount()
@@ -8941,7 +8941,7 @@ Private Sub timeToSpam_Timer()
     End If
   Next i
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Error while trying to send position client " & CStr(i) & " : " & Err.Description
 End Sub
 
@@ -9020,7 +9020,7 @@ Private Sub txtClientGameP_Validate(Cancel As Boolean)
 End Sub
 
 Private Sub txtClientLoginP_Validate(Cancel As Boolean)
-  On Error GoTo goterr
+  On Error GoTo gotErr
   ' change in login port
   Dim newP As Long
   Dim failedline As String
@@ -9044,7 +9044,7 @@ Private Sub txtClientLoginP_Validate(Cancel As Boolean)
     failedline = failedline & vbCrLf & "Connected"
   End If
   Exit Sub
-goterr:
+gotErr:
   MsgBox "Sorry, Blackd Proxy was not able to initialize..." & vbCrLf & "Possible reasons:" & vbCrLf & _
   " - Blackd Proxy already open" & vbCrLf & _
   " - Bugged Tibia client blocking connections (try closing all Tibia clients first)" & vbCrLf & _
@@ -9358,7 +9358,7 @@ Private Function GetWITHTIBIADAT() As String
     res = usethisfolder & lastDatFound
     GetWITHTIBIADAT = res
     Exit Function
-goterr:
+gotErr:
     GetWITHTIBIADAT = GetWITHTIBIADATtrivial()
 End Function
 

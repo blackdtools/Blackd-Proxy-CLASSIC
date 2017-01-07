@@ -19,7 +19,7 @@ Option Explicit
     Public Const cteDebugConEvents As Boolean = False
 #End If
 
-Public Const defaultGameServerEnd As String = "-lb.ciproxy.com"
+'Public Const defaultGameServerEnd As String = "-lb.ciproxy.com"
 
 Public Const CTE_NOT_CONNECTED As Integer = 0
 Public Const CTE_LOGIN_CHAR_SELECTION As Integer = 1
@@ -291,7 +291,7 @@ Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long
     Dim usize As Long
     Dim tibiaHandle As Long
     Dim readtotal As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     readtotal = 0
     usize = UBound(Rbuff) + 1
     If (usize < 1) Then
@@ -306,7 +306,7 @@ Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long
         QMemory_ReadNBytes = 0
     End If
     Exit Function
-goterr:
+gotErr:
     QMemory_ReadNBytes = -1
     Debug.Print ("Error at QMemory_ReadNBytes:" & Err.Description)
 End Function
@@ -358,7 +358,7 @@ Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim lpNumberOfBytesWritten As Long
     Dim usize As Long
     lpNumberOfBytesWritten = 0
-    On Error GoTo goterr
+    On Error GoTo gotErr
     usize = UBound(newValue) + 1
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
     If tibiaHandle = -1 Then
@@ -374,7 +374,7 @@ Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_WriteNBytes = -1
     End If
     Exit Function
-goterr:
+gotErr:
     QMemory_WriteNBytes = -1
 End Function
 
@@ -384,7 +384,7 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim lpNumberOfBytesWritten As Long
     Dim Rbuff(1) As Byte
     lpNumberOfBytesWritten = 0
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Rbuff(0) = LowByteOfLong(newValue)
     Rbuff(1) = HighByteOfLong(newValue)
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
@@ -397,7 +397,7 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_Write2Bytes = -1
     End If
     Exit Function
-goterr:
+gotErr:
     QMemory_Write2Bytes = -1
 End Function
 
@@ -440,7 +440,7 @@ Public Function ModifyQString(ByVal pid As Long, ByVal address As Long, ByRef ne
         Dim res As Long
         Dim allbytes() As Byte
         Dim i As Long
-        On Error GoTo goterr
+        On Error GoTo gotErr
         new_size = Len(newText)
         msg_offset = QMemory_Read4Bytes(pid, address + 12)
         msg_maxsize = QMemory_Read4Bytes(pid, address + 8)
@@ -463,7 +463,7 @@ Public Function ModifyQString(ByVal pid As Long, ByVal address As Long, ByRef ne
         End If
         ModifyQString = res
         Exit Function
-goterr:
+gotErr:
         ModifyQString = -1
     End Function
     
@@ -481,7 +481,7 @@ Public Function QMemory_ReadDouble(ByVal pid As Long, ByVal finalAddress As Long
     CopyMemory d, Rbuff(0), LenB(d)
     QMemory_ReadDouble = d
     Exit Function
-goterr:
+gotErr:
     QMemory_ReadDouble = -1
 End Function
 
@@ -489,39 +489,39 @@ End Function
 Public Function QMemory_Read4Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim res As Long
     Dim tibiaHandle As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, res, 4, 0
     CloseHandle (tibiaHandle)
     QMemory_Read4Bytes = res
     Exit Function
-goterr:
+gotErr:
     QMemory_Read4Bytes = -1
 End Function
 
 Public Function QMemory_Read2Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim Rbuff(1) As Byte
     Dim tibiaHandle As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, Rbuff(0), 2, 0
     CloseHandle (tibiaHandle)
     QMemory_Read2Bytes = GetTheLong(Rbuff(0), Rbuff(1))
     Exit Function
-goterr:
+gotErr:
     QMemory_Read2Bytes = -1
 End Function
 
 Public Function QMemory_Read1Byte(ByVal pid As Long, ByVal finalAddress As Long) As Byte
     Dim Rbuff As Byte
     Dim tibiaHandle As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, Rbuff, 1, 0
     CloseHandle (tibiaHandle)
     QMemory_Read1Byte = Rbuff
     Exit Function
-goterr:
+gotErr:
     QMemory_Read1Byte = &HFF
 End Function
     
@@ -530,7 +530,7 @@ Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim res As Long
     Dim lpNumberOfBytesWritten As Long
     lpNumberOfBytesWritten = 0
-    On Error GoTo goterr
+    On Error GoTo gotErr
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
     res = WriteProcessMemory(tibiaHandle, finalAddress, newValue, 4, lpNumberOfBytesWritten)
     If (res = 1) Then
@@ -541,7 +541,7 @@ Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_Write4Bytes = -1
     End If
     Exit Function
-goterr:
+gotErr:
     QMemory_Write4Bytes = -1
 End Function
 
@@ -582,14 +582,14 @@ End Sub
     End Function
     
 Public Function CheckIfEnumDone()
- On Error GoTo goterr
+ On Error GoTo gotErr
  If (HandleTextCollection(0).Window_Handle = &H0) Then
  CheckIfEnumDone = True
  Else
  CheckIfEnumDone = True
  End If
  Exit Function
-goterr:
+gotErr:
  CheckIfEnumDone = False
 End Function
 
@@ -659,7 +659,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     Dim mainWindowHandle As Long
     Dim currentPID As Long
     Dim i As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim items As Object
     Dim item As Object
     'Dim count As Long
@@ -698,7 +698,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     Next
    ' Debug.Print "Total clients found = " & count
     Exit Sub
-goterr:
+gotErr:
     Debug.Print ("Error: Unexpected error - " & Err.Description)
 End Sub
 
@@ -708,7 +708,7 @@ Public Function GetTibiaPIDs(ByRef expectedName As String, ByRef expectedClass A
 ByRef CurrentTibiaPids() As Long) As Long
     Dim ubproc As Long
     Dim i As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim items As Object
     Dim item As Object
     Dim last As Long
@@ -726,7 +726,7 @@ ByRef CurrentTibiaPids() As Long) As Long
     GetTibiaPIDs = last + 1
     'Debug.Print "Total clients found = " & (last + 1)
     Exit Function
-goterr:
+gotErr:
     Debug.Print ("Error: Unexpected error - " & Err.Description)
      CurrentTibiaPids(0) = -1
     GetTibiaPIDs = 0
@@ -736,7 +736,7 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Dim isize As Long
     Dim res As String
     Dim i As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     isize = UBound(arr)
     res = GoodHex(arr(0))
     For i = 1 To isize
@@ -744,7 +744,7 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Next i
     arrayToString = res
     Exit Function
-goterr:
+gotErr:
     arrayToString = ""
 End Function
 
@@ -756,7 +756,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
                                      ByRef maxDepth As Long, ByRef bytesPerElement As Long, _
                                      Optional ByRef maxValidKeyID As Long = -1, _
                                      Optional ByVal addBaseAddress As Boolean = False)
-    On Error GoTo goterr
+    On Error GoTo gotErr
         Dim Id As Long
         Dim auxRes As Long
         Id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
@@ -798,7 +798,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
             End If
         End If
         Exit Sub
-goterr:
+gotErr:
         Debug.Print ("Something failed: " + Err.Description)
 
 End Sub
@@ -847,7 +847,7 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
                                      ByRef dict As Scripting.Dictionary, _
                                      ByVal currentDepth As Long, _
                                      ByRef maxDepth As Long, ByRef adrRoot As Long) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
         Dim Id As Long
         Dim c0, c1, c2 As Long
         Dim Count As Long
@@ -876,7 +876,7 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
         End If
         fillCollectionDictionaryMIN = Count
         Exit Function
-goterr:
+gotErr:
         fillCollectionDictionaryMIN = 0
         Debug.Print ("Something failed: " + Err.Description)
 End Function
@@ -1257,7 +1257,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Dim firstChar As String
     Dim currentPort As Long
     Const cte_bytesPerRegister As Long = &H24
-    On Error GoTo goterr
+    On Error GoTo gotErr
     If stopIfPort = -1 Then
         ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, , , , True
     Else
@@ -1327,7 +1327,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Next
     ReadTibia11ServerList = 0
     Exit Function
-goterr:
+gotErr:
     ReadTibia11ServerList = -1
 End Function
 
@@ -1337,6 +1337,47 @@ Public Function BitConverter_ToInt32(ByRef arr() As Byte, ByRef pos As Long) As 
     BitConverter_ToInt32 = l
 End Function
 
+Private Sub closeTibia11Client(ByVal pid As Long)
+
+
+Dim bRes As Boolean
+Dim tibiaHandle As Long
+On Error GoTo gotErr
+
+    If mainTibiaHandle.Exists(pid) Then ' retrieve directly from our dictionary
+        tibiaHandle = mainTibiaHandle(pid)
+    Else
+        tibiaHandle = Get_MainWindowHandle_from_ProcessID_and_class(pid, tibiaclassname) ' slow procedure
+    End If
+        bRes = ProcessTerminate(pid, tibiaHandle)
+        Exit Sub
+gotErr:
+        Debug.Print "WARNING: Unable to close Tibia PID " & CStr(pid)
+
+End Sub
+
+Public Function IsFormLoaded(fForm As Form) As Boolean
+On Error GoTo Err_Proc
+
+Dim x As Integer
+
+For x = 0 To Forms.Count - 1
+If (Forms(x) Is fForm) Then
+IsFormLoaded = True
+Exit Function
+End If
+Next x
+
+IsFormLoaded = False
+
+
+Exit Function
+
+Err_Proc:
+
+IsFormLoaded = True
+
+End Function
 
 Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' needs to be called often to capture all connections
     If (confirmedExit = True) Then
@@ -1361,7 +1402,6 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
     Dim strServerName As String
     Dim strURLtrans As String
     Dim strDefaultServer As String
-    Dim showWarning As Boolean
     newPort = CLng(frmMain.sckClientGame(0).LocalPort)
     If (newPort = 0) Then
         Exit Sub
@@ -1385,15 +1425,19 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
             readResult = ReadTibia11ServerList(tibia_pids(j), adrServerList_CollectionStart, serverList, newPort)
              Select Case (readResult)
              Case 0
-                showWarning = False
+               
                 For i = 0 To UBound(serverList)
                     strServerName = serverList(i).name
                     If (serverList(i).url = "127.0.0.1") Then ' already modified
                         If (GetGameServerDOMAIN(strServerName) = "") Then
-                            showWarning = True
-                            strDefaultServer = LCase(strServerName) & defaultGameServerEnd
-                            AddGameServer strServerName, "127.0.0.1:" & 7171, strDefaultServer
-                           
+                            'showWarning = True
+                           ' strDefaultServer = LCase(strServerName) & defaultGameServerEnd
+                           ' AddGameServer strServerName, "127.0.0.1:" & 7171, strDefaultServer
+                           closeTibia11Client tibia_pids(j)
+                           If IsFormLoaded(frmMain) Then
+                              frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Tibia client PID " & CStr(tibia_pids(j)) & " closed for security reasons (unable to handle previously modified client list). No big problem. Please just launch Tibia client again."
+                           End If
+                           Exit For
                         End If
                         ' no need to write 127.0.0.1 again
                     Else
@@ -1408,11 +1452,7 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
                 If cteDebugConEvents = True Then
                     LogConEvent "PID " & CStr(tibia_pids(j)) & ": MODIFIED server list. Blackd Proxy is now ready here."
                 End If
-                If (showWarning) Then
-                    If cteDebugConEvents = True Then
-                        LogConEvent "WARNING: Reusing previous char list. Supposing servers = <servername>" & defaultGameServerEnd
-                    End If
-                End If
+
              Case -1
                '  Debug.Print "PID " & CStr(tibia_pids(j)) & ": NO SERVER LIST YET"
               Case -2

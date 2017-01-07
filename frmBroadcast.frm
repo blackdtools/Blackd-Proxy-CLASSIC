@@ -470,7 +470,7 @@ End Sub
 
 Public Sub LoadBroadcastChars()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim i As Long
   Dim firstC As Long
@@ -491,7 +491,7 @@ Public Sub LoadBroadcastChars()
   cmbCharacter.Text = cmbCharacter.List(firstC)
   broadcastIDselected = firstC
   Exit Sub
-goterr:
+gotErr:
  LogOnFile "errors.txt", "Error at LoadBroadcastChars(). Err number " & CStr(Err.Number) & " ; Err description " & Err.Description
 End Sub
 
@@ -500,7 +500,7 @@ End Sub
 
 Private Sub timerBroadcast_Timer()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
     Dim lngv As Long
     Dim dblPer As Double
@@ -548,7 +548,7 @@ Private Sub timerBroadcast_Timer()
         DoEvents
     End If
     Exit Sub
-goterr:
+gotErr:
         timerBroadcast.enabled = False
         currentBroadcastIndex = -1
         Me.lblCurrentBroadcast = "-nobody"

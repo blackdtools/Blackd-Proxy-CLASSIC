@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "42.1" ' Proxy version ' string version
-Public Const myNumericVersion = 42100 ' numeric version
+Public Const ProxyVersion = "42.2" ' Proxy version ' string version
+Public Const myNumericVersion = 42200 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -6739,7 +6739,7 @@ pos = pos + 4 + (15 * templ2)
            #End If
            #If DEBUG_SHOP = 1 Then
             Debug.Print "COLOR> " & GoodHex(packet(pos))
-            Debug.Print "AVAILABLE> " & GoodHex(packet(pos + 1))
+            Debug.Print "AVAILABLE1> " & GoodHex(packet(pos + 1))
            #End If
            pos = pos + 2 ' 2 bytes
            
@@ -6815,7 +6815,7 @@ pos = pos + 4 + (15 * templ2)
            pos = pos + 4
            #If DEBUG_SHOP = 1 Then
              Debug.Print "COLOR> " & GoodHex(packet(pos))
-             Debug.Print "AVAILABLE> " & GoodHex(packet(pos + 1))
+             Debug.Print "AVAILABLE2> " & GoodHex(packet(pos + 1))
            #End If
            templ2 = CLng(packet(pos + 1))
            pos = pos + 2 ' skip 2 bytes
@@ -6831,7 +6831,17 @@ pos = pos + 4 + (15 * templ2)
                Debug.Print "MISSING REQUIREMENTS> " & mobName
              #End If
            End If
-           
+           If (TibiaVersionLong >= 1102) Or ((TibiaVersionLong = 1099) And (subTibiaVersionLong > 2)) Then
+            If templ2 = &H90 Then ' New since Tibia 10.99 rev3 / Tibia 11.03
+              #If DEBUG_SHOP = 1 Then
+                Debug.Print "UNKNOWN 8 BYTES> " & GoodHex(packet(pos)) & " " & GoodHex(packet(pos + 1)) & " " & _
+                GoodHex(packet(pos + 2)) & " " & GoodHex(packet(pos + 3)) & " " & _
+                GoodHex(packet(pos + 4)) & " " & GoodHex(packet(pos + 5)) & " " & _
+                GoodHex(packet(pos + 6)) & " " & GoodHex(packet(pos + 7))
+              #End If
+              pos = pos + 8
+            End If
+           End If
            templ2 = CLng(packet(pos))
            pos = pos + 1
            For lonNumItems = 1 To templ2

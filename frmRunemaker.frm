@@ -734,7 +734,7 @@ Private Sub chkActivate_Click()
 Dim tileID As Long
 Dim aRes As Long
 #If FinalMode Then
-On Error GoTo goterr
+On Error GoTo gotErr
 #End If
 If lock_chkActivate = False Then
 If runemakerIDselected > 0 Then
@@ -786,7 +786,7 @@ If runemakerIDselected > 0 Then
 End If
 End If
 Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Warning: connection fail during the runemaker activation - ignoring"
 End Sub
 
@@ -1000,7 +1000,7 @@ Private Sub cmdSave_Click()
 End Sub
 
 Private Sub cmdSaveRunemakerChaos_Click()
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim lngCast As Long
     Dim lngCast2 As Long
     lngCast = CLng(frmRunemaker.txrRunemakerChaos.Text)
@@ -1012,10 +1012,10 @@ Private Sub cmdSaveRunemakerChaos_Click()
         Me.txrRunemakerChaos2.Text = CStr(RunemakerChaos2)
         frmRunemaker.Caption = "Runemaker - chaos updated"
     Else
-        GoTo goterr
+        GoTo gotErr
     End If
     Exit Sub
-goterr:
+gotErr:
     frmRunemaker.Caption = "Runemaker - invalid chaos values"
 End Sub
 

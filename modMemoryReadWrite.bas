@@ -328,7 +328,7 @@ End Function
 
 
 Public Function getProcessBase(ByVal hProcess As Long, ByVal expectedRegionSize As Long, Optional PIDinsteadHp As Boolean = False) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     ' expectedRegionSize is used again
     Dim lpMem As Long, ret As Long, lLenMBI As Long
     Dim lWritten As Long, CalcAddress As Long, lPos As Long
@@ -377,12 +377,12 @@ Public Function getProcessBase(ByVal hProcess As Long, ByVal expectedRegionSize 
     If PIDinsteadHp = True Then
        CloseHandle hProcess
     End If
-goterr:
+gotErr:
     getProcessBase = 0
 End Function
 
 Public Function getProcessOffset(ByVal hProcess As Long, ByVal pid As Long) As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim lpMem As Long, ret As Long, lLenMBI As Long
     Dim lWritten As Long, CalcAddress As Long, lPos As Long
     Dim sBuffer As String
@@ -432,7 +432,7 @@ Public Function getProcessOffset(ByVal hProcess As Long, ByVal pid As Long) As L
            Exit Do
         End If
     Loop
-goterr:
+gotErr:
     getProcessOffset = 0
 End Function
 Public Function Memory_ReadCString(ByVal address As Long, ByVal process_Hwnd As Long, Optional absoluteAddress As Boolean = False, Optional EOLCharacter As Byte = &H0) As String
@@ -444,7 +444,7 @@ Public Function Memory_ReadCString(ByVal address As Long, ByVal process_Hwnd As 
     Dim Offset As Long
     Dim i As Long
     Dim BytesRead As Long
-    On Error GoTo goterr
+    On Error GoTo gotErr
 
     ' First get a handle to the "game" window
     If (process_Hwnd = 0) Then Exit Function
@@ -488,7 +488,7 @@ exitwhile:
     CloseHandle phandle
     Memory_ReadCString = res
     Exit Function
-goterr:
+gotErr:
     '???
     CloseHandle phandle
     Memory_ReadCString = res
@@ -597,7 +597,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As
     Dim LastBytesRead As Long
     Dim tmpStr As String
 
-    On Error GoTo goterr
+    On Error GoTo gotErr
 
     ' First get a handle to the "game" window
     If (process_Hwnd = 0) Then Exit Function
@@ -627,7 +627,7 @@ Public Function Memory_Analyze1(ByVal StartAddress As Long, ByVal BytesToRead As
     For i = 1 To BytesToRead Step 1
         LastBytesRead = ReadProcessMemory(phandle, StartAddress + i - 1, ByteBuf, 1, 0&)
         If LastBytesRead <> 1 Then
-            GoTo goterr
+            GoTo gotErr
             'err.raise?
         End If
         '&H20 to &H7E - http://www.asciitable.com/
@@ -663,7 +663,7 @@ exitwhile:
     CloseHandle phandle
     Memory_Analyze1 = res
     Exit Function
-goterr:
+gotErr:
     '???
     Memory_Analyze1 = res & "... after reading " & CStr(i - 1) & " bytes, got an error reading at memory location (decimal) " & CStr(StartAddress + i - 1) & " :  Err.Number: " & _
                       CStr(Err.Number) & " Err.Description: " & Err.Description & " Err.LastDllError: " & CStr(Err.LastDllError)

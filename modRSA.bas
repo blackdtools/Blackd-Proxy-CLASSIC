@@ -122,7 +122,7 @@ End Function
 
 
 Public Sub AutoUpdateRSA(ByVal pid As Long)
-  On Error GoTo goterr
+  On Error GoTo gotErr
   Dim pg As Integer
   Dim i As Long
   Dim b As Byte
@@ -192,7 +192,7 @@ Public Sub AutoUpdateRSA(ByVal pid As Long)
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... MEMORY SCAN COMPLETED WITHOUT RESULTS"
    Exit Sub
    
-goterr:
+gotErr:
   adrRSA = 0
    frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "FAIL ... Error at AutoUpdateRSA (" & CStr(Err.Number) & ") : " & Err.Description
   Exit Sub

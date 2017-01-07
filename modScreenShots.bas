@@ -125,7 +125,7 @@ End Function
         
 Public Sub GetScreenshot(ByRef frmS As Form, pictureName As String)
   #If FinalMode = 1 Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim strCompleteName As String
   Dim sRes As String
@@ -175,7 +175,7 @@ Public Sub GetScreenshot(ByRef frmS As Form, pictureName As String)
   'SavePicture frmS.picScreen.Image, strCompleteName
   frmS.Hide
   Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "Got error " & CStr(Err.Number) & " : " & Err.Description & " . This error happened while trying to save log at " & strCompleteName
 End Sub
 

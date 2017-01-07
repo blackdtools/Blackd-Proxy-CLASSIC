@@ -687,7 +687,7 @@ Public Function AddEvent(idConnection As Integer, Id As Integer, fl As String, _
  tR As String, ac As String) As Long
   Dim curr As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (idConnection <= 0) Then
     AddEvent = -1
@@ -705,7 +705,7 @@ Public Function AddEvent(idConnection As Integer, Id As Integer, fl As String, _
   CustomEvents(idConnection).ev(curr).action = ac
   AddEvent = 0
   Exit Function
-goterr:
+gotErr:
   AddEvent = -1
 End Function
 
@@ -757,7 +757,7 @@ Private Sub cmdDeleteSel_Click()
   Dim difR As Long
   Dim numofEv As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   If (eventsIDselected > 0) Then
   vrow = gridEvents.Row
@@ -793,7 +793,7 @@ Private Sub cmdDeleteSel_Click()
   UpdateValues
   End If
   Exit Sub
-goterr:
+gotErr:
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "Function cmdDeleteSel_Click() failed : " & Err.Description
   LogOnFile "errors.txt", "Function cmdDeleteSel_Click() failed : " & Err.Description
 End Sub
@@ -809,7 +809,7 @@ Private Sub cmdLoadEv_Click()
   Dim aRes As Long
   Dim thelo As Long
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Set fso = New Scripting.FileSystemObject
   If eventsIDselected > 0 Then
@@ -849,7 +849,7 @@ Private Sub cmdLoadEv_Click()
   End If
   UpdateValues
   Exit Sub
-goterr:
+gotErr:
   lblInfo.Caption = "Load ERROR (" & Err.Number & "):" & Err.Description
 End Sub
 
@@ -861,7 +861,7 @@ End Sub
 
 Private Sub cmdSaveEv_Click()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim fn As Integer
   Dim i As Long
@@ -878,7 +878,7 @@ Private Sub cmdSaveEv_Click()
     lblInfo.Caption = "Save OK"
   End If
   Exit Sub
-goterr:
+gotErr:
   lblInfo.Caption = "Save ERROR (" & Err.Number & "):" & Err.Description
 End Sub
 
@@ -1009,7 +1009,7 @@ End Sub
 
 Public Sub ReloadFiles()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim strPath As String
   Dim fs As Scripting.FileSystemObject
@@ -1026,7 +1026,7 @@ Public Sub ReloadFiles()
   Next
   txtFile.Text = "ev_example.txt"
   Exit Sub
-goterr:
+gotErr:
   LogOnFile "errors.txt", "ERROR WITH FILESYSTEM OBJECT at ReloadFiles (" & Err.Number & ") : " & Err.Description & " (path : " & strPath & ")"
 End Sub
 
@@ -1041,7 +1041,7 @@ End Sub
 
 Private Sub timerScheduledActions_Timer()
   #If FinalMode Then
-  On Error GoTo goterr
+  On Error GoTo gotErr
   #End If
   Dim i As Long
   Dim ci As Long
@@ -1060,7 +1060,7 @@ Private Sub timerScheduledActions_Timer()
     End If
   Next i
   Exit Sub
-goterr:
+gotErr:
   iRes = -1
 End Sub
 

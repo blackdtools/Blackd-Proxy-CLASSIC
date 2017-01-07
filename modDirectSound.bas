@@ -12,7 +12,7 @@ Public SoundErrorWasThis As String
 Public soundErrorLine As String
 Public Function DirectX_Init(mainWindowHWND As Long, numberOfFiles As Long) As Boolean
   ' This function should be called only once, at the Load event of our main window
-  On Error GoTo goterr
+  On Error GoTo gotErr
   soundErrorLine = "NumberOfSoundFiles = numberOfFiles"
   NumberOfSoundFiles = numberOfFiles
   soundErrorLine = "Set DS = DirectX.DirectSoundCreate("""")"
@@ -27,7 +27,7 @@ Public Function DirectX_Init(mainWindowHWND As Long, numberOfFiles As Long) As B
   SoundIsUsable = True
   DirectX_Init = True ' initialized ok
   Exit Function
-goterr:
+gotErr:
   SoundIsUsable = False
   SoundErrorWasThis = "Executing: " & soundErrorLine & vbCrLf & "Got error number " & CStr(Err.Number) & " : " & Err.Description
   DirectX_Init = False ' failed to initialize

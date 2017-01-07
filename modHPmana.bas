@@ -103,7 +103,7 @@ End Sub
 
 
 Public Function LoadHPmanaConfig() As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
   Dim fso As Scripting.FileSystemObject
   Set fso = New Scripting.FileSystemObject
   Dim fn As Integer
@@ -124,13 +124,13 @@ Public Function LoadHPmanaConfig() As String
   DisplayLoadedHPmanaConfig
   LoadHPmanaConfig = ""
   Exit Function
-goterr:
+gotErr:
   LoadHPmanaConfig = "(at load) error code " & CStr(Err.Number) & " : " & Err.Description
 End Function
 
 
 Public Function SaveHPmanaConfig() As String
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim i As Long
     Dim ult As Long
     Dim strHD As String
@@ -150,7 +150,7 @@ Public Function SaveHPmanaConfig() As String
     OverwriteOnFile "HPmana.cfg", strHD
     SaveHPmanaConfig = ""
     Exit Function
-goterr:
+gotErr:
     SaveHPmanaConfig = "(at save) error code " & CStr(Err.Number) & " : " & Err.Description
 End Function
 
@@ -209,7 +209,7 @@ Public Sub DisplayLoadedHPmanaConfig()
 End Sub
 
 Public Function GotCustomHPsettings(idConnection As Integer) As Boolean
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim i As Long
     Dim ult As Long
     Dim lstrchar As String
@@ -227,13 +227,13 @@ Public Function GotCustomHPsettings(idConnection As Integer) As Boolean
     Next i
     GotCustomHPsettings = False
     Exit Function
-goterr:
+gotErr:
     GotCustomHPsettings = False
 End Function
 
 
 Public Function GotCustomMANAsettings(idConnection As Integer) As Boolean
-    On Error GoTo goterr
+    On Error GoTo gotErr
     Dim i As Long
     Dim ult As Long
     Dim lstrchar As String
@@ -251,7 +251,7 @@ Public Function GotCustomMANAsettings(idConnection As Integer) As Boolean
     Next i
     GotCustomMANAsettings = False
     Exit Function
-goterr:
+gotErr:
     GotCustomMANAsettings = False
 End Function
 
