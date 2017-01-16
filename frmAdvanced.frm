@@ -776,7 +776,7 @@ End Sub
 
 Private Function getSelectedPID() As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
 Dim str As String
 Dim chrstr As String
@@ -810,7 +810,7 @@ Else
 End If
 getSelectedPID = lonnum
 Exit Function
-gotErr:
+goterr:
 getSelectedPID = 0
 End Function
 Private Sub ChangeInternalFPS(clientpid As Long, internalFPS As Long)
@@ -881,7 +881,7 @@ Private Sub cmdUpdatePIDs_Click()
   Dim Message As String
   Dim addedc As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   addedc = 0
   GetProcessAllProcessIDs
@@ -912,7 +912,7 @@ Private Sub cmdUpdatePIDs_Click()
   End If
   cmbClients.Text = cmbClients.List(0)
   Exit Sub
-gotErr:
+goterr:
   cmbClients.Text = "0 - ERROR: " & Err.Description
 End Sub
 

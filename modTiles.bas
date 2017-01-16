@@ -60,12 +60,12 @@ Private debugGraphicPart As Boolean
 Private byteArray() As Byte
 
 Public Function protectedMult(lWidth, lHeight, lBlendframes, lXdiv, lYdiv, lAnimcount, lRare, lFactor) As Long
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim res As Long
   res = lWidth * lHeight * lBlendframes * lXdiv * lYdiv * lAnimcount * lRare * lFactor
   protectedMult = res
   Exit Function
-gotErr:
+goterr:
   res = -1
 End Function
 
@@ -8482,7 +8482,7 @@ Public Function readProtobufNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef
      Dim b3 As Byte
      Dim b4 As Byte
      Dim b5 As Byte
-     On Error GoTo gotErr
+     On Error GoTo goterr
      b1 = arr(pos)
      num = CLng(b1)
      If (b1 < &H80) Then
@@ -8519,7 +8519,7 @@ Public Function readProtobufNumber(ByRef arr() As Byte, ByVal pos As Long, ByRef
      End If
      readProtobufNumber = num
      Exit Function
-gotErr:
+goterr:
      readProtobufNumber = -2
 End Function
 
@@ -9735,7 +9735,7 @@ End Function
 
 
 Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As Long, ByRef par_file As String)
-  On Error GoTo gotErr
+  On Error GoTo goterr
   par_version = 0
   par_file = ""
   If (Right$(strFilePath, 9) = "tibia.dat") Then
@@ -9790,7 +9790,7 @@ Public Sub GetInfoOfNewDatFile(ByVal strFilePath As String, ByRef par_version As
       Close #fn
     End If
     Exit Sub
-gotErr:
+goterr:
     dateErrDescription = "Error " & Err.Number & " at GetDATEOfFile. Here:" & vbCrLf & _
      strLine & vbCrLf & vbCrLf & "Error description: " & Err.Description
     par_version = -1

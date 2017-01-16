@@ -1133,11 +1133,11 @@ Private Sub chkEnableTrainer_Click()
   End If
 End Sub
 
-Private Sub chkSlotRefill_Click(Index As Integer)
+Private Sub chkSlotRefill_Click(index As Integer)
   Dim thenewvalue As Long
-  thenewvalue = chkSlotRefill(Index).value
-  If ((trainerIDselected > 0) And (Index > 0)) Then
-    TrainerOptions(trainerIDselected).PlayerSlots(Index).cheked = thenewvalue
+  thenewvalue = chkSlotRefill(index).value
+  If ((trainerIDselected > 0) And (index > 0)) Then
+    TrainerOptions(trainerIDselected).PlayerSlots(index).cheked = thenewvalue
   End If
 End Sub
 
@@ -1185,22 +1185,22 @@ Private Sub cmdLastAttackedID_Click()
   End If
 End Sub
 
-Private Sub cmdNoPickup_Click(Index As Integer)
-  cmdNoPickup(Index).Visible = False
-  cmdPickup(Index).Visible = True
+Private Sub cmdNoPickup_Click(index As Integer)
+  cmdNoPickup(index).Visible = False
+  cmdPickup(index).Visible = True
   If (trainerIDselected > 0) Then
-    TrainerOptions(trainerIDselected).AllowedSides(Index) = True
+    TrainerOptions(trainerIDselected).AllowedSides(index) = True
   End If
-  cmdPickup(Index).SetFocus
+  cmdPickup(index).SetFocus
 End Sub
 
-Private Sub cmdPickup_Click(Index As Integer)
-  cmdPickup(Index).Visible = False
-  cmdNoPickup(Index).Visible = True
+Private Sub cmdPickup_Click(index As Integer)
+  cmdPickup(index).Visible = False
+  cmdNoPickup(index).Visible = True
   If (trainerIDselected > 0) Then
-    TrainerOptions(trainerIDselected).AllowedSides(Index) = False
+    TrainerOptions(trainerIDselected).AllowedSides(index) = False
   End If
-  cmdNoPickup(Index).SetFocus
+  cmdNoPickup(index).SetFocus
 End Sub
 
 
@@ -1227,9 +1227,9 @@ End Sub
 
 
 
-Private Sub OptionDest_Click(Index As Integer)
-  If ((trainerIDselected > 0) And (Index > 0) And OptionDest(Index).value = True) Then
-    TrainerOptions(trainerIDselected).spearDest = Index
+Private Sub OptionDest_Click(index As Integer)
+  If ((trainerIDselected > 0) And (index > 0) And OptionDest(index).value = True) Then
+    TrainerOptions(trainerIDselected).spearDest = index
   End If
 End Sub
 
@@ -1478,22 +1478,22 @@ End Sub
 
 
 
-Private Sub txtSlotAmmount_Change(Index As Integer)
+Private Sub txtSlotAmmount_Change(index As Integer)
   Dim res As Long
-  If ((trainerIDselected > 0) And (Index > 0)) Then
-    res = safeConvertStringToLong(txtSlotAmmount(Index).Text)
-    TrainerOptions(trainerIDselected).PlayerSlots(Index).xvalue = res
+  If ((trainerIDselected > 0) And (index > 0)) Then
+    res = safeConvertStringToLong(txtSlotAmmount(index).Text)
+    TrainerOptions(trainerIDselected).PlayerSlots(index).xvalue = res
   End If
 End Sub
 
-Private Sub txtSlotRefill_Change(Index As Integer)
+Private Sub txtSlotRefill_Change(index As Integer)
   Dim res As TypePairOfBytes
   Dim strTmp As String
-  strTmp = txtSlotRefill(Index).Text
-  If ((trainerIDselected > 0) And (Index > 0)) Then
+  strTmp = txtSlotRefill(index).Text
+  If ((trainerIDselected > 0) And (index > 0)) Then
     res = safeConvertStringToPairOfBytes(strTmp)
-    TrainerOptions(trainerIDselected).PlayerSlots(Index).itemID_b1 = res.b1
-    TrainerOptions(trainerIDselected).PlayerSlots(Index).itemID_b2 = res.b2
+    TrainerOptions(trainerIDselected).PlayerSlots(index).itemID_b1 = res.b1
+    TrainerOptions(trainerIDselected).PlayerSlots(index).itemID_b2 = res.b2
   End If
 End Sub
 

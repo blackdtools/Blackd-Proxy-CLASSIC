@@ -259,7 +259,7 @@ Public Sub RemoveItem(clientID As Integer, bpID As Long, slot As Long, Optional 
   Dim cap As Long
   Dim aRes As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   cap = Backpack(clientID, bpID).cap
   For i = slot To cap - 2
@@ -290,7 +290,7 @@ Public Sub RemoveItem(clientID As Integer, bpID As Long, slot As Long, Optional 
   LogOnFile "errors.txt", "Warning at Removeitem (" & clientID & ", " & bpID & "," & slot & " )   : Container with cap 0!"
   End If
   Exit Sub
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Unexpected error at Removeitem (" & clientID & ", " & bpID & "," & slot & " ) Cap=" & cap & "  : " & Err.Description
   aRes = GiveGMmessage(clientID, "Unexpected error in backpack module, please report to blackd. Received call: RemoveItem(" & clientID & "," & bpID & "," & slot & ") Error description: " & Err.Description, "Blackdproxy")
 End Sub

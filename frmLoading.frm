@@ -310,7 +310,7 @@ End Sub
 
 
 Private Function ShowConfigWizard() As Boolean
-  On Error GoTo gotErr
+  On Error GoTo goterr
   Dim res As Boolean
   Dim strInfo As String
   Dim i As Long
@@ -345,17 +345,17 @@ Private Function ShowConfigWizard() As Boolean
   End If
   ShowConfigWizard = res
   Exit Function
-gotErr:
+goterr:
   ShowConfigWizard = True
 End Function
 
 
 Private Function SafeInitWMI() As Boolean
-On Error GoTo gotErr
+On Error GoTo goterr
 Set objWMIService = GetObject("winmgmts:\\.\root\CIMV2")
 SafeInitWMI = True
 Exit Function
-gotErr:
+goterr:
 SafeInitWMI = False
 End Function
 

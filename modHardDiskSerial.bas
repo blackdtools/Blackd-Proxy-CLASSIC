@@ -118,11 +118,11 @@ End Function
  
 Public Function getHDserialNumber() As Long
   Dim n As Long
-  On Error GoTo gotErr
+  On Error GoTo goterr
   GetVolumeInformation "C:\", String(255, Chr$(0)), 255, n, 0, 0, String(255, Chr$(0)), 255
   getHDserialNumber = n
   Exit Function
-gotErr:
+goterr:
   getHDserialNumber = -1
 End Function
 

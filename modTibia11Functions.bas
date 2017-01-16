@@ -291,7 +291,7 @@ Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long
     Dim usize As Long
     Dim tibiaHandle As Long
     Dim readtotal As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     readtotal = 0
     usize = UBound(Rbuff) + 1
     If (usize < 1) Then
@@ -306,7 +306,7 @@ Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long
         QMemory_ReadNBytes = 0
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_ReadNBytes = -1
     Debug.Print ("Error at QMemory_ReadNBytes:" & Err.Description)
 End Function
@@ -358,7 +358,7 @@ Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim lpNumberOfBytesWritten As Long
     Dim usize As Long
     lpNumberOfBytesWritten = 0
-    On Error GoTo gotErr
+    On Error GoTo goterr
     usize = UBound(newValue) + 1
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
     If tibiaHandle = -1 Then
@@ -374,7 +374,7 @@ Public Function QMemory_WriteNBytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_WriteNBytes = -1
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_WriteNBytes = -1
 End Function
 
@@ -384,7 +384,7 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim lpNumberOfBytesWritten As Long
     Dim Rbuff(1) As Byte
     lpNumberOfBytesWritten = 0
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Rbuff(0) = LowByteOfLong(newValue)
     Rbuff(1) = HighByteOfLong(newValue)
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
@@ -397,7 +397,7 @@ Public Function QMemory_Write2Bytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_Write2Bytes = -1
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_Write2Bytes = -1
 End Function
 
@@ -440,7 +440,7 @@ Public Function ModifyQString(ByVal pid As Long, ByVal address As Long, ByRef ne
         Dim res As Long
         Dim allbytes() As Byte
         Dim i As Long
-        On Error GoTo gotErr
+        On Error GoTo goterr
         new_size = Len(newText)
         msg_offset = QMemory_Read4Bytes(pid, address + 12)
         msg_maxsize = QMemory_Read4Bytes(pid, address + 8)
@@ -463,7 +463,7 @@ Public Function ModifyQString(ByVal pid As Long, ByVal address As Long, ByRef ne
         End If
         ModifyQString = res
         Exit Function
-gotErr:
+goterr:
         ModifyQString = -1
     End Function
     
@@ -481,7 +481,7 @@ Public Function QMemory_ReadDouble(ByVal pid As Long, ByVal finalAddress As Long
     CopyMemory d, Rbuff(0), LenB(d)
     QMemory_ReadDouble = d
     Exit Function
-gotErr:
+goterr:
     QMemory_ReadDouble = -1
 End Function
 
@@ -489,39 +489,39 @@ End Function
 Public Function QMemory_Read4Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim res As Long
     Dim tibiaHandle As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, res, 4, 0
     CloseHandle (tibiaHandle)
     QMemory_Read4Bytes = res
     Exit Function
-gotErr:
+goterr:
     QMemory_Read4Bytes = -1
 End Function
 
 Public Function QMemory_Read2Bytes(ByVal pid As Long, ByVal finalAddress As Long) As Long
     Dim Rbuff(1) As Byte
     Dim tibiaHandle As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, Rbuff(0), 2, 0
     CloseHandle (tibiaHandle)
     QMemory_Read2Bytes = GetTheLong(Rbuff(0), Rbuff(1))
     Exit Function
-gotErr:
+goterr:
     QMemory_Read2Bytes = -1
 End Function
 
 Public Function QMemory_Read1Byte(ByVal pid As Long, ByVal finalAddress As Long) As Byte
     Dim Rbuff As Byte
     Dim tibiaHandle As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_VM_READ, 0, pid)
     ReadProcessMemory tibiaHandle, finalAddress, Rbuff, 1, 0
     CloseHandle (tibiaHandle)
     QMemory_Read1Byte = Rbuff
     Exit Function
-gotErr:
+goterr:
     QMemory_Read1Byte = &HFF
 End Function
     
@@ -530,7 +530,7 @@ Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Lon
     Dim res As Long
     Dim lpNumberOfBytesWritten As Long
     lpNumberOfBytesWritten = 0
-    On Error GoTo gotErr
+    On Error GoTo goterr
     tibiaHandle = OpenProcess(PROCESS_READ_WRITE_QUERY, 0, pid)
     res = WriteProcessMemory(tibiaHandle, finalAddress, newValue, 4, lpNumberOfBytesWritten)
     If (res = 1) Then
@@ -541,7 +541,7 @@ Public Function QMemory_Write4Bytes(ByVal pid As Long, ByVal finalAddress As Lon
         QMemory_Write4Bytes = -1
     End If
     Exit Function
-gotErr:
+goterr:
     QMemory_Write4Bytes = -1
 End Function
 
@@ -582,14 +582,14 @@ End Sub
     End Function
     
 Public Function CheckIfEnumDone()
- On Error GoTo gotErr
+ On Error GoTo goterr
  If (HandleTextCollection(0).Window_Handle = &H0) Then
  CheckIfEnumDone = True
  Else
  CheckIfEnumDone = True
  End If
  Exit Function
-gotErr:
+goterr:
  CheckIfEnumDone = False
 End Function
 
@@ -659,7 +659,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     Dim mainWindowHandle As Long
     Dim currentPID As Long
     Dim i As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim items As Object
     Dim item As Object
     'Dim count As Long
@@ -698,7 +698,7 @@ Public Sub GetAllBaseAddressesAndRegionSizes(ByRef expectedName As String, ByRef
     Next
    ' Debug.Print "Total clients found = " & count
     Exit Sub
-gotErr:
+goterr:
     Debug.Print ("Error: Unexpected error - " & Err.Description)
 End Sub
 
@@ -708,7 +708,7 @@ Public Function GetTibiaPIDs(ByRef expectedName As String, ByRef expectedClass A
 ByRef CurrentTibiaPids() As Long) As Long
     Dim ubproc As Long
     Dim i As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim items As Object
     Dim item As Object
     Dim last As Long
@@ -726,7 +726,7 @@ ByRef CurrentTibiaPids() As Long) As Long
     GetTibiaPIDs = last + 1
     'Debug.Print "Total clients found = " & (last + 1)
     Exit Function
-gotErr:
+goterr:
     Debug.Print ("Error: Unexpected error - " & Err.Description)
      CurrentTibiaPids(0) = -1
     GetTibiaPIDs = 0
@@ -736,7 +736,7 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Dim isize As Long
     Dim res As String
     Dim i As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
     isize = UBound(arr)
     res = GoodHex(arr(0))
     For i = 1 To isize
@@ -744,7 +744,7 @@ Public Function arrayToString(ByRef arr() As Byte) As String
     Next i
     arrayToString = res
     Exit Function
-gotErr:
+goterr:
     arrayToString = ""
 End Function
 
@@ -756,7 +756,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
                                      ByRef maxDepth As Long, ByRef bytesPerElement As Long, _
                                      Optional ByRef maxValidKeyID As Long = -1, _
                                      Optional ByVal addBaseAddress As Boolean = False)
-    On Error GoTo gotErr
+    On Error GoTo goterr
         Dim Id As Long
         Dim auxRes As Long
         Id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
@@ -798,7 +798,7 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
             End If
         End If
         Exit Sub
-gotErr:
+goterr:
         Debug.Print ("Something failed: " + Err.Description)
 
 End Sub
@@ -847,7 +847,7 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
                                      ByRef dict As Scripting.Dictionary, _
                                      ByVal currentDepth As Long, _
                                      ByRef maxDepth As Long, ByRef adrRoot As Long) As Long
-    On Error GoTo gotErr
+    On Error GoTo goterr
         Dim Id As Long
         Dim c0, c1, c2 As Long
         Dim Count As Long
@@ -876,7 +876,7 @@ Private Function fillCollectionDictionaryMIN(ByRef pid As Long, ByVal adrCurrent
         End If
         fillCollectionDictionaryMIN = Count
         Exit Function
-gotErr:
+goterr:
         fillCollectionDictionaryMIN = 0
         Debug.Print ("Something failed: " + Err.Description)
 End Function
@@ -1257,7 +1257,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Dim firstChar As String
     Dim currentPort As Long
     Const cte_bytesPerRegister As Long = &H24
-    On Error GoTo gotErr
+    On Error GoTo goterr
     If stopIfPort = -1 Then
         ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, , , , True
     Else
@@ -1327,7 +1327,7 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Next
     ReadTibia11ServerList = 0
     Exit Function
-gotErr:
+goterr:
     ReadTibia11ServerList = -1
 End Function
 
@@ -1342,7 +1342,7 @@ Private Sub closeTibia11Client(ByVal pid As Long)
 
 Dim bRes As Boolean
 Dim tibiaHandle As Long
-On Error GoTo gotErr
+On Error GoTo goterr
 
     If mainTibiaHandle.Exists(pid) Then ' retrieve directly from our dictionary
         tibiaHandle = mainTibiaHandle(pid)
@@ -1351,7 +1351,7 @@ On Error GoTo gotErr
     End If
         bRes = ProcessTerminate(pid, tibiaHandle)
         Exit Sub
-gotErr:
+goterr:
         Debug.Print "WARNING: Unable to close Tibia PID " & CStr(pid)
 
 End Sub

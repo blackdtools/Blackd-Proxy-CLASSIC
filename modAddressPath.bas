@@ -67,7 +67,7 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
     End Function
     
     Public Function ReadCurrentAddressFLOAT(ByVal pid As Long, ByRef adrPath As AddressPath, Optional ByVal desiredErrorValue As Single = -1) As Single
-        On Error GoTo gotErr
+        On Error GoTo goterr
         Dim rawval As Long
         Dim valLong As Long
         Dim valSingle As Single
@@ -79,12 +79,12 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
         valSingle = Long2Float(rawval)
         ReadCurrentAddressFLOAT = valSingle
         Exit Function
-gotErr:
+goterr:
         ReadCurrentAddressFLOAT = desiredErrorValue
     End Function
     
     Public Function ReadCurrentAddressDOUBLE(ByVal pid As Long, ByRef adrPath As AddressPath, Optional ByVal desiredErrorValue As Long = -1) As Long
-        On Error GoTo gotErr
+        On Error GoTo goterr
         Dim adr As Long
         Dim val8bytes As Double
         Dim valRounded As Long
@@ -97,7 +97,7 @@ gotErr:
         valRounded = Math.Round(val8bytes)
         ReadCurrentAddressDOUBLE = valRounded
         Exit Function
-gotErr:
+goterr:
         ReadCurrentAddressDOUBLE = desiredErrorValue
     End Function
     
@@ -106,7 +106,7 @@ gotErr:
         Dim realBase As Long
         Dim reqKey As String
         Dim i As Integer
-        On Error GoTo gotErr
+        On Error GoTo goterr
         res = 0
         realBase = 0
         If adrPath.baseAddress = 0 Then
@@ -191,7 +191,7 @@ gotErr:
             End If
             ReadCurrentAddress = res
             Exit Function
-gotErr:
+goterr:
 Debug.Print "ReadCurrentAddress failure: " & Err.Description
             ReadCurrentAddress = desiredErrorValue
 End Function

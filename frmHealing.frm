@@ -1149,7 +1149,7 @@ End If
 End Sub
 
 Private Sub Combo1_Click()
-Dim Index As Integer
+Dim index As Integer
 Dim idConnection As Integer
 
 If healingIDselected > 0 Then
@@ -1173,7 +1173,7 @@ End If
 End Sub
 
 Private Sub Combo2_Click()
-Dim Index As Integer
+Dim index As Integer
 
 If healingIDselected > 0 Then
 

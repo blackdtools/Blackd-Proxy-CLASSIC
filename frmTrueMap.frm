@@ -684,7 +684,7 @@ End Sub
 
 
 
-Private Sub cmdFloor_Click(Index As Integer)
+Private Sub cmdFloor_Click(index As Integer)
    If TrialVersion = True Then
       If mapIDselected > 0 Then
         If sentWelcome(mapIDselected) = False Or GotPacketWarning(mapIDselected) = True Then
@@ -692,7 +692,7 @@ Private Sub cmdFloor_Click(Index As Integer)
         End If
       End If
     End If
-  mapFloorSelected = Index
+  mapFloorSelected = index
   SetButtonColours
   DrawFloor
 End Sub

@@ -534,7 +534,7 @@ End Sub
 
 Public Function ReadHardiskMapsQ() As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As Long
   Dim Ammount As Long
@@ -620,13 +620,13 @@ Public Function ReadHardiskMapsQ() As Long
   'Debug.Print "Loaded Tibia 11 maps! Total found: " & CStr(loadedOK)
   ReadHardiskMapsQ = 0
   Exit Function
-gotErr:
+goterr:
   ReadHardiskMapsQ = -1
 End Function
 
 Public Function ReadHardiskMaps() As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If (TibiaVersionLong >= 1100) Then
     ReadHardiskMaps = ReadHardiskMapsQ()
@@ -686,7 +686,7 @@ Public Function ReadHardiskMaps() As Long
   Next
   ReadHardiskMaps = 0
   Exit Function
-gotErr:
+goterr:
   ReadHardiskMaps = -1
 End Function
 
@@ -708,7 +708,7 @@ Private Function LoadPNGIntoByteArray(ByRef filePath As String, ByRef arr() As B
  ByRef imageBytesPerPixel As Long, _
  Optional ByVal atPosition As Long = 0, _
  Optional ByVal withRotation As Double = 0) As Boolean
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim imageRef As Long
     Dim pRow As Long
     Dim currentLine As Long
@@ -763,17 +763,17 @@ Private Function LoadPNGIntoByteArray(ByRef filePath As String, ByRef arr() As B
     ' All looks OK. We return True
     LoadPNGIntoByteArray = True
     Exit Function
-gotErr:
+goterr:
     '... else, we return False
     LoadPNGIntoByteArray = False
 End Function
 
 ' If array is empty then init it to an array of 1 byte
 Private Sub ensureMinimumArray(ByRef arr() As Byte)
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim test As Long
     test = UBound(arr)
     Exit Sub
-gotErr:
+goterr:
     ReDim arr(0)
 End Sub

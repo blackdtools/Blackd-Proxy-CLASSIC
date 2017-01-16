@@ -94,7 +94,7 @@ End Function
 Public Sub SetTibiaClientsVisible(ByVal blnVisible As Boolean)
   Dim intMode As Long
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim res As Boolean
   Dim tibiaclient As Long
@@ -117,7 +117,7 @@ Public Sub SetTibiaClientsVisible(ByVal blnVisible As Boolean)
     End If
   Loop
   Exit Sub
-gotErr:
+goterr:
   intMode = -1
 End Sub
 

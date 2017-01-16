@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "42.2" ' Proxy version ' string version
-Public Const myNumericVersion = 42200 ' numeric version
+Public Const ProxyVersion = "42.3" ' Proxy version ' string version
+Public Const myNumericVersion = 42300 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -1212,9 +1212,9 @@ End Function
 
 
 
-Public Sub ShowPositionChange(Index As Integer)
+Public Sub ShowPositionChange(index As Integer)
   ' do any required update of position and map
-  If Index = mapIDselected Then
+  If index = mapIDselected Then
     If TrialVersion = True Then
       If sentWelcome(mapIDselected) = False Or GotPacketWarning(mapIDselected) = True Then
         Exit Sub
@@ -1222,16 +1222,16 @@ Public Sub ShowPositionChange(Index As Integer)
     End If
     'update map
     If frmHardcoreCheats.chkAutoUpdateMap.value = True Then
-      If mapIDselected = Index Then
+      If mapIDselected = index Then
         If frmHardcoreCheats.chkLockOnMyFloor.value = 1 Then
-          mapFloorSelected = myZ(Index)
+          mapFloorSelected = myZ(index)
         End If
         frmTrueMap.SetButtonColours
         frmTrueMap.DrawFloor
       End If
     Else
-     If mapIDselected = Index Then
-        If mapFloorSelected <> myZ(Index) Then
+     If mapIDselected = index Then
+        If mapFloorSelected <> myZ(index) Then
           frmTrueMap.SetButtonColours
         End If
       End If
@@ -6840,6 +6840,29 @@ pos = pos + 4 + (15 * templ2)
                 GoodHex(packet(pos + 6)) & " " & GoodHex(packet(pos + 7))
               #End If
               pos = pos + 8
+         
+            ElseIf templ2 = &H10 Then ' New since Tibia 10.99 rev4 / Tibia 11.04
+              #If DEBUG_SHOP = 1 Then
+                Debug.Print "UNKNOWN 8 BYTES> " & GoodHex(packet(pos)) & " " & GoodHex(packet(pos + 1)) & " " & _
+                GoodHex(packet(pos + 2)) & " " & GoodHex(packet(pos + 3)) & " " & _
+                GoodHex(packet(pos + 4)) & " " & GoodHex(packet(pos + 5)) & " " & _
+                GoodHex(packet(pos + 6)) & " " & GoodHex(packet(pos + 7))
+              #End If
+              templ2 = CLng(packet(pos + 7))
+              pos = pos + 8
+              If templ2 = &H1 Then
+                    lonN = GetTheLong(packet(pos), packet(pos + 1))
+                    pos = pos + 2
+                    mobName = ""
+                    For itemCount = 1 To lonN
+                      mobName = mobName & Chr(packet(pos))
+                      pos = pos + 1
+                    Next itemCount
+                    #If DEBUG_SHOP = 1 Then
+                        Debug.Print "WARNING> " & mobName
+                   #End If
+           
+              End If
             End If
            End If
            templ2 = CLng(packet(pos))

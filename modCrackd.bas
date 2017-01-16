@@ -118,7 +118,7 @@ End Sub
 
 Public Function readLoginTibiaKeyAtPID(idConnection As Integer, ProcessID As Long) As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim startAdr As Long
   Dim abyte As Byte
@@ -139,7 +139,7 @@ Public Function readLoginTibiaKeyAtPID(idConnection As Integer, ProcessID As Lon
     readLoginTibiaKeyAtPID = 0
   End If
   Exit Function
-gotErr:
+goterr:
   readLoginTibiaKeyAtPID = -1
 End Function
 
@@ -242,7 +242,7 @@ Public Sub UpdateProcessIDbyLastPacket(ByVal idConnection As Integer, ByRef pack
   Dim sucess As Long
   Dim i As Integer
   Dim errmessage As String
-  On Error GoTo gotErr
+  On Error GoTo goterr
   sucess = -2
   ProcessID(idConnection) = 0
   If AlternativeBinding <> 0 Then
@@ -274,7 +274,7 @@ Public Sub UpdateProcessIDbyLastPacket(ByVal idConnection As Integer, ByRef pack
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & errmessage
   LogOnFile "errors.txt", errmessage
   Exit Sub
-gotErr:
+goterr:
   errmessage = "Function failure : UpdateProcessIDbyLastPacket could not match idconnection<->pid : Error number " & CStr(Err.Number) & " : " & Err.Description
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & errmessage
   LogOnFile "errors.txt", errmessage
@@ -296,7 +296,7 @@ Public Function GiveProcessIDbyLastPacket(ByRef packet() As Byte, Optional strIP
   Dim trivialRes As Long
   Dim packetSizeForComparing As Long
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   tcount = 0
   
@@ -361,7 +361,7 @@ Public Function GiveProcessIDbyLastPacket(ByRef packet() As Byte, Optional strIP
   LogOnFile "errors.txt", debugStrangeFail
   GiveProcessIDbyLastPacket = 0
   Exit Function
-gotErr:
+goterr:
   errmessage = "Function failure : GiveProcessIDbyLastPacket could not match idconnection<->pid : Error number " & CStr(Err.Number) & " : " & Err.Description
   frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & errmessage
   LogOnFile "errors.txt", errmessage
@@ -369,13 +369,13 @@ gotErr:
 End Function
 
 Public Sub AddGameServer(ByVal ServerName As String, ByVal serverIPport As String, Optional ByVal serverDOMAIN As String = "")
-  On Error GoTo gotErr
+  On Error GoTo goterr
   ' add item to dictionary
   Dim res As Boolean
   GameServerDictionary.item(ServerName) = serverIPport
   GameServerDictionaryDOMAIN.item(ServerName) = serverDOMAIN
   Exit Sub
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Get error at AddGameServer : " & Err.Description
 End Sub
 
@@ -407,7 +407,7 @@ Public Function GetGameServerPort(ByVal ServerName As String) As Long
 End Function
 
 Public Function GetGameServerDOMAIN(ByVal ServerName As String, Optional ByVal getHiddenValue As Boolean = False) As String
-  On Error GoTo gotErr
+  On Error GoTo goterr
   ' get the IPandport from server name
   Dim aRes As String
   Dim res As Boolean
@@ -441,12 +441,12 @@ Public Function GetGameServerDOMAIN(ByVal ServerName As String, Optional ByVal g
     GetGameServerDOMAIN = ""
   End If
   Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Got error at GetGameServerDOMAIN (" & ServerName & " ): " & Err.Description
   GetGameServerDOMAIN = ""
 End Function
 Public Function GetIPandPortfromServerName(ByVal ServerName As String) As String
-  On Error GoTo gotErr
+  On Error GoTo goterr
   ' get the IPandport from server name
   Dim aRes As String
   Dim res As Boolean
@@ -486,7 +486,7 @@ Public Function GetIPandPortfromServerName(ByVal ServerName As String) As String
     GetIPandPortfromServerName = strBuildIt
   End If
   Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Got error at GetIPandPortfromServerName (" & ServerName & " ): " & Err.Description
   GetIPandPortfromServerName = ""
 End Function
@@ -597,7 +597,7 @@ Public Function UpdateCharListFromMemory(idConnection As Integer, maxr As Intege
   Dim currRead As Long
   Dim maxread As Long
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   If TibiaVersionLong >= 1011 Then
     UpdateCharListFromMemory = UpdateCharListFromMemory3(idConnection, maxr)
@@ -688,7 +688,7 @@ continueIt:
     GoTo continueIt
   End If
   Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Got error at UpdateCharListFromMemory : " & Err.Description
   UpdateCharListFromMemory = -1
 End Function
@@ -829,7 +829,7 @@ Public Function UpdateCharListFromMemory2(idConnection As Integer, maxr As Integ
   Dim badd(3) As Byte
   
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   'Debug.Print "You should not use this function since Tibia 9.71"
   'UpdateCharListFromMemory2 = -1
@@ -941,7 +941,7 @@ continueIt:
     GoTo continueIt
   End If
   Exit Function
-gotErr:
+goterr:
   LogOnFile "errors.txt", "Got error at UpdateCharListFromMemory2 : " & Err.Description
   UpdateCharListFromMemory2 = -1
 End Function

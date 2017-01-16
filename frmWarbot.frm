@@ -802,7 +802,7 @@ End Sub
 
 Private Sub Form_Load()
   #If FinalMode Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   
   allowRename = False
@@ -841,7 +841,7 @@ Private Sub Form_Load()
   Me.cmdStart.Caption = "DEACTIVATED - press to run changer"
   Me.Timer1.enabled = False
   Exit Sub
-gotErr:
+goterr:
   gotDictErr = 1
 End Sub
 
@@ -881,7 +881,7 @@ Private Sub Timer1_Timer()
 End Sub
 
 Private Sub timerFriendHealer_Timer()
-    On Error GoTo gotErr
+    On Error GoTo goterr
     Dim v1 As Long
     Dim v2 As Long
     v1 = 300
@@ -895,7 +895,7 @@ Private Sub timerFriendHealer_Timer()
     timerFriendHealer.Interval = randomNumberBetween(v1, v2)
   ProcessAllFriendHeals
   Exit Sub
-gotErr:
+goterr:
   txtAutohealDelay.Text = "300"
   txtAutohealDelay2.Text = "700"
 End Sub
@@ -904,72 +904,72 @@ End Sub
 
 
 
-Private Sub txtOutfit_Validate(Index As Integer, Cancel As Boolean)
+Private Sub txtOutfit_Validate(index As Integer, Cancel As Boolean)
 Dim byteValue As Byte
 Dim longValue As Long
-On Error GoTo gotErr
+On Error GoTo goterr
   If TibiaVersionLong >= 773 Then
 
-  longValue = CLng(txtOutfit(Index).Text)
-  If Index = 0 Then
+  longValue = CLng(txtOutfit(index).Text)
+  If index = 0 Then
     If longValue > lastValidOutfit Then
-      txtOutfit(Index).Text = firstValidOutfit
+      txtOutfit(index).Text = firstValidOutfit
       Cancel = True
       Exit Sub
     End If
     If longValue < firstValidOutfit Then
-      txtOutfit(Index).Text = lastValidOutfit
+      txtOutfit(index).Text = lastValidOutfit
       Cancel = True
       Exit Sub
     End If
     Select Case longValue
     Case 135
-      txtOutfit(Index).Text = lastValid(Index)
+      txtOutfit(index).Text = lastValid(index)
       Cancel = True
       Exit Sub
     End Select
   End If
   If longValue >= 0 And longValue <= 255 Then
     byteValue = CByte(longValue)
-    lastValid(Index) = CStr(longValue)
+    lastValid(index) = CStr(longValue)
   Else
-    txtOutfit(Index).Text = lastValid(Index)
+    txtOutfit(index).Text = lastValid(index)
     Cancel = True
   End If
   Exit Sub
   Else
-  longValue = CLng(txtOutfit(Index).Text)
-  If Index = 0 Then
+  longValue = CLng(txtOutfit(index).Text)
+  If index = 0 Then
     If longValue < firstValidOutfit Then
-      txtOutfit(Index).Text = lastValidOutfit
+      txtOutfit(index).Text = lastValidOutfit
       Cancel = True
       Exit Sub
     End If
     If longValue > lastValidOutfit Then
-      txtOutfit(Index).Text = firstValidOutfit
+      txtOutfit(index).Text = firstValidOutfit
       Cancel = True
       Exit Sub
     End If
     Select Case longValue
     Case 1, 10, 11, 12, 20, 46, 47, 72, 77, 93, 96, 97, 98, 135
-      txtOutfit(Index).Text = lastValid(Index)
+      txtOutfit(index).Text = lastValid(index)
       Cancel = True
       Exit Sub
     End Select
   End If
   If longValue >= 0 And longValue <= 255 Then
     byteValue = CByte(longValue)
-    lastValid(Index) = CStr(longValue)
+    lastValid(index) = CStr(longValue)
   Else
-    txtOutfit(Index).Text = lastValid(Index)
+    txtOutfit(index).Text = lastValid(index)
     Cancel = True
   End If
   Exit Sub
   
   
   End If
-gotErr:
-  txtOutfit(Index).Text = lastValid(Index)
+goterr:
+  txtOutfit(index).Text = lastValid(index)
   Cancel = True
 End Sub
 
@@ -980,7 +980,7 @@ End Sub
 
 Public Sub ReloadAutohealFile()
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim fso As Scripting.FileSystemObject
   Dim fn As Integer
@@ -1003,7 +1003,7 @@ Public Sub ReloadAutohealFile()
       Close #fn
     End If
   Exit Sub
-gotErr:
+goterr:
   lstAutoheal.Clear
 End Sub
 
@@ -1015,7 +1015,7 @@ End Sub
 Public Sub SaveAutoHealList()
   Dim i As Long
   #If FinalMode = 1 Then
-  On Error GoTo gotErr
+  On Error GoTo goterr
   #End If
   Dim fn As Integer
   Dim limI As Long
@@ -1027,7 +1027,7 @@ Public Sub SaveAutoHealList()
     Next i
   Close #fn
   Exit Sub
-gotErr:
+goterr:
   i = -1
 End Sub
 
