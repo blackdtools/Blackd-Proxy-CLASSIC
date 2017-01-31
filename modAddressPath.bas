@@ -7,6 +7,8 @@ Public Type AddressPath
          baseAddress As Long
          lastJumpIndex As Long
          jump() As Long
+         rawString As String
+         name As String
 End Type
 
 Public Function AddressPathToString(ByRef adrPath As AddressPath) As String
@@ -25,7 +27,7 @@ Public Function AddressPathToString(ByRef adrPath As AddressPath) As String
     End If
     AddressPathToString = res
 End Function
-Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPath
+Public Function ReadAddressPath(ByVal strRawAddressPath As String, ByRef strName As String) As AddressPath
         Dim res As AddressPath
         Dim parts() As String
         Dim parts0() As String
@@ -36,6 +38,8 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
         strRawAddressPath = Replace(strRawAddressPath, " ", "")
         res.baseAddress = &H0
         res.lastJumpIndex = -1
+        res.name = strName
+        res.rawString = ""
         ReDim res.jump(0)
         parts = Split(strRawAddressPath, ">")
         parts0 = Split(parts(0), "+")
@@ -61,6 +65,7 @@ Public Function ReadAddressPath(ByVal strRawAddressPath As String) As AddressPat
                 End If
             Next i
         End If
+        res.rawString = AddressPathToString(res)
         ReadAddressPath = res
         Exit Function
 

@@ -219,6 +219,8 @@ Public Type TibiaServerEntry
     name_adr As Long
     url_adr As Long
     port_adr As Long
+    url2 As String
+    url2_adr As Long
    ' rawbytes() As Byte
 End Type
 
@@ -283,9 +285,15 @@ Private Declare Function CloseHandle Lib "Kernel32" (ByVal hObject As Long) As L
 Public moduleDictionary As Scripting.Dictionary
 Public mainTibiaHandle As Scripting.Dictionary
 Public objWMIService As Object
-
+Public adrServerList_PortOffset As Long
 Public MAXDATTILESpath As String
 Public subTibiaVersionLong As Long
+Public useAntiDDoS As Boolean
+Public useFirewall As Boolean
+
+Public lastFillAdrName As String
+Public lastFillAdrValue As String
+Public lastFillSize As String
 
 Public Function QMemory_ReadNBytes(ByVal pid As Long, ByVal finalAddress As Long, ByRef Rbuff() As Byte) As Long
     Dim usize As Long
@@ -759,6 +767,13 @@ Private Sub fillCollectionDictionary(ByRef pid As Long, ByVal adrCurrentItem As 
     On Error GoTo goterr
         Dim Id As Long
         Dim auxRes As Long
+        If (adrCurrentItem = 0) Then
+            Dim errMsg As String
+            errMsg = "Critical fail at fillCollectionDictionary. Tibia version " & CStr(TibiaVersionLong) & " Please report to daniel@blackdtools.com Failed to gather collection for address " & lastFillAdrName & " = " & lastFillAdrValue & " with size " & CStr(lastFillSize)
+            Debug.Print errMsg
+            LogOnFile "errors.txt", errMsg
+            End
+        End If
         Id = QMemory_Read4Bytes(pid, adrCurrentItem + &H10)
         If (maxValidKeyID > -1) Then
             If (Id > maxValidKeyID) Then
@@ -832,6 +847,9 @@ Public Sub ReadTibia11Collection(ByRef pid As Long, adrPath As AddressPath, _
         End If
         maxDepth = Math.Round(Math.Sqr(totalItems))
     End If
+    lastFillAdrName = adrPath.name
+    lastFillAdrValue = adrPath.rawString
+    lastFillSize = totalItems
     adrSTARTER_ITEM = QMemory_Read4Bytes(pid, adrCOLLECTION_START)
     p0 = QMemory_Read4Bytes(pid, adrSTARTER_ITEM)
     p1 = QMemory_Read4Bytes(pid, adrSTARTER_ITEM + 4)
@@ -1226,12 +1244,20 @@ Public Sub RestoreAllCharlists()
         If readResult = 0 Then
             For i = 0 To UBound(serverList)
                 strServerName = serverList(i).name
-                realDomain = GetGameServerDOMAIN(strServerName)
+                realDomain = GetGameServerDOMAIN1(strServerName)
                 realPort = GetGameServerPort(strServerName)
                 If Not (realDomain = "") Then
                     'Debug.Print "Restoring " & Hex(serverList(i).url_adr) & " (" & strServerName & ") to " & realDomain & ":" & realPort
                     ModifyQString tibia_pids(j), serverList(i).url_adr, realDomain
                     QMemory_Write4Bytes tibia_pids(j), serverList(i).port_adr, realPort
+                End If
+                If (serverList(i).url2_adr > 0) Then
+                    realDomain = GetGameServerDOMAIN2(strServerName)
+                    If Not (realDomain = "") Then
+                        'Debug.Print "Restoring " & Hex(serverList(i).url_adr) & " (" & strServerName & ") to " & realDomain & ":" & realPort
+                        ModifyQString tibia_pids(j), serverList(i).url2_adr, realDomain
+                    
+                    End If
                 End If
             Next i
             Debug.Print "PID " & CStr(tibia_pids(j)) & ": RESTORED server list."
@@ -1256,7 +1282,9 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
     Dim auxAdr As Long
     Dim firstChar As String
     Dim currentPort As Long
-    Const cte_bytesPerRegister As Long = &H24
+    Dim cte_bytesPerRegister As Long
+    Const altIPpos As Long = &H20
+    cte_bytesPerRegister = adrServerList_PortOffset + 4
     On Error GoTo goterr
     If stopIfPort = -1 Then
         ReadTibia11Collection pid, adrPath, cte_bytesPerRegister, tmpRes, , , , True
@@ -1319,9 +1347,16 @@ Public Function ReadTibia11ServerList(ByRef pid As Long, ByRef adrPath As Addres
         tmpElement.url_adr = BitConverter_ToInt32(val, &H1C)
         tmpElement.name = QMemory_ReadString(pid, tmpElement.name_adr)
         tmpElement.url = QMemory_ReadString(pid, tmpElement.url_adr)
-        tmpElement.port = BitConverter_ToInt32(val, &H20)
+        tmpElement.port = BitConverter_ToInt32(val, adrServerList_PortOffset)
+        If (adrServerList_PortOffset > &H20) Then
+            tmpElement.url2_adr = BitConverter_ToInt32(val, &H20)
+            tmpElement.url2 = QMemory_ReadString(pid, tmpElement.url2_adr)
+        Else
+            tmpElement.url2_adr = 0
+            tmpElement.url2 = ""
+        End If
         tmpElement.this_register_adr = BitConverter_ToInt32(val, cte_bytesPerRegister)  ' trick (we left base address in last 4 bytes)
-        tmpElement.port_adr = tmpElement.this_register_adr + &H20
+        tmpElement.port_adr = tmpElement.this_register_adr + adrServerList_PortOffset
         res(tmpElement.Id) = tmpElement
         i = i + 1
     Next
@@ -1335,6 +1370,9 @@ Public Function BitConverter_ToInt32(ByRef arr() As Byte, ByRef pos As Long) As 
     Dim l As Long
     CopyMemory l, arr(pos), 4
     BitConverter_ToInt32 = l
+End Function
+Public Function BitConverter_ToInt8(ByRef arr() As Byte, ByRef pos As Long) As Byte
+    BitConverter_ToInt8 = arr(pos)
 End Function
 
 Private Sub closeTibia11Client(ByVal pid As Long)
@@ -1407,20 +1445,33 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
         Exit Sub
     End If
     For j = 0 To UBound(tibia_pids)
+  
         If (debugMode = 1) Then
-'            readResult = ReadTibia11ServerList(tibia_pids(j), adrServerList_CollectionStart, serverList)
-'            If (readResult = 0) Then
-'                For i = 0 To UBound(serverList)
-'                  strServerName = serverList(i).name
-'                  strURLtrans = GetGameServerDOMAIN(strServerName)
-'                  Debug.Print CStr(serverList(i).name & ": " & serverList(i).url & " (" & strURLtrans & ") referenced at " & Hex(serverList(i).url_adr))
-'                Next i
-'            End If
-            Dim itemAdr As Long
-            Const keyToFind As Long = 11
-       
-            itemAdr = FindCollectionItemByKey(tibia_pids(j), adrServerList_CollectionStart, keyToFind)
-            Debug.Print "key " & CStr(keyToFind) & " found at " & CStr(Hex(itemAdr))
+            readResult = ReadTibia11ServerList(tibia_pids(j), adrServerList_CollectionStart, serverList)
+            If (readResult = 0) Then
+                For i = 0 To UBound(serverList)
+                  strServerName = serverList(i).name
+              
+                  Debug.Print CStr(serverList(i).name & ": " & serverList(i).url & " port " & serverList(i).port & " (" & Hex(serverList(i).this_register_adr) & ") DDoS safe url=" & serverList(i).url2 & " (" & Hex(serverList(i).url2_adr) & ") referenced at " & Hex(serverList(i).url_adr))
+                Next i
+            End If
+            Dim lastCharIndex As Integer
+            Dim charList() As TibiaCharListEntry
+            lastCharIndex = CInt(ReadTibia11CharList(tibia_pids(0), charList))
+            If lastCharIndex > -1 Then
+                Dim strNick As String
+                Dim strServer As String
+                Dim strDomain As String
+                Dim aa As Integer
+                For aa = 0 To lastCharIndex
+                   strNick = charList(aa).name
+                   strServer = charList(aa).server
+                   strDomain = GetGameServerDOMAIN1(strServer)
+                   Debug.Print "> " & strNick & " > " & strServer & " > " & strDomain
+                Next aa
+                Debug.Print "debug ok"
+                End
+            End If
         Else
             readResult = ReadTibia11ServerList(tibia_pids(j), adrServerList_CollectionStart, serverList, newPort)
              Select Case (readResult)
@@ -1429,7 +1480,7 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
                 For i = 0 To UBound(serverList)
                     strServerName = serverList(i).name
                     If (serverList(i).url = "127.0.0.1") Then ' already modified
-                        If (GetGameServerDOMAIN(strServerName) = "") Then
+                        If (GetGameServerDOMAIN1(strServerName) = "") Then
                             'showWarning = True
                            ' strDefaultServer = LCase(strServerName) & defaultGameServerEnd
                            ' AddGameServer strServerName, "127.0.0.1:" & 7171, strDefaultServer
@@ -1441,11 +1492,17 @@ Public Sub RedirectAllServersHere(Optional ByVal debugMode As Integer = 0) ' nee
                         End If
                         ' no need to write 127.0.0.1 again
                     Else
-                        If (GetGameServerDOMAIN(strServerName) = "") Then
+                        If (GetGameServerDOMAIN1(strServerName) = "") Then
                             AddGameServer strServerName, "127.0.0.1:" & serverList(i).port, serverList(i).url
+                            If (serverList(i).url2_adr > 0) Then
+                                AddGameServer2 strServerName, serverList(i).url2
+                            End If
                         End If
                         ' only if url is different than 127.0.0.1 then we update it to 127.0.0.1
                         ModifyQString tibia_pids(j), serverList(i).url_adr, "127.0.0.1"
+                        If (serverList(i).url2_adr > 0) Then
+                           ModifyQString tibia_pids(j), serverList(i).url2_adr, "127.0.0.1"
+                        End If
                     End If
                     QMemory_Write4Bytes tibia_pids(j), serverList(i).port_adr, newPort ' we always need to update our port
                 Next i
@@ -1486,7 +1543,11 @@ Public Sub BuildCharListForTibiaQ(ByVal idConnection As Integer, ByRef selName A
     For a = 0 To lastCharIndex
         strNick = charList(a).name
         strServer = charList(a).server
-        strDomain = GetGameServerDOMAIN(strServer)
+        If ((useAntiDDoS = True) And (TibiaVersionLong >= 1104)) Then
+            strDomain = GetGameServerDOMAIN2(strServer)
+        Else
+            strDomain = GetGameServerDOMAIN1(strServer)
+        End If
         If (strDomain = "127.0.0.1") Then
             selName = ""
             listPos = -1
@@ -1716,5 +1777,5 @@ Public Sub SafeMemoryMoveXYZ_Tibia11(ByRef idConnection As Integer, Px As Long, 
     clickX = corner_posx + 9 + goalRawX
     clickY = corner_posy + 6 + goalRawY
     SendClickToTibia11 pid, clickX, clickY
-    'Debug.Print "done click at " & CStr(clickX) & "," & CStr(clickY)
+  '  Debug.Print "done click at " & CStr(clickX) & "," & CStr(clickY)
 End Sub

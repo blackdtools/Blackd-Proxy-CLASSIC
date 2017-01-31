@@ -5651,7 +5651,7 @@ goterr:
   DoEvents
 End Sub
 
-Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
+Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix, Optional ByVal creatureBlocks = False)
   Dim x As Long
   Dim y As Long
   Dim z As Long
@@ -5727,17 +5727,28 @@ Public Sub ReadTrueMap(idConnection As Integer, ByRef myMap As TypeAstarMatrix)
           If tileID = 0 Then
             Exit For
           ElseIf tileID = 97 Then 'person
-            tmpID = Matrix(y, x, z, idConnection).s(s).dblID
-            nameofgivenID = GetNameFromID(idConnection, tmpID)
-            If nameofgivenID = "" Then
-              ' detected mobile with no name! ?
-              aRes = -1
-            ElseIf (nameofgivenID = CharacterName(idConnection)) Or (tmpID = lastAttackedID(idConnection)) Then
-              ' myself
-              aRes = -2
+            If creatureBlocks Then
+                tmpID = Matrix(y, x, z, idConnection).s(s).dblID
+                nameofgivenID = GetNameFromID(idConnection, tmpID)
+                If nameofgivenID = CharacterName(idConnection) Then
+                  ' myself
+                  aRes = -2
+                Else
+                  myMap.cost(x, y) = CostBlock
+                End If
             Else
-              myMap.cost(x, y) = CostBlock
-              Exit For
+                tmpID = Matrix(y, x, z, idConnection).s(s).dblID
+                nameofgivenID = GetNameFromID(idConnection, tmpID)
+                If nameofgivenID = "" Then
+                  ' detected mobile with no name! ?
+                  aRes = -1
+                ElseIf (nameofgivenID = CharacterName(idConnection)) Or (tmpID = lastAttackedID(idConnection)) Then
+                  ' myself
+                  aRes = -2
+                Else
+                  myMap.cost(x, y) = CostBlock
+                  Exit For
+                End If
             End If
           ElseIf DatTiles(tileID).isField Then
             If (myMap.cost(x, y)) < CostHandicap Then
@@ -7568,6 +7579,185 @@ Public Sub SafeMemoryMoveXYZ(ByVal idConnection As Integer, ByVal x As Long, ByV
   If z < 0 Then
     Exit Sub ' Stop because that would be an illegal move
   End If
+  
+  
+
+  If (TibiaVersionLong > 1099) Then ' can't do map click to creature
+    Dim tryingX As Long
+    Dim tryingY As Long
+    Dim goalX As Long
+    Dim goalY As Long
+    Dim fixIt As Boolean
+    Dim opts(0 To 7) As Long
+  
+    Dim i
+    fixIt = False
+    goalX = x - myX(idConnection)
+    goalY = y - myY(idConnection)
+    If (goalX = 0) And (goalY = 0) Then
+        Debug.Print "SafeMemoryMoveXYZ: Already on goal!"
+        Exit Sub
+    End If
+    tryingX = 0
+    tryingY = 0
+    If (goalX > -9) And (goalX < 10) And (goalY > -7) And (goalY < 8) Then
+      'Debug.Print "optimizing relative move to " & CStr(goalX) & "," & CStr(goalY)
+      If (1 = 1) Then
+        Dim myMap As TypeAstarMatrix
+        ReadTrueMap idConnection, myMap, True
+        tryingX = goalX
+        tryingY = goalY
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+            fixIt = True
+            GoTo continue
+          End If
+        End If
+        For i = 0 To 7
+            opts(i) = 100
+        Next i
+        tryingX = goalX - 1
+        tryingY = goalY - 1
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+          opts(0) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(0) = 100
+          End If
+        End If
+        
+        tryingX = goalX
+        tryingY = goalY - 1
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+            opts(1) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(1) = 100
+          End If
+        End If
+        
+        tryingX = goalX + 1
+        tryingY = goalY - 1
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+          opts(2) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(2) = 100
+          End If
+        End If
+        
+        tryingX = goalX + 1
+        tryingY = goalY
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+           opts(3) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(3) = 100
+          End If
+        End If
+        
+        tryingX = goalX + 1
+        tryingY = goalY + 1
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+            opts(4) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(4) = 100
+          End If
+        End If
+        
+        tryingX = goalX
+        tryingY = goalY + 1
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+            opts(5) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(5) = 100
+          End If
+        End If
+        
+        tryingX = goalX - 1
+        tryingY = goalY + 1
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+          opts(6) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(6) = 100
+          End If
+        End If
+        
+        tryingX = goalX - 1
+        tryingY = goalY
+        If (tryingX > -9) And (tryingX < 10) And (tryingY > -7) And (tryingY < 8) Then
+          If myMap.cost(tryingX, tryingY) = CostWalkable Then
+            opts(7) = Math.Abs(tryingX) + Math.Abs(tryingY)
+          Else
+            opts(7) = 100
+          End If
+        End If
+        
+        Dim bestOpt As Long
+        Dim lowestOpt As Long
+        bestOpt = -1
+        lowestOpt = 99
+        For i = 0 To 7
+            If (opts(i) < lowestOpt) Then
+                bestOpt = i
+                lowestOpt = opts(i)
+            End If
+        Next i
+        If (bestOpt > -1) Then
+       ' Debug.Print "bestOpt=" & CStr(bestOpt)
+            fixIt = True
+            Select Case bestOpt
+            Case 0:
+                tryingX = goalX - 1
+                tryingY = goalY - 1
+            Case 1:
+                tryingX = goalX
+                tryingY = goalY - 1
+            Case 2:
+                tryingX = goalX + 1
+                tryingY = goalY - 1
+            Case 3:
+                tryingX = goalX + 1
+                tryingY = goalY
+            Case 4:
+                tryingX = goalX + 1
+                tryingY = goalY + 1
+            Case 5:
+                tryingX = goalX
+                tryingY = goalY + 1
+            Case 6:
+                tryingX = goalX - 1
+                tryingY = goalY + 1
+            Case 7:
+                tryingX = goalX - 1
+                tryingY = goalY
+            End Select
+        End If
+      End If
+    End If
+continue:
+   ' Debug.Print "trying =" & CStr(tryingX) & ","; CStr(tryingY)
+    If (fixIt) Then
+      x = myX(idConnection) + tryingX
+      y = myY(idConnection) + tryingY
+     ' Debug.Print "new xy =" & CStr(x) & ","; CStr(y)
+      If (x = myX(idConnection)) And (y = myY(idConnection)) Then
+        'Debug.Print "SafeMemoryMoveXYZ: No need to move"
+        Exit Sub
+      End If
+    Else
+  '    Debug.Print "ignore and resume"
+    End If
+  End If
+
+  
+  
+  
+  
+  
   pid = ProcessID(idConnection)
   If TibiaVersionLong < 1100 Then
     myBpos = MyBattleListPosition(idConnection)

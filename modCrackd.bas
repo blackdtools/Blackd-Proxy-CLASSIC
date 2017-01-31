@@ -83,7 +83,8 @@ Public debugStrangeFail As String
 Public MAXCHARACTERLEN As Long
 Public manualDebugOrder As Long
 Public GameServerDictionary As Scripting.Dictionary  ' A dictionary server (string) -> IP (string)
-Public GameServerDictionaryDOMAIN As Scripting.Dictionary
+Public GameServerDictionaryDOMAIN1 As Scripting.Dictionary
+Public GameServerDictionaryDOMAIN2 As Scripting.Dictionary
 
 Public Sub JustReadPID(idConnection As Integer)
  ' should be only used at login stage, in tibia 7.63+
@@ -373,10 +374,20 @@ Public Sub AddGameServer(ByVal ServerName As String, ByVal serverIPport As Strin
   ' add item to dictionary
   Dim res As Boolean
   GameServerDictionary.item(ServerName) = serverIPport
-  GameServerDictionaryDOMAIN.item(ServerName) = serverDOMAIN
+  GameServerDictionaryDOMAIN1.item(ServerName) = serverDOMAIN
   Exit Sub
 goterr:
   LogOnFile "errors.txt", "Get error at AddGameServer : " & Err.Description
+End Sub
+
+Public Sub AddGameServer2(ByVal ServerName As String, Optional ByVal serverDOMAIN As String = "")
+  On Error GoTo goterr
+  ' add item to dictionary
+  Dim res As Boolean
+  GameServerDictionaryDOMAIN2.item(ServerName) = serverDOMAIN
+  Exit Sub
+goterr:
+  LogOnFile "errors.txt", "Get error at AddGameServer2 : " & Err.Description
 End Sub
 
 Public Function GetGameServerPort(ByVal ServerName As String) As Long
@@ -391,7 +402,7 @@ Public Function GetGameServerPort(ByVal ServerName As String) As Long
   Else
     tmps = Right$(allthing, Len(allthing) - pos)
     If (TibiaVersionLong >= 1100) Then
-        If (GetGameServerDOMAIN(ServerName, True) = "127.0.0.1") Then
+        If (GetGameServerDOMAIN1(ServerName) = "127.0.0.1") Then
             res = 7171
         Else
             res = CLng(tmps)
@@ -406,7 +417,7 @@ Public Function GetGameServerPort(ByVal ServerName As String) As Long
   GetGameServerPort = res
 End Function
 
-Public Function GetGameServerDOMAIN(ByVal ServerName As String, Optional ByVal getHiddenValue As Boolean = False) As String
+Public Function GetGameServerDOMAIN1(ByVal ServerName As String) As String
   On Error GoTo goterr
   ' get the IPandport from server name
   Dim aRes As String
@@ -421,30 +432,61 @@ Public Function GetGameServerDOMAIN(ByVal ServerName As String, Optional ByVal g
   Dim pos3 As Long
   Dim resS As String
   If GameServerDictionary.Exists(ServerName) = True Then
-    resS = GameServerDictionaryDOMAIN.item(ServerName)
+    resS = GameServerDictionaryDOMAIN1.item(ServerName)
     If (TibiaVersionLong >= 1100) Then
-        If resS = "127.0.0.1" Then
-            If (getHiddenValue) Then
-                GetGameServerDOMAIN = resS
-            Else
-                resS = LCase(ServerName) & "-lb.ciproxy.com"
-                Debug.Print "WARNING: Had to use emergency translation: " & ServerName & "=" & resS
-                GetGameServerDOMAIN = resS
-            End If
-        End If
-        GetGameServerDOMAIN = resS
+        GetGameServerDOMAIN1 = resS
         Exit Function
     Else
-        GetGameServerDOMAIN = resS
+        GetGameServerDOMAIN1 = resS
     End If
   Else
-    GetGameServerDOMAIN = ""
+    GetGameServerDOMAIN1 = ""
   End If
   Exit Function
 goterr:
-  LogOnFile "errors.txt", "Got error at GetGameServerDOMAIN (" & ServerName & " ): " & Err.Description
-  GetGameServerDOMAIN = ""
+  LogOnFile "errors.txt", "Got error at GetGameServerDOMAIN1 (" & ServerName & " ): " & Err.Description
+  GetGameServerDOMAIN1 = ""
 End Function
+
+Public Function GetGameServerDOMAIN2(ByVal ServerName As String) As String
+  On Error GoTo goterr
+  ' get the IPandport from server name
+  Dim aRes As String
+  Dim res As Boolean
+  Dim strBuildIt As String
+  Dim b(3) As Byte
+  Dim i As Long
+  Dim lastI As Long
+  Dim strTmp As String
+  Dim pos1 As Long
+  Dim pos2 As Long
+  Dim pos3 As Long
+  Dim resS As String
+  If GameServerDictionary.Exists(ServerName) = True Then
+    resS = GameServerDictionaryDOMAIN2.item(ServerName)
+    If (TibiaVersionLong >= 1100) Then
+        GetGameServerDOMAIN2 = resS
+        Exit Function
+    Else
+        GetGameServerDOMAIN2 = resS
+    End If
+  Else
+    GetGameServerDOMAIN2 = ""
+  End If
+  Exit Function
+goterr:
+  LogOnFile "errors.txt", "Got error at GetGameServerDOMAIN2 (" & ServerName & " ): " & Err.Description
+  GetGameServerDOMAIN2 = ""
+End Function
+
+
+
+
+
+
+
+
+
 Public Function GetIPandPortfromServerName(ByVal ServerName As String) As String
   On Error GoTo goterr
   ' get the IPandport from server name
@@ -790,7 +832,11 @@ Public Function UpdateCharListFromMemory3(idConnection As Integer, maxr As Integ
        ' Debug.Print "Nick=" & nick & " ; Server=" & world
       End If
       rememberPort = GetGameServerPort(world)
-      rememberDomain = GetGameServerDOMAIN(world)
+      If (useAntiDDoS) And (TibiaVersionLong >= 1104) Then
+        rememberDomain = GetGameServerDOMAIN2(world)
+      Else
+        rememberDomain = GetGameServerDOMAIN1(world)
+      End If
       AddCharServer2 idConnection, nick, world, "127", "0", "0", "1", rememberPort, rememberDomain
     End If
     i = i + charlist_dist

@@ -12098,6 +12098,12 @@ End Function
 Public Function setBlackdINI(ByRef par1 As String, ByRef par2 As String, _
  ByRef par3 As String, ByRef par4 As String)
    If ((par1 = "MemoryAddresses") Or (par1 = "tileIDs") Or (par2 = "configPath")) Then
+    If (par1 = "MemoryAddresses") And (TibiaVersionLong >= 1100) Then
+    If Not (par2 = "TibiaExePath") Then
+     setBlackdINI = 1
+     Exit Function
+     End If
+    End If
     setBlackdINI = WritePrivateProfileString(par1, par2, par3, par4)
   Else
     setBlackdINI = WritePrivateProfileString(par1, par2, par3, App.Path & "\settings.ini")

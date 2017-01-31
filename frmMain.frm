@@ -16,6 +16,17 @@ Begin VB.Form frmMain
    ScaleHeight     =   7635
    ScaleWidth      =   8400
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CheckBox chkUseAntiDDoS 
+      BackColor       =   &H00000000&
+      Caption         =   "Use Anti DDoS (if available)"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   4320
+      TabIndex        =   42
+      Top             =   960
+      Value           =   1  'Checked
+      Width           =   2415
+   End
    Begin VB.Timer TimerTibiaQ 
       Interval        =   500
       Left            =   5760
@@ -73,14 +84,14 @@ Begin VB.Form frmMain
    End
    Begin VB.CheckBox chkBlockRemote 
       BackColor       =   &H00000000&
-      Caption         =   "Block remote connections"
+      Caption         =   "Firewall protection"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Left            =   3840
+      Left            =   2520
       TabIndex        =   39
       Top             =   960
       Value           =   1  'Checked
-      Width           =   2895
+      Width           =   1575
    End
    Begin VB.Timer timeToSpam 
       Interval        =   2000
@@ -602,6 +613,26 @@ Dim HTTPGetResponseBuffer() As String
 '  End If
 'End Function
 
+
+
+Private Sub chkBlockRemote_Click()
+    If (chkBlockRemote.value = 0) Then
+        useFirewall = False
+    Else
+        useFirewall = True
+    End If
+   ' Debug.Print "chkBlockRemote=" & chkBlockRemote.value
+End Sub
+
+Private Sub chkUseAntiDDoS_Click()
+    If (chkUseAntiDDoS.value = 0) Then
+        useAntiDDoS = False
+    Else
+        useAntiDDoS = True
+    End If
+   ' Debug.Print "chkUseAntiDDoS=" & chkUseAntiDDoS.value
+End Sub
+
 ' BLAKCKDINI FUNCTIONS MOVED TO MODCODE
 
 Private Sub cmbBrowse_Click()
@@ -856,7 +887,8 @@ Private Sub Form_Load()
   frmLoading.NotifyLoadProgress dblAmLoaded, "Creating the first activex dictionary"
 lastLoadLine = 601
   Set GameServerDictionary = New Scripting.Dictionary
-  Set GameServerDictionaryDOMAIN = New Scripting.Dictionary
+  Set GameServerDictionaryDOMAIN1 = New Scripting.Dictionary
+  Set GameServerDictionaryDOMAIN2 = New Scripting.Dictionary
   Set mainTibiaHandle = New Scripting.Dictionary
   Set specialGMnames = New Scripting.Dictionary
   lastLoadLine = 602
@@ -3438,12 +3470,12 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   i = getBlackdINI("MemoryAddresses", "adrConnectionKey", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrConnectionKey = ReadAddressPath(strInfo)
+    adrConnectionKey = ReadAddressPath(strInfo, "adrConnectionKey")
   Else
     If TibiaVersionLong >= 1100 Then
-        adrConnectionKey = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1DC > 308 > 90 > C8") ' 11.01
+        adrConnectionKey = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1DC > 308 > 90 > C8", "adrConnectionKey") ' 11.01
     Else
-        adrConnectionKey = ReadAddressPath("&H6FA1A0") ' oldest value
+        adrConnectionKey = ReadAddressPath("&H6FA1A0", "adrConnectionKey") ' oldest value
     End If
   End If
 
@@ -3452,9 +3484,9 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   i = getBlackdINI("MemoryAddresses", "adrNewRedSquare", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrNewRedSquare = ReadAddressPath(strInfo)
+    adrNewRedSquare = ReadAddressPath(strInfo, "adrNewRedSquare")
   Else
-    adrNewRedSquare = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1D8 > E4 > 1C")  ' 11.0
+    adrNewRedSquare = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 1D8 > E4 > 1C", "adrNewRedSquare") ' 11.0
   End If
   
   
@@ -3463,90 +3495,90 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   i = getBlackdINI("MemoryAddresses", "adrGameRect_Width_Double", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrGameRect_Width_Double = ReadAddressPath(strInfo)
+    adrGameRect_Width_Double = ReadAddressPath(strInfo, "adrGameRect_Width_Double")
   Else
-    adrGameRect_Width_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 10C > 18 > 4 > 74 > 4 > 88")  ' 11.0
+    adrGameRect_Width_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 10C > 18 > 4 > 74 > 4 > 88", "adrGameRect_Width_Double")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (2) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapRect_Y_Double", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapRect_Y_Double = ReadAddressPath(strInfo)
+    adrMiniMapRect_Y_Double = ReadAddressPath(strInfo, "adrMiniMapRect_Y_Double")
   Else
-    adrMiniMapRect_Y_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 8 > 4 > 90")  ' 11.0
+    adrMiniMapRect_Y_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 8 > 4 > 90", "adrMiniMapRect_Y_Double")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (3) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapRect_Width_Double", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapRect_Width_Double = ReadAddressPath(strInfo)
+    adrMiniMapRect_Width_Double = ReadAddressPath(strInfo, "adrMiniMapRect_Width_Double")
   Else
-    adrMiniMapRect_Width_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 8 > 134 > 24 > 8 > 4 > 98")  ' 11.0
+    adrMiniMapRect_Width_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 8 > 134 > 24 > 8 > 4 > 98", "adrMiniMapRect_Width_Double")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (4) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapRect_Height_Double", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapRect_Height_Double = ReadAddressPath(strInfo)
+    adrMiniMapRect_Height_Double = ReadAddressPath(strInfo, "adrMiniMapRect_Height_Double")
   Else
-    adrMiniMapRect_Height_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 8 > 4 > A0")  ' 11.0
+    adrMiniMapRect_Height_Double = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 8 > 4 > A0", "adrMiniMapRect_Height_Double")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (5) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapDisplay_MinX", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapDisplay_MinX = ReadAddressPath(strInfo)
+    adrMiniMapDisplay_MinX = ReadAddressPath(strInfo, "adrMiniMapDisplay_MinX")
   Else
-    adrMiniMapDisplay_MinX = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 20")  ' 11.0
+    adrMiniMapDisplay_MinX = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 20", "adrMiniMapDisplay_MinX")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (6) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapDisplay_MinY", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapDisplay_MinY = ReadAddressPath(strInfo)
+    adrMiniMapDisplay_MinY = ReadAddressPath(strInfo, "adrMiniMapDisplay_MinY")
   Else
-    adrMiniMapDisplay_MinY = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 24")  ' 11.0
+    adrMiniMapDisplay_MinY = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 24", "adrMiniMapDisplay_MinY")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (7) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapDisplay_Z", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapDisplay_Z = ReadAddressPath(strInfo)
+    adrMiniMapDisplay_Z = ReadAddressPath(strInfo, "adrMiniMapDisplay_Z")
   Else
-    adrMiniMapDisplay_Z = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 28")  ' 11.0
+    adrMiniMapDisplay_Z = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 28", "adrMiniMapDisplay_Z")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (8) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapDisplay_SizeX", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapDisplay_SizeX = ReadAddressPath(strInfo)
+    adrMiniMapDisplay_SizeX = ReadAddressPath(strInfo, "adrMiniMapDisplay_SizeX")
   Else
-    adrMiniMapDisplay_SizeX = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 30")  ' 11.0
+    adrMiniMapDisplay_SizeX = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 30", "adrMiniMapDisplay_SizeX")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (9) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapDisplay_SizeY", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapDisplay_SizeY = ReadAddressPath(strInfo)
+    adrMiniMapDisplay_SizeY = ReadAddressPath(strInfo, "adrMiniMapDisplay_SizeY")
   Else
-    adrMiniMapDisplay_SizeY = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 34")  ' 11.0
+    adrMiniMapDisplay_SizeY = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 34", "adrMiniMapDisplay_SizeY")  ' 11.0
   End If
   ' FOR MINIMAP CLICK (10) - Tibia 11 +
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrMiniMapDisplay_Zoom_PointSize1_Float", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrMiniMapDisplay_Zoom_PointSize1_Float = ReadAddressPath(strInfo)
+    adrMiniMapDisplay_Zoom_PointSize1_Float = ReadAddressPath(strInfo, "adrMiniMapDisplay_Zoom_PointSize1_Float")
   Else
-    adrMiniMapDisplay_Zoom_PointSize1_Float = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 48")  ' 11.0
+    adrMiniMapDisplay_Zoom_PointSize1_Float = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 48", "adrMiniMapDisplay_Zoom_PointSize1_Float")  ' 11.0
   End If
 
   
@@ -3560,6 +3592,17 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
     offSetSquare_ARGB_8bytes = &H84 ' Tibia 11.00
   End If
   
+  strInfo = String$(10, 0)
+  i = getBlackdINI("MemoryAddresses", "adrServerList_PortOffset", "", strInfo, Len(strInfo), here)
+  If i > 0 Then
+    strInfo = Left(strInfo, i)
+    lonInfo = CLng(strInfo)
+    adrServerList_PortOffset = lonInfo
+  Else
+    adrServerList_PortOffset = &H20 ' Tibia 11.00 --- &H24 since Tibia 11.04
+  End If
+ ' Debug.Print Hex(adrServerList_PortOffset)
+  'Debug.Print "OK"
 '  ' Tibia 11 +
 '  strInfo = String$(255, 0)
 '  i = getBlackdINI("MemoryAddresses", "adrNewBlueSquare", "", strInfo, Len(strInfo), here)
@@ -3575,10 +3618,10 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   i = getBlackdINI("MemoryAddresses", "adrSelectedCharIndex", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedCharIndex = ReadAddressPath(strInfo)
+    adrSelectedCharIndex = ReadAddressPath(strInfo, "adrSelectedCharIndex")
   Else
     'adrSelectedCharIndex = &H6FC9D8 '7.63
-    adrSelectedCharIndex = ReadAddressPath("&H5F6CB0") '7.6
+    adrSelectedCharIndex = ReadAddressPath("&H5F6CB0", "adrSelectedCharIndex") '7.6
   End If
   
   
@@ -3587,69 +3630,69 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
   i = getBlackdINI("MemoryAddresses", "adrSelectedCharIndex", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedItem_height = ReadAddressPath(strInfo)
+    adrSelectedItem_height = ReadAddressPath(strInfo, "adrSelectedCharIndex")
   Else
-    adrSelectedItem_height = ReadAddressPath("""Qt5Widgets.dll"" + 00401DC4 > 70 > 4 > a8") ' 11.0
+    adrSelectedItem_height = ReadAddressPath("""Qt5Widgets.dll"" + 00401DC4 > 70 > 4 > a8", "adrSelectedCharIndex") ' 11.0
   End If
   
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrSelectedCharName", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedCharName = ReadAddressPath(strInfo)
+    adrSelectedCharName = ReadAddressPath(strInfo, "adrSelectedCharName")
   Else
-    adrSelectedCharName = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > C > 4 > 18 > 38 > 28") ' 11.0
+    adrSelectedCharName = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > C > 4 > 18 > 38 > 28", "adrSelectedCharName") ' 11.0
   End If
   
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrServerList_CollectionStart", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrServerList_CollectionStart = ReadAddressPath(strInfo)
+    adrServerList_CollectionStart = ReadAddressPath(strInfo, "adrServerList_CollectionStart")
   Else
-    adrServerList_CollectionStart = ReadAddressPath("""Qt5Core.dll"" + 4555C8 > 8 > 168 > 54 > 18 > 2c") ' 11.0
+    adrServerList_CollectionStart = ReadAddressPath("""Qt5Core.dll"" + 4555C8 > 8 > 168 > 54 > 18 > 2c", "adrServerList_CollectionStart") ' 11.0
   End If
  
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", " adrBattlelist_CollectionStart", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-     adrBattlelist_CollectionStart = ReadAddressPath(strInfo)
+     adrBattlelist_CollectionStart = ReadAddressPath(strInfo, " adrBattlelist_CollectionStart")
   Else
-     adrBattlelist_CollectionStart = ReadAddressPath("""Qt5Core.dll"" + 4555C8 > 8 > 1D8 > E4 > 8") ' 11.0
+     adrBattlelist_CollectionStart = ReadAddressPath("""Qt5Core.dll"" + 4555C8 > 8 > 1D8 > E4 > 8", " adrBattlelist_CollectionStart") ' 11.0
   End If
   
   strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrSelectedCharName_afterCharList", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedCharName_afterCharList = ReadAddressPath(strInfo)
+    adrSelectedCharName_afterCharList = ReadAddressPath(strInfo, "adrSelectedCharName_afterCharList")
   Else
-    adrSelectedCharName_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > 0") ' 11.0
+    adrSelectedCharName_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > 0", "adrSelectedCharName_afterCharList") ' 11.0
   End If
    strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrSelectedServerURL_afterCharList", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedServerURL_afterCharList = ReadAddressPath(strInfo)
+    adrSelectedServerURL_afterCharList = ReadAddressPath(strInfo, "adrSelectedServerURL_afterCharList")
   Else
-    adrSelectedServerURL_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > 4") ' 11.0
+    adrSelectedServerURL_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > 4", "adrSelectedServerURL_afterCharList") ' 11.0
   End If
     strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrSelectedServerPORT_afterCharList", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedServerPORT_afterCharList = ReadAddressPath(strInfo)
+    adrSelectedServerPORT_afterCharList = ReadAddressPath(strInfo, "adrSelectedServerPORT_afterCharList")
   Else
-    adrSelectedServerPORT_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > 8") ' 11.0
+    adrSelectedServerPORT_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > 8", "adrSelectedServerPORT_afterCharList") ' 11.0
   End If
     strInfo = String$(255, 0)
   i = getBlackdINI("MemoryAddresses", "adrSelectedServerNAME_afterCharList", "", strInfo, Len(strInfo), here)
   If i > 0 Then
     strInfo = Left(strInfo, i)
-    adrSelectedServerNAME_afterCharList = ReadAddressPath(strInfo)
+    adrSelectedServerNAME_afterCharList = ReadAddressPath(strInfo, "adrSelectedServerNAME_afterCharList")
   Else
-    adrSelectedServerNAME_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > C") ' 11.0
+    adrSelectedServerNAME_afterCharList = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 320 > 18 > 60 > C", "adrSelectedServerNAME_afterCharList") ' 11.0
   End If
   
 
@@ -4358,6 +4401,40 @@ Public Sub ReadIni()
   i = getBlackdINI("Proxy", "txtServerGameP", "", strInfo, Len(strInfo), here)
   strInfo = Left(strInfo, i)
   txtServerGameP.Text = strInfo
+  
+  
+  
+  
+  strInfo = String$(10, 0)
+  i = getBlackdINI("Proxy", "useAntiDDoS", "", strInfo, Len(strInfo), here)
+  strInfo = Left(strInfo, i)
+  If strInfo = "0" Then
+    useAntiDDoS = False
+    frmMain.chkUseAntiDDoS.value = 0
+  Else
+    useAntiDDoS = True
+    frmMain.chkUseAntiDDoS.value = 1
+  End If
+  
+  strInfo = String$(10, 0)
+  i = getBlackdINI("Proxy", "useFirewall", "", strInfo, Len(strInfo), here)
+  strInfo = Left(strInfo, i)
+  If strInfo = "0" Then
+    useFirewall = False
+    frmMain.chkBlockRemote.value = 0
+  Else
+    useFirewall = True
+    frmMain.chkBlockRemote.value = 1
+  End If
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   If (OVERWRITE_OT_MODE = True) Then
@@ -5787,6 +5864,7 @@ End Sub
 
 Public Sub WriteIni()
   ' write ini file
+  On Error GoTo goterr
   Dim i As Integer
   Dim strInfo As String
   Dim here As String
@@ -5849,6 +5927,25 @@ Public Sub WriteIni()
     strInfo = "3"
   End If
   i = setBlackdINI("Proxy", "ForwardOption", strInfo, here)
+  
+  
+  
+  
+  If frmMain.chkUseAntiDDoS.value = 1 Then
+     strInfo = "1"
+  Else
+     strInfo = "0"
+  End If
+  i = setBlackdINI("Proxy", "useAntiDDoS", strInfo, here)
+  
+  
+  If frmMain.chkBlockRemote.value = 1 Then
+     strInfo = "1"
+  Else
+     strInfo = "0"
+  End If
+  i = setBlackdINI("Proxy", "useFirewall", strInfo, here)
+  
   
   If frmHardcoreCheats.ActionPath.value = True Then
     strInfo = "4"
@@ -6565,6 +6662,9 @@ Public Sub WriteIni()
   i = setBlackdINI("tileIDs", "byteMana", strInfo, here)
   strInfo = "&H" & Hex(byteLife)
   i = setBlackdINI("tileIDs", "byteLife", strInfo, here)
+  Exit Sub
+goterr:
+  Debug.Print "Error at WriteIni: " & Err.Description
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

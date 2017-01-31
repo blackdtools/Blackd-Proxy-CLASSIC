@@ -62,16 +62,28 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 42.2" & vbCrLf & _
+    strMsg = "Blackd Proxy 42.6" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+    " - Improvements and fixes in cavebot movement for Tibia 10.99 and Tibia 11"
+    
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 42.5" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+    " - Improved debug system for Tibia 11."
+    
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 42.4" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+    " - Minimum changes to work in the new Tibia 11 login system with optional DDoS protection. Bot will ignore login setting and will use the new setting at Proxy window. By default it will use the DDoS protection."
+    
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 42.3" & vbCrLf & _
     "----------------------------" & vbCrLf & _
     " - Minimum changes to work in all Tibia versions up to 10.99 rev4 (16 jan 2017)" & vbCrLf & _
     " - Minimum changes to work in all Tibia versions up to 11.04"
     
-    strMsg = "Blackd Proxy 42.2" & vbCrLf & _
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 42.2" & vbCrLf & _
     "----------------------------" & vbCrLf & _
     " - Minimum changes to work in all Tibia versions up to 10.99 rev3 (7 jan 2017)"
     
-    strMsg = "Blackd Proxy 42.1" & vbCrLf & _
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 42.1" & vbCrLf & _
     "----------------------------" & vbCrLf & _
     " - Minimum changes to work in all Tibia versions up to 10.99 rev2 (15 dec 2016)" & vbCrLf & _
     " - Minimum changes to work in all Tibia versions up to 11.03"
