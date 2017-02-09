@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Blackd Proxy"
-#define MyAppVersion "42.6"
+#define MyAppVersion "42.7"
 #define MyAppPublisher "blackdtools.com"
 #define MyAppURL "http://blackdtools.com"
 #define MyAppExeName "Tibia.exe"
@@ -237,12 +237,14 @@ Source: "config1099-old0\*"; DestDir: "{app}\config1099-old0"; Flags: ignorevers
 Source: "config1099-old1\*"; DestDir: "{app}\config1099-old1"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1099-old2\*"; DestDir: "{app}\config1099-old2"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1099-old3\*"; DestDir: "{app}\config1099-old3"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "config1099-old4\*"; DestDir: "{app}\config1099-old4"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1099\*"; DestDir: "{app}\config1099"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1100\*"; DestDir: "{app}\config1100"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1101\*"; DestDir: "{app}\config1101"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1102\*"; DestDir: "{app}\config1102"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1103\*"; DestDir: "{app}\config1103"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "config1104\*"; DestDir: "{app}\config1104"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "config1110\*"; DestDir: "{app}\config1110"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "events\*"; DestDir: "{app}\events"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "ips\*"; DestDir: "{app}\ips"; Flags: ignoreversion recursesubdirs createallsubdirs

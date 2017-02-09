@@ -17,14 +17,6 @@ Begin VB.Form frmMenu
    ScaleWidth      =   6090
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton Command1 
-      Caption         =   "Command1"
-      Height          =   375
-      Left            =   4080
-      TabIndex        =   46
-      Top             =   240
-      Width           =   855
-   End
    Begin VB.CommandButton cmdVIPsupport 
       BackColor       =   &H0000FFFF&
       Caption         =   "Go to VIP support page"
@@ -1243,18 +1235,18 @@ End Sub
 
 
 
-Private Sub Command1_Click()
-    Dim tibia_pids() As Long
-    Dim totalPids As Long
-    totalPids = GetTibiaPIDs(tibiamainname, tibiaclassname, tibia_pids)
-    LastNumTibiaClients = totalPids
-    If totalPids = 0 Then
-      Debug.Print "Tibia 11 clients not found (0)"
-        Exit Sub
-    End If
+'Private Sub Command1_Click()
+'    Dim tibia_pids() As Long
+ '   Dim totalPids As Long
+ '   totalPids = GetTibiaPIDs(tibiamainname, tibiaclassname, tibia_pids)
+ '   LastNumTibiaClients = totalPids
+  '  If totalPids = 0 Then
+  '    Debug.Print "Tibia 11 clients not found (0)"
+  '      Exit Sub
+  '  End If
  
-   SafeMemoryMoveXYZ 1, myX(1) + 1, myY(1) + 1, myZ(1)
-End Sub
+  ' SafeMemoryMoveXYZ 1, myX(1) + 1, myY(1) + 1, myZ(1)
+'End Sub
 
 
 

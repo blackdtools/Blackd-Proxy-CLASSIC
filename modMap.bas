@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMap"
-#Const FinalMode = 1
+#Const FinalMode = 0
 #Const MapDebug = 0
 #Const DEBUG_SHOP = 0
 Option Explicit
@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "42.6" ' Proxy version ' string version
-Public Const myNumericVersion = 42600 ' numeric version
+Public Const ProxyVersion = "42.7" ' Proxy version ' string version
+Public Const myNumericVersion = 42700 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -1251,7 +1251,10 @@ Public Function GetTheMobileInfo(idConnection As Integer, ByRef packet() As Byte
   Dim originalPos As Long
   Dim debugStr As String
   ' tibia 10.36 full: 00 00 AD 01 FF 61 00 00 00 00 00 7A 01 00 40 02 04 00 4E 61 6A 69 64 00 81 00 39 71 5F 71 00 00 00 00 00 32 00 00 00 00 02 02 FF 00 00 01 00 FF
+  ' tibia 11.10 full: 6A 43 7D BF 7D 07 02 61 00 00 00 00 00 6A CF 02 03 00 14 00 52 6F 74 6F 72 75 78 75 6E 61 20 44 61 77 61 78 69 6D 61 6E 51 02 81 00 4F 71 27 73 00 00 00 00 00 73 00 00 00 00 00 00 FF 05 00 00 00
   ' tibia 10.36 mobile info=61 00 00 00 00 00 7A 01 00 40 02 04 00 4E 61 6A 69 64 00 81 00 39 71 5F 71 00 00 00 00 00 32 00 00 00 00 02 02 FF 00 00 01 00 FF
+  ' tibia 11.10 mobile info=61 00 00 00 00 00 6A CF 02 03 00 14 00 52 6F 74 6F 72 75 78 75 6E 61 20 44 61 77 61 78 69 6D 61 6E 51 02 81 00 4F 71 27 73 00 00 00 00 00 73 00 00 00 00 00 00 FF 05 00 00 00
+  
   originalPos = firstPos
   
   strangeID = FourBytesDouble(packet(firstPos + 2), packet(firstPos + 3), packet(firstPos + 4), packet(firstPos + 5))
@@ -1272,6 +1275,8 @@ Public Function GetTheMobileInfo(idConnection As Integer, ByRef packet() As Byte
          ' 61 00 00 00 00 00 01 F3 01 40 01 03 00 xxx 64 03 14 01 00 00 00 00 00 00 00 00 00 3E 00 00 00 00 01 FF 00 00 01
          ' 61 00 00 00 00 00 3B 02 00 40 02 06 00 xxx 64 02 81 00 61 4D 57 73 00 00 00 00 00 30 00 00 00 00 02 FF 00 00 01
    ' 10.36'61 00 00 00 00 00 7A 01 00 40 02 04 00 xxx 64 00 81 00 39 71 5F 71 00 00 00 00 00 32 00 00 00 00 02 02 FF 00 00 01 00 FF
+   ' 11.10'61 00 00 00 00 00 6A CF 02 03 00 14 00 xxx 51 02 81 00 4F 71 27 73 00 00 00 00 00 73 00 00 00 00 00 00 FF 05 00 00 00
+  
   End If
   lon = GetTheLong(packet(resF.pos), packet(1 + resF.pos))
   resF.pos = resF.pos + 2
@@ -1336,6 +1341,10 @@ Public Function GetTheMobileInfo(idConnection As Integer, ByRef packet() As Byte
   End If
   
     If TibiaVersionLong >= 1036 Then
+    resF.pos = resF.pos + 1 '  skip 1 more
+  End If
+  
+ If (TibiaVersionLong = 1099) And (subTibiaVersionLong > 4) Or (TibiaVersionLong >= 1110) Then
     resF.pos = resF.pos + 1 '  skip 1 more
   End If
 '  For i = originalPos To resF.pos - 1
@@ -1414,7 +1423,7 @@ Public Function ReadMap(idConnection As Integer, ByRef packet() As Byte, firstBy
   skipcount = 0
   ' ENTER THE MATRIX!!
    #If MapDebug = 1 Then
-     OverwriteOnFileSimple "mapdebug.txt", "Trying to read map. Expecting to read " & CStr(Nfloors * 252) & " positions"
+     AddwriteOnFileSimple "mapdebug.txt", "<packet 64!!> Trying to read map. Expecting to read " & CStr(Nfloors * 252) & " positions"
    #End If
   For nz = startz To endz Step zstep
     For nx = -8 To 9
@@ -2833,7 +2842,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
   
   ' 10.38: 0F 64 6A 83 78 78 78 78 78 78 78 82 8D 9F A2 92 D2 B4 9E 93 92 90 AC A0 A1
   ' 10.97: 0F 64 6A 83 78 78 82 9F 9C A2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 D2 B4 B4 9E 0F A8 B8 B7 1E 8D 90 92 93 92 F5 A0 A1
-  
+  ' 11.10: 17 19 E8 E8 E8 E9 EE EE 64 82 9F 78 78 78 78 78 78 78 78 A2 D4 D2 D2 83 9E 0F A8 F5 A0 A1
   Do
     lastGoodPos = pos
     mobName = ""
@@ -3023,6 +3032,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
          pos = pos + 2
       End If
     Case &H6A
+    'Debug.Print "DEBUG 6A > " & frmMain.showAsStr3(packet, True, pos, UBound(packet))
       ' something get in screen
       ' tibia ????  0D 00 6A 1F 00 1F 00 07 83 1F 00 1F 00 07 0B
       ' tibia 9.5   0F 00 6A 5E 7E E0 7D 09 FF 63 00 FB F5 00 40 02 01
@@ -6193,23 +6203,46 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
 
     Case &HD2
       ' update vip list item
-      mobID = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
-      lonN = GetTheLong(packet(pos + 5), packet(pos + 6))
-      pos = pos + 7
-      mobName = ""
-      For itemCount = 0 To lonN - 1
-        mobName = mobName & Chr(packet(pos))
-        pos = pos + 1
-      Next itemCount
-      AddIDname idConnection, mobID, mobName
-      If TibiaVersionLong >= 962 Then ' migrated vip list
+      If (TibiaVersionLong = 1099) And (subTibiaVersionLong > 4) Or (TibiaVersionLong >= 1110) Then
+        ' D2 B7 4A 3F 02 XX XX name XX XX desc 01 00 00 00 00 01 01 01
+        ' D2 3E 6E 77 03 XX XX name XX XX desc 02 00 00 00 00 01 01 00
+        mobID = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
+        lonN = GetTheLong(packet(pos + 5), packet(pos + 6))
+        pos = pos + 7
+        mobName = ""
+        For itemCount = 0 To lonN - 1
+          mobName = mobName & Chr(packet(pos))
+          pos = pos + 1
+        Next itemCount
+        AddIDname idConnection, mobID, mobName
+        ' description
+        mobName = ""
         lonN = GetTheLong(packet(pos), packet(pos + 1))
-        pos = pos + 2 + lonN
-        pos = pos + 4 ' skip vip symbol (4 bytes)
-        pos = pos + 1 ' skip notify at login (1 byte)
+        pos = pos + 2
+        For itemCount = 0 To lonN - 1
+          mobName = mobName & Chr(packet(pos))
+          pos = pos + 1
+        Next itemCount
+        pos = pos + 8
+      Else
+        mobID = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
+        lonN = GetTheLong(packet(pos + 5), packet(pos + 6))
+        pos = pos + 7
+        mobName = ""
+        For itemCount = 0 To lonN - 1
+          mobName = mobName & Chr(packet(pos))
+          pos = pos + 1
+        Next itemCount
+        AddIDname idConnection, mobID, mobName
+        If TibiaVersionLong >= 962 Then ' migrated vip list
+          lonN = GetTheLong(packet(pos), packet(pos + 1))
+          pos = pos + 2 + lonN
+          pos = pos + 4 ' skip vip symbol (4 bytes)
+          pos = pos + 1 ' skip notify at login (1 byte)
+        End If
+        lonN = CLng(packet(pos)) '00=offline ; 01 = online
+        pos = pos + 1
       End If
-      lonN = CLng(packet(pos)) '00=offline ; 01 = online
-      pos = pos + 1
     Case &HD3
       ' something about vip list
       ' D3 28 2A 8E 02 01
@@ -6219,10 +6252,30 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
         pos = pos + 1
       End If
     Case &HD4
-      ' vip list update
-      ' D4 09 00 00 00
-      ' (at least in a ot server 7.6)
-      pos = pos + 5
+     ' vip list info
+      If (TibiaVersionLong = 1099) And (subTibiaVersionLong > 4) Or (TibiaVersionLong >= 1110) Then
+        ' D4
+        ' 03 00
+        ' 07 00 45 6E 65 6D 69 65 73 00 01
+        ' 07 00 46 72 69 65 6E 64 73 00 02
+        ' 10 00 54 72 61 64 69 6E 67 20 50 61 72 74 6E 65 72 73 00 00
+          lonN = GetTheLong(packet(pos + 1), packet(pos + 2))
+          pos = pos + 3
+          For itemCount = 1 To lonN
+            templ1 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ2 = 1 To templ1
+               mobName = mobName & Chr(packet(pos))
+               pos = pos + 1
+            Next templ2
+            pos = pos + 2
+          Next itemCount
+      Else
+        ' D4 09 00 00 00
+        ' (found at ot server 7.6)
+        pos = pos + 5
+      End If
     Case &HDC
       ' hint , tibia 8.21+
       ' DC 01

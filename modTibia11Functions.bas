@@ -1577,17 +1577,11 @@ End Function
 
 
 Public Function LoWord(ByVal lDWord As Long) As Long
-
         If lDWord And &H8000& Then
-
             LoWord = lDWord Or &HFFFF0000
-
         Else
-
             LoWord = lDWord And &HFFFF&
-
         End If
-
 End Function
 
 Public Sub SendClickToTibia11(ByRef pid As Long, ByVal x As Long, ByVal y As Long)
@@ -1640,6 +1634,8 @@ Public Sub SafeMemoryMoveXYZ_Tibia11(ByRef idConnection As Integer, Px As Long, 
     Dim clickY As Long
     Dim precisionDifX As Long
     Dim precisionDifY As Long
+    Dim modX As Long
+    Dim sidebarCount As Long
     pid = ProcessID(idConnection)
     safecheck_width = ReadCurrentAddressDOUBLE(pid, adrMiniMapRect_Width_Double, -1)
     safecheck_height = ReadCurrentAddressDOUBLE(pid, adrMiniMapRect_Height_Double, -1)
@@ -1651,8 +1647,16 @@ Public Sub SafeMemoryMoveXYZ_Tibia11(ByRef idConnection As Integer, Px As Long, 
         Debug.Print "Unexpected Minimap width"
         Exit Sub
     End If
+ 
+    If TibiaVersionLong >= 1110 Then
+        sidebarCount = ReadCurrentAddress(pid, adrSidebar_Count, 1)
+        modX = 176 * (sidebarCount - 1)
+    Else
+        modX = 0
+    End If
     corner_posx = ReadCurrentAddressDOUBLE(pid, adrGameRect_Width_Double, -1)
     corner_posy = ReadCurrentAddressDOUBLE(pid, adrMiniMapRect_Y_Double, -1)
+    corner_posx = corner_posx + modX
     
     retryCount = 0
     Do

@@ -71,6 +71,7 @@ Public adrMiniMapDisplay_Z As AddressPath
 Public adrMiniMapDisplay_SizeX As AddressPath
 Public adrMiniMapDisplay_SizeY As AddressPath
 Public adrMiniMapDisplay_Zoom_PointSize1_Float As AddressPath
+Public adrSidebar_Count As AddressPath
 
 Public offSetSquare_ARGB_8bytes As Long
 Public adrNewRedSquare As AddressPath

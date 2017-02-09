@@ -3581,6 +3581,15 @@ TibiaExePathWITHTIBIADAT = GetWITHTIBIADAT()
     adrMiniMapDisplay_Zoom_PointSize1_Float = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 134 > 24 > 2c > 48", "adrMiniMapDisplay_Zoom_PointSize1_Float")  ' 11.0
   End If
 
+  ' FOR MINIMAP CLICK (11) - Tibia 11.10 +
+  strInfo = String$(255, 0)
+  i = getBlackdINI("MemoryAddresses", "adrSidebar_Count", "", strInfo, Len(strInfo), here)
+  If i > 0 Then
+    strInfo = Left(strInfo, i)
+    adrSidebar_Count = ReadAddressPath(strInfo, "adrSidebar_Count")
+  Else
+    adrSidebar_Count = ReadAddressPath("""Qt5Core.dll"" + 004555C8 > 8 > 10C > 18 > 4 > F8", "adrSidebar_Count")  ' 11.10
+  End If
   
   strInfo = String$(10, 0)
   i = getBlackdINI("MemoryAddresses", "offSetSquare_ARGB_8bytes", "", strInfo, Len(strInfo), here)
@@ -7779,7 +7788,7 @@ Public Sub UnifiedSendToClientGame(ByVal index As Integer, ByRef packet() As Byt
 '        thedamnCRC2 = GetTibiaCRC2(goodPacket(6), UBound(goodPacket) - 5) ' (number of bytes - 6)
 '        longToBytes fourBytesCRC2, thedamnCRC2
 '        If Not (((fourBytesCRC(0) = fourBytesCRC2(0)) And (fourBytesCRC(1) = fourBytesCRC2(1)) And (fourBytesCRC(2) = fourBytesCRC2(2)) And (fourBytesCRC(3) = fourBytesCRC2(3)))) Then
-'          Debug.Print "no match!!!"
+'          Debug.Print "no match!"
 '          Debug.Print "res1:" & GoodHex(fourBytesCRC(0)) & " " & GoodHex(fourBytesCRC(1)) & " " & GoodHex(fourBytesCRC(2)) & " " & GoodHex(fourBytesCRC(3))
 '          Debug.Print "res2:" & GoodHex(fourBytesCRC2(0)) & " " & GoodHex(fourBytesCRC2(1)) & " " & GoodHex(fourBytesCRC2(2)) & " " & GoodHex(fourBytesCRC2(3))
 '        End If
