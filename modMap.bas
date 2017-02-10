@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "42.8" ' Proxy version ' string version
-Public Const myNumericVersion = 42800 ' numeric version
+Public Const ProxyVersion = "42.9" ' Proxy version ' string version
+Public Const myNumericVersion = 42900 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -686,9 +686,9 @@ Public Sub parseType76(ByRef packet() As Byte, ByRef pos As Long, ByVal debugIt 
             Debug.Print "Unexpected packet 76 subtype: " & CStr(templ1)
             pos = pos + 10000
         End If
-        If (pos < UBound(packet)) Then
-            Debug.Print "REMAINING BYTES >" & frmMain.showAsStr3(packet, True, pos, UBound(packet))
-        End If
+        'If (pos < UBound(packet)) Then
+       '     Debug.Print "REMAINING BYTES >" & frmMain.showAsStr3(packet, True, pos, UBound(packet))
+       ' End If
 End Sub
 Public Function GetSpamOrderPosition(idConnection As Integer, order As Integer) As Integer
   ' return 1 if order exist
@@ -1452,11 +1452,18 @@ End Function
 
 
 ' < The dictionary tibia IDs -> direction >
-Public Sub AddID_Direction(idConnection As Integer, tibiaID As Double, direction As Byte)
+Public Sub AddID_Direction(ByVal idConnection As Integer, ByVal tibiaID As Double, ByVal direction As Byte)
   ' add item to dictionary
   Dim res As Boolean
-  DirectionOfID(idConnection).item(tibiaID) = direction
+  Dim securityCheck As Long
+  securityCheck = CLng(direction)
+  If securityCheck < 4 Then
+    DirectionOfID(idConnection).item(tibiaID) = direction
+  Else
+    DirectionOfID(idConnection).item(tibiaID) = &H0
+  End If
 End Sub
+
 Public Sub RemoveID_Direction(idConnection As Integer, tibiaID As Double)
   ' remove item from dictionary
   Dim res As Boolean
@@ -2428,6 +2435,61 @@ badbug:
   UpdateSouthSide = 10000
 End Function
 
+Public Function evalCreatureSubPacket62(ByRef idConnection As Integer, ByRef packet() As Byte, ByRef pos As Long, _
+ ByRef tempID As Double, ByRef nameofgivenID As String, ByVal debugPoint As Long)
+    ' tibia 9.9   : 6A 2A 7D 9E 7D 0B FF 62 00 0D FA C1 02 4F 01 80 00 4E 45 3A 4C 00 00 00 00 00 70 00 00 00 00 FF 00 00 00
+    ' tibia 10.36 : 6A C4 81 C3 7E 07 FF 62 00 3A A7 3B 02 62 00 86 00 09 00 72 5D 03 00 00 06 1D EE 00 00 00 00 00 FF 00 00 00
+    ' tibia 11.10 : 6A D5 7E 87 7B 07 FF 62 00 06 52 95 03 64 02 8B 00 5F 26 5E 73 00 00 00 00 00 7A 00 00 00 00 00 FF 00 00 00 00
+
+    Dim gotStackP As Long
+    Dim templ1 As Long
+    Dim firstPos As Long
+    Dim newDirection As Byte
+    firstPos = pos
+    tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
+    AddID_HP idConnection, tempID, packet(pos + 6) 'update hp
+    newDirection = packet(pos + 7)
+    nameofgivenID = GetNameFromID(idConnection, tempID)
+    ' outfit ...
+    If TibiaVersionLong <= 760 Then
+      templ1 = CLng(packet(pos + 8))
+    Else
+      templ1 = GetTheLong(packet(pos + 8), packet(pos + 9))
+      pos = pos + 1
+    End If
+    If templ1 = 0 Then
+      If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
+        If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
+          packet(pos + 9) = LowByteOfLong(tileID_Oracle)
+          packet(pos + 10) = HighByteOfLong(tileID_Oracle)
+        End If
+      End If
+      pos = pos + 17
+    Else
+      pos = pos + 19
+      If TibiaVersionLong >= 773 Then
+        pos = pos + 1
+      End If
+    End If
+    If TibiaVersionLong >= 853 Then
+      pos = pos + 1
+    End If
+    If TibiaVersionLong >= 870 Then
+      pos = pos + 2
+    End If
+    If TibiaVersionLong >= 990 Then
+      pos = pos + 4
+    End If
+    If TibiaVersionLong >= 1036 Then
+      pos = pos + 1
+    End If
+    If (TibiaVersionLong = 1099) And (subTibiaVersionLong > 4) Or (TibiaVersionLong >= 1110) Then
+       pos = pos + 1
+    End If
+    AddID_Direction idConnection, tempID, newDirection 'update direction
+   ' Debug.Print "Got update (&H62) from debug point " & CStr(debugPoint) & " for " & nameofgivenID & " Direction = " & GoodHex(newDirection) & " (" & TranslateDirectionByteToHumanLang(newDirection) & ")"
+   ' Debug.Print "DEBUG: " & frmMain.showAsStr3(packet, True, firstPos, pos)
+End Function
 
 Public Function ReadSinglePositionOld(idConnection As Integer, nx As Long, ny As Long, nz As Long, ByRef packet() As Byte, pos As Long) As Long
  ' update a single square of the map
@@ -2526,10 +2588,7 @@ Public Function ReadSinglePositionOld(idConnection As Integer, nx As Long, ny As
       End If
     ElseIf idTile = &H62 Then
       ' we already knew his ID + include some info
-      tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
-      AddID_HP idConnection, tempID, packet(pos + 6) 'update hp
-      nameofgivenID = GetNameFromID(idConnection, tempID)
-      ' ReDim Matrix(-6 To 7, -8 To 9, 0 To 15, 1 To MAXCLIENTS
+      evalCreatureSubPacket62 idConnection, packet, pos, tempID, nameofgivenID, 3
       If ((ny >= -6) And (ny <= 7) And (nx >= -8) And (nx <= 9) And (nz >= 0) And (nz <= 15)) Then
         Matrix(ny, nx, nz, idConnection).s(stackpos).t1 = &H61
         Matrix(ny, nx, nz, idConnection).s(stackpos).t2 = &H0
@@ -2550,44 +2609,6 @@ Public Function ReadSinglePositionOld(idConnection As Integer, nx As Long, ny As
         End If
       End If
       stackpos = stackpos + 1
-      
-      'eval outfit
-      If TibiaVersionLong <= 760 Then
-        outfit = CLng(packet(pos + 8))
-      Else
-        outfit = GetTheLong(packet(pos + 8), packet(pos + 9))
-        pos = pos + 1
-      End If
-      
-      If outfit = 0 Then
-        If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-          If (nameofgivenID <> CharacterName(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
-            packet(pos + 9) = LowByteOfLong(tileID_Oracle)
-            packet(pos + 10) = HighByteOfLong(tileID_Oracle)
-          End If
-        End If
-        pos = pos + 17
-      Else
-        pos = pos + 19
-        If TibiaVersionLong >= 773 Then
-          pos = pos + 1
-        End If
-      End If
-      If TibiaVersionLong >= 853 Then '2
-        pos = pos + 1
-      End If
-        If TibiaVersionLong >= 870 Then ' 1
-           pos = pos + 2 ' fixed since 18.5
-        End If
-      If TibiaVersionLong >= 990 Then ' new 4 bytes
-          pos = pos + 4
-      End If
-      If TibiaVersionLong >= 1036 Then ' new 1 byte
-        pos = pos + 1
-      End If
-      'Debug.Print "direction5=" & GoodHex(packet(pos - 1)) & " " & GoodHex(packet(pos - 2)) & " " & GoodHex(packet(pos - 3)) & " " & GoodHex(packet(pos - 4)) & " " & GoodHex(packet(pos - 5))
-      AddID_Direction idConnection, tempID, packet(pos - 1) 'update direction
-
     ElseIf idTile = &H63 Then
       ' new mobile, we already knew his ID
       tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
@@ -2791,12 +2812,8 @@ Public Function ReadSinglePosition(idConnection As Integer, nx As Long, _
             End If
           End If
         Case &H62
- 
           ' we already knew his ID + include some info
-          tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
-          AddID_HP idConnection, tempID, packet(pos + 6) 'update hp
-          nameofgivenID = GetNameFromID(idConnection, tempID)
-          ' ReDim Matrix(-6 To 7, -8 To 9, 0 To 15, 1 To MAXCLIENTS
+          evalCreatureSubPacket62 idConnection, packet, pos, tempID, nameofgivenID, 4
           If ((ny >= -6) And (ny <= 7) And (nx >= -8) And (nx <= 9) And (nz >= 0) And (nz <= 15) And (stackpos <= 10)) Then
             Matrix(ny, nx, nz, idConnection).s(stackpos).t1 = &H61
             Matrix(ny, nx, nz, idConnection).s(stackpos).t2 = &H0
@@ -2820,45 +2837,6 @@ Public Function ReadSinglePosition(idConnection As Integer, nx As Long, _
               End If
             End If
           End If
-          'stackpos = stackpos + 1
-          
-          'eval outfit
-          If TibiaVersionLong <= 760 Then
-            outfit = CLng(packet(pos + 8))
-          Else
-            outfit = GetTheLong(packet(pos + 8), packet(pos + 9))
-            pos = pos + 1
-          End If
-          
-          If outfit = 0 Then
-            If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-              If (nameofgivenID <> CharacterName(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
-                packet(pos + 9) = LowByteOfLong(tileID_Oracle)
-                packet(pos + 10) = HighByteOfLong(tileID_Oracle)
-              End If
-            End If
-            pos = pos + 17
-          Else
-            pos = pos + 19
-            If TibiaVersionLong >= 773 Then
-              pos = pos + 1
-            End If
-          End If
-          If TibiaVersionLong >= 853 Then '2
-            pos = pos + 1
-          End If
-            If TibiaVersionLong >= 870 Then ' 1
-               pos = pos + 2 ' fixed since 18.5
-            End If
-          If TibiaVersionLong >= 990 Then ' new 4 bytes
-            pos = pos + 4
-          End If
-          If TibiaVersionLong >= 1036 Then ' new 1 byte
-          pos = pos + 1
-        End If
-          'Debug.Print "direction5=" & GoodHex(packet(pos - 1)) & " " & GoodHex(packet(pos - 2)) & " " & GoodHex(packet(pos - 3)) & " " & GoodHex(packet(pos - 4)) & " " & GoodHex(packet(pos - 5))
-          AddID_Direction idConnection, tempID, packet(pos - 1) 'update direction
-    
         Case &H63
           CompleteDebugS = CompleteDebugS & " [MOB63]"
           ' new mobile, we already knew his ID
@@ -3364,16 +3342,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
          pos = pos + 1 ' 1 new byte since Tibia 9.5
       End If
       Case &H62
-  ' tibia 9.9 : 6A 2A 7D 9E 7D 0B FF 62 00 0D FA C1 02 4F 01 80 00 4E 45 3A 4C 00 00 00 00 00 70 00 00 00 00 FF 00 00 00
-  ' tibia 10.36:6A C4 81 C3 7E 07 FF 62 00 3A A7 3B 02 62 00 86 00 09 00 72 5D 03 00 00 06 1D EE 00 00 00 00 00 FF 00 00 00
-
-        tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
-        AddID_HP idConnection, tempID, packet(pos + 6) 'update hp
-        ' AFTERLOGIN LOGOUT
-        nameofgivenID = GetNameFromID(idConnection, tempID)
-        
-       ' frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "New char1 (" & nameofgivenID & ") with level " & CStr(templ2)
-                
+        evalCreatureSubPacket62 idConnection, packet, pos, tempID, nameofgivenID, 1
         CheckIfGM idConnection, nameofgivenID, initZ
         If RuneMakerOptions(idConnection).autoLogoutAnyFloor = True Then
           If nameofgivenID <> "" And frmRunemaker.IsFriend(LCase(nameofgivenID)) = False And nameofgivenID <> CharacterName(idConnection) Then
@@ -3387,48 +3356,6 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           End If
         End If
         gotStackP = AddThingToStack(idConnection, matrixP.x, matrixP.y, matrixP.z, &H61, &H0, &H0, tempID)
-        
-        ' outfit ...
-        If TibiaVersionLong <= 760 Then
-          templ1 = CLng(packet(pos + 8))
-        Else
-          templ1 = GetTheLong(packet(pos + 8), packet(pos + 9))
-          pos = pos + 1
-        End If
-        'XXYY
-        
-        If templ1 = 0 Then
-          If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-            If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
-              packet(pos + 9) = LowByteOfLong(tileID_Oracle)
-              packet(pos + 10) = HighByteOfLong(tileID_Oracle)
-            End If
-          End If
-          pos = pos + 17
-        Else
-          pos = pos + 19
-          If TibiaVersionLong >= 773 Then
-            pos = pos + 1
-          End If
-        End If
-        If TibiaVersionLong >= 853 Then ' 3
-          pos = pos + 1
-        End If
-  'If TibiaVersionLong >= 854 Then ' 1
-  '  pos = pos + 1 ' skip one more
- ' End If
-        'Debug.Print "direction1=" & GoodHex(packet(pos - 1)) & " " & GoodHex(packet(pos - 2)) & " " & GoodHex(packet(pos - 3)) & " " & GoodHex(packet(pos - 4)) & " " & GoodHex(packet(pos - 5))
-        
-        If TibiaVersionLong >= 870 Then ' xxx1
-          pos = pos + 2
-        End If
-        If TibiaVersionLong >= 990 Then ' new 4 bytes
-          pos = pos + 4
-        End If
-        If TibiaVersionLong >= 1036 Then ' new 1 byte
-          pos = pos + 1
-        End If
-        AddID_Direction idConnection, tempID, packet(pos - 1) 'update dir
       Case &H61
         ' new character info
         resF = GetTheMobileInfo(idConnection, packet, pos)
@@ -3580,38 +3507,7 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       End If
       
       Case &H62
-        frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "WARNING (62) - please report to blackd :" & frmMain.showAsStr2(packet, 0)
-        tempID = FourBytesDouble(packet(pos + 2), packet(pos + 3), packet(pos + 4), packet(pos + 5))
-        AddID_HP idConnection, tempID, packet(pos + 6) 'update hp
-        ' outfit
-        If TibiaVersionLong <= 760 Then
-          templ1 = packet(pos + 8)
-        Else
-          templ1 = GetTheLong(packet(pos + 8), packet(pos + 9))
-          pos = pos + 1
-        End If
-        If templ1 = 0 Then
-          If (packet(pos + 9) = &H0) And (packet(pos + 10) = &H0) Then
-            If (tempID <> myID(idConnection)) And (frmHardcoreCheats.chkReveal.value = 1) Then
-              packet(pos + 9) = LowByteOfLong(tileID_Oracle)
-              packet(pos + 10) = HighByteOfLong(tileID_Oracle)
-            End If
-          End If
-          pos = pos + 17
-        Else
-          pos = pos + 19
-          If TibiaVersionLong >= 773 Then
-            pos = pos + 1
-          End If
-        End If
-        If TibiaVersionLong >= 990 Then ' new 4 bytes
-          pos = pos + 4
-        End If
-        If TibiaVersionLong >= 1036 Then ' new 1 byte
-          pos = pos + 1
-        End If
-        'Debug.Print "direction3=" & GoodHex(packet(pos - 1)) & " " & GoodHex(packet(pos - 2)) & " " & GoodHex(packet(pos - 3)) & " " & GoodHex(packet(pos - 4)) & " " & GoodHex(packet(pos - 5))
-        AddID_Direction idConnection, tempID, packet(pos - 1) 'update direction
+         evalCreatureSubPacket62 idConnection, packet, pos, tempID, nameofgivenID, 2
       Case &H61
         frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "WARNING (61) - plz report to blackd :" & frmMain.showAsStr2(packet, 0)
         resF = GetTheMobileInfo(idConnection, packet, pos)

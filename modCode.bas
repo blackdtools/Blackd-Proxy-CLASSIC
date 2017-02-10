@@ -8714,7 +8714,23 @@ goterr:
 End Function
 
 
-
+Public Function TranslateDirectionByteToHumanLang(directionID As Byte) As String
+    Dim res As String
+    res = ""
+    Select Case directionID
+    Case 0
+        res = "North"
+    Case 1
+        res = "Right"
+    Case 2
+        res = "South"
+    Case 3
+        res = "Left"
+    Case Else
+        res = "Unknown"
+    End Select
+    TranslateDirectionByteToHumanLang = res
+End Function
 Public Function DoTurbo(idConnection As Integer) As Long
   Dim cPacket(3) As Byte
   Dim curDirPlayer As Byte
