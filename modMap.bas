@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMap"
-#Const FinalMode = 0
+#Const FinalMode = 1
 #Const MapDebug = 0
 #Const DEBUG_SHOP = 0
 Option Explicit
@@ -36,8 +36,8 @@ Public addConfigPaths As String ' list of new config paths here
 Public addConfigVersions As String ' relative versions
 Public addConfigVersionsLongs As String 'relative version longs
 
-Public Const ProxyVersion = "42.7" ' Proxy version ' string version
-Public Const myNumericVersion = 42700 ' numeric version
+Public Const ProxyVersion = "42.8" ' Proxy version ' string version
+Public Const myNumericVersion = 42800 ' numeric version
 Public Const myAuthProtocol = 2 ' authetication protocol
 Public Const TrialVersion = False ' true=trial version
 
@@ -418,6 +418,277 @@ Public Sub ResetSpamOrders()
     SpamAutoMana(i) = False
   Next i
   UsedSpamOrders = 0
+End Sub
+
+Public Sub skipTileBytes(ByRef packet() As Byte, ByRef pos As Long, ByVal debugIt As Boolean)
+    Dim tileID As Long
+    Dim totalSkip As Long
+    totalSkip = 0
+    tileID = GetTheLong(packet(pos), packet(pos + 1))
+
+    If TibiaVersionLong >= 990 Then
+      If DatTiles(tileID).haveExtraByte = True Then
+        If DatTiles(tileID).haveExtraByte2 = True Then
+          totalSkip = 5
+        Else
+          totalSkip = 4
+        End If
+      Else
+        If DatTiles(tileID).haveExtraByte2 = True Then
+          totalSkip = 4
+        Else
+          totalSkip = 3
+        End If
+      End If
+    Else
+      If DatTiles(tileID).haveExtraByte = True Then
+        totalSkip = 3
+        If DatTiles(tileID).haveExtraByte2 = True Then
+          totalSkip = totalSkip + 1
+        End If
+      Else
+        totalSkip = 2
+        If DatTiles(tileID).haveExtraByte2 = True Then
+          totalSkip = totalSkip + 1
+        End If
+      End If
+   End If
+   If debugIt Then
+    Dim i As Long
+    Dim debugStr As String
+    debugStr = ""
+    For i = 0 To totalSkip - 1
+        debugStr = debugStr & " " & GoodHex(packet(pos + i))
+      
+    Next i
+    Debug.Print "TILE ID =" & debugStr
+   End If
+   pos = pos + totalSkip
+End Sub
+Public Sub skipBytes(ByRef packet() As Byte, ByRef pos As Long, ByVal totalSkip As Long, ByVal debugIt As Boolean)
+  If debugIt Then
+    Dim i As Long
+    Dim debugStr As String
+    debugStr = ""
+    For i = 0 To totalSkip - 1
+        debugStr = debugStr & " " & GoodHex(packet(pos + i))
+    Next i
+    Debug.Print "SKIP BYTES =" & debugStr
+   End If
+   pos = pos + totalSkip
+End Sub
+Public Sub parseType76(ByRef packet() As Byte, ByRef pos As Long, ByVal debugIt As Boolean)
+    Dim templ1 As Long
+    Dim templ2 As Long
+    Dim templ3 As Long
+    Dim lonN As Long
+    Dim tileID As Long
+    Dim itemCount As Long
+    Dim mobName As String
+    
+        pos = pos + 1
+        templ1 = CLng(packet(pos))
+        pos = pos + 1
+        If (debugIt) Then
+          Debug.Print "packet 76 subtype = " & CStr(templ1)
+        End If
+        If templ1 = 1 Then
+' 76
+' 01 = subtype inspect char
+' 07 - total items
+' 10 00 61 20 73 74 75 64 64 65 64 20 68 65 6C 6D 65 74 - item name
+' 01 - slot
+' 30 0D FF - tile id 3 bytes
+' 00
+' 03 - number of lines (2 strings each)
+' 05 00 41 72 6D 6F 72
+' 01 00 32
+' 06 00 57 65 69 67 68 74
+' 08 00 32 34 2E 35 30 20 6F 7A
+' 0D 00 42 6F 64 79 20 50 6F 73 69 74 69 6F 6E
+' 04 00 68 65 61 64
+' 0A 00 61 20 62 61 63 6B 70 61 63 6B  - item name
+' 03 - slot
+' 26 0B FF 00 - tile id
+' 03 - number of lines (2 strings each)
+' ...
+' 14 00 xxxxxxxx - char name
+' 81 00 4F 71 27 73 00 - outfit
+' 04 - number of lines (2 strings each)
+' ...
+        lonN = CLng(packet(pos))
+        pos = pos + 1
+        For itemCount = 1 To lonN
+          templ2 = GetTheLong(packet(pos), packet(pos + 1))
+          pos = pos + 2
+          mobName = ""
+          For templ1 = 1 To templ2
+            mobName = mobName & Chr(packet(pos))
+            pos = pos + 1
+          Next templ1
+          If (debugIt) Then
+            Debug.Print "ITEM NAME = " & mobName
+          End If
+          templ1 = CLng(packet(pos))
+          pos = pos + 1
+          If (debugIt) Then
+           Debug.Print "SLOT = " & CStr(templ1)
+          End If
+          skipTileBytes packet, pos, debugIt
+          skipBytes packet, pos, 1, debugIt
+          templ3 = CLng(packet(pos))
+          pos = pos + 1
+          If (debugIt) Then
+           Debug.Print "TEXT LINES = " & CStr(templ3)
+          End If
+          For tileID = 1 To templ3
+            templ2 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ1 = 1 To templ2
+              mobName = mobName & Chr(packet(pos))
+              pos = pos + 1
+            Next templ1
+            If (debugIt) Then
+             Debug.Print "LINE_TITLE = " & mobName
+            End If
+            templ2 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ1 = 1 To templ2
+              mobName = mobName & Chr(packet(pos))
+              pos = pos + 1
+            Next templ1
+            If (debugIt) Then
+             Debug.Print "LINE_VALUE = " & mobName
+            End If
+          Next tileID
+        Next itemCount
+        
+        ' char info
+          templ2 = GetTheLong(packet(pos), packet(pos + 1))
+          pos = pos + 2
+          mobName = ""
+          For templ1 = 1 To templ2
+            mobName = mobName & Chr(packet(pos))
+            pos = pos + 1
+          Next templ1
+          If (debugIt) Then
+            Debug.Print "CHAR NAME = " & mobName
+          End If
+          skipBytes packet, pos, 7, debugIt
+          templ3 = CLng(packet(pos))
+          pos = pos + 1
+          If (debugIt) Then
+           Debug.Print "TEXT LINES = " & CStr(templ3)
+          End If
+          For tileID = 1 To templ3
+            templ2 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ1 = 1 To templ2
+              mobName = mobName & Chr(packet(pos))
+              pos = pos + 1
+            Next templ1
+            If (debugIt) Then
+             Debug.Print "LINE_TITLE = " & mobName
+            End If
+            templ2 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ1 = 1 To templ2
+              mobName = mobName & Chr(packet(pos))
+              pos = pos + 1
+            Next templ1
+            If (debugIt) Then
+             Debug.Print "LINE_VALUE = " & mobName
+            End If
+          Next tileID
+       
+        
+        
+        
+        
+        
+        
+        ElseIf templ1 = 0 Then
+' 76
+' 00  ' inspect single item
+' 01
+' 0A 00 61 20 62 61 63 6B 70 61 63 6B - item name
+' 26 0B FF - tile id 3 bytes
+' 00
+' 03 - total lines
+' 08 00 43 61 70 61 63 69 74 79
+' 02 00 32 30
+' 0C 00 54 6F 74 61 6C 20 57 65 69 67 68 74
+' 08 00 35 37 2E 38 30 20 6F 7A
+' 0D 00 42 6F 64 79 20 50 6F 73 69 74 69 6F 6E
+' 09 00 63 6F 6E 74 61 69 6E 65 72
+
+
+
+' 76
+' 00
+' 01
+' 0D 00 38 38 20 67 6F 6C 64 20 63 6F 69 6E 73
+' D7 0B FF 58 - tile id 4 bytes
+' 00
+' 02 - total lines
+' 0C 00 54 6F 74 61 6C 20 57 65 69 67 68 74
+' 07 00 38 2E 38 30 20 6F 7A
+' 09 00 54 72 61 64 65 61 62 6C 65
+' 03 00 79 65 73 6D 4E 7D BF 7D 07 03 4D 7D BF 7D 07
+        lonN = CLng(packet(pos))
+        pos = pos + 1
+        For itemCount = 1 To lonN
+          templ2 = GetTheLong(packet(pos), packet(pos + 1))
+          pos = pos + 2
+          mobName = ""
+          For templ1 = 1 To templ2
+            mobName = mobName & Chr(packet(pos))
+            pos = pos + 1
+          Next templ1
+          If (debugIt) Then
+            Debug.Print "ITEM NAME = " & mobName
+          End If
+          skipTileBytes packet, pos, debugIt
+          skipBytes packet, pos, 1, debugIt
+          templ3 = CLng(packet(pos))
+          pos = pos + 1
+          If (debugIt) Then
+            Debug.Print "TEXT LINES = " & CStr(templ3)
+          End If
+          For tileID = 1 To templ3
+            templ2 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ1 = 1 To templ2
+              mobName = mobName & Chr(packet(pos))
+              pos = pos + 1
+            Next templ1
+            If (debugIt) Then
+              Debug.Print "LINE_TITLE = " & mobName
+            End If
+            templ2 = GetTheLong(packet(pos), packet(pos + 1))
+            pos = pos + 2
+            mobName = ""
+            For templ1 = 1 To templ2
+              mobName = mobName & Chr(packet(pos))
+              pos = pos + 1
+            Next templ1
+            If (debugIt) Then
+              Debug.Print "LINE_VALUE = " & mobName
+            End If
+          Next tileID
+        Next itemCount
+        Else
+            Debug.Print "Unexpected packet 76 subtype: " & CStr(templ1)
+            pos = pos + 10000
+        End If
+        If (pos < UBound(packet)) Then
+            Debug.Print "REMAINING BYTES >" & frmMain.showAsStr3(packet, True, pos, UBound(packet))
+        End If
 End Sub
 Public Function GetSpamOrderPosition(idConnection As Integer, order As Integer) As Integer
   ' return 1 if order exist
@@ -3886,6 +4157,9 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       End If
       'Debug.Print frmMain.showAsStr(packet, True)
       'Debug.Print GoodHex(packet(pos))
+      
+    Case &H76 ' new inspect feature since Tibia 11.10
+      parseType76 packet, pos, False
     Case &H78
       ' inventory slot get something
       tileID = GetTheLong(packet(pos + 2), packet(pos + 3))
@@ -6206,6 +6480,11 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
       If (TibiaVersionLong = 1099) And (subTibiaVersionLong > 4) Or (TibiaVersionLong >= 1110) Then
         ' D2 B7 4A 3F 02 XX XX name XX XX desc 01 00 00 00 00 01 01 01
         ' D2 3E 6E 77 03 XX XX name XX XX desc 02 00 00 00 00 01 01 00
+        ' D2 1D B6 C9 02 XX XX name XX XX desc 00 00 00 00 00 00 00
+        ' D2 FB 92 92 03 XX XX name XX XX desc 00 00 00 00 00 00 00
+        ' D2 3E 6E 77 03 XX XX name XX XX desc 00 00 00 00 00 01 01 00
+        ' D2 3E 6E 77 03 XX XX name XX XX desc 00 00 00 00 00 01 01 00
+        ' D2 B7 4A 3F 02 XX XX name XX XX desc 01 00 00 00 00 00 03 00 01 02
         mobID = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
         lonN = GetTheLong(packet(pos + 5), packet(pos + 6))
         pos = pos + 7
@@ -6223,7 +6502,10 @@ Public Function LearnFromPacket(ByRef packet() As Byte, pos As Long, idConnectio
           mobName = mobName & Chr(packet(pos))
           pos = pos + 1
         Next itemCount
-        pos = pos + 8
+        pos = pos + 6
+        itemCount = packet(pos)
+        pos = pos + 1 + itemCount
+
       Else
         mobID = FourBytesDouble(packet(pos + 1), packet(pos + 2), packet(pos + 3), packet(pos + 4))
         lonN = GetTheLong(packet(pos + 5), packet(pos + 6))
