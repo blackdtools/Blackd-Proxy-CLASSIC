@@ -3,7 +3,7 @@ Attribute VB_Name = "modTibia11Functions"
 ' Don't worry! If you are a programmer capable to compile this code
 ' then you are authorized to use Tibia 11 configs even if you didn't purchase gold.
 ' However, you should not share it with other people.
-#Const Tibia11allowed = 0
+#Const Tibia11allowed = 1
 #Const FinalMode = 1
 #Const DebugConEvents = 0
 Option Explicit
