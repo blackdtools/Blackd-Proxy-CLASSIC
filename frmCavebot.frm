@@ -1540,7 +1540,7 @@ Begin VB.Form frmCavebot
    End
    Begin VB.Label lblChar 
       BackColor       =   &H00000000&
-      Caption         =   "Select your cnaracter:"
+      Caption         =   "Select your character:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120

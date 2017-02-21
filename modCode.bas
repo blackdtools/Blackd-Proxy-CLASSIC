@@ -4283,40 +4283,46 @@ Public Function GetCharListPosition2(idConnection As Integer, ByRef selectedchar
   Dim theindexLNG As Long
   Dim gtc As Long
   Dim maxgtc As Long
+  Dim i As Long
   maxgtc = GetTickCount() + 10000
   
-'  theindex = &HFF
-'  While (theindex = &HFF)
-'    theindex = Memory_ReadByte(adrSelectedCharIndex, ProcessID(idConnection))
-'    gtc = GetTickCount()
-'    If gtc > maxgtc Then
-'        GetCharListPosition2 = -1
-'        Exit Function
-'    End If
-'    DoEvents
-'  Wend
-'wait (500)
+  
   If ProcessID(idConnection) = -1 Then
     GetCharListPosition2 = -1
     Exit Function
   End If
-    theindexLNG = ReadCurrentAddress(ProcessID(idConnection), adrSelectedCharIndex, -1, True)
-    If theindexLNG = -1 Then
+  
+  If TibiaVersionLong >= 1100 Then
+      
+        selectedcharacter = ReadCurrentCharNameAFTERCHARLIST(ProcessID(idConnection))
+        If selectedcharacter = "" Then
+           GetCharListPosition2 = -1
+           Exit Function
+        End If
+        For i = 0 To CharacterList2(idConnection).numItems
+            If selectedcharacter = CharacterList2(idConnection).item(i).CharacterName Then
+               GetCharListPosition2 = i
+               Exit Function
+            End If
+        Next i
+         GetCharListPosition2 = -1
+         Exit Function
+  Else
+        theindexLNG = ReadCurrentAddress(ProcessID(idConnection), adrSelectedCharIndex, -1, True)
+        If theindexLNG = -1 Then
+            GetCharListPosition2 = -1
+            Exit Function
+        Else
+            theindex = CByte(theindexLNG)
+        End If
+    '    gtc = GetTickCount()
+      If theindex >= CharacterList2(idConnection).numItems Then
         GetCharListPosition2 = -1
         Exit Function
-    Else
-        theindex = CByte(theindexLNG)
-    End If
-'    gtc = GetTickCount()
-  If theindex >= CharacterList2(idConnection).numItems Then
-    GetCharListPosition2 = -1
-    Exit Function
+      End If
+      selectedcharacter = CharacterList2(idConnection).item(theindex).CharacterName
+      GetCharListPosition2 = CInt(theindex)
   End If
-  selectedcharacter = CharacterList2(idConnection).item(theindex).CharacterName
-  
-  
-  
-  GetCharListPosition2 = CInt(theindex)
   Exit Function
 returnTheResult:
   GetCharListPosition2 = -1

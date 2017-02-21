@@ -1117,7 +1117,15 @@ Public Function ReadCurrentCharName(ByRef pid As Long) As String
     Dim strRes As String
     auxAdr = ReadCurrentAddress(pid, adrSelectedCharName, -1, True)
     strRes = QMemory_ReadString(pid, auxAdr)
-    ReadCurrentCharName = ""
+    ReadCurrentCharName = strRes
+End Function
+
+Public Function ReadCurrentCharNameAFTERCHARLIST(ByRef pid As Long) As String
+    Dim auxAdr As Long
+    Dim strRes As String
+    auxAdr = ReadCurrentAddress(pid, adrSelectedCharName_afterCharList, -1, True)
+    strRes = QMemory_ReadString(pid, auxAdr)
+    ReadCurrentCharNameAFTERCHARLIST = strRes
 End Function
 
 Public Function GetProcessIdByAdrConnected_TibiaQ() As Long

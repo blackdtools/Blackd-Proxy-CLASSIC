@@ -7257,14 +7257,15 @@ Private Sub SckClientGame_ConnectionRequest(index As Integer, ByVal requestID As
         End If
       End If
       CharacterName(tmpID) = selName
-      '     frmTrueMap.LoadChars
-      '     frmRunemaker.LoadRuneChars
-      '     frmStealth.LoadStealthChars
-      '     frmHPmana.LoadHPmanaChars
-      '     frmEvents.LoadEventChars
-      '     frmCondEvents.LoadCondEventChars
-      '     frmTrainer.LoadTrainerChars
-      '     frmCavebot.LoadCavebotChars
+         '  frmTrueMap.LoadChars
+          ' frmRunemaker.LoadRuneChars
+          ' frmStealth.LoadStealthChars
+         '  frmHPmana.LoadHPmanaChars
+         '  frmEvents.LoadEventChars
+         '  frmCondEvents.LoadCondEventChars
+        '   frmTrainer.LoadTrainerChars
+         '  frmCavebot.LoadCavebotChars
+           
       '     MustCheckFirstClientPacket(tmpID) = False
       MustCheckFirstClientPacket(tmpID) = True
       NeedToIgnoreFirstGamePacket(tmpID) = True
