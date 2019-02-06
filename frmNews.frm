@@ -62,9 +62,14 @@ End Sub
 Private Sub Form_Load()
     Dim strMsg As String
     Me.lblText = "What is new?"
-    strMsg = "Blackd Proxy 43.1" & vbCrLf & _
+    strMsg = "Blackd Proxy 43.2-dev" & vbCrLf & _
     "----------------------------" & vbCrLf & _
-    " - Added experimental configs for 10.99 rev6 (8 mar 2017) and 11.11. However they will not work at this moment."
+    " - fixed issue with the ""Clear Logs""-button (github issue #93)" & vbCrLf
+    
+    
+    strMsg = strMsg & vbCrLf & "Blackd Proxy 43.1" & vbCrLf & _
+    "----------------------------" & vbCrLf & _
+    " - Added experimental configs for 10.99 rev6 (8 mar 2017) and 11.11. However they will not work at this moment." & vbCrLf
     
     strMsg = strMsg & vbCrLf & "Blackd Proxy 43.0" & vbCrLf & _
     "----------------------------" & vbCrLf & _
@@ -202,7 +207,7 @@ Private Sub Form_Load()
      " - Added Tibia Title, shows character name on Tibia title" & vbCrLf & _
      " - Revamped Aimbot" & vbCrLf & _
      " - Added Persistent, so player can execute exiva or say message every X ms" & vbCrLf & _
-     " - Classname changer on Advanced, so its possible to recognize some of custom tibia client (untested). Classname on .txt does not recognize most common custom classname (ÙbiaClient)" & vbCrLf & _
+     " - Classname changer on Advanced, so its possible to recognize some of custom tibia client (untested). Classname on .txt does not recognize most common custom classname (Ã™biaClient)" & vbCrLf & _
      " - Revamped CaveBot form, stills with all button you can show/hide advanced button and added Items ID list" & vbCrLf & _
      " - Added some new exiva comands (exiva sdmax, etc) and hotkeys list inside Hotkeys form" & vbCrLf & _
      " - Revamped Broadcast, Trainer, Advanced, Proxy forms."
