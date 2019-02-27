@@ -2219,11 +2219,13 @@ End Sub
 
 
 Private Sub cmdClear_Click()
-  ' clear logs
-  txtPackets.Text = ""
-  InitGridLog
+    ' clear logs
+    If frmMain.LogFull3.value = True Then
+        LogOnFile txtLogFile.Text, txtPackets.Text
+    End If
+    txtPackets.Text = ""
+    InitGridLog
 End Sub
-
 
 
 
