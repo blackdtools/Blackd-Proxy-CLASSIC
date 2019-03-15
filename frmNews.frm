@@ -64,7 +64,8 @@ Private Sub Form_Load()
     Me.lblText = "What is new?"
     strMsg = "Blackd Proxy 43.2-dev" & vbCrLf & _
     "----------------------------" & vbCrLf & _
-    " - fixed issue with the ""Clear Logs""-button (github issue #93)" & vbCrLf
+" - fixed issue with the ""Clear Logs""-button (github issue #93)" & vbCrLf _
+" - fixed issue where ""exiva useitemonname""-command could freeze BlackD Proxy (github issue #99)" & vbCrLf _
     
     
     strMsg = strMsg & vbCrLf & "Blackd Proxy 43.1" & vbCrLf & _
