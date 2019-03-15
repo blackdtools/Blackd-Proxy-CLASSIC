@@ -12320,7 +12320,7 @@ Public Function UseItemOnName(idConnection As Integer, ByVal strTile As String) 
     Dim name As String
 
     While Left(strTile, 1) = " "
-    strTile = Mid(strTile, 1) 'ignore spaces..
+    strTile = Mid(strTile, 2) 'ignore spaces..
     Wend
 
 
