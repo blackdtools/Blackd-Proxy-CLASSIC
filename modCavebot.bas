@@ -1783,17 +1783,17 @@ fastSet:
     
     End If
     If continueP = True Then
-        Dim MoveSQMAccuacy As Integer
-        ' higher MoveSQMAccuacy = less accurate
+        Dim MoveSQMAccuracy As Integer
+        ' higher MoveSQMAccuracy = less accurate
         If (Antibanmode = 0) Then
             ' most accurate
-            MoveSQMAccuacy = 1
+            MoveSQMAccuracy = 1
         Else
             ' less accurate
-            MoveSQMAccuacy = 2
+            MoveSQMAccuracy = 2
         End If
-        If (myX(Sid) > val1 - MoveSQMAccuacy) And (myX(Sid) < val1 + MoveSQMAccuacy) And _
-           (myY(Sid) > val2 - MoveSQMAccuacy) And (myY(Sid) < val2 + MoveSQMAccuacy) And _
+        If (myX(Sid) > val1 - MoveSQMAccuracy) And (myX(Sid) < val1 + MoveSQMAccuracy) And _
+           (myY(Sid) > val2 - MoveSQMAccuracy) And (myY(Sid) < val2 + MoveSQMAccuracy) And _
            (myZ(Sid) = val3) Then
           ' move completed
           If DoingNewLoot(Sid) = False Then
