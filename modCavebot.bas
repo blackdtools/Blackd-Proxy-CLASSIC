@@ -1884,9 +1884,10 @@ fastSet:
     DoEvents
   Case "waitx"
     param1 = ParseString(currLine, pos, lenCurrLine, ",")
-    val1 = CLng(param1)
-    waitCounter(Sid) = GetTickCount() + (val1 * 1000)
-   ' exeLine(Sid) = exeLine(Sid) + 1
+    ' val1 = CLng(param1)
+    ' waitCounter(Sid) = GetTickCount() + (val1 * 1000)
+    ' CDbl() use comma, not dot, but we use dot, not comma, so...
+    waitCounter(Sid) = GetTickCount() + CLng(CDbl(Replace(param1, ".", ",")) * 1000)
     updateExeLine Sid, 1, True
   Case "closeconnection"
     frmMain.txtPackets.Text = frmMain.txtPackets.Text & vbCrLf & "#Client " & Sid & " (" & CharacterName(Sid) & ")closed by script#"
