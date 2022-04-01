@@ -179,7 +179,7 @@ Public Sub UpdateValues()
     '...
     Dim theindex As Integer
     theindex = CInt(cmbCharacter.ListIndex)
-    If theindex = 0 Then
+    If theindex < 1 Then
         Me.txtBoard.Text = "Select a character so you can read all their bot messages." & vbCrLf & _
         "All commands typed here will be also executed for that character." & vbCrLf & _
         "Commands casted while no character is selected will be ignored."
